@@ -3,11 +3,15 @@
 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans  
 	http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
 	http://www.springframework.org/schema/context 
-	http://www.springframework.org/schema/context/spring-context-4.2.xsd">
- 
+	http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	http://www.springframework.org/schema/security 
+ 	http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+	 
+	
 	<context:component-scan base-package="org.openbox.sf5.application" />
  
 	<bean id="viewResolver"
@@ -31,18 +35,19 @@ init-method="initialize">
 <property name="dataSource" ref="dataSource" />
 </bean>
  
-<http>
-<intercept-url pattern="/**" access="hasRole('USER')" />
-<form-login />
-<logout />
-</http>
  
 <security:authentication-manager>
 <security:authentication-provider>
 <security:jdbc-user-service
 data-source-ref="dataSource"
-users-by-username-query="select username,password,enabled from user_authentication where username=?"
-authorities-by-username-query="select u1.username, u2.role from user_authentication u1, user_authorization u2 where u1.user_id = u2.user_id and u1.username =?" />
+users-by-username-query="SELECT 
+login,
+password,
+name,
+active
+FROM USERS 
+where login =?"
+authorities-by-username-query="select login, role from FROM USERS where where login =?" />
 </security:authentication-provider>
 </security:authentication-manager>
 	
