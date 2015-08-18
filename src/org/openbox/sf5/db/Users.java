@@ -25,44 +25,70 @@ public class Users implements Serializable {
 
 	public long getId() {
 
-		return this.id;
+		return id;
 	}
 
 	public void setId(long id) {
 		this.id = id;
 	}
 
-	@Column(name = "Name", unique = false, nullable = false, length = 30)
-	private String Name;
+	@Column(name="Name", unique = false, nullable = false, length = 30)
+		private String Name;
 
-	public void setName(String Name) {
-		this.Name = Name;
-	}
+		public void setName(String Name) {
+			this.Name = Name;
+		}
 
-	public String getName() {
-		return this.Name;
-	}
+		public String getName() {
+			return Name;
+		}
+
+
 
 	@Override
 	public String toString() {
 		return Name;
 	}
 
-	@Column(name = "Login", unique = false, nullable = false, length = 12)
+	@Column(name="Login", unique = false, nullable = false, length = 12)
 	private String Login;
 
 	public String getLogin() {
-		return this.Login;
+		return Login;
 	}
 
-	public void setLogin(String Login) {
+ 	public void setLogin(String Login) {
 		this.Login = Login;
 	}
 
-	public Users(String Name, String Login) {
+	@Column(name="Password", unique = false, nullable = false, length = 15)
+	private String Password;
 
-		this.Name = Name;
+	public String getPassword() {
+		return Password;
+	}
+
+ 	public void setPassword(String Password) {
+		this.Password = Password;
+	}
+
+	@Column(name="Active", unique = false, nullable = false)
+	private boolean Active;
+
+	public boolean getActive() {
+		return Active;
+	}
+
+ 	public void setActive(boolean Active) {
+		this.Active = Active;
+	}
+
+	public Users(String Name, String Login, String Password, boolean Active) {
+
+	this.Name= Name;
 		this.Login = Login;
+		this.Password = Password;
+		this.Active = Active;
 
 	}
 
@@ -71,24 +97,27 @@ public class Users implements Serializable {
 
 	@Override
 	public boolean equals(Object other) {
-		if (other == null) {
-			return false;
-		}
-		if (other == this) {
-			return true;
-		}
+    if (other == null) {
+		return false;
+	}
+    if (other == this) {
+		return true;
+	}
 
-		if (!(other instanceof Users)) {
-			return false;
-		}
-		Users otherUsers = (Users) other;
-		if (otherUsers.Name.equals(this.Name)
-				&& otherUsers.Login.equals(this.Login)) {
+    if (!(other instanceof Users)) {
+		return false;
+	}
+    Users otherUsers = (Users) other;
+		if (otherUsers.Name.equals(Name)
+	&& otherUsers.Login.equals(Login)
+	&& otherUsers.Password.equals(Password)
+	&& otherUsers.Active == Active
+				) {
 			return true;
 		} else {
 			return false;
 		}
 
-	}
+}
 
 }

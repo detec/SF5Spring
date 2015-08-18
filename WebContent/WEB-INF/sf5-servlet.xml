@@ -26,14 +26,16 @@ class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 <property name="password" value="" />
 </bean>
 	
-<bean id="LoginBean" class="org.openbox.sf5.application.LoginBean"
+<bean id="Users" class="org.openbox.sf5.db.Users"
 init-method="initialize">
 <property name="dataSource" ref="dataSource" />
 </bean>
  
-<security:http auto-config="true">
-<security:intercept-url pattern="/**" access="ROLE_ADMIN" />
-</security:http>
+<http>
+<intercept-url pattern="/**" access="hasRole('USER')" />
+<form-login />
+<logout />
+</http>
  
 <security:authentication-manager>
 <security:authentication-provider>
