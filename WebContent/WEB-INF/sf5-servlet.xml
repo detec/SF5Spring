@@ -30,10 +30,15 @@ class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 <property name="password" value="" />
 </bean>
 	
+	
+	
 <bean id="Users" class="org.openbox.sf5.db.Users"
 init-method="initialize">
-<property name="dataSource" ref="dataSource" />
 </bean>
+ 
+<security:http auto-config="true">
+<security:intercept-url pattern="/**" access="ROLE_ADMIN" />
+</security:http>
  
  
 <security:authentication-manager>
@@ -50,5 +55,6 @@ where login =?"
 authorities-by-username-query="select login, role from FROM USERS where where login =?" />
 </security:authentication-provider>
 </security:authentication-manager>
+
 	
 </beans>
