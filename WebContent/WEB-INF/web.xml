@@ -3,33 +3,43 @@
  xmlns="http://xmlns.jcp.org/xml/ns/javaee"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
  <display-name>SF5Spring</display-name>
-
+ <filter>
+    <filter-name>MultipartFilter</filter-name>
+    <filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+</filter>
  <filter>
   <filter-name>springSecurityFilterChain</filter-name>
   <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
  </filter>
  <filter-mapping>
+    <filter-name>MultipartFilter</filter-name>
+    <servlet-name>/*</servlet-name>
+</filter-mapping>
+ <filter-mapping>
   <filter-name>springSecurityFilterChain</filter-name>
   <url-pattern>/*</url-pattern>
  </filter-mapping>
- 
  <servlet>
   <servlet-name>sf5</servlet-name>
   <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-              <init-param>
-                <param-name>contextConfigLocation</param-name>
-                <param-value>/WEB-INF/sf5-servlet.xml</param-value>
-            </init-param>
+  <init-param>
+   <param-name>contextConfigLocation</param-name>
+   <param-value>/WEB-INF/sf5-servlet.xml</param-value>
+  </init-param>
   <load-on-startup>1</load-on-startup>
   <enabled>true</enabled>
  </servlet>
- 
  <servlet-mapping>
   <servlet-name>sf5</servlet-name>
   <url-pattern>/</url-pattern>
  </servlet-mapping>
- 
  <welcome-file-list>
   <welcome-file>index.jsp</welcome-file>
  </welcome-file-list>
+ <jsp-config>
+  <taglib>
+   <taglib-uri>http://www.springframework.org/security/tags</taglib-uri>
+   <taglib-location>/WEB-INF/lib/security.tld</taglib-location>
+  </taglib>
+ </jsp-config>
 </web-app>

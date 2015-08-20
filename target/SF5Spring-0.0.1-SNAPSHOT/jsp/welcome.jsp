@@ -7,6 +7,7 @@ body {
 	background-image: url('http://crunchify.com/bg.png');
 }
 </style>
+<sec:csrfMetaTags/>
 </head>
 <body>${message}
  

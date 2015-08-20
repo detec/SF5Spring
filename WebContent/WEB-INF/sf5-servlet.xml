@@ -38,22 +38,26 @@ init-method="initialize">
  
 <security:http auto-config="true">
 <security:intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" />
+
+		<security:logout/>
+		<!-- enable csrf protection -->
+<security:csrf/>
 </security:http>
  
  
 <security:authentication-manager>
-<security:authentication-provider>
-<security:jdbc-user-service
-data-source-ref="dataSource"
-users-by-username-query="
-SELECT 
-login,
-password,
-active
-FROM USERS 
-where login =?"
-authorities-by-username-query="select login, role from FROM USERS where login =?" />
-</security:authentication-provider>
+	<security:authentication-provider>
+	<security:jdbc-user-service
+		data-source-ref="dataSource"
+		users-by-username-query="
+			SELECT 
+				login,
+				password,
+				enabled
+			FROM USERS 
+			where login =?"
+		authorities-by-username-query="select login, role from FROM USERS where login =?" />
+	</security:authentication-provider>
 </security:authentication-manager>
 
 	

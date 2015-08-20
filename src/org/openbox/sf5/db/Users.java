@@ -87,24 +87,24 @@ public class Users implements Serializable {
 		this.Password = Password;
 	}
 
-	@Column(name = "Active", unique = false, nullable = false)
-	private boolean Active;
+	@Column(name = "enabled", unique = false, nullable = false)
+	private boolean enabled;
 
-	public boolean getActive() {
-		return Active;
+	public boolean getEnabled() {
+		return enabled;
 	}
 
-	public void setActive(boolean Active) {
-		this.Active = Active;
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
-	public Users(String Name, String Login, String Password, boolean Active,
+	public Users(String Name, String Login, String Password, boolean enabled,
 			String Role) {
 
 		this.Name = Name;
 		this.Login = Login;
 		this.Password = Password;
-		this.Active = Active;
+		this.enabled = enabled;
 		this.Role = Role;
 
 	}
@@ -127,7 +127,8 @@ public class Users implements Serializable {
 		Users otherUsers = (Users) other;
 		if (otherUsers.Name.equals(Name) && otherUsers.Login.equals(Login)
 				&& otherUsers.Password.equals(Password)
-				&& otherUsers.Active == Active && otherUsers.Role.equals(Role)) {
+				&& otherUsers.enabled == enabled
+				&& otherUsers.Role.equals(Role)) {
 			return true;
 		} else {
 			return false;
@@ -138,12 +139,13 @@ public class Users implements Serializable {
 	public void initialize() {
 
 		Criterion criterea = Restrictions.eq("Login", "admin");
-		List<Users> adminsList = (List<Users>) ObjectsListService.ObjectsCriterionList(Users.class, criterea);
+		List<Users> adminsList = (List<Users>) ObjectsListService
+				.ObjectsCriterionList(Users.class, criterea);
 		if (adminsList.isEmpty()) {
-		Users admin = new Users("Andrew Frolov", "admin", "1", true,
-				"ROLE_ADMIN");
-		ObjectsController contr = new ObjectsController();
-		contr.saveOrUpdate(admin);
+			Users admin = new Users("Andrew Frolov", "admin", "1", true,
+					"ROLE_ADMIN");
+			ObjectsController contr = new ObjectsController();
+			contr.saveOrUpdate(admin);
 		}
 
 	}

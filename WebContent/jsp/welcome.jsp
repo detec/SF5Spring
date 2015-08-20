@@ -1,3 +1,5 @@
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <html>
 <head>
 <title>Spring MVC Tutorial by Crunchify - Hello World Spring MVC
@@ -7,6 +9,7 @@ body {
 	background-image: url('http://crunchify.com/bg.png');
 }
 </style>
+<sec:csrfMetaTags/>
 </head>
 <body>${message}
  

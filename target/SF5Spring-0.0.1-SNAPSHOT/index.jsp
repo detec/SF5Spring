@@ -1,7 +1,9 @@
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <html>
 <head>
 <title>Spring MVC Tutorial Series by Crunchify.com</title>
-
+<sec:csrfMetaTags/>
 </head>
 <body>
 	<br>
