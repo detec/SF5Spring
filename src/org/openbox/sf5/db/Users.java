@@ -1,6 +1,7 @@
 package org.openbox.sf5.db;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.service.ObjectsController;
+import org.openbox.sf5.service.ObjectsListService;
 
 @Entity
 @Table(name = "Users")
@@ -132,13 +136,15 @@ public class Users implements Serializable {
 	}
 
 	public void initialize() {
-		System.out
-				.println("DbUtil.initialize() *************************************** ");
 
+		Criterion criterea = Restrictions.eq("Login", "admin");
+		List<Users> adminsList = (List<Users>) ObjectsListService.ObjectsCriterionList(Users.class, criterea);
+		if (adminsList.isEmpty()) {
 		Users admin = new Users("Andrew Frolov", "admin", "1", true,
 				"ROLE_ADMIN");
 		ObjectsController contr = new ObjectsController();
 		contr.saveOrUpdate(admin);
+		}
 
 	}
 }

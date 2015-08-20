@@ -37,7 +37,7 @@ init-method="initialize">
 </bean>
  
 <security:http auto-config="true">
-<security:intercept-url pattern="/**" access="ROLE_ADMIN" />
+<security:intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" />
 </security:http>
  
  
@@ -45,14 +45,14 @@ init-method="initialize">
 <security:authentication-provider>
 <security:jdbc-user-service
 data-source-ref="dataSource"
-users-by-username-query="SELECT 
+users-by-username-query="
+SELECT 
 login,
 password,
-name,
 active
 FROM USERS 
 where login =?"
-authorities-by-username-query="select login, role from FROM USERS where where login =?" />
+authorities-by-username-query="select login, role from FROM USERS where login =?" />
 </security:authentication-provider>
 </security:authentication-manager>
 
