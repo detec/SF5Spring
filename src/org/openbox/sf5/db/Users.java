@@ -1,15 +1,19 @@
 package org.openbox.sf5.db;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.service.ObjectsController;
@@ -24,88 +28,66 @@ public class Users implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	// @SequenceGenerator(name = "my_entity_seq_gen", sequenceName =
-	// "catalog_seq")
-	private long id;
+	@Column(name="username", unique = false, nullable = false, length = 50)
+		private String username;
 
-	public long getId() {
+		public void setusername(String username) {
+			this.username = username;
+		}
 
-		return id;
-	}
+		public String getusername() {
+			return username;
+		}
 
-	public void setId(long id) {
-		this.id = id;
-	}
 
-	@Column(name = "Name", unique = false, nullable = false, length = 30)
-	private String Name;
-
-	public void setName(String Name) {
-		this.Name = Name;
-	}
-
-	public String getName() {
-		return Name;
-	}
-
-	@Column(name = "Role", unique = false, nullable = false, length = 20)
-	private String Role;
-
-	public String getRole() {
-		return Role;
-	}
-
-	public void setRole(String role) {
-		Role = role;
-	}
 
 	@Override
 	public String toString() {
-		return Name;
+		return username;
 	}
 
-	@Column(name = "Login", unique = false, nullable = false, length = 12)
-	private String Login;
-
-	public String getLogin() {
-		return Login;
-	}
-
-	public void setLogin(String Login) {
-		this.Login = Login;
-	}
-
-	@Column(name = "Password", unique = false, nullable = false, length = 15)
+	@Column(name="Password", unique = false, nullable = false, length = 15)
 	private String Password;
 
 	public String getPassword() {
 		return Password;
 	}
 
-	public void setPassword(String Password) {
+ 	public void setPassword(String Password) {
 		this.Password = Password;
 	}
 
-	@Column(name = "enabled", unique = false, nullable = false)
+	@Column(name="enabled", unique = false, nullable = false)
 	private boolean enabled;
 
-	public boolean getEnabled() {
+	public boolean getenabled() {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+ 	public void setenabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
-	public Users(String Name, String Login, String Password, boolean enabled,
-			String Role) {
 
-		this.Name = Name;
-		this.Login = Login;
+	@OneToMany(mappedBy = "parent_id", fetch = FetchType.EAGER, orphanRemoval = true)
+	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+	@OrderColumn(name="LineNumber")
+	public List<Usersauthorities> authorities;
+
+	public List<Usersauthorities> getauthorities() {
+		return authorities;
+	}
+
+ 	public void setauthorities(List<Usersauthorities> authorities) {
+		this.authorities = authorities;
+	}
+
+	public Users(String username, String Password, boolean enabled, List<Usersauthorities> authorities) {
+
+	this.username= username;
 		this.Password = Password;
 		this.enabled = enabled;
-		this.Role = Role;
+		this.authorities = authorities;
 
 	}
 
@@ -114,36 +96,43 @@ public class Users implements Serializable {
 
 	@Override
 	public boolean equals(Object other) {
-		if (other == null) {
-			return false;
-		}
-		if (other == this) {
-			return true;
-		}
+    if (other == null) {
+		return false;
+	}
+    if (other == this) {
+		return true;
+	}
 
-		if (!(other instanceof Users)) {
-			return false;
-		}
-		Users otherUsers = (Users) other;
-		if (otherUsers.Name.equals(Name) && otherUsers.Login.equals(Login)
-				&& otherUsers.Password.equals(Password)
-				&& otherUsers.enabled == enabled
-				&& otherUsers.Role.equals(Role)) {
+    if (!(other instanceof Users)) {
+		return false;
+	}
+    Users otherUsers = (Users) other;
+		if (otherUsers.username.equals(username)
+	&& otherUsers.Password.equals(Password)
+	&& otherUsers.enabled == enabled
+	&& otherUsers.authorities.equals(authorities)
+) {
 			return true;
 		} else {
 			return false;
 		}
 
-	}
+}
+
 
 	public void initialize() {
 
-		Criterion criterea = Restrictions.eq("Login", "admin");
+		Criterion criterea = Restrictions.eq("username", "admin");
 		List<Users> adminsList = (List<Users>) ObjectsListService
 				.ObjectsCriterionList(Users.class, criterea);
 		if (adminsList.isEmpty()) {
-			Users admin = new Users("Andrew Frolov", "admin", "1", true,
-					"ROLE_ADMIN");
+			List<Usersauthorities> list = new ArrayList<>();
+
+
+			Users admin = new Users("admin", "1", true, list);
+			list.add(new Usersauthorities("admin", "ROLE_ADMIN", admin));
+			admin.setauthorities(list);
+
 			ObjectsController contr = new ObjectsController();
 			contr.saveOrUpdate(admin);
 		}

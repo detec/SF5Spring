@@ -51,12 +51,12 @@ init-method="initialize">
 		data-source-ref="dataSource"
 		users-by-username-query="
 			SELECT 
-				login,
+				username,
 				password,
 				enabled
 			FROM USERS 
-			where login =?"
-		authorities-by-username-query="select login, role from FROM USERS where login =?" />
+			where username =?"
+		authorities-by-username-query="select username, role from FROM USERS where username =?" />
 	</security:authentication-provider>
 </security:authentication-manager>
 

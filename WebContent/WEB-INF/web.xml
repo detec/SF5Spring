@@ -13,7 +13,7 @@
  </filter>
  <filter-mapping>
     <filter-name>MultipartFilter</filter-name>
-    <servlet-name>/*</servlet-name>
+    <servlet-name>sf5</servlet-name>
 </filter-mapping>
  <filter-mapping>
   <filter-name>springSecurityFilterChain</filter-name>
