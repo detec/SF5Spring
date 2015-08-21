@@ -50,13 +50,8 @@ init-method="initialize">
 	<security:jdbc-user-service
 		data-source-ref="dataSource"
 		users-by-username-query="
-			SELECT 
-				username,
-				password,
-				enabled
-			FROM USERS 
-			where username =?"
-		authorities-by-username-query="select username, role from FROM USERS where username =?" />
+			select	username, password, enabled from users	where username =?"
+		authorities-by-username-query="select username, authority from usersauthorities where username =?" />
 	</security:authentication-provider>
 </security:authentication-manager>
 
