@@ -12,13 +12,13 @@
  	http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 	 
 	
-	<context:component-scan base-package="org.openbox.sf5.application" />
+<context:component-scan base-package="org.openbox.sf5.application" />
  
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 		<property name="viewClass"
 			value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="prefix" value="/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
 	
