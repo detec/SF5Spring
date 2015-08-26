@@ -12,7 +12,7 @@ import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.jdbc.ReturningWork;
-import org.openbox.sf5.application.SettingsFormController.SettingsConversionPresentation;
+import org.openbox.sf5.application.SettingsConversionPresentation;
 import org.openbox.sf5.db.HibernateUtil;
 import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.SettingsConversion;
