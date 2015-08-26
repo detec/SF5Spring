@@ -14,33 +14,36 @@
 </head>
 <body>
  
-<h1>Edit Person</h1>
-<c:url var="saveUrl" value="/krams/main/persons/edit?id=${personAttribute.id}" />
-<form:form modelAttribute="personAttribute" method="POST" action="${saveUrl}">
+<h2>Openbox SF5 settings editor</h2>
+ <h3>Edit setting</h3>
+ <c:if test="${setting.id == 0}">
+ <c:url var="saveUrl" value="/settings/add" />
+ </c:if>
+ <c:if test="${setting.id != 0}">
+ <c:url var="saveUrl" value="/settings/edit?id=${setting.id}"/>
+ </c:if>
+<form:form modelAttribute="setting" method="POST" action="${saveUrl}">
  <table>
   <tr>
-   <td><form:label path="id">Id:</form:label></td>
-   <td><form:input path="id" disabled="true"/></td>
-  </tr>
-  
-  <tr>
-   <td><form:label path="firstName">First Name:</form:label></td>
-   <td><form:input path="firstName"/></td>
-  </tr>
- 
-  <tr>
-   <td><form:label path="lastName">Last Name</form:label></td>
-   <td><form:input path="lastName"/></td>
-  </tr>
-   
-  <tr>
-   <td><form:label path="money">Money</form:label></td>
-   <td><form:input path="money"/></td>
+   <td><form:label path="name">Name</form:label></td>
+   <td><form:input path="name"/></td>
+   <td><form:label path="id">ID</form:label></td>
+   <td><form:label path="id" /></td>
+   <td><form:label path="TheLastEntry">Last update date</form:label></td>
+   <td><form:label path="TheLastEntry"/></td>
   </tr>
  </table>
   
+  <p>Transponders table
+  <br>
+  <c:if test="${setting.id == 0}">
+  <input type="submit" value="Add"/>
+  </c:if>
+  <c:if test="${setting.id != 0}">
  <input type="submit" value="Save" />
+ </c:if>
 </form:form>
+<a href="index">Cancel</a>
  
 </body>
 </html>

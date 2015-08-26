@@ -37,7 +37,8 @@ init-method="initialize">
 </bean>
  
 <security:http auto-config="true">
-<security:intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" />
+
+<security:intercept-url pattern="/**" access="isAuthenticated()" />
 
 		<security:logout/>
 		<!-- enable csrf protection -->

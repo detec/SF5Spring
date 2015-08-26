@@ -10,7 +10,7 @@
 </head>
 <body>
 <h2>Openbox SF5 settings editor</h2>
- <h2>Settings</h2>
+ <h3>Settings</h3>
 <c:url var="addUrl" value="/settings/add" />
 <table style="border: 1px solid; width: 500px; text-align:center">
  <thead style="background:#fcf">

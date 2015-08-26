@@ -11,7 +11,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
@@ -81,8 +80,7 @@ public class Settings implements Serializable {
 		this.TheLastEntry = TheLastEntry;
 	}
 
-	// @ManyToAny(metaColumn = @Column)
-	@JoinColumn(name = "User", unique = false, nullable = false)
+	@Column(name = "User", unique = false, nullable = false)
 	private Users User;
 
 	public Users getUser() {

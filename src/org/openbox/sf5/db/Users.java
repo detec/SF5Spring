@@ -16,6 +16,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.openbox.sf5.common.TableFiller;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 
@@ -141,6 +142,9 @@ public class Users implements Serializable {
 
 			ObjectsController contr = new ObjectsController();
 			contr.saveOrUpdate(admin);
+
+			// insert default values into database.
+			new TableFiller();
 		}
 
 	}
