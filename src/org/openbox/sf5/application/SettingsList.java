@@ -3,6 +3,10 @@ package org.openbox.sf5.application;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import opr.openbox.sf5.converters.UserEditor;
+
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.db.Settings;
@@ -13,6 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +28,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SettingsList {
 
 	private Users currentUser;
+
+	@InitBinder
+	protected void initBinder(HttpServletRequest request,
+			ServletRequestDataBinder binder) {
+		binder.registerCustomEditor(Users.class, new UserEditor());
+	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String getSettings(Model model) {
@@ -42,7 +54,7 @@ public class SettingsList {
 		model.addAttribute("settings", settingsList);
 
 		// This will resolve to /WEB-INF/settings.jsp
-		return "index";
+		return "settings";
 	}
 
 	@RequestMapping(value = "/settings", method = RequestMethod.GET)
@@ -50,11 +62,39 @@ public class SettingsList {
 		return getSettings(model);
 	}
 
-	@RequestMapping(value = "/settings/edit", method = RequestMethod.GET)
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	public String rootsettingsGetSettings(Model model) {
+		return getSettings(model);
+	}
+
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String barerootsettingsGetSettings(Model model) {
+		return getSettings(model);
+	}
+
+	@RequestMapping(value = "/editsetting", method = RequestMethod.GET)
 	public String editSetting(
 			@RequestParam(value = "id", required = true) long id, Model model) {
 
+		ObjectsController contr = new ObjectsController();
+		Settings setting = (Settings) contr.select(Settings.class, id);
+		model.addAttribute("setting", setting);
 		return "editsetting";
+	}
+
+	@RequestMapping(value = "/settings/delete", method = RequestMethod.GET)
+	public String deleteSetting(
+			@RequestParam(value = "id", required = true) long id, Model model) {
+
+		ObjectsController contr = new ObjectsController();
+		contr.remove(Settings.class, id);
+		return getSettings(model);
+	}
+
+	@RequestMapping(value = "/editsetting", method = RequestMethod.POST)
+	public String editSaveSetting(@ModelAttribute("setting") Settings pSetting) {
+
+		return add(pSetting);
 	}
 
 	// here we save setting
@@ -70,7 +110,7 @@ public class SettingsList {
 
 		pSetting.setUser(currentUser);
 		contr.saveOrUpdate(pSetting);
-		return "index";
+		return "editsetting";
 	}
 
 	// here we start to create setting

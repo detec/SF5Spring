@@ -38,11 +38,13 @@ init-method="initialize">
  
 <security:http auto-config="true">
 
-<security:intercept-url pattern="/**" access="isAuthenticated()" />
-
-		<security:logout/>
-		<!-- enable csrf protection -->
-<security:csrf/>
+	<security:intercept-url pattern="/**" access="isAuthenticated()" />
+    <security:logout
+        logout-success-url="/login" />
+      	<security:logout/>
+	
+	<!-- enable csrf protection -->
+	<security:csrf/>
 </security:http>
  
  

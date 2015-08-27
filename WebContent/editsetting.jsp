@@ -20,18 +20,21 @@
  <c:url var="saveUrl" value="/settings/add" />
  </c:if>
  <c:if test="${setting.id != 0}">
- <c:url var="saveUrl" value="/settings/edit?id=${setting.id}"/>
+ <c:url var="saveUrl" value="/editsetting"/>
  </c:if>
 <form:form modelAttribute="setting" method="POST" action="${saveUrl}">
  <table>
   <tr>
    <td><form:label path="name">Name</form:label></td>
    <td><form:input path="name"/></td>
-   <td><form:label path="id">ID</form:label></td>
-   <td><form:label path="id" /></td>
+   <td><form:label path="id">ID</form:label><c:out value="${setting.id}" /></td>
+   <td><b><form:input path="id"/></b></td>
    <td><form:label path="TheLastEntry">Last update date</form:label></td>
-   <td><form:label path="TheLastEntry"/></td>
+   <td><b><c:out value="${setting.theLastEntry}" /></b></td>
   </tr>
+   <tr>
+   <form:hidden path="user"/>
+   </tr>
  </table>
   
   <p>Transponders table
@@ -42,8 +45,12 @@
   <c:if test="${setting.id != 0}">
  <input type="submit" value="Save" />
  </c:if>
-</form:form>
-<a href="index">Cancel</a>
  
+</form:form>
+<a href="index">Cancel</a><br>
+<a href="index">Settings</a>
+ <form:form method="POST" action="logout">
+<input type="submit" value="Logout" />
+</form:form>
 </body>
 </html>

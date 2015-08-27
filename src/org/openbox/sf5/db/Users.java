@@ -27,7 +27,7 @@ public class Users implements Serializable {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6789497093756301793L;
 	@Id
 	private long id;
 
@@ -148,4 +148,5 @@ public class Users implements Serializable {
 		}
 
 	}
+
 }
