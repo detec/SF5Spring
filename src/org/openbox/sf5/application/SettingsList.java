@@ -64,6 +64,11 @@ public class SettingsList {
 		ObjectsController contr = new ObjectsController();
 		pSetting.setTheLastEntry(new java.sql.Timestamp(System
 				.currentTimeMillis()));
+
+		// let's refresh the user because it returns empty.
+		readCurrentUser();
+
+		pSetting.setUser(currentUser);
 		contr.saveOrUpdate(pSetting);
 		return "index";
 	}
@@ -72,13 +77,11 @@ public class SettingsList {
 	@RequestMapping(value = "/settings/add", method = RequestMethod.GET)
 	public String getAdd(Model model) {
 
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
 		Settings setting = new Settings();
 
 		readCurrentUser();
 
-		setting.setUser(this.currentUser);
+		setting.setUser(currentUser);
 		setting.setName("New setting");
 		model.addAttribute("setting", setting);
 

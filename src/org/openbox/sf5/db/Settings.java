@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
@@ -41,12 +42,12 @@ public class Settings implements Serializable {
 	}
 
 	public String getName() {
-		return this.Name;
+		return Name;
 	}
 
 	public long getId() {
 
-		return this.id;
+		return id;
 	}
 
 	public void setId(long id) {
@@ -62,7 +63,7 @@ public class Settings implements Serializable {
 	private String PropsFile;
 
 	public String getPropsFile() {
-		return this.PropsFile;
+		return PropsFile;
 	}
 
 	public void setPropsFile(String PropsFile) {
@@ -73,18 +74,18 @@ public class Settings implements Serializable {
 	private Timestamp TheLastEntry;
 
 	public Timestamp getTheLastEntry() {
-		return this.TheLastEntry;
+		return TheLastEntry;
 	}
 
 	public void setTheLastEntry(Timestamp TheLastEntry) {
 		this.TheLastEntry = TheLastEntry;
 	}
 
-	@Column(name = "User", unique = false, nullable = false)
+	@JoinColumn(name = "User", unique = false, nullable = false)
 	private Users User;
 
 	public Users getUser() {
-		return this.User;
+		return User;
 	}
 
 	public void setUser(Users User) {
@@ -97,7 +98,7 @@ public class Settings implements Serializable {
 	private List<SettingsConversion> Conversion;
 
 	public List<SettingsConversion> getConversion() {
-		return this.Conversion;
+		return Conversion;
 	}
 
 	public void setConversion(List<SettingsConversion> Conversion) {
@@ -110,7 +111,7 @@ public class Settings implements Serializable {
 	private List<SettingsSatellites> Satellites;
 
 	public List<SettingsSatellites> getSatellites() {
-		return this.Satellites;
+		return Satellites;
 	}
 
 	public void setSatellites(List<SettingsSatellites> Satellites) {
@@ -123,7 +124,7 @@ public class Settings implements Serializable {
 
 		this.Name = Name;
 		this.PropsFile = PropsFile;
-		this.TheLastEntry = lastEntry;
+		TheLastEntry = lastEntry;
 		this.User = User;
 		this.Conversion = Conversion;
 		this.Satellites = Satellites;
@@ -146,12 +147,12 @@ public class Settings implements Serializable {
 			return false;
 		}
 		Settings otherSettings = (Settings) other;
-		if (otherSettings.Name.equals(this.Name)
-				&& otherSettings.PropsFile.equals(this.PropsFile)
-				&& otherSettings.TheLastEntry == this.TheLastEntry
-				&& otherSettings.User.equals(this.User)
-				&& otherSettings.Conversion.equals(this.Conversion)
-				&& otherSettings.Satellites.equals(this.Satellites)) {
+		if (otherSettings.Name.equals(Name)
+				&& otherSettings.PropsFile.equals(PropsFile)
+				&& otherSettings.TheLastEntry == TheLastEntry
+				&& otherSettings.User.equals(User)
+				&& otherSettings.Conversion.equals(Conversion)
+				&& otherSettings.Satellites.equals(Satellites)) {
 			return true;
 		} else {
 			return false;
