@@ -6,14 +6,14 @@
     
 <html>
 <head>
-<title>Openbox SF-5 settings editor</title>
+<title>Openbox SF-5 settings editor - Settings list</title>
 <sec:csrfMetaTags/>
 </head>
 <body>
 <h2>Openbox SF5 settings editor</h2>
  <h3>Settings</h3>
 <c:url var="addUrl" value="/settings/add" />
-<table style="border: 1px solid; width: 500px; text-align:center">
+<table style="border: 1px solid; text-align:center">
  <thead style="background:#fcf">
   <tr>
    <th>ID</th>
@@ -41,6 +41,9 @@
  <i>There are currently no settings in the list.</i> 
 </c:if>
 <a href="${addUrl}">Add</a>
+<a href="transponders">Transponders</a>
+<a href="upload">Import transponders from file</a>
+
 <form:form method="POST" action="logout">
 <input type="submit" value="Logout" />
 </form:form>

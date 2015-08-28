@@ -5,10 +5,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import opr.openbox.sf5.converters.UserEditor;
-
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.openbox.sf5.converters.UserEditor;
 import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -72,16 +70,6 @@ public class SettingsList {
 		return getSettings(model);
 	}
 
-	@RequestMapping(value = "/editsetting", method = RequestMethod.GET)
-	public String editSetting(
-			@RequestParam(value = "id", required = true) long id, Model model) {
-
-		ObjectsController contr = new ObjectsController();
-		Settings setting = (Settings) contr.select(Settings.class, id);
-		model.addAttribute("setting", setting);
-		return "editsetting";
-	}
-
 	@RequestMapping(value = "/settings/delete", method = RequestMethod.GET)
 	public String deleteSetting(
 			@RequestParam(value = "id", required = true) long id, Model model) {
@@ -89,44 +77,6 @@ public class SettingsList {
 		ObjectsController contr = new ObjectsController();
 		contr.remove(Settings.class, id);
 		return getSettings(model);
-	}
-
-	@RequestMapping(value = "/editsetting", method = RequestMethod.POST)
-	public String editSaveSetting(@ModelAttribute("setting") Settings pSetting) {
-
-		return add(pSetting);
-	}
-
-	// here we save setting
-	@RequestMapping(value = "/settings/add", method = RequestMethod.POST)
-	public String add(@ModelAttribute("setting") Settings pSetting) {
-
-		ObjectsController contr = new ObjectsController();
-		pSetting.setTheLastEntry(new java.sql.Timestamp(System
-				.currentTimeMillis()));
-
-		// let's refresh the user because it returns empty.
-		readCurrentUser();
-
-		pSetting.setUser(currentUser);
-		contr.saveOrUpdate(pSetting);
-		return "editsetting";
-	}
-
-	// here we start to create setting
-	@RequestMapping(value = "/settings/add", method = RequestMethod.GET)
-	public String getAdd(Model model) {
-
-		Settings setting = new Settings();
-
-		readCurrentUser();
-
-		setting.setUser(currentUser);
-		setting.setName("New setting");
-		model.addAttribute("setting", setting);
-
-		return "editsetting";
-
 	}
 
 	private void readCurrentUser() {

@@ -1,4 +1,4 @@
-package opr.openbox.sf5.converters;
+package org.openbox.sf5.converters;
 
 import java.beans.PropertyEditorSupport;
 import java.util.List;

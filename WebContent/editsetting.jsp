@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Openbox SF-5 settings editor</title>
+<title>Openbox SF-5 settings editor - edit setting</title>
 <sec:csrfMetaTags/>
 </head>
 <body>
@@ -58,7 +58,9 @@
    <th>Select</th>
    <th colspan="13"></th>
   </tr>
-  
+ <c:forEach items="${DataSC}" var="DataSc">
+ 
+ </c:forEach> 
   </table>
   <c:if test="${setting.id == 0}">
   <input type="submit" value="OK"/>
