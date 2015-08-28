@@ -27,8 +27,8 @@
   <tr>
    <td><form:label path="name">Name</form:label></td>
    <td><form:input path="name"/></td>
-   <td><form:label path="id">ID</form:label><c:out value="${setting.id}" /></td>
-   <td><b><form:input path="id"/></b></td>
+   <td><form:label path="id">ID</form:label><b><c:out value="${setting.id}" /></b><form:hidden path="id"/></td>
+   
    <td><form:label path="TheLastEntry">Last update date</form:label></td>
    <td><b><c:out value="${setting.theLastEntry}" /></b></td>
   </tr>
@@ -39,16 +39,37 @@
   
   <p>Transponders table
   <br>
+  <input type="submit" value="Up"/>
+  <input type="submit" value="Down"/>
+  <table>
+    <tr>
+   <th>Line no.</th>
+   <th>Transponder</th>
+   <th>Pol.</th>
+   <th>Carrier</th>
+   <th>Speed</th>
+   <th>Satellite</th>
+   <th>FEC</th>
+   <th>SatIdx</th>
+   <th>TpIdx</th>
+   <th>Int-tion #</th>
+   <th>Comment</th>
+   <th>Actions</th>
+   <th>Select</th>
+   <th colspan="13"></th>
+  </tr>
+  
+  </table>
   <c:if test="${setting.id == 0}">
-  <input type="submit" value="Add"/>
+  <input type="submit" value="OK"/>
   </c:if>
   <c:if test="${setting.id != 0}">
- <input type="submit" value="Save" />
+ <input type="submit" value="OK" />
  </c:if>
  
 </form:form>
-<a href="index">Cancel</a><br>
-<a href="index">Settings</a>
+<a href="settings">Cancel</a><br>
+<a href="settings">Settings</a>
  <form:form method="POST" action="logout">
 <input type="submit" value="Logout" />
 </form:form>
