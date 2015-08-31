@@ -19,5 +19,11 @@
 	<input type="hidden" name="${_csrf.parameterName}"
                 value="${_csrf.token}" />		
 	</form>
+<br>
+<a href="settings">Settings</a>
+<a href="transponders">Transponders</a>
+<form:form method="POST" action="logout">
+<input type="submit" value="Logout" />
+</form:form>	
 </body>
 </html>

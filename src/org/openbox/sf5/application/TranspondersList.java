@@ -10,6 +10,8 @@ import org.openbox.sf5.db.Transponders;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -51,7 +53,15 @@ public class TranspondersList {
 	private List<TransponderChoice> TransponderChoiceList = new ArrayList<TransponderChoice>();
 
 	@RequestMapping(value = "/transponders", method = RequestMethod.GET)
-	public String getTransponders(Model model) {
+	public String getTransponders(
+	// @RequestParam(value = "filtersatid", required = false) Long id,
+			Model model) {
+
+		// if (id != null) {
+		// ObjectsController contr = new ObjectsController();
+		// this.filterSatellite = (Satellites) contr.select(Satellites.class,
+		// id.longValue());
+		// }
 
 		if (filterSatellite != null) {
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
@@ -63,11 +73,26 @@ public class TranspondersList {
 			TranspondersList = (List<Transponders>) ObjectsListService
 					.ObjectsList(Transponders.class);
 
-			model.addAttribute("transponders", TranspondersList);
-			model.addAttribute("selectionMode", SelectionMode);
+			model.addAttribute("bean", this);
 
 		}
 		return "transponders";
+	}
+
+	@RequestMapping(value = "/transponders", method = RequestMethod.POST)
+	public String postGetTransponders(
+			@ModelAttribute("bean") TranspondersList bean, BindingResult result) {
+
+		// this.filterSatellite = bean.filterSatellite;
+		String returnString = "/transponders?filtersatid="
+				+ String.valueOf(bean.filterSatellite.getId());
+		return "/transponders?filtersatid=0";
+	}
+
+	@RequestMapping(value = "/transponders/upload", method = RequestMethod.POST)
+	public String uploadGetTransponders(BindingResult result) {
+
+		return "/transponders";
 	}
 
 	public List<Transponders> getTranspondersList() {
