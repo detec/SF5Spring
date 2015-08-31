@@ -16,7 +16,8 @@
 		File to upload: <input type="file" name="file"> <br /> <input type="submit"
 			value="Upload">
 		
-			
+	<input type="hidden" name="${_csrf.parameterName}"
+                value="${_csrf.token}" />		
 	</form>
 </body>
 </html>

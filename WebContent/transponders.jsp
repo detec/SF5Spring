@@ -8,14 +8,31 @@
 <head>
 <title>Openbox SF-5 settings editor - Browse, select transponders</title>
 <sec:csrfMetaTags/>
+<style>
+table, th, td {
+    border: 1px solid black;
+     border-collapse: collapse;
+}
+th, td {
+    padding: 15px;
+}
+</style>
 </head>
 <body>
 <h2>Openbox SF5 settings editor</h2>
  <h3>Transponders</h3>
+ <form:form method="POST" action="/transponders">
+ <form:select path="filterSatellite" >
+	<form:option value="NONE" label="--- Select ---"/>
+ 	<form:options items="${satellites}" />
+</form:select>
+
  <table style="border: 1px solid">
   <thead>
   <tr>
+   <c:if test="${selectionMode}">
    <th>Select</th>
+    </c:if>
    <th>Frequency</th>
    <th>Speed</th>
    <th>Pol.</th>
@@ -24,12 +41,16 @@
     <th>DVB ver.</th>
     <th>DVB range</th>
     <th>Satellite</th>
-   <th colspan="10"></th>
+   <th colspan="9"></th>
   </tr>
  </thead>
  
   <c:forEach items="${transponders}" var="transponder">
   <tr>
+  <c:if test="${selectionMode}">
+  <form:checkbox path="${transponder.checked}"/>
+  </c:if>
+
   <td><c:out value="${transponder.frequency}" /></td>
   <td><c:out value="${transponder.speed}" /></td>
   <td><c:out value="${transponder.polarization}" /></td>
@@ -41,6 +62,7 @@
   </tr>
    </c:forEach>
  </table>
+ </form:form>
  <c:if test="${empty transponders}">
  <i>There are currently no transponders in the list.</i> 
 </c:if>

@@ -64,6 +64,7 @@ public class TranspondersList {
 					.ObjectsList(Transponders.class);
 
 			model.addAttribute("transponders", TranspondersList);
+			model.addAttribute("selectionMode", SelectionMode);
 
 		}
 		return "transponders";

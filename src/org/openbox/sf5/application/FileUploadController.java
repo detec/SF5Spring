@@ -40,12 +40,12 @@ public class FileUploadController {
 				// calling reader class
 				IniReader getResult = new IniReader(absolutePath);
 
-				return "transponders";
+				return "/transponders";
 			} catch (Exception e) {
 				return "You failed to upload => " + e.getMessage();
 			}
 		} else {
-			return "transponders";
+			return "/transponders";
 		}
 
 	}
