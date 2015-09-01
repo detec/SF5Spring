@@ -7,6 +7,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.db.Satellites;
 import org.openbox.sf5.db.Transponders;
+import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,10 +15,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class TranspondersList {
+public class TranspondersListClass {
 
+	@ModelAttribute("selectionMode")
 	public boolean isSelectionMode() {
 		return SelectionMode;
 	}
@@ -34,6 +37,7 @@ public class TranspondersList {
 		this.multiple = multiple;
 	}
 
+	@ModelAttribute("filterSatellite")
 	public Satellites getFilterSatellite() {
 		return filterSatellite;
 	}
@@ -54,14 +58,17 @@ public class TranspondersList {
 
 	@RequestMapping(value = "/transponders", method = RequestMethod.GET)
 	public String getTransponders(
-	// @RequestParam(value = "filtersatid", required = false) Long id,
+	 @RequestParam(value = "filtersatid", required = false) Long id,
 			Model model) {
 
-		// if (id != null) {
-		// ObjectsController contr = new ObjectsController();
-		// this.filterSatellite = (Satellites) contr.select(Satellites.class,
-		// id.longValue());
-		// }
+		 if (id != null ) {
+
+			 if ( id.longValue() != 0) {
+		 ObjectsController contr = new ObjectsController();
+		 filterSatellite = (Satellites) contr.select(Satellites.class,
+		 id.longValue());
+			 }
+		 }
 
 		if (filterSatellite != null) {
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
@@ -81,20 +88,21 @@ public class TranspondersList {
 
 	@RequestMapping(value = "/transponders", method = RequestMethod.POST)
 	public String postGetTransponders(
-			@ModelAttribute("bean") TranspondersList bean, BindingResult result) {
+			@ModelAttribute("bean") TranspondersListClass bean, BindingResult result) {
 
 		// this.filterSatellite = bean.filterSatellite;
-		String returnString = "/transponders?filtersatid="
+		String returnString = "";
+		if (bean.filterSatellite != null) {
+			returnString = "/transponders?filtersatid="
 				+ String.valueOf(bean.filterSatellite.getId());
-		return "/transponders?filtersatid=0";
+		}
+		else {
+			returnString = "/transponders";
+		}
+		return returnString;
 	}
 
-	@RequestMapping(value = "/transponders/upload", method = RequestMethod.POST)
-	public String uploadGetTransponders(BindingResult result) {
-
-		return "/transponders";
-	}
-
+	@ModelAttribute("transpondersList")
 	public List<Transponders> getTranspondersList() {
 		return TranspondersList;
 	}
@@ -112,6 +120,7 @@ public class TranspondersList {
 		TransponderChoiceList = transponderChoiceList;
 	}
 
+	@ModelAttribute("satellites")
 	public List<Satellites> getSatellites() {
 		return (List<Satellites>) ObjectsListService
 				.ObjectsList(Satellites.class);
@@ -149,5 +158,6 @@ public class TranspondersList {
 			checked = false;
 		}
 	}
+
 
 }
