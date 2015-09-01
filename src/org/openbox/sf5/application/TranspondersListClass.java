@@ -26,6 +26,27 @@ public class TranspondersListClass {
 		return SelectionMode;
 	}
 
+	private long SettingId;
+
+	public List<Transponders> getSelectedTranspondersList() {
+		return selectedTranspondersList;
+	}
+
+	public void setSelectedTranspondersList(
+			List<Transponders> selectedTranspondersList) {
+		this.selectedTranspondersList = selectedTranspondersList;
+	}
+
+	private List<Transponders> selectedTranspondersList = new ArrayList<Transponders>();
+
+	public long getSettingId() {
+		return SettingId;
+	}
+
+	public void setSettingId(long settingId) {
+		SettingId = settingId;
+	}
+
 	public void setSelectionMode(boolean selectionMode) {
 		SelectionMode = selectionMode;
 	}
@@ -70,6 +91,8 @@ public class TranspondersListClass {
 	@RequestMapping(value = "/transponders", method = RequestMethod.GET)
 	public String getTransponders(
 			@RequestParam(value = "filtersatid", required = false) Long id,
+			@RequestParam(value = "SelectionMode", required = false) Boolean pSelectionMode,
+			@RequestParam(value = "SettingId", required = false) Long pSettingId,
 			Model model) {
 
 		if (id != null) {
@@ -93,7 +116,21 @@ public class TranspondersListClass {
 
 		}
 
+		if (pSelectionMode != null) {
+			this.SelectionMode = pSelectionMode;
+		}
+
+		if (pSettingId != null) {
+			this.SettingId = pSettingId.longValue();
+		}
+
 		model.addAttribute("bean", this);
+		// because I cannot cope with table binding
+		if (this.SelectionMode) {
+			model.addAttribute("tableItems", getTransponderChoiceList());
+		} else {
+			model.addAttribute("tableItems", this.TranspondersList);
+		}
 
 		return "transponders";
 	}
@@ -133,6 +170,23 @@ public class TranspondersListClass {
 		return "transponders";
 	}
 
+	@RequestMapping(value = "/transponders/select", method = RequestMethod.POST)
+	public String postSelectTransponders(
+			@ModelAttribute("bean") TranspondersListClass bean,
+			BindingResult result) {
+
+		selectedTranspondersList.clear();
+
+		this.TransponderChoiceList = bean.TransponderChoiceList;
+		for (TransponderChoice e : TransponderChoiceList) {
+			if (e.checked) {
+				selectedTranspondersList.add(e);
+			}
+		}
+
+		return "editsetting?" + String.valueOf(SettingId);
+	}
+
 	@ModelAttribute("transpondersList")
 	public List<Transponders> getTranspondersList() {
 		return TranspondersList;
@@ -143,6 +197,13 @@ public class TranspondersListClass {
 	}
 
 	public List<TransponderChoice> getTransponderChoiceList() {
+
+		TransponderChoiceList.clear();
+
+		for (Transponders e : TranspondersList) {
+			TransponderChoiceList.add(new TransponderChoice(e));
+		}
+
 		return TransponderChoiceList;
 	}
 

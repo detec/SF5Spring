@@ -21,7 +21,7 @@ th, td {
 <body>
 <h2>Openbox SF5 settings editor</h2>
  <h3>Transponders</h3>
- <form:form method="POST" action="transponders" modelAttribute="bean" id="form" >
+ <form:form method="POST" action="transponders" modelAttribute="bean" id="formFilterSatellite" >
  	<form:select path="filterSatelliteId" >
 		<form:option value="NONE" label="--- Select ---"/>
  		<form:options items="${bean.satellites}" />
@@ -29,7 +29,14 @@ th, td {
 	<input type="submit" value="Apply filter"/>
 	
 </form:form>
+
 	
+<c:set var="colsnumber" value="${bean.selectionMode ? 9 : 8}" />
+	
+<form:form method="POST" action="/transponders/select" commandName="tableItems">
+  	<c:if test="${bean.selectionMode}">
+	<input type="submit" value="Select"/>
+	</c:if> 	
  	<table style="border: 1px solid">
   	<thead>
   	<tr>
@@ -44,18 +51,13 @@ th, td {
     <th>DVB ver.</th>
     <th>DVB range</th>
     <th>Satellite</th>
-  	<c:if test="${bean.selectionMode}">    
-   	<th colspan="9"></th>
-  	<c:otherwise/>
-   	<th colspan="8"></th>
-  	</c:if> 
+  	<th colspan="${colsnumber}"></th>
   	</tr>
  	</thead>
- 
-  	<c:forEach items="${bean.transpondersList}" var="transponder">
+ 	<c:forEach items="${tableItems}" var="transponder" varStatus="x">
   	<tr>
   	<c:if test="${bean.selectionMode}">
-  	<form:checkbox path="${transponder.checked}"/>
+  	<td><form:checkbox path="checked" items="${transponder}" /></td>
   	</c:if>
 	
   	<td><c:out value="${transponder.frequency}" /></td>
@@ -69,6 +71,7 @@ th, td {
   	</tr>
    	</c:forEach>
  	</table>
+ </form:form>
  
  <c:if test="${empty bean.transpondersList}">
  <i>There are currently no transponders in the list.</i> 

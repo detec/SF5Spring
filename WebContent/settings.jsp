@@ -15,6 +15,7 @@
 <c:url var="addUrl" value="/settings/add" />
 <table style="border: 1px solid; text-align:center">
  <thead style="background:#fcf">
+
   <tr>
    <th>ID</th>
    <th>Name</th>

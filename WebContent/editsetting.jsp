@@ -41,6 +41,7 @@
   <br>
   <input type="submit" value="Up"/>
   <input type="submit" value="Down"/>
+  <a href="transponders?SelectionMode=true&SettingId=${setting.id}">Select transponders...</a>
   <table>
     <tr>
    <th>Line no.</th>
