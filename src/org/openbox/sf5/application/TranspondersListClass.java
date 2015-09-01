@@ -1,6 +1,7 @@
 package org.openbox.sf5.application;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.hibernate.criterion.Criterion;
@@ -37,13 +38,23 @@ public class TranspondersListClass {
 		this.multiple = multiple;
 	}
 
-	@ModelAttribute("filterSatellite")
 	public Satellites getFilterSatellite() {
 		return filterSatellite;
 	}
 
 	public void setFilterSatellite(Satellites filterSatellite) {
 		this.filterSatellite = filterSatellite;
+	}
+
+	private Long filterSatelliteId;
+
+	@ModelAttribute("filterSatelliteId")
+	public Long getFilterSatelliteId() {
+		return filterSatelliteId;
+	}
+
+	public void setFilterSatelliteId(Long filterSatelliteId) {
+		this.filterSatelliteId = filterSatelliteId;
 	}
 
 	private boolean SelectionMode;
@@ -58,17 +69,17 @@ public class TranspondersListClass {
 
 	@RequestMapping(value = "/transponders", method = RequestMethod.GET)
 	public String getTransponders(
-	 @RequestParam(value = "filtersatid", required = false) Long id,
+			@RequestParam(value = "filtersatid", required = false) Long id,
 			Model model) {
 
-		 if (id != null ) {
+		if (id != null) {
 
-			 if ( id.longValue() != 0) {
-		 ObjectsController contr = new ObjectsController();
-		 filterSatellite = (Satellites) contr.select(Satellites.class,
-		 id.longValue());
-			 }
-		 }
+			if (id.longValue() != 0) {
+				ObjectsController contr = new ObjectsController();
+				filterSatellite = (Satellites) contr.select(Satellites.class,
+						id.longValue());
+			}
+		}
 
 		if (filterSatellite != null) {
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
@@ -80,26 +91,46 @@ public class TranspondersListClass {
 			TranspondersList = (List<Transponders>) ObjectsListService
 					.ObjectsList(Transponders.class);
 
-			model.addAttribute("bean", this);
-
 		}
+
+		model.addAttribute("bean", this);
+
 		return "transponders";
 	}
 
 	@RequestMapping(value = "/transponders", method = RequestMethod.POST)
 	public String postGetTransponders(
-			@ModelAttribute("bean") TranspondersListClass bean, BindingResult result) {
+			@ModelAttribute("bean") TranspondersListClass bean,
+			BindingResult result, Model model) {
 
 		// this.filterSatellite = bean.filterSatellite;
-		String returnString = "";
-		if (bean.filterSatellite != null) {
-			returnString = "/transponders?filtersatid="
-				+ String.valueOf(bean.filterSatellite.getId());
+		// String returnString = "";
+		// if (bean.filterSatellite != null) {
+		// returnString = "/transponders?filtersatid="
+		// + String.valueOf(bean.filterSatellite.getId());
+		// } else {
+		// returnString = "/transponders";
+		// }
+		// return returnString;
+		if (bean.filterSatelliteId != null) {
+			ObjectsController contr = new ObjectsController();
+			this.filterSatellite = (Satellites) contr.select(Satellites.class,
+					bean.filterSatelliteId.longValue());
+
+			Criterion criterion = Restrictions.eq("Satellite",
+					this.filterSatellite);
+			TranspondersList = (List<Transponders>) ObjectsListService
+					.ObjectsCriterionList(Transponders.class, criterion);
 		}
+
 		else {
-			returnString = "/transponders";
+			TranspondersList = (List<Transponders>) ObjectsListService
+					.ObjectsList(Transponders.class);
 		}
-		return returnString;
+
+		model.addAttribute("bean", this);
+
+		return "transponders";
 	}
 
 	@ModelAttribute("transpondersList")
@@ -121,9 +152,17 @@ public class TranspondersListClass {
 	}
 
 	@ModelAttribute("satellites")
-	public List<Satellites> getSatellites() {
-		return (List<Satellites>) ObjectsListService
-				.ObjectsList(Satellites.class);
+	public HashMap<Long, String> getSatellites() {
+
+		HashMap<Long, String> satMap = new HashMap<Long, String>();
+
+		((List<Satellites>) ObjectsListService.ObjectsList(Satellites.class))
+				.stream().forEach(
+						t -> satMap.put(new Long(t.getId()), t.getName()));
+
+		return satMap;
+		// return (List<Satellites>) ObjectsListService
+		// .ObjectsList(Satellites.class);
 	}
 
 	public List<TransponderChoice> getTranspondersChoice() {
@@ -158,6 +197,5 @@ public class TranspondersListClass {
 			checked = false;
 		}
 	}
-
 
 }

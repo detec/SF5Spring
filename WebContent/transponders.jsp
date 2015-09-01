@@ -22,7 +22,7 @@ th, td {
 <h2>Openbox SF5 settings editor</h2>
  <h3>Transponders</h3>
  <form:form method="POST" action="transponders" modelAttribute="bean" id="form" >
- 	<form:select path="filterSatellite" >
+ 	<form:select path="filterSatelliteId" >
 		<form:option value="NONE" label="--- Select ---"/>
  		<form:options items="${bean.satellites}" />
 	</form:select>
