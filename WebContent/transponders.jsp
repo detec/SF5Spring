@@ -33,7 +33,7 @@ th, td {
 	
 <c:set var="colsnumber" value="${bean.selectionMode ? 9 : 8}" />
 	
-<form:form method="POST" action="/transponders/select" commandName="tableItems">
+<form:form method="POST" action="transponders/select" commandName="tableItems">
   	<c:if test="${bean.selectionMode}">
 	<input type="submit" value="Select"/>
 	</c:if> 	
@@ -57,7 +57,8 @@ th, td {
  	<c:forEach items="${tableItems}" var="transponder" varStatus="x">
   	<tr>
   	<c:if test="${bean.selectionMode}">
-  	<td><form:checkbox path="checked" items="${transponder}" /></td>
+  	<td><input type = "checkbox" name = "checked" value = "${transponder.checked}" /></td>
+
   	</c:if>
 	
   	<td><c:out value="${transponder.frequency}" /></td>
