@@ -14,7 +14,7 @@ table, th, td {
      border-collapse: collapse;
 }
 th, td {
-    padding: 15px;
+    padding: 5px;
 }
 </style>
 </head>
@@ -26,16 +26,17 @@ th, td {
 		<form:option value="NONE" label="--- Select ---"/>
  		<form:options items="${bean.satellites}" />
 	</form:select>
-	<input type="submit" value="Apply filter"/>
+	<input type="submit" value="Apply filter" name="filter"/>
 	
 </form:form>
 
 	
 <c:set var="colsnumber" value="${bean.selectionMode ? 9 : 8}" />
 	
-<form:form method="POST" action="transponders/select" commandName="tableItems">
+<form:form method="POST" action="transponders" commandName="tableItems">
   	<c:if test="${bean.selectionMode}">
-	<input type="submit" value="Select"/>
+	<input type="submit" value="Select" name="select"/>
+		
 	</c:if> 	
  	<table style="border: 1px solid">
   	<thead>

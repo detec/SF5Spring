@@ -41,7 +41,7 @@
   <br>
   <input type="submit" value="Up"/>
   <input type="submit" value="Down"/>
-  <a href="transponders?SelectionMode=true&SettingId=${setting.id}">Select transponders...</a>
+  <input type="submit" value="Select transponders..." name="selectTransponders" />
   <table>
     <tr>
    <th>Line no.</th>
@@ -64,14 +64,14 @@
  </c:forEach> 
   </table>
   <c:if test="${setting.id == 0}">
-  <input type="submit" value="OK"/>
+  <input type="submit" value="OK" name="add" />
   </c:if>
   <c:if test="${setting.id != 0}">
- <input type="submit" value="OK" />
+ <input type="submit" value="OK" name="save"/>
  </c:if>
- 
+ <input type="submit" value="Cancel" name="cancel"/>
 </form:form>
-<a href="settings">Cancel</a><br>
+
 <a href="settings">Settings</a>
  <form:form method="POST" action="logout">
 <input type="submit" value="Logout" />

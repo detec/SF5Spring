@@ -8,13 +8,22 @@
 <head>
 <title>Openbox SF-5 settings editor - Settings list</title>
 <sec:csrfMetaTags/>
+<style>
+table, th, td {
+    border: 1px solid black;
+     border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+}
+</style>
 </head>
 <body>
 <h2>Openbox SF5 settings editor</h2>
  <h3>Settings</h3>
 <c:url var="addUrl" value="/settings/add" />
-<table style="border: 1px solid; text-align:center">
- <thead style="background:#fcf">
+<table style="text-align:center">
+ <thead >
 
   <tr>
    <th>ID</th>

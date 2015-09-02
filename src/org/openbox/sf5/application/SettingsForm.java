@@ -24,8 +24,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 @Controller
+@SessionAttributes("selectedTransponders, selectedSettingsConversionPresentations, currentObject")
 public class SettingsForm {
 
 	private Users currentUser;
@@ -71,15 +74,38 @@ public class SettingsForm {
 
 	}
 
-	@RequestMapping(value = "/editsetting", method = RequestMethod.POST)
-	public String editSaveSetting(@ModelAttribute("setting") Settings pSetting) {
+	@RequestMapping(params = "save", value = "/editsetting", method = RequestMethod.POST)
+	public String editSaveSetting(@ModelAttribute("setting") Settings pSetting,
+			SessionStatus status) {
 
-		return add(pSetting);
+		// here we must check session attributes selectedTransponders,
+		// selectedSettingsConversionPresentations
+		// and add them to model
+
+		return add(pSetting, status);
+	}
+
+	@RequestMapping(params = "cancel", value = "/editsetting", method = RequestMethod.POST)
+	public String cancelSettingEdit() {
+
+		return "redirect:/settings";
+	}
+
+	@RequestMapping(params = "selectTransponders", value = "/editsetting", method = RequestMethod.POST)
+	public String prepareToSelectTransponders(
+			@ModelAttribute("setting") Settings pSetting, Model model) {
+
+		// storing setting between requests
+		model.addAttribute("currentObject", pSetting);
+		// we will not save setting, but will just pass it between requests.
+		return "redirect:/transponders?SelectionMode=true&SettingId="
+				+ String.valueOf(pSetting.getId());
 	}
 
 	// here we save setting
-	@RequestMapping(value = "/settings/add", method = RequestMethod.POST)
-	public String add(@ModelAttribute("setting") Settings pSetting) {
+	@RequestMapping(params = "add", value = "/settings/add", method = RequestMethod.POST)
+	public String add(@ModelAttribute("setting") Settings pSetting,
+			SessionStatus status) {
 
 		ObjectsController contr = new ObjectsController();
 		pSetting.setTheLastEntry(new java.sql.Timestamp(System
@@ -90,6 +116,9 @@ public class SettingsForm {
 
 		pSetting.setUser(currentUser);
 		contr.saveOrUpdate(pSetting);
+
+		status.setComplete();
+
 		return "editsetting";
 	}
 
