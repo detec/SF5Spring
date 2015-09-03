@@ -11,6 +11,7 @@ import org.openbox.sf5.db.Transponders;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@Scope("request")
 public class TranspondersListClass {
 
 	@Autowired
@@ -134,7 +136,6 @@ public class TranspondersListClass {
 			SelectionMode = pSelectionMode;
 		}
 
-
 		model.addAttribute("bean", this);
 		// because I cannot cope with table binding
 		if (SelectionMode) {
@@ -165,8 +166,7 @@ public class TranspondersListClass {
 			filterSatellite = (Satellites) contr.select(Satellites.class,
 					bean.filterSatelliteId.longValue());
 
-			Criterion criterion = Restrictions.eq("Satellite",
-					filterSatellite);
+			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
 			TranspondersList = (List<Transponders>) ObjectsListService
 					.ObjectsCriterionList(Transponders.class, criterion);
 		}
@@ -191,12 +191,12 @@ public class TranspondersListClass {
 	public String postSelectTransponders(
 			@ModelAttribute("tableItems") ArrayList<TransponderChoice> tableItems) {
 
-		//selectedTranspondersList.clear();
+		// selectedTranspondersList.clear();
 
 		AppContext.getSelectedTransponders().clear();
 
 		List<Transponders> transList = new ArrayList<Transponders>();
-		//TransponderChoiceList = tableItems;
+		// TransponderChoiceList = tableItems;
 		// for (TransponderChoice e : TransponderChoiceList) {
 		// if (e.checked) {
 		// selectedTranspondersList.add(e);
@@ -207,13 +207,13 @@ public class TranspondersListClass {
 
 		AppContext.setSelectedTransponders(transList);
 
-		String idStr = String.valueOf(AppContext.getCurentlyEditedSetting().getId());
+		String idStr = String.valueOf(AppContext.getCurentlyEditedSetting()
+				.getId());
 		String returnAddress = "";
 		if (idStr.equals("0")) {
 			// if it is a new unsaved settings - use add scenario
 			returnAddress = "redirect:/settings/add";
-		}
-		else {
+		} else {
 			returnAddress = "redirect:/editsetting?id=" + idStr;
 		}
 		return returnAddress;
@@ -271,6 +271,15 @@ public class TranspondersListClass {
 		public TransponderChoice(Transponders transponder) {
 			super(transponder);
 			checked = false;
+		}
+
+		// Spring needs default constructor for components
+		public TransponderChoice() {
+
+		}
+
+		public void init() {
+
 		}
 	}
 

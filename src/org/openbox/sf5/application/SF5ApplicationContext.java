@@ -5,23 +5,24 @@ import java.util.List;
 
 import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.Transponders;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 // this class is intended to store objects between controllers.
 @Component
-@Scope(value="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "session")
 public class SF5ApplicationContext {
 
-	public SF5ApplicationContext () {
-
+	public SF5ApplicationContext() {
+		// init();
 	}
 
 	private List<Transponders> selectedTransponders = new ArrayList<Transponders>();
 
 	private List<SettingsConversionPresentation> selectedSettingsConversionPresentations = new ArrayList<SettingsConversionPresentation>();
 
+	@Autowired
 	private Settings curentlyEditedSetting;
 
 	public List<Transponders> getSelectedTransponders() {
@@ -49,4 +50,10 @@ public class SF5ApplicationContext {
 		this.curentlyEditedSetting = curentlyEditedSetting;
 	}
 
+	// public void init() {
+	// curentlyEditedSetting = new Settings();
+	// selectedTransponders = new ArrayList<Transponders>();
+	// selectedSettingsConversionPresentations = new
+	// ArrayList<SettingsConversionPresentation>();
+	// }
 }

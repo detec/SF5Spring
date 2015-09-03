@@ -13,6 +13,7 @@ import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@Scope("request")
 public class SettingsList {
 
 	@Autowired
@@ -48,9 +50,9 @@ public class SettingsList {
 		}
 
 		// try to initialize wired AppContext
-		if (AppContext == null) {
-			AppContext = new SF5ApplicationContext();
-		}
+		// if (AppContext == null) {
+		AppContext = new SF5ApplicationContext();
+		// }
 
 		// Retrieve all settings
 		Criterion criterion = Restrictions.eq("User", currentUser);

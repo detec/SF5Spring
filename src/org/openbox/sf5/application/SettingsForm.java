@@ -11,10 +11,12 @@ import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.converters.UserEditor;
 import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.SettingsConversion;
+import org.openbox.sf5.db.Transponders;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -25,9 +27,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.support.SessionStatus;
 
 @Controller
+@Scope("request")
 public class SettingsForm {
 
 	@Autowired
@@ -77,14 +79,13 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(params = "save", value = "/editsetting", method = RequestMethod.POST)
-	public String editSaveSetting(@ModelAttribute("setting") Settings pSetting,
-			SessionStatus status) {
+	public String editSaveSetting(@ModelAttribute("setting") Settings pSetting) {
 
 		// here we must check session attributes selectedTransponders,
 		// selectedSettingsConversionPresentations
 		// and add them to model
 
-		return add(pSetting, status);
+		return add(pSetting);
 	}
 
 	@RequestMapping(params = "cancel", value = "/editsetting", method = RequestMethod.POST)
@@ -105,8 +106,7 @@ public class SettingsForm {
 
 	// here we save setting
 	@RequestMapping(params = "add", value = "/settings/add", method = RequestMethod.POST)
-	public String add(@ModelAttribute("setting") Settings pSetting,
-			SessionStatus status) {
+	public String add(@ModelAttribute("setting") Settings pSetting) {
 
 		ObjectsController contr = new ObjectsController();
 		pSetting.setTheLastEntry(new java.sql.Timestamp(System
@@ -117,8 +117,6 @@ public class SettingsForm {
 
 		pSetting.setUser(currentUser);
 		contr.saveOrUpdate(pSetting);
-
-		status.setComplete();
 
 		return "editsetting";
 	}
@@ -137,8 +135,17 @@ public class SettingsForm {
 	public String editSetting(
 			@RequestParam(value = "id", required = true) long id, Model model) {
 
-		ObjectsController contr = new ObjectsController();
-		Settings setting = (Settings) contr.select(Settings.class, id);
+		Settings setting = null;
+		// check if we have this object in AppContext
+		if (AppContext.getCurentlyEditedSetting() != null) {
+			setting = readSettingFromContext();
+		}
+
+		else {
+			ObjectsController contr = new ObjectsController();
+			setting = (Settings) contr.select(Settings.class, id);
+
+		}
 		model.addAttribute("setting", setting);
 		// load transponders and so on
 
@@ -171,22 +178,60 @@ public class SettingsForm {
 
 		// check if we have this object in AppContext
 		if (AppContext.getCurentlyEditedSetting() != null) {
-			setting = AppContext.getCurentlyEditedSetting();
-
+			setting = readSettingFromContext();
 		}
 
 		else {
-		readCurrentUser();
+			readCurrentUser();
 
-		setting.setUser(currentUser);
-		setting.setName("New setting");
+			setting.setUser(currentUser);
+			setting.setName("New setting");
 
 		}
+
 		model.addAttribute("setting", setting);
 		model.addAttribute("DataSC",
 				new ArrayList<SettingsConversionPresentation>());
 
 		return "editsetting";
+
+	}
+
+	public Settings readSettingFromContext() {
+		Settings setting = AppContext.getCurentlyEditedSetting();
+
+		// add transponders, if they are not null
+		List<Transponders> selTransList = AppContext.getSelectedTransponders();
+		if (selTransList != null) {
+
+			// selTransList.stream().forEach(t -> addNewLine(t, setting));
+			// warning about final variable.
+			for (Transponders t : selTransList) {
+				addNewLine(t, setting);
+			}
+			// clean after processing
+			selTransList.clear();
+			AppContext.setSelectedTransponders(selTransList);
+			AppContext.setCurentlyEditedSetting(null);
+
+		}
+		return setting;
+	}
+
+	public void addNewLine(Transponders trans, Settings pSetting) {
+		long newLine = new Long(dataSettingsConversion.size() + 1).longValue();
+
+		SettingsConversionPresentation newLineObject = new SettingsConversionPresentation(
+				pSetting);
+
+		newLineObject.setLineNumber(newLine);
+		// newLineObject.setTransponder(new Transponders()); // to prevent null
+		// pointer Exception
+		newLineObject.setTransponder(trans);
+		newLineObject.setNote("");
+		// newLineObject.editable = true;
+
+		dataSettingsConversion.add(newLineObject);
 
 	}
 }
