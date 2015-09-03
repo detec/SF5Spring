@@ -12,6 +12,7 @@ import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SettingsList {
+
+	@Autowired
+	private SF5ApplicationContext AppContext;
 
 	private Users currentUser;
 
@@ -41,6 +45,11 @@ public class SettingsList {
 
 		if (currentUser == null) {
 			return "notauthenticated";
+		}
+
+		// try to initialize wired AppContext
+		if (AppContext == null) {
+			AppContext = new SF5ApplicationContext();
 		}
 
 		// Retrieve all settings

@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.db.Satellites;
-import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.Transponders;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,36 +18,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
-@SessionAttributes("selectedTransponders, selectedSettingsConversionPresentations, currentObject")
 public class TranspondersListClass {
+
+	@Autowired
+	private SF5ApplicationContext AppContext;
 
 	@ModelAttribute("selectionMode")
 	public boolean isSelectionMode() {
 		return SelectionMode;
-	}
-
-	private long SettingId;
-
-	public List<Transponders> getSelectedTranspondersList() {
-		return selectedTranspondersList;
-	}
-
-	public void setSelectedTranspondersList(
-			List<Transponders> selectedTranspondersList) {
-		this.selectedTranspondersList = selectedTranspondersList;
-	}
-
-	private List<Transponders> selectedTranspondersList = new ArrayList<Transponders>();
-
-	public long getSettingId() {
-		return SettingId;
-	}
-
-	public void setSettingId(long settingId) {
-		SettingId = settingId;
 	}
 
 	public void setSelectionMode(boolean selectionMode) {
@@ -129,8 +107,7 @@ public class TranspondersListClass {
 	public String getTransponders(
 			@RequestParam(value = "filtersatid", required = false) Long filtersatid,
 			@RequestParam(value = "SelectionMode", required = false) Boolean pSelectionMode,
-			@RequestParam(value = "SettingId", required = false) Long pSettingId,
-			Model model, @ModelAttribute("currentObject") Settings pSetting) {
+			Model model) {
 
 		if (filtersatid != null) {
 
@@ -154,19 +131,16 @@ public class TranspondersListClass {
 		}
 
 		if (pSelectionMode != null) {
-			this.SelectionMode = pSelectionMode;
+			SelectionMode = pSelectionMode;
 		}
 
-		if (pSettingId != null) {
-			this.SettingId = pSettingId.longValue();
-		}
 
 		model.addAttribute("bean", this);
 		// because I cannot cope with table binding
-		if (this.SelectionMode) {
-			model.addAttribute("tableItems", getTransponderChoiceList());
+		if (SelectionMode) {
+			model.addAttribute("tableItems", getTranspondersChoice());
 		} else {
-			model.addAttribute("tableItems", this.TranspondersList);
+			model.addAttribute("tableItems", TranspondersList);
 		}
 
 		return "transponders";
@@ -188,11 +162,11 @@ public class TranspondersListClass {
 		// return returnString;
 		if (bean.filterSatelliteId != null) {
 			ObjectsController contr = new ObjectsController();
-			this.filterSatellite = (Satellites) contr.select(Satellites.class,
+			filterSatellite = (Satellites) contr.select(Satellites.class,
 					bean.filterSatelliteId.longValue());
 
 			Criterion criterion = Restrictions.eq("Satellite",
-					this.filterSatellite);
+					filterSatellite);
 			TranspondersList = (List<Transponders>) ObjectsListService
 					.ObjectsCriterionList(Transponders.class, criterion);
 		}
@@ -203,10 +177,10 @@ public class TranspondersListClass {
 		}
 
 		// because I cannot cope with table binding
-		if (this.SelectionMode) {
-			model.addAttribute("tableItems", getTransponderChoiceList());
+		if (SelectionMode) {
+			model.addAttribute("tableItems", getTranspondersChoice());
 		} else {
-			model.addAttribute("tableItems", this.TranspondersList);
+			model.addAttribute("tableItems", TranspondersList);
 		}
 		model.addAttribute("bean", this);
 
@@ -215,24 +189,34 @@ public class TranspondersListClass {
 
 	@RequestMapping(params = "select", value = "/transponders", method = RequestMethod.POST)
 	public String postSelectTransponders(
-			@ModelAttribute("tableItems") List<TransponderChoice> tableItems,
-			HttpServletRequest request) {
+			@ModelAttribute("tableItems") ArrayList<TransponderChoice> tableItems) {
 
-		selectedTranspondersList.clear();
+		//selectedTranspondersList.clear();
 
-		this.TransponderChoiceList = tableItems;
+		AppContext.getSelectedTransponders().clear();
+
+		List<Transponders> transList = new ArrayList<Transponders>();
+		//TransponderChoiceList = tableItems;
 		// for (TransponderChoice e : TransponderChoiceList) {
 		// if (e.checked) {
 		// selectedTranspondersList.add(e);
 		// }
 		// }
-		this.TransponderChoiceList.stream().filter(t -> t.checked)
-				.forEach(t -> this.selectedTranspondersList.add(t));
+		tableItems.stream().filter(t -> t.checked)
+				.forEach(t -> transList.add(t));
 
-		request.getSession().setAttribute("selectedTransponders",
-				this.selectedTranspondersList);
+		AppContext.setSelectedTransponders(transList);
 
-		return "redirect:/editsetting?" + String.valueOf(SettingId);
+		String idStr = String.valueOf(AppContext.getCurentlyEditedSetting().getId());
+		String returnAddress = "";
+		if (idStr.equals("0")) {
+			// if it is a new unsaved settings - use add scenario
+			returnAddress = "redirect:/settings/add";
+		}
+		else {
+			returnAddress = "redirect:/editsetting?id=" + idStr;
+		}
+		return returnAddress;
 	}
 
 	@ModelAttribute("transpondersList")
@@ -242,22 +226,6 @@ public class TranspondersListClass {
 
 	public void setTranspondersList(List<Transponders> transpondersList) {
 		TranspondersList = transpondersList;
-	}
-
-	public List<TransponderChoice> getTransponderChoiceList() {
-
-		TransponderChoiceList.clear();
-
-		for (Transponders e : TranspondersList) {
-			TransponderChoiceList.add(new TransponderChoice(e));
-		}
-
-		return TransponderChoiceList;
-	}
-
-	public void setTransponderChoiceList(
-			List<TransponderChoice> transponderChoiceList) {
-		TransponderChoiceList = transponderChoiceList;
 	}
 
 	@ModelAttribute("satellites")
@@ -270,8 +238,7 @@ public class TranspondersListClass {
 						t -> satMap.put(new Long(t.getId()), t.getName()));
 
 		return satMap;
-		// return (List<Satellites>) ObjectsListService
-		// .ObjectsList(Satellites.class);
+
 	}
 
 	public List<TransponderChoice> getTranspondersChoice() {

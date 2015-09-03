@@ -14,6 +14,7 @@ import org.openbox.sf5.db.SettingsConversion;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,12 +25,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 @Controller
-@SessionAttributes("selectedTransponders, selectedSettingsConversionPresentations, currentObject")
 public class SettingsForm {
+
+	@Autowired
+	private SF5ApplicationContext AppContext;
 
 	private Users currentUser;
 
@@ -95,8 +97,7 @@ public class SettingsForm {
 	public String prepareToSelectTransponders(
 			@ModelAttribute("setting") Settings pSetting, Model model) {
 
-		// storing setting between requests
-		model.addAttribute("currentObject", pSetting);
+		AppContext.setCurentlyEditedSetting(pSetting);
 		// we will not save setting, but will just pass it between requests.
 		return "redirect:/transponders?SelectionMode=true&SettingId="
 				+ String.valueOf(pSetting.getId());
@@ -168,10 +169,19 @@ public class SettingsForm {
 
 		Settings setting = new Settings();
 
+		// check if we have this object in AppContext
+		if (AppContext.getCurentlyEditedSetting() != null) {
+			setting = AppContext.getCurentlyEditedSetting();
+
+		}
+
+		else {
 		readCurrentUser();
 
 		setting.setUser(currentUser);
 		setting.setName("New setting");
+
+		}
 		model.addAttribute("setting", setting);
 		model.addAttribute("DataSC",
 				new ArrayList<SettingsConversionPresentation>());
