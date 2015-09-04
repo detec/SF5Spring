@@ -137,8 +137,12 @@ public class SettingsForm {
 
 		Settings setting = null;
 		// check if we have this object in AppContext
-		if (AppContext.getCurentlyEditedSetting().getName() != null) {
-			setting = readSettingFromContext();
+		Settings checkCurrSetting = AppContext.getCurentlyEditedSetting();
+
+		if (checkCurrSetting != null) {
+			if (checkCurrSetting.getName() != null) {
+				setting = readSettingFromContext();
+			}
 		}
 
 		else {
@@ -177,8 +181,12 @@ public class SettingsForm {
 		Settings setting = new Settings();
 
 		// check if we have this object in AppContext
-		if (AppContext.getCurentlyEditedSetting() != null) {
-			setting = readSettingFromContext();
+		Settings checkCurrSetting = AppContext.getCurentlyEditedSetting();
+
+		if (checkCurrSetting != null) {
+			if (checkCurrSetting.getName() != null) {
+				setting = readSettingFromContext();
+			}
 		}
 
 		else {

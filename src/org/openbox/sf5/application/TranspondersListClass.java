@@ -4,10 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.openbox.sf5.converters.TransponderChoice;
+import org.openbox.sf5.converters.TransponderChoiceEditor;
+import org.openbox.sf5.converters.TransponderChoiceListWrapper;
+import org.openbox.sf5.converters.UserEditor;
 import org.openbox.sf5.db.Satellites;
 import org.openbox.sf5.db.Transponders;
+import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +22,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +32,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @Scope("request")
 public class TranspondersListClass {
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		// exactly this order should be maintained!
+		binder.setAutoGrowCollectionLimit(4096);
+
+		binder.registerCustomEditor(Users.class, new UserEditor());
+		binder.registerCustomEditor(Transponders.class,
+				new TransponderChoiceEditor());
+		binder.registerCustomEditor(TransponderChoice.class,
+				new TransponderChoiceEditor());
+
+	}
 
 	@Autowired
 	private SF5ApplicationContext AppContext;
@@ -69,47 +91,15 @@ public class TranspondersListClass {
 
 	private Satellites filterSatellite;
 
-	private ArrayList<Transponders> TranspondersList;
+	private List<Transponders> TranspondersList = new ArrayList<Transponders>();
 
-	private ArrayList<TransponderChoice> TransponderChoiceList = new ArrayList<TransponderChoice>();
-
-	// @RequestMapping(value = "/transponders", method = RequestMethod.GET)
-	// public String selectTransponders(
-	// @RequestParam(value = "SelectionMode", required = false) Boolean
-	// pSelectionMode,
-	// @RequestParam(value = "SettingId", required = false) Long pSettingId,
-	// Model model, @ModelAttribute("currentObject") Settings pSetting) {
-	//
-	// TranspondersList = (List<Transponders>) ObjectsListService
-	// .ObjectsList(Transponders.class);
-	//
-	// if (pSelectionMode != null) {
-	// this.SelectionMode = pSelectionMode;
-	// }
-	//
-	// if (pSettingId != null) {
-	// this.SettingId = pSettingId.longValue();
-	// }
-	//
-	// model.addAttribute("bean", this);
-	// // because I cannot cope with table binding
-	// if (this.SelectionMode) {
-	// model.addAttribute("tableItems", getTransponderChoiceList());
-	// } else {
-	// model.addAttribute("tableItems", this.TranspondersList);
-	// }
-	//
-	// model.addAttribute("setting", pSetting);
-	//
-	// // return "redirect:/editsetting?id=" + String.valueOf(SettingId);
-	// return "transponders";
-	// }
+	private List<TransponderChoice> TransponderChoiceList = new ArrayList<TransponderChoice>();
 
 	@RequestMapping(value = "/transponders", method = RequestMethod.GET)
 	public String getTransponders(
 			@RequestParam(value = "filtersatid", required = false) Long filtersatid,
 			@RequestParam(value = "SelectionMode", required = false) Boolean pSelectionMode,
-			Model model) {
+			Model model, HttpServletRequest request) {
 
 		if (filtersatid != null) {
 
@@ -136,13 +126,18 @@ public class TranspondersListClass {
 			SelectionMode = pSelectionMode;
 		}
 
+		TransponderChoiceListWrapper wrapper = new TransponderChoiceListWrapper();
+		wrapper.setTclist(getTransponderChoiceList());
 		model.addAttribute("bean", this);
+		model.addAttribute("wrapper", wrapper);
+
+		// model.addAttribute("bean", this);
 		// because I cannot cope with table binding
-//		if (SelectionMode) {
-//			model.addAttribute("tableItems", getTranspondersChoice());
-//		} else {
-//			model.addAttribute("tableItems", TranspondersList);
-//		}
+		// if (SelectionMode) {
+		// model.addAttribute("tableItems", getTranspondersChoice());
+		// } else {
+		// model.addAttribute("tableItems", TranspondersList);
+		// }
 
 		return "transponders";
 	}
@@ -152,46 +147,40 @@ public class TranspondersListClass {
 			@ModelAttribute("bean") TranspondersListClass bean,
 			BindingResult result, Model model) {
 
-		// this.filterSatellite = bean.filterSatellite;
-		// String returnString = "";
-		// if (bean.filterSatellite != null) {
-		// returnString = "/transponders?filtersatid="
-		// + String.valueOf(bean.filterSatellite.getId());
-		// } else {
-		// returnString = "/transponders";
-		// }
-		// return returnString;
 		if (bean.filterSatelliteId != null) {
 			ObjectsController contr = new ObjectsController();
 			filterSatellite = (Satellites) contr.select(Satellites.class,
 					bean.filterSatelliteId.longValue());
 
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
-			TranspondersList = (ArrayList<Transponders>) ObjectsListService
+			TranspondersList = (List<Transponders>) ObjectsListService
 					.ObjectsCriterionList(Transponders.class, criterion);
 		}
 
 		else {
-			TranspondersList = (ArrayList<Transponders>) ObjectsListService
+			TranspondersList = (List<Transponders>) ObjectsListService
 					.ObjectsList(Transponders.class);
 		}
 
 		// because I cannot cope with table binding
-		if (SelectionMode) {
-			model.addAttribute("tableItems", getTransponderChoiceList());
-		} else {
-			model.addAttribute("tableItems", TranspondersList);
-		}
+		// if (SelectionMode) {
+		// model.addAttribute("tableItems", getTransponderChoiceList());
+		// } else {
+		// model.addAttribute("tableItems", TranspondersList);
+		// }
 		model.addAttribute("bean", this);
+		TransponderChoiceListWrapper wrapper = new TransponderChoiceListWrapper();
+		wrapper.setTclist(getTransponderChoiceList());
+		model.addAttribute("wrapper", wrapper);
 
 		return "transponders";
 	}
 
 	@RequestMapping(params = "select", value = "/transponders", method = RequestMethod.POST)
 	public String postSelectTransponders(
-			@ModelAttribute("tableItems") ArrayList<TransponderChoice> tableItems) {
-
-		// selectedTranspondersList.clear();
+			@ModelAttribute("bean") TranspondersListClass bean,
+			@ModelAttribute("wrapper") TransponderChoiceListWrapper wrapper,
+			BindingResult result, HttpServletRequest request) {
 
 		AppContext.getSelectedTransponders().clear();
 
@@ -202,7 +191,7 @@ public class TranspondersListClass {
 		// selectedTranspondersList.add(e);
 		// }
 		// }
-		tableItems.stream().filter(t -> t.checked)
+		wrapper.getTclist().stream().filter(t -> t.isChecked())
 				.forEach(t -> transList.add(t));
 
 		AppContext.setSelectedTransponders(transList);
@@ -241,7 +230,7 @@ public class TranspondersListClass {
 
 	}
 
-	public ArrayList<TransponderChoice> getTransponderChoiceList() {
+	public List<TransponderChoice> getTransponderChoiceList() {
 
 		TransponderChoiceList.clear();
 
@@ -250,37 +239,6 @@ public class TranspondersListClass {
 		}
 
 		return TransponderChoiceList;
-	}
-
-	public class TransponderChoice extends Transponders {
-
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 3262084796351763445L;
-		private boolean checked;
-
-		public boolean isChecked() {
-			return checked;
-		}
-
-		public void setChecked(boolean checked) {
-			this.checked = checked;
-		}
-
-		public TransponderChoice(Transponders transponder) {
-			super(transponder);
-			checked = false;
-		}
-
-		// Spring needs default constructor for components
-		public TransponderChoice() {
-
-		}
-
-		public void init() {
-
-		}
 	}
 
 }

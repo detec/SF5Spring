@@ -33,11 +33,11 @@ th, td {
 	
 <c:set var="colsnumber" value="${bean.selectionMode ? 9 : 8}" />
 	
-<form:form modelAttribute="bean" method="POST" action="transponders" items="${bean.transponderChoiceList}" >
+<form:form modelAttribute="wrapper" method="POST" action="transponders" items="${wrapper.tclist}" >
   	<c:if test="${bean.selectionMode}">
 	<input type="submit" value="Select" name="select"/>
-		
-	</c:if> 	
+	</c:if>
+	 	
  	<table style="border: 1px solid">
   	<thead>
   	<tr>
@@ -55,13 +55,16 @@ th, td {
   	<th colspan="${colsnumber}"></th>
   	</tr>
  	</thead>
- 	<c:forEach items="${bean.transponderChoiceList}" var="transponder" varStatus="x">
+ 	<c:forEach items="${wrapper.tclist}" var="transponder" varStatus="x">
   	<tr>
   	<c:if test="${bean.selectionMode}">
-  	<td><input type = "checkbox" name = "checked" value = "${transponder.checked}" /></td>
-
+  	<!-- 
+  	<td><input type = "checkbox" name = "checked" value = "${tclist[x.index].checked}" /></td>
+ 	-->	
+	<td><form:checkbox path="tclist[${x.index}].checked" /></td>
   	</c:if>
-	<form:input type="hidden" path="transponderChoiceList[${x.index}]" value="transponderChoiceList[${x.index}]"/>
+	<form:input type="hidden" path="tclist[${x.index}].id"/>
+
 	
   	<td><c:out value="${transponder.frequency}" /></td>
   	<td><c:out value="${transponder.speed}" /></td>
@@ -76,7 +79,7 @@ th, td {
  	</table>
  </form:form>
  
- <c:if test="${empty bean.transpondersList}">
+ <c:if test="${empty wrapper.tclist}">
  <i>There are currently no transponders in the list.</i> 
 </c:if>
 <br>
