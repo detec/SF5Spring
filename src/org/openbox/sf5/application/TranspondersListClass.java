@@ -69,9 +69,9 @@ public class TranspondersListClass {
 
 	private Satellites filterSatellite;
 
-	private List<Transponders> TranspondersList;
+	private ArrayList<Transponders> TranspondersList;
 
-	private List<TransponderChoice> TransponderChoiceList = new ArrayList<TransponderChoice>();
+	private ArrayList<TransponderChoice> TransponderChoiceList = new ArrayList<TransponderChoice>();
 
 	// @RequestMapping(value = "/transponders", method = RequestMethod.GET)
 	// public String selectTransponders(
@@ -122,12 +122,12 @@ public class TranspondersListClass {
 
 		if (filterSatellite != null) {
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
-			TranspondersList = (List<Transponders>) ObjectsListService
+			TranspondersList = (ArrayList<Transponders>) ObjectsListService
 					.ObjectsCriterionList(Transponders.class, criterion);
 		} else {
 			// return (List<Transponders>) ObjectsListService
 			// .ObjectsList(Transponders.class);
-			TranspondersList = (List<Transponders>) ObjectsListService
+			TranspondersList = (ArrayList<Transponders>) ObjectsListService
 					.ObjectsList(Transponders.class);
 
 		}
@@ -138,11 +138,11 @@ public class TranspondersListClass {
 
 		model.addAttribute("bean", this);
 		// because I cannot cope with table binding
-		if (SelectionMode) {
-			model.addAttribute("tableItems", getTranspondersChoice());
-		} else {
-			model.addAttribute("tableItems", TranspondersList);
-		}
+//		if (SelectionMode) {
+//			model.addAttribute("tableItems", getTranspondersChoice());
+//		} else {
+//			model.addAttribute("tableItems", TranspondersList);
+//		}
 
 		return "transponders";
 	}
@@ -167,18 +167,18 @@ public class TranspondersListClass {
 					bean.filterSatelliteId.longValue());
 
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
-			TranspondersList = (List<Transponders>) ObjectsListService
+			TranspondersList = (ArrayList<Transponders>) ObjectsListService
 					.ObjectsCriterionList(Transponders.class, criterion);
 		}
 
 		else {
-			TranspondersList = (List<Transponders>) ObjectsListService
+			TranspondersList = (ArrayList<Transponders>) ObjectsListService
 					.ObjectsList(Transponders.class);
 		}
 
 		// because I cannot cope with table binding
 		if (SelectionMode) {
-			model.addAttribute("tableItems", getTranspondersChoice());
+			model.addAttribute("tableItems", getTransponderChoiceList());
 		} else {
 			model.addAttribute("tableItems", TranspondersList);
 		}
@@ -224,7 +224,7 @@ public class TranspondersListClass {
 		return TranspondersList;
 	}
 
-	public void setTranspondersList(List<Transponders> transpondersList) {
+	public void setTranspondersList(ArrayList<Transponders> transpondersList) {
 		TranspondersList = transpondersList;
 	}
 
@@ -241,7 +241,7 @@ public class TranspondersListClass {
 
 	}
 
-	public List<TransponderChoice> getTranspondersChoice() {
+	public ArrayList<TransponderChoice> getTransponderChoiceList() {
 
 		TransponderChoiceList.clear();
 

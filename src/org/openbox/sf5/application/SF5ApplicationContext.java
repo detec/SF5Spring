@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class SF5ApplicationContext {
 
 	public SF5ApplicationContext() {
-		// init();
+
 	}
 
 	private List<Transponders> selectedTransponders = new ArrayList<Transponders>();
@@ -50,10 +50,4 @@ public class SF5ApplicationContext {
 		this.curentlyEditedSetting = curentlyEditedSetting;
 	}
 
-	// public void init() {
-	// curentlyEditedSetting = new Settings();
-	// selectedTransponders = new ArrayList<Transponders>();
-	// selectedSettingsConversionPresentations = new
-	// ArrayList<SettingsConversionPresentation>();
-	// }
 }

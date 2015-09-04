@@ -137,7 +137,7 @@ public class SettingsForm {
 
 		Settings setting = null;
 		// check if we have this object in AppContext
-		if (AppContext.getCurentlyEditedSetting() != null) {
+		if (AppContext.getCurentlyEditedSetting().getName() != null) {
 			setting = readSettingFromContext();
 		}
 
