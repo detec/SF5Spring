@@ -3,9 +3,7 @@ package org.openbox.sf5.application;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.Transponders;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -22,8 +20,7 @@ public class SF5ApplicationContext {
 
 	private List<SettingsConversionPresentation> selectedSettingsConversionPresentations = new ArrayList<SettingsConversionPresentation>();
 
-	@Autowired
-	private Settings curentlyEditedSetting;
+	private SettingsForm curentlyEditedSetting;
 
 	public List<Transponders> getSelectedTransponders() {
 		return selectedTransponders;
@@ -42,11 +39,11 @@ public class SF5ApplicationContext {
 		this.selectedSettingsConversionPresentations = selectedSettingsConversionPresentations;
 	}
 
-	public Settings getCurentlyEditedSetting() {
+	public SettingsForm getCurentlyEditedSetting() {
 		return curentlyEditedSetting;
 	}
 
-	public void setCurentlyEditedSetting(Settings curentlyEditedSetting) {
+	public void setCurentlyEditedSetting(SettingsForm curentlyEditedSetting) {
 		this.curentlyEditedSetting = curentlyEditedSetting;
 	}
 

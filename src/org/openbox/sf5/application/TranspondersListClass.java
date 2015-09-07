@@ -180,7 +180,7 @@ public class TranspondersListClass {
 	public String postSelectTransponders(
 			@ModelAttribute("bean") TranspondersListClass bean,
 			@ModelAttribute("wrapper") TransponderChoiceListWrapper wrapper,
-			BindingResult result, HttpServletRequest request) {
+			BindingResult result) {
 
 		AppContext.getSelectedTransponders().clear();
 
@@ -192,7 +192,7 @@ public class TranspondersListClass {
 		// }
 		// }
 		wrapper.getTclist().stream().filter(t -> t.isChecked())
-				.forEach(t -> transList.add(t));
+				.forEach(t -> transList.add(t.getTransponder()));
 
 		AppContext.setSelectedTransponders(transList);
 

@@ -1,6 +1,7 @@
 package org.openbox.sf5.converters;
 
 import org.openbox.sf5.db.Transponders;
+import org.openbox.sf5.service.ObjectsController;
 
 public class TransponderChoice extends Transponders {
 
@@ -26,6 +27,13 @@ public class TransponderChoice extends Transponders {
 	// Spring needs default constructor for components
 	public TransponderChoice() {
 
+	}
+
+	public Transponders getTransponder() {
+		ObjectsController contr = new ObjectsController();
+		Transponders trans = (Transponders) contr.select(Transponders.class,
+				super.getId());
+		return trans;
 	}
 
 }

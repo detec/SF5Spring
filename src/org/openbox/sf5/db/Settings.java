@@ -59,7 +59,9 @@ public class Settings implements Serializable {
 
 	@Override
 	public String toString() {
-		return Name;
+		// return Name;
+		// we must convert object to id
+		return String.valueOf(id);
 	}
 
 	@Column(name = "PropsFile", unique = false, nullable = true, length = 300)

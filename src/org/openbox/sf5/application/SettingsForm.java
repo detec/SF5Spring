@@ -1,13 +1,16 @@
 package org.openbox.sf5.application;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.openbox.sf5.converters.SettingsEditor;
+import org.openbox.sf5.converters.SqlTimestampPropertyEditor;
+import org.openbox.sf5.converters.TransponderChoice;
+import org.openbox.sf5.converters.TransponderChoiceEditor;
 import org.openbox.sf5.converters.UserEditor;
 import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.SettingsConversion;
@@ -21,7 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +38,37 @@ public class SettingsForm {
 	@Autowired
 	private SF5ApplicationContext AppContext;
 
-	private Users currentUser;
+	private long id;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	private Timestamp TheLastEntry;
+
+	public Timestamp getTheLastEntry() {
+		return TheLastEntry;
+	}
+
+	public void setTheLastEntry(Timestamp TheLastEntry) {
+		this.TheLastEntry = TheLastEntry;
+	}
+
+	private Settings SettingsObject;
+
+	public Settings getSettingsObject() {
+		return SettingsObject;
+	}
+
+	public void setSettingsObject(Settings settingsObject) {
+		SettingsObject = settingsObject;
+	}
+
+	private Users User;
 
 	private List<SettingsConversionPresentation> dataSettingsConversion = new ArrayList<SettingsConversionPresentation>();
 
@@ -49,17 +82,73 @@ public class SettingsForm {
 	}
 
 	@InitBinder
-	protected void initBinder(HttpServletRequest request,
-			ServletRequestDataBinder binder) {
+	public void initBinder(WebDataBinder binder) {
+		// exactly this order should be maintained!
+		binder.setAutoGrowCollectionLimit(4096);
+
 		binder.registerCustomEditor(Users.class, new UserEditor());
+		binder.registerCustomEditor(Transponders.class,
+				new TransponderChoiceEditor());
+		binder.registerCustomEditor(TransponderChoice.class,
+				new TransponderChoiceEditor());
+		binder.registerCustomEditor(java.sql.Timestamp.class,
+				new SqlTimestampPropertyEditor());
+		binder.registerCustomEditor(Settings.class, new SettingsEditor());
 	}
 
-	public Users getCurrentUser() {
-		return currentUser;
+	public Users getUser() {
+		return User;
 	}
 
-	public void setCurrentUser(Users currentUser) {
-		this.currentUser = currentUser;
+	public void setUser(Users currentUser) {
+		this.User = currentUser;
+	}
+
+	// makes conversion of properties from db layer to controller
+	public void writeFromSettingsObjectToSettingsForm() {
+		this.id = this.SettingsObject.getId();
+		this.Name = this.SettingsObject.getName();
+		this.User = this.SettingsObject.getUser();
+		this.TheLastEntry = this.SettingsObject.getTheLastEntry();
+
+		List<SettingsConversion> listRead = this.SettingsObject.getConversion();
+
+		// for new item it is null
+		if (listRead != null) {
+			// sort in ascending order
+			Collections
+					.sort(listRead, (b1, b2) -> (int) (b1.getLineNumber() - b2
+							.getLineNumber()));
+
+			for (SettingsConversion e : listRead) {
+				dataSettingsConversion
+						.add(new SettingsConversionPresentation(e));
+			}
+
+		}
+	}
+
+	public void writeFromSettingsFormToSettingsObject(SettingsForm pSetting) {
+		this.SettingsObject = pSetting.SettingsObject;
+		this.SettingsObject.setName(pSetting.Name);
+
+		this.SettingsObject.setTheLastEntry(new java.sql.Timestamp(System
+				.currentTimeMillis()));
+
+		// let's refresh the user because it returns empty.
+		readCurrentUser();
+		this.SettingsObject.setUser(pSetting.User);
+		this.dataSettingsConversion = pSetting.dataSettingsConversion;
+
+		// convert to Conversion
+		// this.SettingsObject
+		// .setConversion((List<SettingsConversion>)
+		// this.dataSettingsConversion);
+
+		List<SettingsConversion> tempSCList = new ArrayList<SettingsConversion>();
+		this.dataSettingsConversion.stream().forEach(t -> tempSCList.add(t));
+		this.SettingsObject.setConversion(tempSCList);
+
 	}
 
 	private void readCurrentUser() {
@@ -73,13 +162,23 @@ public class SettingsForm {
 		List<Users> usersList = (List<Users>) ObjectsListService
 				.ObjectsCriterionList(Users.class, criterion);
 		if (!usersList.isEmpty()) {
-			currentUser = usersList.get(0);
+			User = usersList.get(0);
 		}
 
 	}
 
+	private String Name;
+
+	public void setName(String Name) {
+		this.Name = Name;
+	}
+
+	public String getName() {
+		return Name;
+	}
+
 	@RequestMapping(params = "save", value = "/editsetting", method = RequestMethod.POST)
-	public String editSaveSetting(@ModelAttribute("setting") Settings pSetting) {
+	public String editSaveSetting(@ModelAttribute("bean") SettingsForm pSetting) {
 
 		// here we must check session attributes selectedTransponders,
 		// selectedSettingsConversionPresentations
@@ -96,7 +195,7 @@ public class SettingsForm {
 
 	@RequestMapping(params = "selectTransponders", value = "/editsetting", method = RequestMethod.POST)
 	public String prepareToSelectTransponders(
-			@ModelAttribute("setting") Settings pSetting, Model model) {
+			@ModelAttribute("setting") SettingsForm pSetting, Model model) {
 
 		AppContext.setCurentlyEditedSetting(pSetting);
 		// we will not save setting, but will just pass it between requests.
@@ -106,17 +205,11 @@ public class SettingsForm {
 
 	// here we save setting
 	@RequestMapping(params = "add", value = "/settings/add", method = RequestMethod.POST)
-	public String add(@ModelAttribute("setting") Settings pSetting) {
+	public String add(@ModelAttribute("setting") SettingsForm pSetting) {
 
 		ObjectsController contr = new ObjectsController();
-		pSetting.setTheLastEntry(new java.sql.Timestamp(System
-				.currentTimeMillis()));
-
-		// let's refresh the user because it returns empty.
-		readCurrentUser();
-
-		pSetting.setUser(currentUser);
-		contr.saveOrUpdate(pSetting);
+		writeFromSettingsFormToSettingsObject(pSetting);
+		contr.saveOrUpdate(this.SettingsObject);
 
 		return "editsetting";
 	}
@@ -133,54 +226,44 @@ public class SettingsForm {
 
 	@RequestMapping(value = "/editsetting", method = RequestMethod.GET)
 	public String editSetting(
-			@RequestParam(value = "id", required = true) long id, Model model) {
+			@RequestParam(value = "id", required = true) long pid, Model model) {
 
-		Settings setting = null;
+		SettingsForm setting = null;
 		// check if we have this object in AppContext
-		Settings checkCurrSetting = AppContext.getCurentlyEditedSetting();
+		SettingsForm checkCurrSetting = AppContext.getCurentlyEditedSetting();
 
 		if (checkCurrSetting != null) {
 			if (checkCurrSetting.getName() != null) {
-				setting = readSettingFromContext();
-			}
-			else {
+				readSettingFromContext();
+			} else {
 				ObjectsController contr = new ObjectsController();
-				setting = (Settings) contr.select(Settings.class, id);
+				// setting = (Settings) contr.select(Settings.class, id);
+				this.SettingsObject = (Settings) contr.select(Settings.class,
+						pid);
 
+				// fill form values.
+				writeFromSettingsObjectToSettingsForm();
 			}
 		}
 
 		else {
 			ObjectsController contr = new ObjectsController();
-			setting = (Settings) contr.select(Settings.class, id);
+			// setting = (Settings) contr.select(Settings.class, id);
+			this.SettingsObject = (Settings) contr.select(Settings.class, pid);
+
+			// fill form values.
+			writeFromSettingsObjectToSettingsForm();
 
 		}
 
-		// here we must reaf selected transponders.
-
-		model.addAttribute("setting", setting);
+		// model.addAttribute("setting", setting);
 
 		// load transponders and so on
 
 		// this is wrong, no need to clear
-		//dataSettingsConversion.clear();
-		List<SettingsConversion> listRead = setting.getConversion();
+		// dataSettingsConversion.clear();
 
-		// for new item it is null
-		if (listRead != null) {
-			// sort in ascending order
-			Collections
-					.sort(listRead, (b1, b2) -> (int) (b1.getLineNumber() - b2
-							.getLineNumber()));
-
-			for (SettingsConversion e : listRead) {
-				dataSettingsConversion
-						.add(new SettingsConversionPresentation(e));
-			}
-
-		}
-
-		model.addAttribute("DataSC", dataSettingsConversion);
+		model.addAttribute("bean", this);
 		return "editsetting";
 	}
 
@@ -188,35 +271,29 @@ public class SettingsForm {
 	@RequestMapping(value = "/settings/add", method = RequestMethod.GET)
 	public String getAdd(Model model) {
 
-		Settings setting = new Settings();
+		this.SettingsObject = new Settings();
 
-		// check if we have this object in AppContext
-		Settings checkCurrSetting = AppContext.getCurentlyEditedSetting();
+		readCurrentUser();
 
-		if (checkCurrSetting != null) {
-			if (checkCurrSetting.getName() != null) {
-				setting = readSettingFromContext();
-			}
-		}
+		this.Name = "New setting";
 
-		else {
-			readCurrentUser();
-
-			setting.setUser(currentUser);
-			setting.setName("New setting");
-
-		}
-
-		model.addAttribute("setting", setting);
-		model.addAttribute("DataSC",
-				new ArrayList<SettingsConversionPresentation>());
+		model.addAttribute("bean", this);
+		// model.addAttribute("DataSC",
+		// new ArrayList<SettingsConversionPresentation>());
 
 		return "editsetting";
 
 	}
 
-	public Settings readSettingFromContext() {
-		Settings setting = AppContext.getCurentlyEditedSetting();
+	public void readSettingFromContext() {
+		SettingsForm setting = AppContext.getCurentlyEditedSetting();
+		this.id = setting.id;
+		this.Name = setting.Name;
+		this.SettingsObject = setting.SettingsObject;
+		this.User = setting.User;
+		this.TheLastEntry = setting.TheLastEntry;
+
+		// this = AppContext.getCurentlyEditedSetting();
 
 		// add transponders, if they are not null
 		List<Transponders> selTransList = AppContext.getSelectedTransponders();
@@ -225,7 +302,7 @@ public class SettingsForm {
 			// selTransList.stream().forEach(t -> addNewLine(t, setting));
 			// warning about final variable.
 			for (Transponders t : selTransList) {
-				addNewLine(t, setting);
+				addNewLine(t, this);
 			}
 			// clean after processing
 			selTransList.clear();
@@ -233,14 +310,14 @@ public class SettingsForm {
 			AppContext.setCurentlyEditedSetting(null);
 
 		}
-		return setting;
+
 	}
 
-	public void addNewLine(Transponders trans, Settings pSetting) {
+	public void addNewLine(Transponders trans, SettingsForm pSetting) {
 		long newLine = new Long(dataSettingsConversion.size() + 1).longValue();
 
 		SettingsConversionPresentation newLineObject = new SettingsConversionPresentation(
-				pSetting);
+				pSetting.SettingsObject);
 
 		newLineObject.setLineNumber(newLine);
 		// newLineObject.setTransponder(new Transponders()); // to prevent null

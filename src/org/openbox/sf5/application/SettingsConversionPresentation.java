@@ -146,5 +146,9 @@ public class SettingsConversionPresentation extends SettingsConversion {
 
 	}
 
-}
+	// Spring needs default constructor
+	public SettingsConversionPresentation() {
 
+	}
+
+}
