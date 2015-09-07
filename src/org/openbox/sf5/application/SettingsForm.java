@@ -143,6 +143,11 @@ public class SettingsForm {
 			if (checkCurrSetting.getName() != null) {
 				setting = readSettingFromContext();
 			}
+			else {
+				ObjectsController contr = new ObjectsController();
+				setting = (Settings) contr.select(Settings.class, id);
+
+			}
 		}
 
 		else {
@@ -150,10 +155,15 @@ public class SettingsForm {
 			setting = (Settings) contr.select(Settings.class, id);
 
 		}
+
+		// here we must reaf selected transponders.
+
 		model.addAttribute("setting", setting);
+
 		// load transponders and so on
 
-		dataSettingsConversion.clear();
+		// this is wrong, no need to clear
+		//dataSettingsConversion.clear();
 		List<SettingsConversion> listRead = setting.getConversion();
 
 		// for new item it is null
