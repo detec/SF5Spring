@@ -43,6 +43,7 @@
   <input type="submit" value="Up"/>
   <input type="submit" value="Down"/>
   <input type="submit" value="Select transponders..." name="selectTransponders" />
+  <input type="submit" value="Remove selected" name="removeSCrows" />
   <table>
    <tr>
    <th>Line no.</th>
@@ -61,19 +62,21 @@
    <th colspan="13"></th>
   </tr>
  <c:forEach items="${bean.dataSettingsConversion}" var="DataSC" varStatus="x">
+ 
+ 
  <tr>
  <td><c:out value="${DataSC.lineNumber}" /><form:hidden path="dataSettingsConversion[${x.index}].lineNumber" /></td>
- <td><form:input path="dataSettingsConversion[${x.index}].transponder"/></td>
- <td><c:out value="${DataSC.polarization}" /><form:hidden path="dataSettingsConversion[${x.index}].polarization" /></td>
- <td><c:out value="${DataSC.carrier}" /></td>
- <td><c:out value="${DataSC.speed}" /><form:hidden path="dataSettingsConversion[${x.index}].speed" /></td>
- <td><c:out value="${DataSC.satellite}" /><form:hidden path="dataSettingsConversion[${x.index}].satellite" /></td>
- <td><c:out value="${DataSC.FEC}" /></td>
+ <td><c:out value="${DataSC.transponder}" /><form:hidden path="dataSettingsConversion[${x.index}].transponder"/></td>
+ <td><c:out value="${DataSC.transponder.polarization}" /></td>
+ <td><c:out value="${DataSC.transponder.carrier}" /></td>
+ <td><c:out value="${DataSC.transponder.speed}" /></td>
+ <td><c:out value="${DataSC.transponder.satellite}" /></td>
+ <td><c:out value="${DataSC.transponder.FEC}" /></td>
  <td><c:out value="${DataSC.satindex}" /><form:hidden path="dataSettingsConversion[${x.index}].satindex" /></td>
  <td><c:out value="${DataSC.tpindex}" /><form:hidden path="dataSettingsConversion[${x.index}].tpindex" /></td>
  <td><c:out value="${DataSC.theLineOfIntersection}" /><form:hidden path="dataSettingsConversion[${x.index}].theLineOfIntersection" /></td>
  <td><form:input path="dataSettingsConversion[${x.index}].note"/></td>
- <td><c:out value="${DataSC.theLineOfIntersection}" /></td>
+ <td></td>
  <td><form:checkbox path="dataSettingsConversion[${x.index}].checked" /></td>
  <form:hidden path="dataSettingsConversion[${x.index}].parent_id"/>
  <form:hidden path="dataSettingsConversion[${x.index}].transponder.id"/>

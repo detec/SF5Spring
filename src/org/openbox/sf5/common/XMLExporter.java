@@ -97,14 +97,14 @@ public class XMLExporter {
 		tpId = doc.createElement("tp");
 		tpId.setAttribute("index", String.valueOf(currentTpIndex));
 		tpId.appendChild(getTpElements(doc, "LnbFreq",
-				String.valueOf(e.getCarrier())));
+				String.valueOf(e.getTransponder().getCarrier())));
 		tpId.appendChild(getTpElements(doc, "Freq",
 				String.valueOf(e.getTransponder().getFrequency())));
 		tpId.appendChild(getTpElements(doc, "Symbol",
-				String.valueOf(e.getSpeed())));
+				String.valueOf(e.getTransponder().getSpeed())));
 		tpId.appendChild(getTpElements(doc, "Polar",
 				org.openbox.sf5.db.Polarization.getXMLpresentation(e
-						.getPolarization())));
+						.getTransponder().getPolarization())));
 		return tpId;
 	}
 

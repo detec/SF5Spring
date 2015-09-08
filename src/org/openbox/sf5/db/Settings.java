@@ -64,17 +64,6 @@ public class Settings implements Serializable {
 		return String.valueOf(id);
 	}
 
-	@Column(name = "PropsFile", unique = false, nullable = true, length = 300)
-	private String PropsFile;
-
-	public String getPropsFile() {
-		return PropsFile;
-	}
-
-	public void setPropsFile(String PropsFile) {
-		this.PropsFile = PropsFile;
-	}
-
 	@Column(name = "TheLastEntry", unique = false, nullable = true)
 	private Timestamp TheLastEntry;
 
@@ -124,12 +113,11 @@ public class Settings implements Serializable {
 		this.Satellites = Satellites;
 	}
 
-	public Settings(String Name, String PropsFile, Timestamp lastEntry,
-			Users User, List<SettingsConversion> Conversion,
+	public Settings(String Name, Timestamp lastEntry, Users User,
+			List<SettingsConversion> Conversion,
 			List<SettingsSatellites> Satellites) {
 
 		this.Name = Name;
-		this.PropsFile = PropsFile;
 		TheLastEntry = lastEntry;
 		this.User = User;
 		this.Conversion = Conversion;
@@ -154,7 +142,6 @@ public class Settings implements Serializable {
 		}
 		Settings otherSettings = (Settings) other;
 		if (otherSettings.Name.equals(Name)
-				&& otherSettings.PropsFile.equals(PropsFile)
 				&& otherSettings.TheLastEntry == TheLastEntry
 				&& otherSettings.User.equals(User)
 				&& otherSettings.Conversion.equals(Conversion)

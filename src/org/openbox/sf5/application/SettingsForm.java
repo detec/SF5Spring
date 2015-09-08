@@ -3,7 +3,9 @@ package org.openbox.sf5.application;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -128,7 +130,8 @@ public class SettingsForm {
 		}
 	}
 
-	public void writeFromSettingsFormToSettingsObject(SettingsForm pSetting) {
+	public void writeHeaderFromSettingsFormToSettingsObject(
+			SettingsForm pSetting) {
 		SettingsObject = pSetting.SettingsObject;
 
 		// for new settings we must create it.
@@ -143,6 +146,12 @@ public class SettingsForm {
 		// let's refresh the user because it returns empty.
 		readCurrentUser();
 		SettingsObject.setUser(pSetting.User);
+	}
+
+	public void writeFromSettingsFormToSettingsObject(SettingsForm pSetting) {
+
+		writeHeaderFromSettingsFormToSettingsObject(pSetting);
+
 		dataSettingsConversion = pSetting.dataSettingsConversion;
 
 		// convert to Conversion
@@ -340,5 +349,54 @@ public class SettingsForm {
 
 		dataSettingsConversion.add(newLineObject);
 
+	}
+
+	@RequestMapping(params = "removeSCrows", value = "/editsetting", method = RequestMethod.POST)
+	public String removwRow(@ModelAttribute("bean") SettingsForm pSetting) {
+
+		writeHeaderFromSettingsFormToSettingsObject(pSetting);
+
+		this.dataSettingsConversion = pSetting.dataSettingsConversion;
+
+		List<SettingsConversionPresentation> toRemove = new ArrayList<SettingsConversionPresentation>();
+		Map<Long, SettingsConversionPresentation> tpMap = new HashMap<>();
+
+		for (SettingsConversionPresentation e : dataSettingsConversion) {
+			if (!e.isChecked()) {
+				continue;
+			} else {
+				toRemove.add(e);
+				tpMap.put(new Long(e.getId()), e);
+			}
+
+		}
+
+		dataSettingsConversion.removeAll(toRemove);
+
+		List<SettingsConversion> tpConversion = this.SettingsObject
+				.getConversion();
+		ArrayList<SettingsConversion> deleteArray = new ArrayList<SettingsConversion>();
+
+		// define elements to be deleted
+		for (SettingsConversion e : tpConversion) {
+			if (tpMap.get(new Long(e.getId())) != null) {
+				deleteArray.add(e);
+			}
+		}
+
+		tpConversion.removeAll(deleteArray);
+
+		renumerateLines();
+
+		// save if row should be deleted from database.
+		if (deleteArray.size() > 0) {
+			this.SettingsObject.setConversion(tpConversion);
+			ObjectsController contr = new ObjectsController();
+			contr.saveOrUpdate(this.SettingsObject);
+		}
+
+		String idStr = String.valueOf(SettingsObject.getId());
+		String returnAddress = "redirect:/editsetting?id=" + idStr;
+		return returnAddress;
 	}
 }
