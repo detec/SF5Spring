@@ -131,15 +131,7 @@ public class TranspondersListClass {
 		model.addAttribute("bean", this);
 		model.addAttribute("wrapper", wrapper);
 
-		// model.addAttribute("bean", this);
-		// because I cannot cope with table binding
-		// if (SelectionMode) {
-		// model.addAttribute("tableItems", getTranspondersChoice());
-		// } else {
-		// model.addAttribute("tableItems", TranspondersList);
-		// }
-
-		return "transponders";
+	return "transponders";
 	}
 
 	@RequestMapping(params = "filter", value = "/transponders", method = RequestMethod.POST)
@@ -185,12 +177,7 @@ public class TranspondersListClass {
 		AppContext.getSelectedTransponders().clear();
 
 		List<Transponders> transList = new ArrayList<Transponders>();
-		// TransponderChoiceList = tableItems;
-		// for (TransponderChoice e : TransponderChoiceList) {
-		// if (e.checked) {
-		// selectedTranspondersList.add(e);
-		// }
-		// }
+
 		wrapper.getTclist().stream().filter(t -> t.isChecked())
 				.forEach(t -> transList.add(t.getTransponder()));
 

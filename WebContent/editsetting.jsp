@@ -62,15 +62,15 @@
   </tr>
  <c:forEach items="${bean.dataSettingsConversion}" var="DataSC" varStatus="x">
  <tr>
- <td><c:out value="${DataSC.lineNumber}" /></td>
+ <td><c:out value="${DataSC.lineNumber}" /><form:hidden path="dataSettingsConversion[${x.index}].lineNumber" /></td>
  <td><form:input path="dataSettingsConversion[${x.index}].transponder"/></td>
  <td><c:out value="${DataSC.polarization}" /></td>
  <td><c:out value="${DataSC.carrier}" /></td>
  <td><c:out value="${DataSC.speed}" /></td>
  <td><c:out value="${DataSC.satellite}" /></td>
  <td><c:out value="${DataSC.FEC}" /></td>
- <td><c:out value="${DataSC.satindex}" /></td>
- <td><c:out value="${DataSC.tpindex}" /></td>
+ <td><c:out value="${DataSC.satindex}" /><form:hidden path="dataSettingsConversion[${x.index}].satindex" /></td>
+ <td><c:out value="${DataSC.tpindex}" /><form:hidden path="dataSettingsConversion[${x.index}].tpindex" /></td>
  <td><c:out value="${DataSC.theLineOfIntersection}" /></td>
  <td><form:input path="dataSettingsConversion[${x.index}].note"/></td>
  <td><c:out value="${DataSC.theLineOfIntersection}" /></td>

@@ -101,17 +101,17 @@ public class SettingsForm {
 	}
 
 	public void setUser(Users currentUser) {
-		this.User = currentUser;
+		User = currentUser;
 	}
 
 	// makes conversion of properties from db layer to controller
 	public void writeFromSettingsObjectToSettingsForm() {
-		this.id = this.SettingsObject.getId();
-		this.Name = this.SettingsObject.getName();
-		this.User = this.SettingsObject.getUser();
-		this.TheLastEntry = this.SettingsObject.getTheLastEntry();
+		id = SettingsObject.getId();
+		Name = SettingsObject.getName();
+		User = SettingsObject.getUser();
+		TheLastEntry = SettingsObject.getTheLastEntry();
 
-		List<SettingsConversion> listRead = this.SettingsObject.getConversion();
+		List<SettingsConversion> listRead = SettingsObject.getConversion();
 
 		// for new item it is null
 		if (listRead != null) {
@@ -129,16 +129,16 @@ public class SettingsForm {
 	}
 
 	public void writeFromSettingsFormToSettingsObject(SettingsForm pSetting) {
-		this.SettingsObject = pSetting.SettingsObject;
-		this.SettingsObject.setName(pSetting.Name);
+		SettingsObject = pSetting.SettingsObject;
+		SettingsObject.setName(pSetting.Name);
 
-		this.SettingsObject.setTheLastEntry(new java.sql.Timestamp(System
+		SettingsObject.setTheLastEntry(new java.sql.Timestamp(System
 				.currentTimeMillis()));
 
 		// let's refresh the user because it returns empty.
 		readCurrentUser();
-		this.SettingsObject.setUser(pSetting.User);
-		this.dataSettingsConversion = pSetting.dataSettingsConversion;
+		SettingsObject.setUser(pSetting.User);
+		dataSettingsConversion = pSetting.dataSettingsConversion;
 
 		// convert to Conversion
 		// this.SettingsObject
@@ -146,8 +146,8 @@ public class SettingsForm {
 		// this.dataSettingsConversion);
 
 		List<SettingsConversion> tempSCList = new ArrayList<SettingsConversion>();
-		this.dataSettingsConversion.stream().forEach(t -> tempSCList.add(t));
-		this.SettingsObject.setConversion(tempSCList);
+		dataSettingsConversion.stream().forEach(t -> tempSCList.add(t));
+		SettingsObject.setConversion(tempSCList);
 
 	}
 
@@ -195,7 +195,7 @@ public class SettingsForm {
 
 	@RequestMapping(params = "selectTransponders", value = "/editsetting", method = RequestMethod.POST)
 	public String prepareToSelectTransponders(
-			@ModelAttribute("setting") SettingsForm pSetting, Model model) {
+			@ModelAttribute("setting") SettingsForm pSetting) {
 
 		AppContext.setCurentlyEditedSetting(pSetting);
 		// we will not save setting, but will just pass it between requests.
@@ -205,13 +205,18 @@ public class SettingsForm {
 
 	// here we save setting
 	@RequestMapping(params = "add", value = "/settings/add", method = RequestMethod.POST)
-	public String add(@ModelAttribute("setting") SettingsForm pSetting) {
+	public String add(@ModelAttribute("bean") SettingsForm pSetting) {
 
 		ObjectsController contr = new ObjectsController();
 		writeFromSettingsFormToSettingsObject(pSetting);
-		contr.saveOrUpdate(this.SettingsObject);
+		contr.saveOrUpdate(SettingsObject);
 
 		return "editsetting";
+	}
+
+	@RequestMapping(params = "selectTransponders", value = "/settings/add", method = RequestMethod.POST)
+	public String selectTranspondersFromNew(@ModelAttribute("bean") SettingsForm pSetting) {
+		return prepareToSelectTransponders(pSetting);
 	}
 
 	public void renumerateLines() {
@@ -238,7 +243,7 @@ public class SettingsForm {
 			} else {
 				ObjectsController contr = new ObjectsController();
 				// setting = (Settings) contr.select(Settings.class, id);
-				this.SettingsObject = (Settings) contr.select(Settings.class,
+				SettingsObject = (Settings) contr.select(Settings.class,
 						pid);
 
 				// fill form values.
@@ -249,19 +254,12 @@ public class SettingsForm {
 		else {
 			ObjectsController contr = new ObjectsController();
 			// setting = (Settings) contr.select(Settings.class, id);
-			this.SettingsObject = (Settings) contr.select(Settings.class, pid);
+			SettingsObject = (Settings) contr.select(Settings.class, pid);
 
 			// fill form values.
 			writeFromSettingsObjectToSettingsForm();
 
 		}
-
-		// model.addAttribute("setting", setting);
-
-		// load transponders and so on
-
-		// this is wrong, no need to clear
-		// dataSettingsConversion.clear();
 
 		model.addAttribute("bean", this);
 		return "editsetting";
@@ -271,11 +269,13 @@ public class SettingsForm {
 	@RequestMapping(value = "/settings/add", method = RequestMethod.GET)
 	public String getAdd(Model model) {
 
-		this.SettingsObject = new Settings();
+		SettingsObject = new Settings();
 
 		readCurrentUser();
 
-		this.Name = "New setting";
+		Name = "New setting";
+		TheLastEntry = new java.sql.Timestamp(System
+				.currentTimeMillis());
 
 		model.addAttribute("bean", this);
 		// model.addAttribute("DataSC",
@@ -287,23 +287,23 @@ public class SettingsForm {
 
 	public void readSettingFromContext() {
 		SettingsForm setting = AppContext.getCurentlyEditedSetting();
-		this.id = setting.id;
-		this.Name = setting.Name;
-		this.SettingsObject = setting.SettingsObject;
-		this.User = setting.User;
-		this.TheLastEntry = setting.TheLastEntry;
+		id = setting.id;
+		Name = setting.Name;
+		SettingsObject = setting.SettingsObject;
+		User = setting.User;
+		TheLastEntry = setting.TheLastEntry;
+		dataSettingsConversion = setting.dataSettingsConversion;
 
-		// this = AppContext.getCurentlyEditedSetting();
 
 		// add transponders, if they are not null
 		List<Transponders> selTransList = AppContext.getSelectedTransponders();
 		if (selTransList != null) {
 
-			// selTransList.stream().forEach(t -> addNewLine(t, setting));
+			 selTransList.stream().forEach(t -> addNewLine(t, this));
 			// warning about final variable.
-			for (Transponders t : selTransList) {
-				addNewLine(t, this);
-			}
+//			for (Transponders t : selTransList) {
+//				addNewLine(t, this);
+//			}
 			// clean after processing
 			selTransList.clear();
 			AppContext.setSelectedTransponders(selTransList);
