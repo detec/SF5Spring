@@ -64,26 +64,27 @@
  <tr>
  <td><c:out value="${DataSC.lineNumber}" /><form:hidden path="dataSettingsConversion[${x.index}].lineNumber" /></td>
  <td><form:input path="dataSettingsConversion[${x.index}].transponder"/></td>
- <td><c:out value="${DataSC.polarization}" /></td>
+ <td><c:out value="${DataSC.polarization}" /><form:hidden path="dataSettingsConversion[${x.index}].polarization" /></td>
  <td><c:out value="${DataSC.carrier}" /></td>
- <td><c:out value="${DataSC.speed}" /></td>
- <td><c:out value="${DataSC.satellite}" /></td>
+ <td><c:out value="${DataSC.speed}" /><form:hidden path="dataSettingsConversion[${x.index}].speed" /></td>
+ <td><c:out value="${DataSC.satellite}" /><form:hidden path="dataSettingsConversion[${x.index}].satellite" /></td>
  <td><c:out value="${DataSC.FEC}" /></td>
  <td><c:out value="${DataSC.satindex}" /><form:hidden path="dataSettingsConversion[${x.index}].satindex" /></td>
  <td><c:out value="${DataSC.tpindex}" /><form:hidden path="dataSettingsConversion[${x.index}].tpindex" /></td>
- <td><c:out value="${DataSC.theLineOfIntersection}" /></td>
+ <td><c:out value="${DataSC.theLineOfIntersection}" /><form:hidden path="dataSettingsConversion[${x.index}].theLineOfIntersection" /></td>
  <td><form:input path="dataSettingsConversion[${x.index}].note"/></td>
  <td><c:out value="${DataSC.theLineOfIntersection}" /></td>
  <td><form:checkbox path="dataSettingsConversion[${x.index}].checked" /></td>
  <form:hidden path="dataSettingsConversion[${x.index}].parent_id"/>
  <form:hidden path="dataSettingsConversion[${x.index}].transponder.id"/>
+ <form:hidden path="dataSettingsConversion[${x.index}].id"/>
  </tr>
  </c:forEach> 
   </table>
-  <c:if test="${setting.id == 0}">
+  <c:if test="${bean.id == 0}">
   <input type="submit" value="OK" name="add" />
   </c:if>
-  <c:if test="${setting.id != 0}">
+  <c:if test="${bean.id != 0}">
  <input type="submit" value="OK" name="save"/>
  </c:if>
  <input type="submit" value="Cancel" name="cancel"/>

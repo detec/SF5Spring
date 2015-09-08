@@ -130,6 +130,11 @@ public class SettingsForm {
 
 	public void writeFromSettingsFormToSettingsObject(SettingsForm pSetting) {
 		SettingsObject = pSetting.SettingsObject;
+
+		// for new settings we must create it.
+		if (SettingsObject == null) {
+			this.SettingsObject = new Settings();
+		}
 		SettingsObject.setName(pSetting.Name);
 
 		SettingsObject.setTheLastEntry(new java.sql.Timestamp(System
@@ -178,13 +183,14 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(params = "save", value = "/editsetting", method = RequestMethod.POST)
-	public String editSaveSetting(@ModelAttribute("bean") SettingsForm pSetting) {
+	public String editSaveSetting(
+			@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
 		// here we must check session attributes selectedTransponders,
 		// selectedSettingsConversionPresentations
 		// and add them to model
 
-		return add(pSetting);
+		return add(pSetting, model);
 	}
 
 	@RequestMapping(params = "cancel", value = "/editsetting", method = RequestMethod.POST)
@@ -205,17 +211,25 @@ public class SettingsForm {
 
 	// here we save setting
 	@RequestMapping(params = "add", value = "/settings/add", method = RequestMethod.POST)
-	public String add(@ModelAttribute("bean") SettingsForm pSetting) {
+	public String add(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
+
+		writeFromSettingsFormToSettingsObject(pSetting);
 
 		ObjectsController contr = new ObjectsController();
-		writeFromSettingsFormToSettingsObject(pSetting);
 		contr.saveOrUpdate(SettingsObject);
 
-		return "editsetting";
+		// model.addAttribute("bean", pSetting);
+
+		// return "editsetting";
+		String idStr = String.valueOf(SettingsObject.getId());
+		String returnAddress = "redirect:/editsetting?id=" + idStr;
+		return returnAddress;
+
 	}
 
 	@RequestMapping(params = "selectTransponders", value = "/settings/add", method = RequestMethod.POST)
-	public String selectTranspondersFromNew(@ModelAttribute("bean") SettingsForm pSetting) {
+	public String selectTranspondersFromNew(
+			@ModelAttribute("bean") SettingsForm pSetting) {
 		return prepareToSelectTransponders(pSetting);
 	}
 
@@ -243,8 +257,7 @@ public class SettingsForm {
 			} else {
 				ObjectsController contr = new ObjectsController();
 				// setting = (Settings) contr.select(Settings.class, id);
-				SettingsObject = (Settings) contr.select(Settings.class,
-						pid);
+				SettingsObject = (Settings) contr.select(Settings.class, pid);
 
 				// fill form values.
 				writeFromSettingsObjectToSettingsForm();
@@ -258,9 +271,10 @@ public class SettingsForm {
 
 			// fill form values.
 			writeFromSettingsObjectToSettingsForm();
-
 		}
 
+		// writeFromSettingsObjectToSettingsForm();
+		renumerateLines();
 		model.addAttribute("bean", this);
 		return "editsetting";
 	}
@@ -274,8 +288,7 @@ public class SettingsForm {
 		readCurrentUser();
 
 		Name = "New setting";
-		TheLastEntry = new java.sql.Timestamp(System
-				.currentTimeMillis());
+		TheLastEntry = new java.sql.Timestamp(System.currentTimeMillis());
 
 		model.addAttribute("bean", this);
 		// model.addAttribute("DataSC",
@@ -294,16 +307,15 @@ public class SettingsForm {
 		TheLastEntry = setting.TheLastEntry;
 		dataSettingsConversion = setting.dataSettingsConversion;
 
-
 		// add transponders, if they are not null
 		List<Transponders> selTransList = AppContext.getSelectedTransponders();
 		if (selTransList != null) {
 
-			 selTransList.stream().forEach(t -> addNewLine(t, this));
+			selTransList.stream().forEach(t -> addNewLine(t, this));
 			// warning about final variable.
-//			for (Transponders t : selTransList) {
-//				addNewLine(t, this);
-//			}
+			// for (Transponders t : selTransList) {
+			// addNewLine(t, this);
+			// }
 			// clean after processing
 			selTransList.clear();
 			AppContext.setSelectedTransponders(selTransList);
