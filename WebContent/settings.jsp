@@ -35,13 +35,18 @@ th, td {
  </thead>
  <tbody>
  <c:forEach items="${settings}" var="setting">
-   <c:url var="editUrl" value="/editsetting?id=${setting.id}" />
+   <c:url var="editUrl" value="/editsetting?id=${setting.id}&selectionmode=false" />
    <c:url var="deleteUrl" value="/settings/delete?id=${setting.id}" />
+   <c:url var="selectUrl" value="/selectedsetting?id=${setting.id}" />
   <tr>
    <td><c:out value="${setting.id}" /></td>
    <td><c:out value="${setting.name}" /></td>
    <td><c:out value="${setting.theLastEntry}" /></td>
-    <td><a href="${editUrl}">Edit</a><a href="${deleteUrl}">Delete</a></td>
+    <td><a href="${editUrl}">Edit</a><a href="${deleteUrl}">Delete</a>
+    <c:if test="${selectionMode}">
+    <a href="${selectUrl}">Select</a>
+    </c:if>
+    </td>
   </tr>
  </c:forEach>
  </tbody>

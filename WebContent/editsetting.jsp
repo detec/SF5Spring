@@ -35,15 +35,24 @@
    <tr>
    <form:hidden path="user"/>
    <form:hidden path="SettingsObject"/>
+   <form:hidden path="SelectionMode"/>
    </tr>
  </table>
   
   <p>Transponders table
   <br>
+  <c:if test="${!bean.selectionMode}">
   <input type="submit" value="Up"/>
   <input type="submit" value="Down"/>
   <input type="submit" value="Select transponders..." name="selectTransponders" />
   <input type="submit" value="Remove selected" name="removeSCrows" />
+  <input type="submit" value="Move up" name="moveup" />
+  <input type="submit" value="Move down" name="movedown" />
+  <input type="submit" value="Select from other setting..." name="selectfromother" />
+  </c:if>
+   <c:if test="${bean.selectionMode}">
+   <input type="submit" value="Select rows..." name="selectRows" />
+   </c:if>
   <table>
    <tr>
    <th>Line no.</th>
@@ -66,7 +75,7 @@
  
  <tr>
  <td><c:out value="${DataSC.lineNumber}" /><form:hidden path="dataSettingsConversion[${x.index}].lineNumber" /></td>
- <td><c:out value="${DataSC.transponder}" /><form:hidden path="dataSettingsConversion[${x.index}].transponder"/></td>
+ <td><c:out value="${DataSC.transponder.toString()}" /></td>
  <td><c:out value="${DataSC.transponder.polarization}" /></td>
  <td><c:out value="${DataSC.transponder.carrier}" /></td>
  <td><c:out value="${DataSC.transponder.speed}" /></td>

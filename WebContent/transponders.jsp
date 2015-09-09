@@ -27,7 +27,7 @@ th, td {
  		<form:options items="${bean.satellites}" />
 	</form:select>
 	<input type="submit" value="Apply filter" name="filter"/>
-	
+	<form:input type="hidden" path="SelectionMode"/>
 </form:form>
 
 	
@@ -58,9 +58,6 @@ th, td {
  	<c:forEach items="${wrapper.tclist}" var="transponder" varStatus="x">
   	<tr>
   	<c:if test="${bean.selectionMode}">
-  	<!-- 
-  	<td><input type = "checkbox" name = "checked" value = "${tclist[x.index].checked}" /></td>
- 	-->	
 	<td><form:checkbox path="tclist[${x.index}].checked" /></td>
   	</c:if>
 	<form:input type="hidden" path="tclist[${x.index}].id"/>

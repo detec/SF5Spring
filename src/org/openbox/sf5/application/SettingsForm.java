@@ -51,6 +51,16 @@ public class SettingsForm {
 		this.id = id;
 	}
 
+	private boolean SelectionMode;
+
+	public boolean isSelectionMode() {
+		return SelectionMode;
+	}
+
+	public void setSelectionMode(boolean selectionMode) {
+		SelectionMode = selectionMode;
+	}
+
 	private Timestamp TheLastEntry;
 
 	public Timestamp getTheLastEntry() {
@@ -243,6 +253,14 @@ public class SettingsForm {
 		return prepareToSelectTransponders(pSetting);
 	}
 
+	@RequestMapping(params = "selectfromother", value = "/editsetting", method = RequestMethod.POST)
+	public String prepareSelectFromOtherSetting(
+			@ModelAttribute("bean") SettingsForm pSetting) {
+
+		AppContext.setCurentlyEditedSetting(pSetting);
+		return "redirect:/settings/select?selectionmode=true";
+	}
+
 	public void renumerateLines() {
 
 		int i = 1;
@@ -255,7 +273,9 @@ public class SettingsForm {
 
 	@RequestMapping(value = "/editsetting", method = RequestMethod.GET)
 	public String editSetting(
-			@RequestParam(value = "id", required = true) long pid, Model model) {
+			@RequestParam(value = "id", required = true) long pid,
+			@RequestParam(value = "selectionmode", required = true) boolean pSelectionMode,
+			Model model) {
 
 		SettingsForm setting = null;
 		// check if we have this object in AppContext
@@ -316,6 +336,7 @@ public class SettingsForm {
 		User = setting.User;
 		TheLastEntry = setting.TheLastEntry;
 		dataSettingsConversion = setting.dataSettingsConversion;
+		this.SelectionMode = setting.SelectionMode;
 
 		// add transponders, if they are not null
 		List<Transponders> selTransList = AppContext.getSelectedTransponders();
@@ -332,6 +353,20 @@ public class SettingsForm {
 			AppContext.setCurentlyEditedSetting(null);
 
 		}
+
+		// read prepared SCP rows.
+		List<SettingsConversionPresentation> presList = AppContext
+				.getSelectedSettingsConversionPresentations();
+		if (presList != null) {
+			presList.stream().forEach(t -> addForeignSCProw(t));
+		}
+
+	}
+
+	public void addForeignSCProw(SettingsConversionPresentation SCProw) {
+		SCProw.setId(0);
+		SCProw.setparent_id(SettingsObject);
+		this.dataSettingsConversion.add(SCProw);
 
 	}
 
@@ -360,7 +395,9 @@ public class SettingsForm {
 		dataSettingsConversion = pSetting.dataSettingsConversion;
 
 		// there may be unsaved, delete them as selected collection
-		List<SettingsConversionPresentation> firstList = dataSettingsConversion.stream().filter( t -> t.isChecked()).collect(Collectors.toList());
+		List<SettingsConversionPresentation> firstList = dataSettingsConversion
+				.stream().filter(t -> (t.isChecked() && t.getId() == 0))
+				.collect(Collectors.toList());
 		dataSettingsConversion.removeAll(firstList);
 
 		List<SettingsConversionPresentation> toRemove = new ArrayList<SettingsConversionPresentation>();
@@ -378,8 +415,7 @@ public class SettingsForm {
 
 		dataSettingsConversion.removeAll(toRemove);
 
-		List<SettingsConversion> tpConversion = SettingsObject
-				.getConversion();
+		List<SettingsConversion> tpConversion = SettingsObject.getConversion();
 
 		int initialSize = tpConversion.size();
 		ArrayList<SettingsConversion> deleteArray = new ArrayList<SettingsConversion>();
@@ -393,22 +429,113 @@ public class SettingsForm {
 
 		tpConversion.removeAll(deleteArray);
 		// TpConversion may be empty. Let's load it with values.
-		if (tpConversion.size() == 0 && dataSettingsConversion.size() > 0) {
-			tpConversion.addAll(dataSettingsConversion);
-		}
+		// if (tpConversion.size() == 0 && dataSettingsConversion.size() > 0) {
 
-		int finalSize = tpConversion.size();
+		// we must refresh settings conversion
+		tpConversion.clear();
+		tpConversion.addAll(dataSettingsConversion);
+
+		// }
+
+		// int finalSize = tpConversion.size();
 		renumerateLines();
 
 		// save if row should be deleted from database.
-	//	if (deleteArray.size() > 0) {
-		if (initialSize != finalSize) {
-			SettingsObject.setConversion(tpConversion);
-			ObjectsController contr = new ObjectsController();
-			contr.saveOrUpdate(SettingsObject);
-		}
+		// if (deleteArray.size() > 0) {
+		// if (initialSize != finalSize) {
+		SettingsObject.setConversion(tpConversion);
+		ObjectsController contr = new ObjectsController();
+		contr.saveOrUpdate(SettingsObject);
+		// }
 
 		String idStr = String.valueOf(SettingsObject.getId());
+		String returnAddress = "redirect:/editsetting?id=" + idStr;
+		return returnAddress;
+	}
+
+	@RequestMapping(params = "moveup", value = "/editsetting", method = RequestMethod.POST)
+	public String moveUp(@ModelAttribute("bean") SettingsForm pSetting,
+			Model model) {
+
+		writeHeaderFromSettingsFormToSettingsObject(pSetting);
+
+		readToThisBean(pSetting);
+
+		List<SettingsConversionPresentation> selectedRows = new ArrayList<SettingsConversionPresentation>();
+		selectedRows = dataSettingsConversion.stream()
+				.filter(t -> t.isChecked()).collect(Collectors.toList());
+		selectedRows.stream().forEach(t -> {
+			int currentIndex = dataSettingsConversion.indexOf(t);
+			if (currentIndex > 0) {
+				dataSettingsConversion.add(currentIndex - 1, t);
+				dataSettingsConversion.remove(currentIndex + 1); // now it is 1
+																	// item
+																	// larger
+			}
+		}
+
+		);
+
+		renumerateLines();
+
+		model.addAttribute("bean", this);
+
+		return "editsetting";
+
+		// String idStr = String.valueOf(SettingsObject.getId());
+		// String returnAddress = "redirect:/editsetting?id=" + idStr;
+		// return returnAddress;
+	}
+
+	public void readToThisBean(SettingsForm pSetting) {
+		dataSettingsConversion = pSetting.dataSettingsConversion;
+
+		this.id = pSetting.id;
+		this.Name = pSetting.Name;
+		this.SettingsObject = pSetting.SettingsObject;
+		this.TheLastEntry = pSetting.TheLastEntry;
+		this.User = pSetting.User;
+		this.SelectionMode = pSetting.SelectionMode;
+	}
+
+	@RequestMapping(params = "movedown", value = "/editsetting", method = RequestMethod.POST)
+	public String moveDown(@ModelAttribute("bean") SettingsForm pSetting,
+			Model model) {
+
+		writeHeaderFromSettingsFormToSettingsObject(pSetting);
+
+		readToThisBean(pSetting);
+
+		List<SettingsConversionPresentation> selectedRows = new ArrayList<SettingsConversionPresentation>();
+		selectedRows = dataSettingsConversion.stream()
+				.filter(t -> t.isChecked()).collect(Collectors.toList());
+		selectedRows.stream().forEach(
+				t -> {
+					int currentIndex = dataSettingsConversion.indexOf(t);
+					if (currentIndex < dataSettingsConversion.size() - 1) {
+						dataSettingsConversion.add(currentIndex + 1, t);
+						dataSettingsConversion.add(currentIndex,
+								dataSettingsConversion.get(currentIndex + 2));
+						// removing superfluous copies.
+						dataSettingsConversion.remove(currentIndex + 2);
+						dataSettingsConversion.remove(currentIndex + 2);
+					}
+
+				});
+		renumerateLines();
+		model.addAttribute("bean", this);
+
+		return "editsetting";
+	}
+
+	@RequestMapping(params = "movedown", value = "/editsetting", method = RequestMethod.POST)
+	public String selectSCProws() {
+		List<SettingsConversionPresentation> selectedRows = new ArrayList<SettingsConversionPresentation>();
+		selectedRows = dataSettingsConversion.stream()
+				.filter(t -> t.isChecked()).collect(Collectors.toList());
+
+		AppContext.setSelectedSettingsConversionPresentations(selectedRows);
+		String idStr = String.valueOf(AppContext.getCurentlyEditedSetting().id);
 		String returnAddress = "redirect:/editsetting?id=" + idStr;
 		return returnAddress;
 	}

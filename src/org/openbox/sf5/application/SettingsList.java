@@ -33,6 +33,16 @@ public class SettingsList {
 
 	private Users currentUser;
 
+	private boolean SelectionMode;
+
+	public boolean isSelectionMode() {
+		return SelectionMode;
+	}
+
+	public void setSelectionMode(boolean selectionMode) {
+		SelectionMode = selectionMode;
+	}
+
 	@InitBinder
 	protected void initBinder(HttpServletRequest request,
 			ServletRequestDataBinder binder) {
@@ -51,7 +61,7 @@ public class SettingsList {
 
 		// try to initialize wired AppContext
 		// if (AppContext == null) {
-		AppContext = new SF5ApplicationContext();
+		// AppContext = new SF5ApplicationContext();
 		// }
 
 		// Retrieve all settings
@@ -61,6 +71,7 @@ public class SettingsList {
 
 		// Attach settings to the Model
 		model.addAttribute("settings", settingsList);
+		model.addAttribute("SelectionMode", SelectionMode);
 
 		// This will resolve to /WEB-INF/settings.jsp
 		return "settings";
@@ -103,6 +114,26 @@ public class SettingsList {
 		if (!usersList.isEmpty()) {
 			currentUser = usersList.get(0);
 		}
+	}
+
+	@RequestMapping(value = "/settings/select", method = RequestMethod.GET)
+	public String selectSetting(
+			@RequestParam(value = "selectionmode", required = true) boolean pSelectionMode,
+			Model model) {
+
+		this.SelectionMode = pSelectionMode;
+		return getSettings(model);
+
+	}
+
+	@RequestMapping(value = "/selectedsetting", method = RequestMethod.GET)
+	public String openSettingForSelection(
+			@RequestParam(value = "id", required = true) long id) {
+
+		String idStr = String.valueOf(id);
+		String returnAddress = "redirect:/editsetting?id=" + idStr
+				+ "&selectionmode=true";
+		return returnAddress;
 	}
 
 	public Users getCurrentUser() {

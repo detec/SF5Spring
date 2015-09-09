@@ -131,13 +131,12 @@ public class TranspondersListClass {
 		model.addAttribute("bean", this);
 		model.addAttribute("wrapper", wrapper);
 
-	return "transponders";
+		return "transponders";
 	}
 
 	@RequestMapping(params = "filter", value = "/transponders", method = RequestMethod.POST)
 	public String postGetTransponders(
-			@ModelAttribute("bean") TranspondersListClass bean,
-			BindingResult result, Model model) {
+			@ModelAttribute("bean") TranspondersListClass bean, Model model) {
 
 		if (bean.filterSatelliteId != null) {
 			ObjectsController contr = new ObjectsController();
@@ -154,12 +153,8 @@ public class TranspondersListClass {
 					.ObjectsList(Transponders.class);
 		}
 
-		// because I cannot cope with table binding
-		// if (SelectionMode) {
-		// model.addAttribute("tableItems", getTransponderChoiceList());
-		// } else {
-		// model.addAttribute("tableItems", TranspondersList);
-		// }
+		this.SelectionMode = bean.SelectionMode;
+
 		model.addAttribute("bean", this);
 		TransponderChoiceListWrapper wrapper = new TransponderChoiceListWrapper();
 		wrapper.setTclist(getTransponderChoiceList());
