@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -136,7 +137,7 @@ public class SettingsForm {
 
 		// for new settings we must create it.
 		if (SettingsObject == null) {
-			this.SettingsObject = new Settings();
+			SettingsObject = new Settings();
 		}
 		SettingsObject.setName(pSetting.Name);
 
@@ -356,7 +357,11 @@ public class SettingsForm {
 
 		writeHeaderFromSettingsFormToSettingsObject(pSetting);
 
-		this.dataSettingsConversion = pSetting.dataSettingsConversion;
+		dataSettingsConversion = pSetting.dataSettingsConversion;
+
+		// there may be unsaved, delete them as selected collection
+		List<SettingsConversionPresentation> firstList = dataSettingsConversion.stream().filter( t -> t.isChecked()).collect(Collectors.toList());
+		dataSettingsConversion.removeAll(firstList);
 
 		List<SettingsConversionPresentation> toRemove = new ArrayList<SettingsConversionPresentation>();
 		Map<Long, SettingsConversionPresentation> tpMap = new HashMap<>();
@@ -373,8 +378,10 @@ public class SettingsForm {
 
 		dataSettingsConversion.removeAll(toRemove);
 
-		List<SettingsConversion> tpConversion = this.SettingsObject
+		List<SettingsConversion> tpConversion = SettingsObject
 				.getConversion();
+
+		int initialSize = tpConversion.size();
 		ArrayList<SettingsConversion> deleteArray = new ArrayList<SettingsConversion>();
 
 		// define elements to be deleted
@@ -385,14 +392,20 @@ public class SettingsForm {
 		}
 
 		tpConversion.removeAll(deleteArray);
+		// TpConversion may be empty. Let's load it with values.
+		if (tpConversion.size() == 0 && dataSettingsConversion.size() > 0) {
+			tpConversion.addAll(dataSettingsConversion);
+		}
 
+		int finalSize = tpConversion.size();
 		renumerateLines();
 
 		// save if row should be deleted from database.
-		if (deleteArray.size() > 0) {
-			this.SettingsObject.setConversion(tpConversion);
+	//	if (deleteArray.size() > 0) {
+		if (initialSize != finalSize) {
+			SettingsObject.setConversion(tpConversion);
 			ObjectsController contr = new ObjectsController();
-			contr.saveOrUpdate(this.SettingsObject);
+			contr.saveOrUpdate(SettingsObject);
 		}
 
 		String idStr = String.valueOf(SettingsObject.getId());
