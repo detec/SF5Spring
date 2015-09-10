@@ -49,6 +49,7 @@
   <input type="submit" value="Move up" name="moveup" />
   <input type="submit" value="Move down" name="movedown" />
   <input type="submit" value="Select from other setting..." name="selectfromother" />
+  <input type="submit" value="Check intersection" name="checkIntersection" />
   </c:if>
    <c:if test="${bean.selectionMode}">
    <input type="submit" value="Select rows..." name="selectRows" />
@@ -75,7 +76,7 @@
  
  <tr>
  <td><c:out value="${DataSC.lineNumber}" /><form:hidden path="dataSettingsConversion[${x.index}].lineNumber" /></td>
- <td><c:out value="${DataSC.transponder.toString()}" /></td>
+ <td><c:out value="${DataSC.transponder}" /></td>
  <td><c:out value="${DataSC.transponder.polarization}" /></td>
  <td><c:out value="${DataSC.transponder.carrier}" /></td>
  <td><c:out value="${DataSC.transponder.speed}" /></td>
@@ -90,6 +91,11 @@
  <form:hidden path="dataSettingsConversion[${x.index}].parent_id"/>
  <form:hidden path="dataSettingsConversion[${x.index}].transponder.id"/>
  <form:hidden path="dataSettingsConversion[${x.index}].id"/>
+ <form:hidden path="dataSettingsConversion[${x.index}].transponder.polarization"/>
+ <form:hidden path="dataSettingsConversion[${x.index}].transponder.carrier"/>
+ <form:hidden path="dataSettingsConversion[${x.index}].transponder.speed"/>
+  <form:hidden path="dataSettingsConversion[${x.index}].transponder.satellite"/>
+  <form:hidden path="dataSettingsConversion[${x.index}].transponder.FEC"/>
  </tr>
  </c:forEach> 
   </table>

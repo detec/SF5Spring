@@ -42,8 +42,11 @@ th, td {
    <td><c:out value="${setting.id}" /></td>
    <td><c:out value="${setting.name}" /></td>
    <td><c:out value="${setting.theLastEntry}" /></td>
-    <td><a href="${editUrl}">Edit</a><a href="${deleteUrl}">Delete</a>
-    <c:if test="${selectionMode}">
+    <td>
+    <c:if test="${!SelectionMode}">
+    <a href="${editUrl}">Edit</a><a href="${deleteUrl}">Delete</a>
+    </c:if>
+    <c:if test="${SelectionMode}">
     <a href="${selectUrl}">Select</a>
     </c:if>
     </td>

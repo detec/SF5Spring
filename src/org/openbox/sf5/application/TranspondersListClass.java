@@ -185,7 +185,8 @@ public class TranspondersListClass {
 			// if it is a new unsaved settings - use add scenario
 			returnAddress = "redirect:/settings/add";
 		} else {
-			returnAddress = "redirect:/editsetting?id=" + idStr;
+			returnAddress = "redirect:/editsetting?id=" + idStr
+					+ "&selectionmode=false";
 		}
 		return returnAddress;
 	}

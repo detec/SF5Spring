@@ -1,5 +1,6 @@
 package org.openbox.sf5.application;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,14 +11,18 @@ import java.util.stream.Collectors;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.openbox.sf5.common.Intersections;
+import org.openbox.sf5.converters.CarrierEditor;
+import org.openbox.sf5.converters.FECEditor;
 import org.openbox.sf5.converters.SettingsEditor;
 import org.openbox.sf5.converters.SqlTimestampPropertyEditor;
-import org.openbox.sf5.converters.TransponderChoice;
 import org.openbox.sf5.converters.TransponderChoiceEditor;
 import org.openbox.sf5.converters.UserEditor;
+import org.openbox.sf5.db.CarrierFrequency;
 import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.SettingsConversion;
 import org.openbox.sf5.db.Transponders;
+import org.openbox.sf5.db.TypesOfFEC;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
@@ -102,11 +107,13 @@ public class SettingsForm {
 		binder.registerCustomEditor(Users.class, new UserEditor());
 		binder.registerCustomEditor(Transponders.class,
 				new TransponderChoiceEditor());
-		binder.registerCustomEditor(TransponderChoice.class,
-				new TransponderChoiceEditor());
+		// binder.registerCustomEditor(TransponderChoice.class,
+		// new TransponderChoiceEditor());
 		binder.registerCustomEditor(java.sql.Timestamp.class,
 				new SqlTimestampPropertyEditor());
 		binder.registerCustomEditor(Settings.class, new SettingsEditor());
+		binder.registerCustomEditor(TypesOfFEC.class, new FECEditor());
+		binder.registerCustomEditor(CarrierFrequency.class, new CarrierEditor());
 	}
 
 	public Users getUser() {
@@ -203,14 +210,13 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(params = "save", value = "/editsetting", method = RequestMethod.POST)
-	public String editSaveSetting(
-			@ModelAttribute("bean") SettingsForm pSetting, Model model) {
+	public String editSaveSetting(@ModelAttribute("bean") SettingsForm pSetting) {
 
 		// here we must check session attributes selectedTransponders,
 		// selectedSettingsConversionPresentations
 		// and add them to model
 
-		return add(pSetting, model);
+		return add(pSetting);
 	}
 
 	@RequestMapping(params = "cancel", value = "/editsetting", method = RequestMethod.POST)
@@ -231,18 +237,14 @@ public class SettingsForm {
 
 	// here we save setting
 	@RequestMapping(params = "add", value = "/settings/add", method = RequestMethod.POST)
-	public String add(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
+	public String add(@ModelAttribute("bean") SettingsForm pSetting) {
 
-		writeFromSettingsFormToSettingsObject(pSetting);
-
-		ObjectsController contr = new ObjectsController();
-		contr.saveOrUpdate(SettingsObject);
-
-		// model.addAttribute("bean", pSetting);
+		saveSettingWithoutContext(pSetting);
 
 		// return "editsetting";
 		String idStr = String.valueOf(SettingsObject.getId());
-		String returnAddress = "redirect:/editsetting?id=" + idStr;
+		String returnAddress = "redirect:/editsetting?id=" + idStr
+				+ "&selectionmode=false";
 		return returnAddress;
 
 	}
@@ -282,7 +284,7 @@ public class SettingsForm {
 		SettingsForm checkCurrSetting = AppContext.getCurentlyEditedSetting();
 
 		if (checkCurrSetting != null) {
-			if (checkCurrSetting.getName() != null) {
+			if (checkCurrSetting.getName() != null && !pSelectionMode) {
 				readSettingFromContext();
 			} else {
 				ObjectsController contr = new ObjectsController();
@@ -291,6 +293,7 @@ public class SettingsForm {
 
 				// fill form values.
 				writeFromSettingsObjectToSettingsForm();
+				this.SelectionMode = pSelectionMode;
 			}
 		}
 
@@ -301,6 +304,7 @@ public class SettingsForm {
 
 			// fill form values.
 			writeFromSettingsObjectToSettingsForm();
+			this.SelectionMode = pSelectionMode;
 		}
 
 		// writeFromSettingsObjectToSettingsForm();
@@ -449,7 +453,8 @@ public class SettingsForm {
 		// }
 
 		String idStr = String.valueOf(SettingsObject.getId());
-		String returnAddress = "redirect:/editsetting?id=" + idStr;
+		String returnAddress = "redirect:/editsetting?id=" + idStr
+				+ "&selectionmode=false";
 		return returnAddress;
 	}
 
@@ -528,15 +533,76 @@ public class SettingsForm {
 		return "editsetting";
 	}
 
-	@RequestMapping(params = "movedown", value = "/editsetting", method = RequestMethod.POST)
-	public String selectSCProws() {
+	@RequestMapping(params = "selectRows", value = "/editsetting", method = RequestMethod.POST)
+	public String selectSCProws(@ModelAttribute("bean") SettingsForm pSetting) {
+		this.dataSettingsConversion = pSetting.dataSettingsConversion;
+
 		List<SettingsConversionPresentation> selectedRows = new ArrayList<SettingsConversionPresentation>();
 		selectedRows = dataSettingsConversion.stream()
 				.filter(t -> t.isChecked()).collect(Collectors.toList());
 
 		AppContext.setSelectedSettingsConversionPresentations(selectedRows);
 		String idStr = String.valueOf(AppContext.getCurentlyEditedSetting().id);
-		String returnAddress = "redirect:/editsetting?id=" + idStr;
+		String returnAddress = "redirect:/editsetting?id=" + idStr
+				+ "&selectionmode=false";
 		return returnAddress;
 	}
+
+	@RequestMapping(params = "checkIntersection", value = "/editsetting", method = RequestMethod.POST)
+	public void checkIntersection(
+			@ModelAttribute("bean") SettingsForm pSetting, Model model)
+			throws SQLException {
+
+		readToThisBean(pSetting);
+
+		this.dataSettingsConversion = pSetting.dataSettingsConversion;
+
+		// let's clear all old intersections and save setting.
+		dataSettingsConversion.stream().forEach(
+				t -> t.setTheLineOfIntersection(0));
+
+		saveSettingWithoutContext(pSetting);
+
+		int rows = Intersections.checkIntersection(dataSettingsConversion,
+				pSetting.SettingsObject);
+
+		// reloadDataSettingsConversion();
+
+		model.addAttribute("bean", this);
+
+		//
+		// String mesString = "Unique problem lines: " + String.valueOf(rows);
+		// FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+		// "Intersections calculation result", mesString);
+		//
+		// // Add the message into context for a specific component
+		// FacesContext.getCurrentInstance().addMessage("messages", message);
+
+	}
+
+	public void saveSettingWithoutContext(SettingsForm pSetting) {
+
+		writeFromSettingsFormToSettingsObject(pSetting);
+
+		ObjectsController contr = new ObjectsController();
+		contr.saveOrUpdate(SettingsObject);
+
+	}
+
+	// trying to fix the problem with not displaying transponders frequencies
+	// after getting
+	// dataSettingsConversion from model attribute.
+	// public void reloadDataSettingsConversion() {
+	//
+	// List<SettingsConversion> tempSCList = new
+	// ArrayList<SettingsConversion>();
+	// dataSettingsConversion.stream().forEach(t -> tempSCList.add(t));
+	//
+	// // clear before reload
+	// dataSettingsConversion.clear();
+	//
+	// for (SettingsConversion e : tempSCList) {
+	// dataSettingsConversion.add(new SettingsConversionPresentation(e));
+	// }
+	// }
 }
