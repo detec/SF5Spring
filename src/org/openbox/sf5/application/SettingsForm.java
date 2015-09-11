@@ -108,12 +108,14 @@ public class SettingsForm {
 
 	public void writeHeaderFromSettingsFormToSettingsObject(
 			SettingsForm pSetting) {
-		SettingsObject = pSetting.SettingsObject;
+
+		SettingsObject = (pSetting.SettingsObject == null) ? new Settings()
+				: pSetting.SettingsObject;
 
 		// for new settings we must create it.
-		if (SettingsObject == null) {
-			SettingsObject = new Settings();
-		}
+		// if (SettingsObject == null) {
+		// SettingsObject = new Settings();
+		// }
 		SettingsObject.setName(pSetting.Name);
 
 		SettingsObject.setTheLastEntry(new java.sql.Timestamp(System
@@ -131,7 +133,10 @@ public class SettingsForm {
 		dataSettingsConversion = pSetting.dataSettingsConversion;
 
 		List<SettingsConversion> tempSCList = new ArrayList<SettingsConversion>();
-		dataSettingsConversion.stream().forEach(t -> tempSCList.add(t));
+		dataSettingsConversion.stream().forEach(t -> {
+			t.setparent_id(SettingsObject);
+			tempSCList.add(t);
+		});
 		SettingsObject.setConversion(tempSCList);
 
 	}
@@ -227,7 +232,7 @@ public class SettingsForm {
 			@RequestParam(value = "selectionmode", required = true) boolean pSelectionMode,
 			Model model) {
 
-		SettingsForm setting = null;
+		// SettingsForm setting = null;
 		// check if we have this object in AppContext
 		SettingsForm checkCurrSetting = AppContext.getCurentlyEditedSetting();
 
@@ -265,18 +270,43 @@ public class SettingsForm {
 	@RequestMapping(value = "/settings/add", method = RequestMethod.GET)
 	public String getAdd(Model model) {
 
+		// SettingsForm setting = null;
+		// check if we have this object in AppContext
+		SettingsForm checkCurrSetting = AppContext.getCurentlyEditedSetting();
+
+		if (checkCurrSetting != null) {
+			if (checkCurrSetting.getName() != null) {
+				readSettingFromContext();
+			} else {
+
+				initializeSettingsFormAsNew();
+			}
+		}
+
+		else {
+			initializeSettingsFormAsNew();
+		}
+
+		// check if SettingsObject is initialized
+		// = (expression) ? value if true : value if false
+		this.SettingsObject = (this.SettingsObject == null) ? new Settings()
+				: this.SettingsObject;
+		// after selection SettingsObject is null.
+		this.dataSettingsConversion.stream().forEach(
+				t -> t.setparent_id(SettingsObject));
+		model.addAttribute("bean", this);
+
+		return "editsetting";
+
+	}
+
+	public void initializeSettingsFormAsNew() {
 		SettingsObject = new Settings();
 
 		readCurrentUser();
 
 		Name = "New setting";
 		TheLastEntry = new java.sql.Timestamp(System.currentTimeMillis());
-
-		model.addAttribute("bean", this);
-		// model.addAttribute("DataSC",
-		// new ArrayList<SettingsConversionPresentation>());
-
-		return "editsetting";
 
 	}
 
