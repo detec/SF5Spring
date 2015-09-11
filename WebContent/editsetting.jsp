@@ -50,6 +50,7 @@
   <input type="submit" value="Move down" name="movedown" />
   <input type="submit" value="Select from other setting..." name="selectfromother" />
   <input type="submit" value="Check intersection" name="checkIntersection" />
+   <input type="submit" value="Generate Sat/Tp" name="generateSatTpStructure" />
   </c:if>
    <c:if test="${bean.selectionMode}">
    <input type="submit" value="Select rows..." name="selectRows" />
@@ -94,8 +95,9 @@
  <form:hidden path="dataSettingsConversion[${x.index}].transponder.polarization"/>
  <form:hidden path="dataSettingsConversion[${x.index}].transponder.carrier"/>
  <form:hidden path="dataSettingsConversion[${x.index}].transponder.speed"/>
-  <form:hidden path="dataSettingsConversion[${x.index}].transponder.satellite"/>
-  <form:hidden path="dataSettingsConversion[${x.index}].transponder.FEC"/>
+ <form:hidden path="dataSettingsConversion[${x.index}].transponder.satellite"/>
+ <form:hidden path="dataSettingsConversion[${x.index}].transponder.FEC"/>
+ <form:hidden path="dataSettingsConversion[${x.index}].transponder.frequency"/>
  </tr>
  </c:forEach> 
   </table>

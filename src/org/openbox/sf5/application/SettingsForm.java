@@ -589,20 +589,53 @@ public class SettingsForm {
 
 	}
 
-	// trying to fix the problem with not displaying transponders frequencies
-	// after getting
-	// dataSettingsConversion from model attribute.
-	// public void reloadDataSettingsConversion() {
-	//
-	// List<SettingsConversion> tempSCList = new
-	// ArrayList<SettingsConversion>();
-	// dataSettingsConversion.stream().forEach(t -> tempSCList.add(t));
-	//
-	// // clear before reload
-	// dataSettingsConversion.clear();
-	//
-	// for (SettingsConversion e : tempSCList) {
-	// dataSettingsConversion.add(new SettingsConversionPresentation(e));
-	// }
-	// }
+	public boolean check32Rows() {
+
+		if (dataSettingsConversion.size() != 32) {
+			// FacesMessage message = new FacesMessage(
+			// FacesMessage.SEVERITY_ERROR, "Error!",
+			// "Table Transponders must contain exactly 32 records!");
+			//
+			// // Add the message into context for a specific component
+			// FacesContext.getCurrentInstance().addMessage("messages",
+			// message);
+
+			return false;
+		} else {
+
+			return true;
+		}
+	}
+
+	@RequestMapping(params = "generateSatTpStructure", value = "/editsetting", method = RequestMethod.POST)
+	public void generateSatTpStructure(
+			@ModelAttribute("bean") SettingsForm pSetting, Model model) {
+
+		readToThisBean(pSetting);
+
+		this.dataSettingsConversion = pSetting.dataSettingsConversion;
+
+		if (!check32Rows()) {
+			return;
+		}
+
+		long sat = 1;
+		long currentCount = 0;
+		for (SettingsConversionPresentation e : dataSettingsConversion) {
+			currentCount++;
+			e.setSatindex(sat);
+			e.setTpindex(currentCount);
+			if (currentCount == 4) {
+				currentCount = 0;
+				sat++;
+			}
+		}
+
+		// save result
+		// saveSetting();
+
+		model.addAttribute("bean", this);
+
+	}
+
 }
