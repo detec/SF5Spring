@@ -98,6 +98,10 @@
  <form:hidden path="dataSettingsConversion[${x.index}].transponder.satellite"/>
  <form:hidden path="dataSettingsConversion[${x.index}].transponder.FEC"/>
  <form:hidden path="dataSettingsConversion[${x.index}].transponder.frequency"/>
+ <form:hidden path="dataSettingsConversion[${x.index}].transponder.versionOfTheDVB"/>
+ <form:hidden path="dataSettingsConversion[${x.index}].transponder.rangeOfDVB"/>
+ <form:hidden path="dataSettingsConversion[${x.index}].transponder.satellite.id"/>
+ <form:hidden path="dataSettingsConversion[${x.index}].transponder.satellite.name"/>
  </tr>
  </c:forEach> 
   </table>

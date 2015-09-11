@@ -58,14 +58,6 @@ public class TranspondersListClass {
 		SelectionMode = selectionMode;
 	}
 
-	public boolean isMultiple() {
-		return multiple;
-	}
-
-	public void setMultiple(boolean multiple) {
-		this.multiple = multiple;
-	}
-
 	public Satellites getFilterSatellite() {
 		return filterSatellite;
 	}
@@ -86,8 +78,6 @@ public class TranspondersListClass {
 	}
 
 	private boolean SelectionMode;
-
-	private boolean multiple;
 
 	private Satellites filterSatellite;
 

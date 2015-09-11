@@ -18,7 +18,9 @@ import org.openbox.sf5.converters.SettingsEditor;
 import org.openbox.sf5.converters.SqlTimestampPropertyEditor;
 import org.openbox.sf5.converters.TransponderChoiceEditor;
 import org.openbox.sf5.converters.UserEditor;
+import org.openbox.sf5.converters.VersionOfTheDVBEditor;
 import org.openbox.sf5.db.CarrierFrequency;
+import org.openbox.sf5.db.DVBStandards;
 import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.SettingsConversion;
 import org.openbox.sf5.db.Transponders;
@@ -43,62 +45,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Scope("request")
 public class SettingsForm {
 
-	@Autowired
-	private SF5ApplicationContext AppContext;
-
-	private long id;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	private boolean SelectionMode;
-
-	public boolean isSelectionMode() {
-		return SelectionMode;
-	}
-
-	public void setSelectionMode(boolean selectionMode) {
-		SelectionMode = selectionMode;
-	}
-
-	private Timestamp TheLastEntry;
-
-	public Timestamp getTheLastEntry() {
-		return TheLastEntry;
-	}
-
-	public void setTheLastEntry(Timestamp TheLastEntry) {
-		this.TheLastEntry = TheLastEntry;
-	}
-
-	private Settings SettingsObject;
-
-	public Settings getSettingsObject() {
-		return SettingsObject;
-	}
-
-	public void setSettingsObject(Settings settingsObject) {
-		SettingsObject = settingsObject;
-	}
-
-	private Users User;
-
-	private List<SettingsConversionPresentation> dataSettingsConversion = new ArrayList<SettingsConversionPresentation>();
-
-	public List<SettingsConversionPresentation> getDataSettingsConversion() {
-		return dataSettingsConversion;
-	}
-
-	public void setDataSettingsConversion(
-			List<SettingsConversionPresentation> dataSettingsConversion) {
-		this.dataSettingsConversion = dataSettingsConversion;
-	}
-
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		// exactly this order should be maintained!
@@ -114,14 +60,8 @@ public class SettingsForm {
 		binder.registerCustomEditor(Settings.class, new SettingsEditor());
 		binder.registerCustomEditor(TypesOfFEC.class, new FECEditor());
 		binder.registerCustomEditor(CarrierFrequency.class, new CarrierEditor());
-	}
-
-	public Users getUser() {
-		return User;
-	}
-
-	public void setUser(Users currentUser) {
-		User = currentUser;
+		binder.registerCustomEditor(DVBStandards.class,
+				new VersionOfTheDVBEditor());
 	}
 
 	// makes conversion of properties from db layer to controller
@@ -133,6 +73,8 @@ public class SettingsForm {
 
 		List<SettingsConversion> listRead = SettingsObject.getConversion();
 
+		this.dataSettingsConversion.clear();
+
 		// for new item it is null
 		if (listRead != null) {
 			// sort in ascending order
@@ -141,11 +83,27 @@ public class SettingsForm {
 							.getLineNumber()));
 
 			for (SettingsConversion e : listRead) {
+				// let's make conversion of types.
+				// e = e;
+				// SettingsConversion parent = new SettingsConversion();
+				//
+				// if (e instanceof SettingsConversionPresentation) {
+				// parent = e;
+				// dataSettingsConversion
+				// .add(new SettingsConversionPresentation(parent));
+				// }
+				//
+				// else {
 				dataSettingsConversion
 						.add(new SettingsConversionPresentation(e));
+				// }
+
 			}
 
 		}
+
+		long a = 1; // just so stop debugger
+		a = 2;
 	}
 
 	public void writeHeaderFromSettingsFormToSettingsObject(
@@ -172,11 +130,6 @@ public class SettingsForm {
 
 		dataSettingsConversion = pSetting.dataSettingsConversion;
 
-		// convert to Conversion
-		// this.SettingsObject
-		// .setConversion((List<SettingsConversion>)
-		// this.dataSettingsConversion);
-
 		List<SettingsConversion> tempSCList = new ArrayList<SettingsConversion>();
 		dataSettingsConversion.stream().forEach(t -> tempSCList.add(t));
 		SettingsObject.setConversion(tempSCList);
@@ -199,24 +152,34 @@ public class SettingsForm {
 
 	}
 
-	private String Name;
-
-	public void setName(String Name) {
-		this.Name = Name;
-	}
-
-	public String getName() {
-		return Name;
-	}
-
 	@RequestMapping(params = "save", value = "/editsetting", method = RequestMethod.POST)
-	public String editSaveSetting(@ModelAttribute("bean") SettingsForm pSetting) {
+	public String editSaveSetting(
+			@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
 		// here we must check session attributes selectedTransponders,
 		// selectedSettingsConversionPresentations
 		// and add them to model
 
-		return add(pSetting);
+		return add(pSetting, model);
+
+	}
+
+	// here we save setting
+	@RequestMapping(params = "add", value = "/settings/add", method = RequestMethod.POST)
+	public String add(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
+
+		saveSettingWithoutContext(pSetting);
+
+		writeFromSettingsObjectToSettingsForm();
+
+		model.addAttribute("bean", this);
+
+		return "editsetting";
+		// String idStr = String.valueOf(SettingsObject.getId());
+		// String returnAddress = "redirect:/editsetting?id=" + idStr
+		// + "&selectionmode=false";
+		// return returnAddress;
+
 	}
 
 	@RequestMapping(params = "cancel", value = "/editsetting", method = RequestMethod.POST)
@@ -231,22 +194,7 @@ public class SettingsForm {
 
 		AppContext.setCurentlyEditedSetting(pSetting);
 		// we will not save setting, but will just pass it between requests.
-		return "redirect:/transponders?SelectionMode=true&SettingId="
-				+ String.valueOf(pSetting.getId());
-	}
-
-	// here we save setting
-	@RequestMapping(params = "add", value = "/settings/add", method = RequestMethod.POST)
-	public String add(@ModelAttribute("bean") SettingsForm pSetting) {
-
-		saveSettingWithoutContext(pSetting);
-
-		// return "editsetting";
-		String idStr = String.valueOf(SettingsObject.getId());
-		String returnAddress = "redirect:/editsetting?id=" + idStr
-				+ "&selectionmode=false";
-		return returnAddress;
-
+		return "redirect:/transponders?SelectionMode=true";
 	}
 
 	@RequestMapping(params = "selectTransponders", value = "/settings/add", method = RequestMethod.POST)
@@ -631,11 +579,82 @@ public class SettingsForm {
 			}
 		}
 
-		// save result
-		// saveSetting();
-
 		model.addAttribute("bean", this);
 
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public boolean isSelectionMode() {
+		return SelectionMode;
+	}
+
+	public void setSelectionMode(boolean selectionMode) {
+		SelectionMode = selectionMode;
+	}
+
+	public Timestamp getTheLastEntry() {
+		return TheLastEntry;
+	}
+
+	public void setTheLastEntry(Timestamp TheLastEntry) {
+		this.TheLastEntry = TheLastEntry;
+	}
+
+	public Settings getSettingsObject() {
+		return SettingsObject;
+	}
+
+	public void setSettingsObject(Settings settingsObject) {
+		SettingsObject = settingsObject;
+	}
+
+	public List<SettingsConversionPresentation> getDataSettingsConversion() {
+		return dataSettingsConversion;
+	}
+
+	public void setDataSettingsConversion(
+			List<SettingsConversionPresentation> dataSettingsConversion) {
+		this.dataSettingsConversion = dataSettingsConversion;
+	}
+
+	public Users getUser() {
+		return User;
+	}
+
+	public void setUser(Users currentUser) {
+		User = currentUser;
+	}
+
+	public void setName(String Name) {
+		this.Name = Name;
+	}
+
+	public String getName() {
+		return Name;
+	}
+
+	@Autowired
+	private SF5ApplicationContext AppContext;
+
+	private long id;
+
+	private boolean SelectionMode;
+
+	private Timestamp TheLastEntry;
+
+	private Settings SettingsObject;
+
+	private Users User;
+
+	private String Name;
+
+	private List<SettingsConversionPresentation> dataSettingsConversion = new ArrayList<SettingsConversionPresentation>();
 
 }

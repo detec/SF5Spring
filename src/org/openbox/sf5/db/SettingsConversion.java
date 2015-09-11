@@ -2,6 +2,9 @@ package org.openbox.sf5.db;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -176,15 +179,33 @@ public class SettingsConversion implements Serializable {
 					"New object must be the same class or a subclass of original");
 		}
 
+		// filter only SettingsConversion fields
+		List<String> SCClassList = new ArrayList<String>();
+
+		Field[] thisClassFieldsArray = SettingsConversion.class
+				.getDeclaredFields();
+		// this.getClass().getDeclaredFields();
+
+		List<Field> thisClassFiledList = Arrays.asList(thisClassFieldsArray);
+		thisClassFiledList.stream().forEach(t -> {
+			String fieldname = t.getName();
+			if (!fieldname.equals("serialVersionUID")) {
+				SCClassList.add(fieldname);
+			}
+		});
+
 		// Spin through all fields of the class & all its superclasses
 		do {
-			fields = curClass.getDeclaredFields();
+			fields = thisClassFieldsArray;
 
 			for (int i = 0; i < fields.length; i++) {
-				if (fields[i].getName().equals("serialVersionUID")) {
-					continue;
+				// if (fields[i].getName().equals("serialVersionUID")) {
+				if (SCClassList.contains(fields[i].getName())) {
+					// add only checked classes
+					// continue;
+					fields[i].set(this, fields[i].get(origObj));
 				}
-				fields[i].set(this, fields[i].get(origObj));
+				//
 			}
 			curClass = curClass.getSuperclass();
 		} while (curClass != null);
