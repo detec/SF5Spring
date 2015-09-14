@@ -32,17 +32,6 @@ public class Transponders implements Serializable {
 	// "catalog_seq")
 	private long id;
 
-	@Column(name = "Name", unique = false, nullable = true, length = 25)
-	private String Name;
-
-	public void setName(String Name) {
-		this.Name = Name;
-	}
-
-	public String getName() {
-		return this.Name;
-	}
-
 	public long getId() {
 
 		return this.id;
@@ -151,12 +140,11 @@ public class Transponders implements Serializable {
 		this.Satellite = Satellite;
 	}
 
-	public Transponders(String Name, long Frequency, Polarization Polarization,
+	public Transponders(long Frequency, Polarization Polarization,
 			TypesOfFEC FEC, CarrierFrequency Carrier, long Speed,
 			DVBStandards VersionOfTheDVB, RangesOfDVB RangeOfDVB,
 			Satellites Satellite) {
 
-		this.Name = Name;
 		this.Frequency = Frequency;
 		this.Polarization = Polarization;
 		this.FEC = FEC;
@@ -184,9 +172,7 @@ public class Transponders implements Serializable {
 			return false;
 		}
 		Transponders otherTransponders = (Transponders) other;
-		if (otherTransponders.Name.equals(this.Name)
-
-				&& otherTransponders.Frequency == this.Frequency
+		if (otherTransponders.Frequency == this.Frequency
 				&& otherTransponders.Polarization.equals(this.Polarization)
 				&& otherTransponders.FEC.equals(this.FEC)
 				&& otherTransponders.Carrier.equals(this.Carrier)

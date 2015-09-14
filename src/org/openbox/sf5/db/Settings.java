@@ -2,6 +2,7 @@ package org.openbox.sf5.db;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 //import javax.persistence.CascadeType;
@@ -90,7 +91,7 @@ public class Settings implements Serializable {
 	@OneToMany(mappedBy = "parent_id", fetch = FetchType.EAGER, orphanRemoval = true)
 	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE })
 	@OrderColumn(name = "LineNumber")
-	private List<SettingsConversion> Conversion;
+	private List<SettingsConversion> Conversion = new ArrayList<SettingsConversion>();
 
 	public List<SettingsConversion> getConversion() {
 		return Conversion;

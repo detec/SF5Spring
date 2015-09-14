@@ -42,18 +42,18 @@
   <p>Transponders table
   <br>
   <c:if test="${!bean.selectionMode}">
-  <input type="submit" value="Up"/>
-  <input type="submit" value="Down"/>
-  <input type="submit" value="Select transponders..." name="selectTransponders" />
-  <input type="submit" value="Remove selected" name="removeSCrows" />
   <input type="submit" value="Move up" name="moveup" />
   <input type="submit" value="Move down" name="movedown" />
+  <input type="submit" value="Select transponders..." name="selectTransponders" />
+  <input type="submit" value="Remove selected" name="removeSCrows" />
+
   <input type="submit" value="Select from other setting..." name="selectfromother" />
   <input type="submit" value="Check intersection" name="checkIntersection" />
    <input type="submit" value="Generate Sat/Tp" name="generateSatTpStructure" />
   </c:if>
    <c:if test="${bean.selectionMode}">
    <input type="submit" value="Select rows..." name="selectRows" />
+   <input type="submit" value="Cancel select" name="cancelselectRows" />
    </c:if>
   <table>
    <tr>
@@ -105,13 +105,15 @@
  </tr>
  </c:forEach> 
   </table>
-  <c:if test="${bean.id == 0}">
-  <input type="submit" value="OK" name="add" />
-  </c:if>
-  <c:if test="${bean.id != 0}">
+ <c:if test="${!bean.selectionMode}">
+ <c:if test="${bean.id == 0}">
+ <input type="submit" value="OK" name="add" />
+ </c:if>
+ <c:if test="${bean.id != 0}">
  <input type="submit" value="OK" name="save"/>
  </c:if>
  <input type="submit" value="Cancel" name="cancel"/>
+ </c:if>
 </form:form>
 
 <a href="settings">Settings</a>

@@ -164,8 +164,15 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(params = "selectfromother", value = "/settings/add", method = RequestMethod.POST)
-	public String newSelectFromOtherSetting(@ModelAttribute("bean") SettingsForm pSetting) {
-		return selectTranspondersFromNew(pSetting);
+	public String newSelectFromOtherSetting(
+			@ModelAttribute("bean") SettingsForm pSetting) {
+		return prepareSelectFromOtherSetting(pSetting);
+		// return selectTranspondersFromNew(pSetting);
+	}
+
+	@RequestMapping(params = "cancel", value = "/settings/add", method = RequestMethod.POST)
+	public String newCancelSettingEdit() {
+		return "redirect:/settings";
 	}
 
 	@RequestMapping(params = "cancel", value = "/editsetting", method = RequestMethod.POST)
@@ -270,15 +277,19 @@ public class SettingsForm {
 
 		// check if SettingsObject is initialized
 		// = (expression) ? value if true : value if false
+		putNewSettingsIntoSettingsObject();
+		model.addAttribute("bean", this);
+
+		return "editsetting";
+
+	}
+
+	public void putNewSettingsIntoSettingsObject() {
 		SettingsObject = (SettingsObject == null) ? new Settings()
 				: SettingsObject;
 		// after selection SettingsObject is null.
 		dataSettingsConversion.stream().forEach(
 				t -> t.setparent_id(SettingsObject));
-		model.addAttribute("bean", this);
-
-		return "editsetting";
-
 	}
 
 	public void initializeSettingsFormAsNew() {
@@ -296,9 +307,13 @@ public class SettingsForm {
 		id = setting.id;
 		Name = setting.Name;
 		SettingsObject = setting.SettingsObject;
+
 		User = setting.User;
 		TheLastEntry = setting.TheLastEntry;
 		dataSettingsConversion = setting.dataSettingsConversion;
+
+		putNewSettingsIntoSettingsObject();
+
 		SelectionMode = setting.SelectionMode;
 
 		// add transponders, if they are not null
@@ -323,6 +338,10 @@ public class SettingsForm {
 		if (presList != null) {
 			presList.stream().forEach(t -> addForeignSCProw(t));
 		}
+
+		// clear selected SCP rows
+		AppContext
+				.setSelectedSettingsConversionPresentations(new ArrayList<SettingsConversionPresentation>());
 
 	}
 
@@ -350,19 +369,20 @@ public class SettingsForm {
 
 	}
 
-
 	@RequestMapping(params = "removeSCrows", value = "/settings/add", method = RequestMethod.POST)
-	public String newRemoveSCrows(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
-		return removwRow( pSetting, model);
+	public String newRemoveSCrows(
+			@ModelAttribute("bean") SettingsForm pSetting, Model model) {
+		return removwRow(pSetting, model);
 	}
 
-
 	@RequestMapping(params = "removeSCrows", value = "/editsetting", method = RequestMethod.POST)
-	public String removwRow(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
+	public String removwRow(@ModelAttribute("bean") SettingsForm pSetting,
+			Model model) {
 
 		writeHeaderFromSettingsFormToSettingsObject(pSetting);
 
 		dataSettingsConversion = pSetting.dataSettingsConversion;
+		putNewSettingsIntoSettingsObject();
 
 		// there may be unsaved, delete them as selected collection
 		List<SettingsConversionPresentation> firstList = dataSettingsConversion
@@ -387,7 +407,7 @@ public class SettingsForm {
 
 		List<SettingsConversion> tpConversion = SettingsObject.getConversion();
 
-		int initialSize = tpConversion.size();
+		// int initialSize = tpConversion.size();
 		ArrayList<SettingsConversion> deleteArray = new ArrayList<SettingsConversion>();
 
 		// define elements to be deleted
@@ -418,10 +438,10 @@ public class SettingsForm {
 		contr.saveOrUpdate(SettingsObject);
 		// }
 
-//		String idStr = String.valueOf(SettingsObject.getId());
-//		String returnAddress = "redirect:/editsetting?id=" + idStr
-//				+ "&selectionmode=false";
-//		return returnAddress;
+		// String idStr = String.valueOf(SettingsObject.getId());
+		// String returnAddress = "redirect:/editsetting?id=" + idStr
+		// + "&selectionmode=false";
+		// return returnAddress;
 		model.addAttribute("bean", this);
 
 		return "editsetting";
@@ -434,12 +454,11 @@ public class SettingsForm {
 		return moveUp(pSetting, model);
 	}
 
-	@RequestMapping(params = "movedown", value = "/editsetting", method = RequestMethod.POST)
+	@RequestMapping(params = "movedown", value = "/settings/add", method = RequestMethod.POST)
 	public String newMoveDown(@ModelAttribute("bean") SettingsForm pSetting,
 			Model model) {
 		return moveDown(pSetting, model);
 	}
-
 
 	@RequestMapping(params = "moveup", value = "/editsetting", method = RequestMethod.POST)
 	public String moveUp(@ModelAttribute("bean") SettingsForm pSetting,
@@ -481,6 +500,9 @@ public class SettingsForm {
 		id = pSetting.id;
 		Name = pSetting.Name;
 		SettingsObject = pSetting.SettingsObject;
+
+		putNewSettingsIntoSettingsObject();
+
 		TheLastEntry = pSetting.TheLastEntry;
 		User = pSetting.User;
 		SelectionMode = pSetting.SelectionMode;
@@ -497,6 +519,9 @@ public class SettingsForm {
 		List<SettingsConversionPresentation> selectedRows = new ArrayList<SettingsConversionPresentation>();
 		selectedRows = dataSettingsConversion.stream()
 				.filter(t -> t.isChecked()).collect(Collectors.toList());
+
+		// if we have 2 elements, they do not move
+		Collections.reverse(selectedRows);
 		selectedRows.stream().forEach(
 				t -> {
 					int currentIndex = dataSettingsConversion.indexOf(t);
@@ -516,6 +541,15 @@ public class SettingsForm {
 		return "editsetting";
 	}
 
+	@RequestMapping(params = "cancelselectRows", value = "/editsetting", method = RequestMethod.POST)
+	public String cancelSelectRows(@ModelAttribute("bean") SettingsForm pSetting) {
+
+		String idStr = String.valueOf(AppContext.getCurentlyEditedSetting().id);
+		String returnAddress = "redirect:/editsetting?id=" + idStr
+				+ "&selectionmode=false";
+		return returnAddress;
+	}
+
 	@RequestMapping(params = "selectRows", value = "/editsetting", method = RequestMethod.POST)
 	public String selectSCProws(@ModelAttribute("bean") SettingsForm pSetting) {
 		dataSettingsConversion = pSetting.dataSettingsConversion;
@@ -531,14 +565,26 @@ public class SettingsForm {
 		return returnAddress;
 	}
 
+	@RequestMapping(params = "checkIntersection", value = "/settings/add", method = RequestMethod.POST)
+	public String newCheckIntersection(
+			@ModelAttribute("bean") SettingsForm pSetting, Model model)
+			throws SQLException {
+		checkIntersection(pSetting, model);
+		return "editsetting";
+
+	}
+
 	@RequestMapping(params = "checkIntersection", value = "/editsetting", method = RequestMethod.POST)
 	public void checkIntersection(
 			@ModelAttribute("bean") SettingsForm pSetting, Model model)
 			throws SQLException {
 
+		dataSettingsConversion = pSetting.dataSettingsConversion;
+
 		readToThisBean(pSetting);
 
-		dataSettingsConversion = pSetting.dataSettingsConversion;
+		// this method has already been executed before.
+		// putNewSettingsIntoSettingsObject();
 
 		// let's clear all old intersections and save setting.
 		dataSettingsConversion.stream().forEach(
@@ -547,7 +593,7 @@ public class SettingsForm {
 		saveSettingWithoutContext(pSetting);
 
 		int rows = Intersections.checkIntersection(dataSettingsConversion,
-				pSetting.SettingsObject);
+				SettingsObject);
 
 		// reloadDataSettingsConversion();
 
@@ -590,17 +636,30 @@ public class SettingsForm {
 		}
 	}
 
+	@RequestMapping(params = "generateSatTpStructure", value = "/settings/add", method = RequestMethod.POST)
+	public String newGenerateSatTp(
+			@ModelAttribute("bean") SettingsForm pSetting, Model model) {
+		generateSatTpStructureUniversal(pSetting, model);
+
+		return "editsetting";
+	}
+
 	@RequestMapping(params = "generateSatTpStructure", value = "/editsetting", method = RequestMethod.POST)
 	public void generateSatTpStructure(
 			@ModelAttribute("bean") SettingsForm pSetting, Model model) {
+		generateSatTpStructureUniversal(pSetting, model);
+	}
 
+	public void generateSatTpStructureUniversal(SettingsForm pSetting,
+			Model model) {
 		readToThisBean(pSetting);
 
 		dataSettingsConversion = pSetting.dataSettingsConversion;
 
-		if (!check32Rows()) {
-			return;
-		}
+		// if (!check32Rows()) {
+		// model.addAttribute("bean", this);
+		// return;
+		// }
 
 		long sat = 1;
 		long currentCount = 0;
@@ -615,7 +674,6 @@ public class SettingsForm {
 		}
 
 		model.addAttribute("bean", this);
-
 	}
 
 	public long getId() {
