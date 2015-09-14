@@ -46,10 +46,10 @@
   <input type="submit" value="Move down" name="movedown" />
   <input type="submit" value="Select transponders..." name="selectTransponders" />
   <input type="submit" value="Remove selected" name="removeSCrows" />
-
   <input type="submit" value="Select from other setting..." name="selectfromother" />
   <input type="submit" value="Check intersection" name="checkIntersection" />
    <input type="submit" value="Generate Sat/Tp" name="generateSatTpStructure" />
+   <input type="submit" value="Export to XML" name="exportToXML" />
   </c:if>
    <c:if test="${bean.selectionMode}">
    <input type="submit" value="Select rows..." name="selectRows" />
