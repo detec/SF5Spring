@@ -172,7 +172,7 @@ public class SettingsForm {
 		writeFromSettingsObjectToSettingsForm();
 
 		model.addAttribute("bean", this);
-
+		model.addAttribute("viewMsg", "Setting saved!");
 		return "editsetting";
 
 	}
@@ -661,11 +661,6 @@ public class SettingsForm {
 
 		dataSettingsConversion = pSetting.dataSettingsConversion;
 
-		// if (!check32Rows()) {
-		// model.addAttribute("bean", this);
-		// return;
-		// }
-
 		long sat = 1;
 		long currentCount = 0;
 		for (SettingsConversionPresentation e : dataSettingsConversion) {
@@ -700,20 +695,26 @@ public class SettingsForm {
 		dataSettingsConversion = pSetting.dataSettingsConversion;
 
 		HttpHeaders header = new HttpHeaders();
-		header.setContentType(new MediaType("application", "xml"));
+		header.setContentType(new MediaType("text", "xml"));
 
 		byte[] bytesBuffer = new byte[32768];
 
 		if (!check32Rows()) {
-			return new HttpEntity<String>("", header);
+			return new ResponseEntity<String>(
+					"Table Transponders must contain exactly 32 rows!", header,
+					HttpStatus.OK);
 		}
 
 		String filePath = XMLExporter
 				.exportSettingToXML(dataSettingsConversion);
 
 		if (filePath == "") {
-			return new HttpEntity<String>("", header);
+			return new ResponseEntity<String>(
+					"Error reading export XML file on server!", header,
+					HttpStatus.OK);
 		}
+
+		header.setContentType(new MediaType("application", "xml"));
 
 		try {
 

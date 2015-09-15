@@ -17,6 +17,12 @@
  
 <h2>Openbox SF5 settings editor</h2>
  <h3>Edit setting</h3>
+ <c:if test="${not empty viewMsg}" >
+	<div style="color:#408080;"> ${viewMsg}</div>
+</c:if>
+ <c:if test="${not empty viewErrMsg}" >
+ <div style="color:Red;"> ${viewErrMsg}</div>
+ </c:if>
  <c:if test="${bean.id == 0}">
  <c:url var="saveUrl" value="/settings/add" />
  </c:if>
