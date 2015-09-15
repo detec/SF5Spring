@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.criterion.Criterion;
@@ -40,6 +39,9 @@ import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -50,7 +52,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Scope("request")
@@ -688,31 +689,30 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(params = "exportToXML", value = "/settings/add", method = RequestMethod.POST)
-	@ResponseBody
-	public String newExportToXML() {
-		return universalexportToXML();
+	public HttpEntity<byte[]> newExportToXML(HttpServletResponse response) {
+		return universalexportToXML(response);
 	}
 
-	@ResponseBody
-	public String universalexportToXML() {
+	public HttpEntity<byte[]> universalexportToXML(HttpServletResponse response) {
+
+
+	    HttpHeaders header = new HttpHeaders();
+	    header.setContentType(new MediaType("application", "xml"));
+	  //  header.setContentLength(documentBody.length);
+
+		byte[] bytesBuffer = new byte[2048];
 
 		if (!check32Rows()) {
-			return;
+			return bytesBuffer;
 		}
 
 		String filePath = XMLExporter
 				.exportSettingToXML(dataSettingsConversion);
 
 		if (filePath == "") {
-			return;
+			return bytesBuffer;
 		}
 
-		// Get the FacesContext
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-
-		// Get HTTP response
-		HttpServletResponse response = (HttpServletResponse) facesContext
-				.getExternalContext().getResponse();
 
 		// Set response headers
 		response.reset(); // Reset the response in the first place
@@ -727,7 +727,7 @@ public class SettingsForm {
 					new File(filePath));
 			// Read PDF contents and write them to the output
 
-			byte[] bytesBuffer = new byte[2048];
+
 			int bytesRead;
 			while ((bytesRead = inputStream.read(bytesBuffer)) > 0) {
 				responseOutputStream.write(bytesBuffer, 0, bytesRead);
@@ -746,7 +746,7 @@ public class SettingsForm {
 			// (such as an HTTP redirect), and that the request processing
 			// lifecycle should be terminated
 			// as soon as the current phase is completed.
-			facesContext.responseComplete();
+			//facesContext.responseComplete();
 
 			// clean temporary file
 			Files.deleteIfExists(Paths.get(filePath));
@@ -755,6 +755,8 @@ public class SettingsForm {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		return "";
 
 	}
 
