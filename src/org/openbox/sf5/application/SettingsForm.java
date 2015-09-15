@@ -1,9 +1,7 @@
 package org.openbox.sf5.application;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -14,8 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -41,7 +37,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -52,6 +50,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Scope("request")
@@ -688,65 +687,43 @@ public class SettingsForm {
 		model.addAttribute("bean", this);
 	}
 
-	@RequestMapping(params = "exportToXML", value = "/settings/add", method = RequestMethod.POST)
-	public HttpEntity<byte[]> newExportToXML(HttpServletResponse response) {
-		return universalexportToXML(response);
+	@RequestMapping(params = "exportToXML", value = "/editsetting", method = RequestMethod.POST)
+	@ResponseBody
+	public HttpEntity<String> exportToXML(
+			@ModelAttribute("bean") SettingsForm pSetting) {
+		return universalexportToXML(pSetting);
 	}
 
-	public HttpEntity<byte[]> universalexportToXML(HttpServletResponse response) {
+	@RequestMapping(params = "exportToXML", value = "/settings/add", method = RequestMethod.POST)
+	@ResponseBody
+	public HttpEntity<String> newExportToXML(
+			@ModelAttribute("bean") SettingsForm pSetting) {
+		return universalexportToXML(pSetting);
+	}
 
+	@ResponseBody
+	public HttpEntity<String> universalexportToXML(SettingsForm pSetting) {
+		dataSettingsConversion = pSetting.dataSettingsConversion;
 
-	    HttpHeaders header = new HttpHeaders();
-	    header.setContentType(new MediaType("application", "xml"));
-	  //  header.setContentLength(documentBody.length);
+		HttpHeaders header = new HttpHeaders();
+		header.setContentType(new MediaType("application", "xml"));
 
-		byte[] bytesBuffer = new byte[2048];
+		byte[] bytesBuffer = new byte[32768];
 
 		if (!check32Rows()) {
-			return bytesBuffer;
+			return new HttpEntity<String>("", header);
 		}
 
 		String filePath = XMLExporter
 				.exportSettingToXML(dataSettingsConversion);
 
 		if (filePath == "") {
-			return bytesBuffer;
+			return new HttpEntity<String>("", header);
 		}
 
-
-		// Set response headers
-		response.reset(); // Reset the response in the first place
-		response.setHeader("Content-Type", "text/xml"); // Set only the content
-														// type
-
-		// Open response output stream
 		try {
-			OutputStream responseOutputStream = response.getOutputStream();
 
-			FileInputStream inputStream = new FileInputStream(
-					new File(filePath));
-			// Read PDF contents and write them to the output
-
-
-			int bytesRead;
-			while ((bytesRead = inputStream.read(bytesBuffer)) > 0) {
-				responseOutputStream.write(bytesBuffer, 0, bytesRead);
-			}
-
-			// Make sure that everything is out
-			responseOutputStream.flush();
-
-			// Close both streams
-			inputStream.close();
-			responseOutputStream.close();
-
-			// JSF doc:
-			// Signal the JavaServer Faces implementation that the HTTP response
-			// for this request has already been generated
-			// (such as an HTTP redirect), and that the request processing
-			// lifecycle should be terminated
-			// as soon as the current phase is completed.
-			//facesContext.responseComplete();
+			bytesBuffer = Files.readAllBytes(Paths.get(filePath));
 
 			// clean temporary file
 			Files.deleteIfExists(Paths.get(filePath));
@@ -756,7 +733,8 @@ public class SettingsForm {
 			e.printStackTrace();
 		}
 
-		return "";
+		return new ResponseEntity<String>(new String(bytesBuffer,
+				Charset.forName("UTF8")), header, HttpStatus.OK);
 
 	}
 
