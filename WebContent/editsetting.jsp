@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
@@ -30,7 +31,7 @@
    <td><form:label path="id">ID</form:label><b><c:out value="${bean.id}" /></b><form:hidden path="id"/></td>
    
    <td><form:label path="TheLastEntry">Last update date</form:label><form:hidden path="TheLastEntry"/></td>
-   <td><b><c:out value="${bean.theLastEntry}" /></b></td>
+   <td><b><fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${bean.theLastEntry}" /></b></td>
   </tr>
    <tr>
    <form:hidden path="user"/>
@@ -48,8 +49,11 @@
   <input type="submit" value="Remove selected" name="removeSCrows" />
   <input type="submit" value="Select from other setting..." name="selectfromother" />
   <input type="submit" value="Check intersection" name="checkIntersection" />
-   <input type="submit" value="Generate Sat/Tp" name="generateSatTpStructure" />
-   <input type="submit" value="Export to XML" name="exportToXML" />
+  <input type="submit" value="Generate Sat/Tp" name="generateSatTpStructure" />
+  <input type="submit" value="Export to XML" name="exportToXML" />
+  <c:if test="${bean.id != 0}">
+  <input type="submit" value="Print" name="print" />
+  </c:if>
   </c:if>
    <c:if test="${bean.selectionMode}">
    <input type="submit" value="Select rows..." name="selectRows" />
@@ -117,6 +121,7 @@
 </form:form>
 
 <a href="settings">Settings</a>
+<a href="transponders">Transponders</a>
  <form:form method="POST" action="logout">
 <input type="submit" value="Logout" />
 </form:form>

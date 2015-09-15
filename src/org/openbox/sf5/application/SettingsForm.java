@@ -8,10 +8,13 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpSession;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -239,27 +242,18 @@ public class SettingsForm {
 			if (checkCurrSetting.getName() != null && !pSelectionMode) {
 				readSettingFromContext();
 			} else {
-				ObjectsController contr = new ObjectsController();
-				// setting = (Settings) contr.select(Settings.class, id);
-				SettingsObject = (Settings) contr.select(Settings.class, pid);
+				readAndFillBeanfromSetting(pid);
 
-				// fill form values.
-				writeFromSettingsObjectToSettingsForm();
 				SelectionMode = pSelectionMode;
 			}
 		}
 
 		else {
-			ObjectsController contr = new ObjectsController();
-			// setting = (Settings) contr.select(Settings.class, id);
-			SettingsObject = (Settings) contr.select(Settings.class, pid);
+			readAndFillBeanfromSetting(pid);
 
-			// fill form values.
-			writeFromSettingsObjectToSettingsForm();
 			SelectionMode = pSelectionMode;
 		}
 
-		// writeFromSettingsObjectToSettingsForm();
 		renumerateLines();
 		model.addAttribute("bean", this);
 		return "editsetting";
@@ -736,6 +730,35 @@ public class SettingsForm {
 		return new ResponseEntity<String>(new String(bytesBuffer,
 				Charset.forName("UTF8")), header, HttpStatus.OK);
 
+	}
+
+	@RequestMapping(value = "/print", method = RequestMethod.GET)
+	public String printSetting(
+			@RequestParam(value = "id", required = true) long pid, Model model,
+			HttpSession session) {
+
+		readAndFillBeanfromSetting(pid);
+
+		renumerateLines();
+
+		model.addAttribute("bean", this);
+		model.addAttribute("sessiondate",
+				new Date(session.getLastAccessedTime()));
+		return "settingprintfull";
+	}
+
+	@RequestMapping(params = "print", value = "/editsetting", method = RequestMethod.POST)
+	public String printSettingPost(@ModelAttribute("bean") SettingsForm pSetting) {
+		return "redirect:/print?id=" + String.valueOf(pSetting.id);
+	}
+
+	public void readAndFillBeanfromSetting(long pid) {
+		ObjectsController contr = new ObjectsController();
+		// setting = (Settings) contr.select(Settings.class, id);
+		SettingsObject = (Settings) contr.select(Settings.class, pid);
+
+		// fill form values.
+		writeFromSettingsObjectToSettingsForm();
 	}
 
 	public long getId() {

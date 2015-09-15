@@ -38,13 +38,14 @@ th, td {
    <c:url var="editUrl" value="/editsetting?id=${setting.id}&selectionmode=false" />
    <c:url var="deleteUrl" value="/settings/delete?id=${setting.id}" />
    <c:url var="selectUrl" value="/selectedsetting?id=${setting.id}" />
+   <c:url var="printUrl" value="/print?id=${setting.id}" />
   <tr>
    <td><c:out value="${setting.id}" /></td>
    <td><c:out value="${setting.name}" /></td>
    <td><c:out value="${setting.theLastEntry}" /></td>
     <td>
     <c:if test="${!SelectionMode}">
-    <a href="${editUrl}">Edit</a><a href="${deleteUrl}">Delete</a>
+    <a href="${editUrl}">Edit</a><a href="${deleteUrl}">Delete</a><a href="${printUrl}">Print</a>
     </c:if>
     <c:if test="${SelectionMode}">
     <a href="${selectUrl}">Select</a>
