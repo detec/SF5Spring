@@ -588,9 +588,6 @@ public class SettingsForm {
 
 		readToThisBean(pSetting);
 
-		// this method has already been executed before.
-		// putNewSettingsIntoSettingsObject();
-
 		// let's clear all old intersections and save setting.
 		dataSettingsConversion.stream().forEach(
 				t -> t.setTheLineOfIntersection(0));
@@ -603,14 +600,10 @@ public class SettingsForm {
 		// reloadDataSettingsConversion();
 
 		model.addAttribute("bean", this);
+		String mesString = "Intersection check result. Unique problem lines: " + String.valueOf(rows);
 
-		//
-		// String mesString = "Unique problem lines: " + String.valueOf(rows);
-		// FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-		// "Intersections calculation result", mesString);
-		//
-		// // Add the message into context for a specific component
-		// FacesContext.getCurrentInstance().addMessage("messages", message);
+		model.addAttribute("viewMsg", mesString);
+
 
 	}
 
@@ -626,14 +619,7 @@ public class SettingsForm {
 	public boolean check32Rows() {
 
 		if (dataSettingsConversion.size() != 32) {
-			// FacesMessage message = new FacesMessage(
-			// FacesMessage.SEVERITY_ERROR, "Error!",
 			// "Table Transponders must contain exactly 32 records!");
-			//
-			// // Add the message into context for a specific component
-			// FacesContext.getCurrentInstance().addMessage("messages",
-			// message);
-
 			return false;
 		} else {
 
