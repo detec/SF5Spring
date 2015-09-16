@@ -600,10 +600,10 @@ public class SettingsForm {
 		// reloadDataSettingsConversion();
 
 		model.addAttribute("bean", this);
-		String mesString = "Intersection check result. Unique problem lines: " + String.valueOf(rows);
+		String mesString = "Intersection check result. Unique problem lines: "
+				+ String.valueOf(rows);
 
 		model.addAttribute("viewMsg", mesString);
-
 
 	}
 
@@ -681,14 +681,16 @@ public class SettingsForm {
 		dataSettingsConversion = pSetting.dataSettingsConversion;
 
 		HttpHeaders header = new HttpHeaders();
-		header.setContentType(new MediaType("text", "xml"));
+		header.setContentType(MediaType.TEXT_HTML);
 
 		byte[] bytesBuffer = new byte[32768];
 
 		if (!check32Rows()) {
-			return new ResponseEntity<String>(
-					"Table Transponders must contain exactly 32 rows!", header,
-					HttpStatus.OK);
+			ResponseEntity<String> resp = new ResponseEntity<String>(
+					new String(
+							"Table Transponders must contain exactly 32 rows!"),
+					header, HttpStatus.OK);
+			return resp;
 		}
 
 		String filePath = XMLExporter
