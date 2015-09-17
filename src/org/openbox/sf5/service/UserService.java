@@ -11,8 +11,12 @@ import org.openbox.sf5.application.UserDto;
 import org.openbox.sf5.converters.UserNotFoundException;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.db.Usersauthorities;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+@Component
+@Scope(value = "session")
 @Service
 public class UserService implements IUserService {
 
@@ -33,7 +37,10 @@ public class UserService implements IUserService {
 		newUser.setusername(accountDto.getUsername());
 		newUser.setPassword(accountDto.getPassword());
 		List<Usersauthorities> listAuthorities = new ArrayList<Usersauthorities>();
-		listAuthorities.add(new Usersauthorities("ROLE_USER"));
+
+		Usersauthorities newLine = new Usersauthorities(
+				accountDto.getUsername(), "ROLE_USER", newUser, 1);
+		listAuthorities.add(newLine);
 		newUser.setauthorities(listAuthorities);
 		contr.saveOrUpdate(newUser);
 

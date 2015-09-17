@@ -9,42 +9,42 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title><spring:message code="label.form.title"></spring:message></title>
+<title>Register new user</title>
 <sec:csrfMetaTags/>
 </head>
 <body>
     <H1>
-        <spring:message code="label.form.title"></spring:message>
+        Register new user
     </H1>
     <form:form modelAttribute="user" method="POST" enctype="utf8">
         <br>
         <tr>
-        <td><label><spring:message code="label.user.username"></spring:message>
+        <td><label>Username
             </label>
         </td>
         <td><form:input path="username" value="" /></td>
         <form:errors path="username" element="div"/>
     </tr>
     <tr>
-        <td><label><spring:message code="label.user.password"></spring:message>
+        <td><label>Password
             </label>
         </td>
         <td><form:input path="password" value="" type="password" /></td>
         <form:errors path="password" element="div" />
     </tr>
     <tr>
-        <td><label><spring:message code="label.user.confirmPass"></spring:message>
+        <td><label>Confirm password
             </label>
         </td>
         <td><form:input path="matchingPassword" value="" type="password" /></td>
         <form:errors element="div" />
     </tr>
-        <button type="submit"><spring:message code="label.form.submit"></spring:message>
-        </button>
+        <button type="submit">Submit</button>
+        
+        	<input type="hidden" name="${_csrf.parameterName}"
+                value="${_csrf.token}" />
     </form:form>
     <br>
-    <a href="<c:url value="login.html" />">
-        <spring:message code="label.form.loginLink"></spring:message>
-    </a>
+    <a href="/login">Login </a>
 </body>
 </html>

@@ -130,23 +130,78 @@ public class Users implements Serializable {
 
 	public void initialize() {
 
+		// insert default values into database.
+		new TableFiller();
+
 		Criterion criterea = Restrictions.eq("username", "admin");
 		List<Users> adminsList = (List<Users>) ObjectsListService
 				.ObjectsCriterionList(Users.class, criterea);
+
 		if (adminsList.isEmpty()) {
-			List<Usersauthorities> list = new ArrayList<>();
+			List<Usersauthorities> rolesList = new ArrayList<>();
 
-			Users admin = new Users("admin", "1", true, list);
-			list.add(new Usersauthorities("admin", "ROLE_ADMIN", admin));
-			admin.setauthorities(list);
-
+			Users admin = new Users("admin", "1", true, rolesList);
 			ObjectsController contr = new ObjectsController();
 			contr.saveOrUpdate(admin);
 
-			// insert default values into database.
-			new TableFiller();
+			fillTables(admin, rolesList);
+			// admin.setauthorities(rolesList);
+
+			contr.saveOrUpdate(admin);
+		}
+
+		else {
+
+			ObjectsController contr = new ObjectsController();
+
+			Users adminUser = adminsList.get(0);
+			List<Usersauthorities> rolesList = adminUser.getauthorities();
+
+			// create second clean list
+			// List<Usersauthorities> cleanrolesList = new
+			// ArrayList<Usersauthorities>();
+			// cleanrolesList.addAll(rolesList);
+
+			// check if admin role is present
+
+			boolean save = false;
+
+			fillTables(adminUser, rolesList);
+
+			if (save) {
+
+				// adminUser.setauthorities(cleanrolesList);
+				contr.saveOrUpdate(adminUser);
+
+			}
+
 		}
 
 	}
 
+	public void fillTables(Users adminUser, List<Usersauthorities> rolesList) {
+
+		ObjectsController contr = new ObjectsController();
+
+		List<String> textRoles = new ArrayList<String>();
+		textRoles.add("ROLE_ADMIN");
+		textRoles.add("ROLE_USER");
+
+		boolean save = false;
+		// let's numerate lines because it seem to cause troubles.
+		long numerator = 1;
+
+		for (String e : textRoles) {
+			Usersauthorities checkRoleAdmin = new Usersauthorities(
+					adminUser.username, e, adminUser, numerator);
+
+			if (!rolesList.contains(checkRoleAdmin)) {
+				contr.saveOrUpdate(checkRoleAdmin);
+
+				rolesList.add(checkRoleAdmin);
+				save = true;
+				numerator++;
+			}
+		}
+	}
 }
