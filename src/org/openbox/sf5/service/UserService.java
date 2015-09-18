@@ -42,6 +42,7 @@ public class UserService implements IUserService {
 				accountDto.getUsername(), "ROLE_USER", newUser, 1);
 		listAuthorities.add(newLine);
 		newUser.setauthorities(listAuthorities);
+		newUser.setenabled(true);
 		contr.saveOrUpdate(newUser);
 
 		return newUser;

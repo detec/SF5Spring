@@ -6,20 +6,18 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.db.HibernateUtil;
-import org.openbox.sf5.db.Transponders;
 
 public class DAOListImpl implements DAOList {
 
 
 	@Override
 	public List<?> list(Class<?> clazz) {
-	
+
 		List<?> list = new ArrayList<>();
         Session s=HibernateUtil.openSession();
         s.beginTransaction();
-        list = (List<?>) s.createQuery("from " + clazz.getName()).list();
+        list = s.createQuery("from " + clazz.getName()).list();
         s.getTransaction().commit();
         s.close();
         return list;
@@ -30,7 +28,11 @@ public class DAOListImpl implements DAOList {
 		Session session = HibernateUtil.openSession();
 		Criteria criteria = session.createCriteria(clazz).add(criterion);
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY); // kill duplicates
-		return criteria.list();
+
+		List<?> list = criteria.list();
+
+		session.close();
+		return list;
 	}
 
 

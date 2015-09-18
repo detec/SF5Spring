@@ -33,7 +33,7 @@ public class Users implements Serializable {
 
 	public long getId() {
 
-		return this.id;
+		return id;
 	}
 
 	public void setId(long id) {
@@ -157,23 +157,18 @@ public class Users implements Serializable {
 			Users adminUser = adminsList.get(0);
 			List<Usersauthorities> rolesList = adminUser.getauthorities();
 
-			// create second clean list
-			// List<Usersauthorities> cleanrolesList = new
-			// ArrayList<Usersauthorities>();
-			// cleanrolesList.addAll(rolesList);
 
 			// check if admin role is present
-
 			boolean save = false;
 
 			fillTables(adminUser, rolesList);
 
-			if (save) {
+			//if (save) {
 
 				// adminUser.setauthorities(cleanrolesList);
 				contr.saveOrUpdate(adminUser);
 
-			}
+			//}
 
 		}
 
@@ -202,6 +197,8 @@ public class Users implements Serializable {
 				save = true;
 				numerator++;
 			}
+
+
 		}
 	}
 }
