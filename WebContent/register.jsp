@@ -18,33 +18,35 @@
     </H1>
     <form:form modelAttribute="user" method="POST" enctype="utf8">
         <br>
+        <table>
         <tr>
         <td><label>Username
             </label>
         </td>
         <td><form:input path="username" value="" /></td>
-        <form:errors path="username" element="div"/>
+        <form:errors path="username" element="div" cssStyle="color:Red"/>
     </tr>
     <tr>
         <td><label>Password
             </label>
         </td>
         <td><form:input path="password" value="" type="password" /></td>
-        <form:errors path="password" element="div" />
+        <form:errors path="password" element="div" cssStyle="color:Red"/>
     </tr>
     <tr>
         <td><label>Confirm password
             </label>
         </td>
         <td><form:input path="matchingPassword" value="" type="password" /></td>
-        <form:errors element="div" />
+        <form:errors element="div" cssStyle="color:Red"/>
     </tr>
+    </table>
         <button type="submit">Submit</button>
         
         	<input type="hidden" name="${_csrf.parameterName}"
                 value="${_csrf.token}" />
     </form:form>
     <br>
-    <a href="/login">Login </a>
+    <a href="login">Login </a>
 </body>
 </html>

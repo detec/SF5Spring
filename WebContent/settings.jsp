@@ -20,6 +20,7 @@ th, td {
 </head>
 <body>
 <h2>Openbox SF5 settings editor</h2>
+<div style="font-style:italic;"> You are working under <c:out value="${username}" /></div>
  <h3>Settings</h3>
 <c:url var="addUrl" value="/settings/add" />
 <table style="text-align:center">
@@ -30,7 +31,7 @@ th, td {
    <th>Name</th>
    <th>Last update date</th>
    <th>Action</th>
-   <th colspan="4"></th>
+   
   </tr>
  </thead>
  <tbody>
@@ -62,7 +63,9 @@ th, td {
 <a href="${addUrl}">Add</a>
 <a href="transponders">Transponders</a>
 <a href="upload">Import transponders from file</a>
-
+<c:if test="${hasAdminRole}">
+<a href="users/">User administration</a>
+</c:if>
 <form:form method="POST" action="logout">
 <input type="submit" value="Logout" />
 </form:form>

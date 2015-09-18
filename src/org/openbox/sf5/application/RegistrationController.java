@@ -7,8 +7,12 @@ import org.openbox.sf5.converters.UserNotFoundException;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,8 +31,9 @@ public class RegistrationController {
 	@Autowired
 	private UserService service;
 
-	// @Autowired
-	// protected AuthenticationManager authenticationManager;
+	@Autowired
+	@Qualifier("authenticationManager")
+	protected AuthenticationManager authenticationManager;
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String showRegistrationForm(WebRequest request, Model model) {
@@ -47,7 +52,8 @@ public class RegistrationController {
 			user = createUserAccount(accountDto, result);
 		}
 		if (user == null) {
-			result.rejectValue("username", "message.regError");
+			// result.rejectValue("username", "User not created!");
+			result.reject("username", "User not created!");
 		}
 		if (result.hasErrors()) {
 			return new ModelAndView("register", "user", accountDto);
@@ -81,10 +87,10 @@ public class RegistrationController {
 		request.getSession();
 
 		token.setDetails(new WebAuthenticationDetails(request));
-		// Authentication authenticatedUser = authenticationManager
-		// .authenticate(token);
-		//
-		// SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+		Authentication authenticatedUser = authenticationManager
+				.authenticate(token);
+
+		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
 	}
 
 }

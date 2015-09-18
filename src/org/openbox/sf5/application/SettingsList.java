@@ -10,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.converters.UserEditor;
 import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.Users;
+import org.openbox.sf5.db.Usersauthorities;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,8 @@ public class SettingsList {
 		// Attach settings to the Model
 		model.addAttribute("settings", settingsList);
 		model.addAttribute("SelectionMode", SelectionMode);
+		model.addAttribute("username", currentUser.getusername());
+		model.addAttribute("hasAdminRole", hasAdminRole());
 
 		// This will resolve to /WEB-INF/settings.jsp
 		return "settings";
@@ -134,6 +137,23 @@ public class SettingsList {
 		String returnAddress = "redirect:/editsetting?id=" + idStr
 				+ "&selectionmode=true";
 		return returnAddress;
+	}
+
+	private boolean hasAdminRole() {
+
+		Usersauthorities checkRoleAdmin = new Usersauthorities(
+				currentUser.getusername(), "ROLE_ADMIN", currentUser, 1);
+
+		boolean result;
+		if (currentUser.getauthorities().contains(checkRoleAdmin)) {
+			result = true;
+		}
+
+		else {
+			result = false;
+		}
+
+		return result;
 	}
 
 	public Users getCurrentUser() {
