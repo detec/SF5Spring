@@ -52,7 +52,7 @@ init-method="initialize">
 	<security:intercept-url pattern="/login" access="isAnonymous()"/>
 	<security:intercept-url pattern="/register" access="isAnonymous()"/>
 
-	<security:intercept-url pattern="/settings*" access="hasRole('ROLE_USER')" />
+	<security:intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
 	<security:intercept-url pattern="/transponders*" access="hasRole('ROLE_USER')" />
 	<security:logout  logout-success-url="/login" /><security:logout/>
 	

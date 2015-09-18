@@ -750,6 +750,11 @@ public class SettingsForm {
 		writeFromSettingsObjectToSettingsForm();
 	}
 
+	@RequestMapping(value = "/settings/settings", method = RequestMethod.GET)
+	public String redirectToSettings() {
+		return "redirect:/settings";
+	}
+
 	public long getId() {
 		return id;
 	}

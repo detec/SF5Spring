@@ -4,9 +4,12 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -19,6 +22,8 @@ public class Usersauthorities implements Serializable {
 	private static final long serialVersionUID = 108703010218830663L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "t_gen")
+	@SequenceGenerator(name = "t_gen", sequenceName = "T_SEQ")
 	private long id;
 
 	public long getId() {

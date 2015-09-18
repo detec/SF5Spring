@@ -1,5 +1,6 @@
 package org.openbox.sf5.application;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,12 @@ import org.springframework.stereotype.Component;
 // this class is intended to store objects between controllers.
 @Component
 @Scope(value = "session")
-public class SF5ApplicationContext {
+public class SF5ApplicationContext implements Serializable {
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -7611964920327488619L;
 
 	public SF5ApplicationContext() {
 

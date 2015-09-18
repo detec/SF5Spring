@@ -7,9 +7,12 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
@@ -28,7 +31,10 @@ public class Users implements Serializable {
 	 *
 	 */
 	private static final long serialVersionUID = -6789497093756301793L;
+
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "t_gen")
+	@SequenceGenerator(name = "t_gen", sequenceName = "T_SEQ")
 	private long id;
 
 	public long getId() {
@@ -79,7 +85,8 @@ public class Users implements Serializable {
 	}
 
 	@OneToMany(mappedBy = "parent_id", fetch = FetchType.EAGER, orphanRemoval = true)
-	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE })
+	// @Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE })
+	@Cascade({ CascadeType.ALL })
 	@OrderColumn(name = "LineNumber")
 	public List<Usersauthorities> authorities;
 
@@ -157,18 +164,17 @@ public class Users implements Serializable {
 			Users adminUser = adminsList.get(0);
 			List<Usersauthorities> rolesList = adminUser.getauthorities();
 
-
 			// check if admin role is present
 			boolean save = false;
 
 			fillTables(adminUser, rolesList);
 
-			//if (save) {
+			// if (save) {
 
-				// adminUser.setauthorities(cleanrolesList);
-				contr.saveOrUpdate(adminUser);
+			// adminUser.setauthorities(cleanrolesList);
+			contr.saveOrUpdate(adminUser);
 
-			//}
+			// }
 
 		}
 
@@ -185,20 +191,36 @@ public class Users implements Serializable {
 		boolean save = false;
 		// let's numerate lines because it seem to cause troubles.
 		long numerator = 1;
+		//
+		// for (String e : textRoles) {
+		// Usersauthorities checkRoleAdmin = new Usersauthorities(
+		// adminUser.username, e, adminUser, numerator);
+		//
+		// if (!rolesList.contains(checkRoleAdmin)) {
+		// // contr.saveOrUpdate(checkRoleAdmin);
+		//
+		// rolesList.add(checkRoleAdmin);
+		// save = true;
+		// numerator++;
+		// }
+		//
+		// }
 
-		for (String e : textRoles) {
-			Usersauthorities checkRoleAdmin = new Usersauthorities(
-					adminUser.username, e, adminUser, numerator);
+		// ROLE_ADMIN
+		Usersauthorities checkRoleAdmin = new Usersauthorities(
+				adminUser.username, "ROLE_ADMIN", adminUser, 1);
 
-			if (!rolesList.contains(checkRoleAdmin)) {
-				contr.saveOrUpdate(checkRoleAdmin);
-
-				rolesList.add(checkRoleAdmin);
-				save = true;
-				numerator++;
-			}
-
-
+		if (!rolesList.contains(checkRoleAdmin)) {
+			rolesList.add(checkRoleAdmin);
 		}
+
+		// ROLE_USER
+		Usersauthorities checkRoleUser = new Usersauthorities(
+				adminUser.username, "ROLE_USER", adminUser, 2);
+
+		if (!rolesList.contains(checkRoleUser)) {
+			rolesList.add(checkRoleUser);
+		}
+
 	}
 }
