@@ -182,7 +182,7 @@ public class Users implements Serializable {
 
 	public void fillTables(Users adminUser, List<Usersauthorities> rolesList) {
 
-		ObjectsController contr = new ObjectsController();
+	//	ObjectsController contr = new ObjectsController();
 
 		List<String> textRoles = new ArrayList<String>();
 		textRoles.add("ROLE_ADMIN");
