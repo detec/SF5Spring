@@ -61,4 +61,21 @@ public class UserService implements IUserService {
 		}
 
 	}
+
+	public static boolean hasAdminRole(Users currentUser) {
+
+		Usersauthorities checkRoleAdmin = new Usersauthorities(
+				currentUser.getusername(), "ROLE_ADMIN", currentUser, 1);
+
+		boolean result;
+		if (currentUser.getauthorities().contains(checkRoleAdmin)) {
+			result = true;
+		}
+
+		else {
+			result = false;
+		}
+
+		return result;
+	}
 }

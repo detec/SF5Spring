@@ -1,7 +1,6 @@
 package org.openbox.sf5.application;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import org.openbox.sf5.converters.UserNotFoundException;
 import org.openbox.sf5.db.Users;
@@ -44,8 +43,21 @@ public class RegistrationController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ModelAndView registerUserAccount(
-			@ModelAttribute("user") @Valid UserDto accountDto,
-			BindingResult result, HttpServletRequest request, Errors errors) {
+			@ModelAttribute("user") UserDto accountDto, BindingResult result,
+			HttpServletRequest request, Errors errors) {
+
+		// Set<ConstraintViolation<UserDto>> violations = validator
+		// .validate(accountDto);
+		//
+		// for (ConstraintViolation<UserDto> violation : violations) {
+		// String propertyPath = violation.getPropertyPath().toString();
+		// String message = violation.getMessage();
+		// // Add JSR-303 errors to BindingResult
+		// // This allows Spring to display them in view via a FieldError
+		// result.addError(new FieldError("user", propertyPath,
+		//
+		// "Invalid " + propertyPath + "(" + message + ")"));
+		// }
 
 		Users user = new Users();
 		if (!result.hasErrors()) {

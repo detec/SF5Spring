@@ -20,6 +20,12 @@ th, td {
 </head>
 <body>
 <h2>Users list</h2>
+ <c:if test="${not empty viewMsg}" >
+	<div style="color:#408080;"> ${viewMsg}</div>
+</c:if>
+ <c:if test="${not empty viewErrMsg}" >
+ <div style="color:Red;"> ${viewErrMsg}</div>
+ </c:if>
 <table style="text-align:center">
  <thead >
 

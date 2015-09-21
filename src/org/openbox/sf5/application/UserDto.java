@@ -1,19 +1,20 @@
 package org.openbox.sf5.application;
 
-import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
 
-import org.openbox.sf5.converters.PasswordMatches;
-
-@PasswordMatches
 public class UserDto {
 
-	@Size(min = 1, max = 20)
+	@NotBlank
+	@Range(min = 1, max = 20)
 	private String username;
 
-	@Size(min = 1, max = 20)
+	@NotBlank
+	@Range(min = 1, max = 20)
 	private String password;
 
-	@Size(min = 1, max = 20)
+	@NotBlank
+	@Range(min = 1, max = 20)
 	private String matchingPassword;
 
 	public String getUsername() {

@@ -6,6 +6,7 @@ import java.util.List;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
+import org.openbox.sf5.service.UserService;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,12 +48,56 @@ public class UserListController {
 
 	@RequestMapping(value = "/users/change", method = RequestMethod.GET)
 	public String changeState(
-			@RequestParam(value = "id", required = true) long pid) {
+			@RequestParam(value = "id", required = true) long pid, Model model) {
 		ObjectsController contr = new ObjectsController();
 		Users user = (Users) contr.select(Users.class, pid);
+
+		String username = user.getusername();
+
 		user.setenabled(!user.getenabled());
+
+		String state = user.getenabled() ? "enabled" : "disabled";
+
 		contr.saveOrUpdate(user);
-		return "redirect:/users/";
+
+		model.addAttribute("viewMsg", "Successfully " + state + " user "
+				+ username + "!");
+		UsersList = (ArrayList<Users>) ObjectsListService
+				.ObjectsList(Users.class);
+
+		model.addAttribute("users", UsersList);
+		return "users";
+
+	}
+
+	@RequestMapping(value = "/users/delete", method = RequestMethod.GET)
+	public String deleteUser(
+			@RequestParam(value = "id", required = true) long pid, Model model) {
+
+		ObjectsController contr = new ObjectsController();
+		Users userToDelete = (Users) contr.select(Users.class, pid);
+
+		String username = userToDelete.getusername();
+
+		if (UserService.hasAdminRole(userToDelete)) {
+			model.addAttribute("viewErrMsg",
+					"It is forbidden to remove admin user!");
+			UsersList = (ArrayList<Users>) ObjectsListService
+					.ObjectsList(Users.class);
+
+			model.addAttribute("users", UsersList);
+			return "users";
+		}
+
+		contr.remove(Users.class, pid);
+		// return "redirect:/users/";
+		model.addAttribute("viewMsg", "Successfully deleted user " + username
+				+ "!");
+		UsersList = (ArrayList<Users>) ObjectsListService
+				.ObjectsList(Users.class);
+
+		model.addAttribute("users", UsersList);
+		return "users";
 
 	}
 
