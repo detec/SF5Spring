@@ -35,7 +35,7 @@ public class UserListController {
 		return "redirect:/settings";
 	}
 
-	@RequestMapping(value = "/users/logout", method = RequestMethod.GET)
+	@RequestMapping(value = "/users/logout", method = RequestMethod.POST)
 	public String redirectToLogout() {
 		return "redirect:/logout";
 	}
@@ -46,7 +46,8 @@ public class UserListController {
 	}
 
 	@RequestMapping(value = "/users/change", method = RequestMethod.GET)
-	public String changeState(@RequestParam(value = "id", required = true) long pid) {
+	public String changeState(
+			@RequestParam(value = "id", required = true) long pid) {
 		ObjectsController contr = new ObjectsController();
 		Users user = (Users) contr.select(Users.class, pid);
 		user.setenabled(!user.getenabled());

@@ -2,10 +2,8 @@ package org.openbox.sf5.common;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.application.FacesMessage;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -23,7 +21,20 @@ public class XMLExporter {
 
 	public static String exportSettingToXML(
 			List<SettingsConversionPresentation> dataSettingsConversion) {
-		List<FacesMessage> msgs = new ArrayList<FacesMessage>();
+
+		// Generating sat/tp structure
+		long sat = 1;
+		long currentCount = 0;
+		for (SettingsConversionPresentation e : dataSettingsConversion) {
+			currentCount++;
+			e.setSatindex(sat);
+			e.setTpindex(currentCount);
+			if (currentCount == 4) {
+				currentCount = 0;
+				sat++;
+			}
+		}
+
 		String absolutePath = "";
 		try {
 
@@ -33,8 +44,8 @@ public class XMLExporter {
 
 		} catch (IOException e) {
 
-			msgs.add(new FacesMessage("Error saving file on server \n"
-					+ e.getLocalizedMessage()));
+			// msgs.add(new FacesMessage("Error saving file on server \n"
+			// + e.getLocalizedMessage()));
 			return "";
 
 		}

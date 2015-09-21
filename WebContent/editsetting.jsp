@@ -55,7 +55,7 @@
   <input type="submit" value="Remove selected" name="removeSCrows" />
   <input type="submit" value="Select from other setting..." name="selectfromother" />
   <input type="submit" value="Check intersection" name="checkIntersection" />
-  <input type="submit" value="Generate Sat/Tp" name="generateSatTpStructure" />
+  
   <input type="submit" value="Export to XML" name="exportToXML" />
   <c:if test="${bean.id != 0}">
   <input type="submit" value="Print" name="print" />

@@ -56,15 +56,15 @@ init-method="initialize">
 	<security:intercept-url pattern="/transponders*" access="hasRole('ROLE_USER')" />
 	<security:logout  logout-success-url="/login" /><security:logout/>
 	
-	<!--  
+<!-- 	  
      <security:form-login
          login-page='/login.jsp'
          login-processing-url="/perform_login"
          default-target-url="/settings.jsp"
          authentication-failure-url="/login.jsp?error=true"
          always-use-default-target="true" />
-	
 	 -->
+	
 	
 	<!-- enable csrf protection -->
 	<security:csrf/>
