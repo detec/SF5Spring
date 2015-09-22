@@ -16,6 +16,10 @@
     <H1>
         Register new user
     </H1>
+ <c:if test="${not empty viewErrMsg}" >
+ <div style="color:Red;"> ${viewErrMsg}</div>
+ </c:if>
+ 
     <form:form modelAttribute="user" method="POST" enctype="utf8">
         <br>
         <table>

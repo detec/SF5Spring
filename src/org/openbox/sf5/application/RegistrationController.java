@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @Scope("request")
@@ -42,9 +41,9 @@ public class RegistrationController {
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ModelAndView registerUserAccount(
+	public String registerUserAccount(
 			@ModelAttribute("user") UserDto accountDto, BindingResult result,
-			HttpServletRequest request, Errors errors) {
+			HttpServletRequest request, Errors errors, Model model) {
 
 		// Set<ConstraintViolation<UserDto>> violations = validator
 		// .validate(accountDto);
@@ -59,6 +58,29 @@ public class RegistrationController {
 		// "Invalid " + propertyPath + "(" + message + ")"));
 		// }
 
+
+		// Let's manually check if password and other fields are empty
+		if (accountDto.getUsername().equals("")) {
+			model.addAttribute("viewErrMsg", "Field 'Username' cannot be empty!");
+			return "register";
+		}
+
+		if (accountDto.getPassword().equals("")) {
+			model.addAttribute("viewErrMsg", "Field 'Password' cannot be empty!");
+			//return new ModelAndView("register",
+			return "register";
+		}
+
+		if (accountDto.getMatchingPassword().equals("")) {
+			model.addAttribute("viewErrMsg", "Field 'Matching password' cannot be empty!");
+			return "register";
+		}
+
+		if (!accountDto.getPassword().equals(accountDto.getMatchingPassword())) {
+			model.addAttribute("viewErrMsg", "Passwords do not match!");
+			return "register";
+		}
+
 		Users user = new Users();
 		if (!result.hasErrors()) {
 			user = createUserAccount(accountDto, result);
@@ -68,14 +90,17 @@ public class RegistrationController {
 			result.reject("username", "User not created!");
 		}
 		if (result.hasErrors()) {
-			return new ModelAndView("register", "user", accountDto);
+			//return new ModelAndView("register", "user", accountDto);
 		} else {
 
 			// I added this from stackoverflow example
 			authenticateUserAndSetSession(user, request);
 			// return new ModelAndView("login", "user", accountDto);
-			return new ModelAndView("settings");
+			//return new ModelAndView("settings");
+			return "settings";
 		}
+
+		return "settings";
 	}
 
 	private Users createUserAccount(UserDto accountDto, BindingResult result) {
