@@ -4,7 +4,7 @@
 <hibernate-configuration>
  <session-factory>
   <property name="hibernate.connection.driver_class">org.h2.Driver</property>
-  <property name="hibernate.connection.url">${db.jdbcUrl}</property>
+  <property name="hibernate.connection.url">jdbc:h2:tcp://localhost/~/sf5spring</property>
   <property name="hibernate.connection.username">sa</property>
   <property name="hibernate.connection.password"/>
   <property name="hibernate.dialect">org.hibernate.dialect.H2Dialect</property>
@@ -19,5 +19,6 @@
   <mapping class="org.openbox.sf5.db.SettingsConversion"/>
   <mapping class="org.openbox.sf5.db.SettingsSatellites"/>
   <mapping class="org.openbox.sf5.db.Users"/>
+  <mapping class="org.openbox.sf5.db.Usersauthorities" />
  </session-factory>
 </hibernate-configuration>

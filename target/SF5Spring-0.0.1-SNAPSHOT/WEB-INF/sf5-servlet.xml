@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans  
 	http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
 	http://www.springframework.org/schema/context 
 	http://www.springframework.org/schema/context/spring-context-4.2.xsd
 	http://www.springframework.org/schema/security 
- 	http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+ 	http://www.springframework.org/schema/security/spring-security-4.0.xsd
+ 	http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
 	 
 	
-	<context:component-scan base-package="org.openbox.sf5.application" />
+<context:annotation-config />
+	
+<context:component-scan base-package="org.openbox.sf5.application" />
+<context:component-scan base-package="org.openbox.sf5.db" />
+<context:component-scan base-package="org.openbox.sf5.service" />
+
+<mvc:annotation-driven />
  
+
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 		<property name="viewClass"
 			value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="prefix" value="/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
 	
@@ -30,30 +41,62 @@ class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 <property name="password" value="" />
 </bean>
 	
-	
+
 	
 <bean id="Users" class="org.openbox.sf5.db.Users"
 init-method="initialize">
 </bean>
  
-<security:http auto-config="true">
-<security:intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" />
+<!-- Global Security Settings -->
+<security:global-method-security pre-post-annotations="enabled" />
+ 
+ 
+<security:http auto-config="true" use-expressions="true" disable-url-rewriting="true">
+
+	<security:session-management invalid-session-url="/login?time=1">
+    	<security:concurrency-control max-sessions="1" expired-url="/login?time=1" />
+    </security:session-management>
+
+	<security:intercept-url pattern="/login" access="isAnonymous()"/>
+	<security:intercept-url pattern="/register" access="isAnonymous()"/>
+
+	<security:intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
+	<security:intercept-url pattern="/transponders*" access="hasRole('ROLE_USER')" />
+	<security:logout  logout-success-url="/login" /><security:logout/>
+	
+ <!-- 	This code makes the application totally dead.   
+     <security:form-login
+         login-page='/login.jsp'
+         login-processing-url="/perform_login"
+         default-target-url="/settings.jsp"
+         authentication-failure-url="/login.jsp?error=true"
+         always-use-default-target="true" />
+	
+	 
+	-->
+		 
+	<security:form-login 
+		login-page= '/login' 
+		default-target-url="/"
+		authentication-failure-url='/login.jsp?error=true'
+		always-use-default-target='true'
+ 	/>
+	
+
+	
+	<!-- enable csrf protection -->
+	<security:csrf/>
 </security:http>
  
  
-<security:authentication-manager>
-<security:authentication-provider>
-<security:jdbc-user-service
-data-source-ref="dataSource"
-users-by-username-query="
-SELECT 
-login,
-password,
-active
-FROM USERS 
-where login =?"
-authorities-by-username-query="select login, role from FROM USERS where login =?" />
-</security:authentication-provider>
+<security:authentication-manager  alias="authenticationManager">
+	<security:authentication-provider>
+	<security:jdbc-user-service
+		data-source-ref="dataSource"
+		users-by-username-query="
+			select	username, password, enabled from users	where username =?"
+		authorities-by-username-query="select username, authority from usersauthorities where username =?" />
+	</security:authentication-provider>
 </security:authentication-manager>
 
 	
