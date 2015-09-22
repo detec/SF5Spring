@@ -58,21 +58,23 @@ public class RegistrationController {
 		// "Invalid " + propertyPath + "(" + message + ")"));
 		// }
 
-
 		// Let's manually check if password and other fields are empty
 		if (accountDto.getUsername().equals("")) {
-			model.addAttribute("viewErrMsg", "Field 'Username' cannot be empty!");
+			model.addAttribute("viewErrMsg",
+					"Field 'Username' cannot be empty!");
 			return "register";
 		}
 
 		if (accountDto.getPassword().equals("")) {
-			model.addAttribute("viewErrMsg", "Field 'Password' cannot be empty!");
-			//return new ModelAndView("register",
+			model.addAttribute("viewErrMsg",
+					"Field 'Password' cannot be empty!");
+			// return new ModelAndView("register",
 			return "register";
 		}
 
 		if (accountDto.getMatchingPassword().equals("")) {
-			model.addAttribute("viewErrMsg", "Field 'Matching password' cannot be empty!");
+			model.addAttribute("viewErrMsg",
+					"Field 'Matching password' cannot be empty!");
 			return "register";
 		}
 
@@ -90,13 +92,16 @@ public class RegistrationController {
 			result.reject("username", "User not created!");
 		}
 		if (result.hasErrors()) {
-			//return new ModelAndView("register", "user", accountDto);
+			// return new ModelAndView("register", "user", accountDto);
 		} else {
 
 			// I added this from stackoverflow example
 			authenticateUserAndSetSession(user, request);
 			// return new ModelAndView("login", "user", accountDto);
-			//return new ModelAndView("settings");
+			// return new ModelAndView("settings");
+			model.addAttribute("username", user.getusername());
+			model.addAttribute("viewMsg", user.getusername()
+					+ " successfully registered!");
 			return "settings";
 		}
 
@@ -128,6 +133,11 @@ public class RegistrationController {
 				.authenticate(token);
 
 		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login() {
+		return "login";
 	}
 
 }

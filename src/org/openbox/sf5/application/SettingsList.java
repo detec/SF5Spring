@@ -50,7 +50,8 @@ public class SettingsList {
 		binder.registerCustomEditor(Users.class, new UserEditor());
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	// we cannot use such mapping with custom form.
+	// @RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String getSettings(Model model) {
 		List<Settings> settingsList = new ArrayList<Settings>();
 
@@ -107,8 +108,15 @@ public class SettingsList {
 	private void readCurrentUser() {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
-		org.springframework.security.core.userdetails.User secUser = (org.springframework.security.core.userdetails.User) auth
-				.getPrincipal();
+
+		org.springframework.security.core.userdetails.User secUser = null;
+
+		if (auth.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
+			secUser = (org.springframework.security.core.userdetails.User) auth
+					.getPrincipal();
+		} else {
+			return;
+		}
 
 		String username = secUser.getUsername();
 		Criterion criterion = Restrictions.eq("username", username);

@@ -21,6 +21,9 @@ th, td {
 <body>
 <h2>Openbox SF5 settings editor</h2>
 <div style="font-style:italic;"> You are working under <c:out value="${username}" /></div>
+ <c:if test="${not empty viewMsg}" >
+	<div style="color:#408080;"> ${viewMsg}</div>
+</c:if>
  <h3>Settings</h3>
 <c:url var="addUrl" value="/settings/add" />
 <table style="text-align:center">
