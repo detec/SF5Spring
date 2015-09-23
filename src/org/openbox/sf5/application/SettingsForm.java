@@ -760,6 +760,11 @@ public class SettingsForm {
 		return "redirect:/settings";
 	}
 
+	@RequestMapping(value = "/settings/logout", method = RequestMethod.POST)
+	public String redirectLogout() {
+		return "/logout";
+	}
+
 	public long getId() {
 		return id;
 	}
