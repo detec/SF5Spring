@@ -45,8 +45,7 @@ th, td {
    <th>Speed</th>
    <th>FEC</th>
    <th>Comment</th>
-   <th colspan="8"></th>
-    </tr>
+   </tr>
    <c:forEach items="${bean.dataSettingsConversion}" var="DataSC" varStatus="x">
    <c:if test="${DataSC.lineNumber == ((DataSC.satindex - 1) * 4 + 1)}">
    <tr>
