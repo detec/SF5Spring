@@ -20,6 +20,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 
 @Controller
@@ -136,7 +137,14 @@ public class RegistrationController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login() {
+	public String login(
+			@RequestParam(value = "error", required = false) boolean loginError,
+			Model model) {
+
+		if (loginError) {
+			// indicate about bad credentials.
+			model.addAttribute("errormessage", "Bad username/password!");
+		}
 		return "login";
 	}
 

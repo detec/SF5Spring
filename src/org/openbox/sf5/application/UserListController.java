@@ -3,11 +3,15 @@ package org.openbox.sf5.application;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
+import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.openbox.sf5.service.UserService;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @Scope("request")
 public class UserListController {
 
@@ -99,6 +104,15 @@ public class UserListController {
 			return "users";
 		}
 
+		// first we must remove user's settings
+		Criterion criterion = Restrictions.eq("User", userToDelete);
+		List<Settings> userSettings = (List<Settings>) ObjectsListService
+				.ObjectsCriterionList(Settings.class, criterion);
+
+		userSettings.stream().forEach(
+				t -> contr.remove(Settings.class, t.getId()));
+
+		// removing user
 		contr.remove(Users.class, pid);
 		// return "redirect:/users/";
 		model.addAttribute("viewMsg", "Successfully deleted user " + username
