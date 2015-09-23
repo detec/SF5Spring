@@ -62,7 +62,8 @@ init-method="initialize">
 
 	<security:intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
 	<security:intercept-url pattern="/transponders*" access="hasRole('ROLE_USER')" />
-	<security:logout  logout-success-url="/login" /><security:logout/>
+	<security:logout  logout-success-url="/login" delete-cookies="JSESSIONID" invalidate-session="true"/>
+	
 	
  <!-- 	This code makes the application totally dead.   
      <security:form-login

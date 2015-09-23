@@ -90,10 +90,16 @@ public class RegistrationController {
 		}
 		if (user == null) {
 			// result.rejectValue("username", "User not created!");
-			result.reject("username", "User not created!");
+			// result.reject("username", "User not created!");
+			model.addAttribute("viewErrMsg",
+					"User not created! There is a user with such name!");
+			return "register";
 		}
+
 		if (result.hasErrors()) {
 			// return new ModelAndView("register", "user", accountDto);
+			model.addAttribute("viewErrMsg", "Unknown error!");
+			return "register";
 		} else {
 
 			// I added this from stackoverflow example
@@ -106,7 +112,6 @@ public class RegistrationController {
 			return "settings";
 		}
 
-		return "settings";
 	}
 
 	private Users createUserAccount(UserDto accountDto, BindingResult result) {
