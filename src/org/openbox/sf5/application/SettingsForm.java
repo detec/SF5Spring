@@ -730,6 +730,8 @@ public class SettingsForm {
 
 		renumerateLines();
 
+		XMLExporter.generateSatTp(dataSettingsConversion);
+
 		model.addAttribute("bean", this);
 		model.addAttribute("sessiondate",
 				new Date(session.getLastAccessedTime()));
@@ -738,6 +740,7 @@ public class SettingsForm {
 
 	@RequestMapping(params = "print", value = "/editsetting", method = RequestMethod.POST)
 	public String printSettingPost(@ModelAttribute("bean") SettingsForm pSetting) {
+
 		return "redirect:/print?id=" + String.valueOf(pSetting.id);
 	}
 

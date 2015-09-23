@@ -1,5 +1,6 @@
 package org.openbox.sf5.service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,14 @@ import org.springframework.stereotype.Service;
 @Component
 @Scope(value = "session")
 @Service
-public class UserService implements IUserService {
+public class UserService implements IUserService, Serializable {
+
+
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Transactional
 	@Override

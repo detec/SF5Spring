@@ -23,17 +23,7 @@ public class XMLExporter {
 			List<SettingsConversionPresentation> dataSettingsConversion) {
 
 		// Generating sat/tp structure
-		long sat = 1;
-		long currentCount = 0;
-		for (SettingsConversionPresentation e : dataSettingsConversion) {
-			currentCount++;
-			e.setSatindex(sat);
-			e.setTpindex(currentCount);
-			if (currentCount == 4) {
-				currentCount = 0;
-				sat++;
-			}
-		}
+		generateSatTp(dataSettingsConversion);
 
 		String absolutePath = "";
 		try {
@@ -117,6 +107,21 @@ public class XMLExporter {
 				org.openbox.sf5.db.Polarization.getXMLpresentation(e
 						.getTransponder().getPolarization())));
 		return tpId;
+	}
+
+	public static void generateSatTp(List<SettingsConversionPresentation> dataSettingsConversion) {
+		// Generating sat/tp structure
+		long sat = 1;
+		long currentCount = 0;
+		for (SettingsConversionPresentation e : dataSettingsConversion) {
+			currentCount++;
+			e.setSatindex(sat);
+			e.setTpindex(currentCount);
+			if (currentCount == 4) {
+				currentCount = 0;
+				sat++;
+			}
+		}
 	}
 
 }
