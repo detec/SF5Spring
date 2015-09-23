@@ -54,6 +54,16 @@ public class UserListController {
 
 		String username = user.getusername();
 
+		if (UserService.hasAdminRole(user)) {
+			model.addAttribute("viewErrMsg",
+					"It is forbidden to change state of admin user!");
+			UsersList = (ArrayList<Users>) ObjectsListService
+					.ObjectsList(Users.class);
+
+			model.addAttribute("users", UsersList);
+			return "users";
+		}
+
 		user.setenabled(!user.getenabled());
 
 		String state = user.getenabled() ? "enabled" : "disabled";
