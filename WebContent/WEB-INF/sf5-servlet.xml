@@ -46,6 +46,7 @@ class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 <bean id="Users" class="org.openbox.sf5.db.Users"
 init-method="initialize">
 </bean>
+
  
 <!-- Global Security Settings -->
 <security:global-method-security pre-post-annotations="enabled" />
@@ -62,7 +63,7 @@ init-method="initialize">
 
 	<security:intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
 	<security:intercept-url pattern="/transponders*" access="hasRole('ROLE_USER')" />
-	<security:logout  logout-success-url="/login" delete-cookies="JSESSIONID" invalidate-session="true"/>
+	<security:logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID" invalidate-session="true"/>
 	
 	
  <!-- 	This code makes the application totally dead.   

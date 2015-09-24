@@ -14,6 +14,8 @@
           <exclude>**/*.java</exclude>
           <!-- exclude default, unchanged hibernate.cfg.xml -->
           <exclude>**/hibernate.cfg.xml</exclude>
+          <!-- exclude sf5-servlet, because we must insert variable for authentication -->
+          <exclude>**/hibernate.cfg.xml</exclude>
         </excludes>
       </resource>
     </resources>
