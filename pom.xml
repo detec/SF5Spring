@@ -30,7 +30,7 @@
 	 <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>2.3</version>
+        <version>2.4</version>
         <configuration>
           <!-- specify UTF-8, ISO-8859-1 or any other file encoding -->
           <encoding>UTF-8</encoding>
@@ -40,7 +40,7 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>2.6</version>
         <configuration>
-        	<warSourceDirectory>WebContent</warSourceDirectory>
+        	<warSourceDirectory>src/main/webapp</warSourceDirectory>
           	<failOnMissingWebXml>false</failOnMissingWebXml>
 			<packagingExcludes>WEB-INF/web.xml</packagingExcludes>
 			<!-- <packagingExcludes>WEB-INF/sf5-servlet.xml</packagingExcludes> -->
@@ -169,6 +169,18 @@
 	<groupId>javax.servlet</groupId>
 	<artifactId>javax.servlet-api</artifactId>
 	<version>3.1.0</version>
+</dependency>
+
+<dependency>
+  <groupId>javax.servlet</groupId>
+  <artifactId>servlet-api</artifactId>
+  <version>3.1.0</version>
+  <exclusions>
+    <exclusion>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+    </exclusion>
+  </exclusions>
 </dependency>
 
   </dependencies>
