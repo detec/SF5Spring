@@ -40,7 +40,7 @@ class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 <property name="url" value="jdbc:h2:tcp://localhost/~/sf5springtest;MVCC=true" />
  -->
  
-<property name="url" value="jdbc:h2:tcp://localhost/~/sf5spring" />
+<property name="url" value="jdbc:h2:tcp://localhost/~/sf5springtest" />
 <property name="username" value="sa" />
 <property name="password" value="" />
 </bean>
