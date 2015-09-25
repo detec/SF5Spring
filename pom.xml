@@ -30,7 +30,7 @@
 	 <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>2.4</version>
+        <version>2.7</version>
         <configuration>
           <!-- specify UTF-8, ISO-8859-1 or any other file encoding -->
           <encoding>UTF-8</encoding>
@@ -64,6 +64,12 @@
             </resource>
         </webResources>
         </configuration>
+      </plugin>
+      
+      <plugin>
+          <groupId>org.apache.tomcat.maven</groupId>
+          <artifactId>tomcat7-maven-plugin</artifactId>
+          <version>2.0</version>
       </plugin>
     </plugins>
   </build>
@@ -171,17 +177,6 @@
 	<version>3.1.0</version>
 </dependency>
 
-<dependency>
-  <groupId>javax.servlet</groupId>
-  <artifactId>servlet-api</artifactId>
-  <version>3.1.0</version>
-  <exclusions>
-    <exclusion>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-    </exclusion>
-  </exclusions>
-</dependency>
 
   </dependencies>
 </project>
