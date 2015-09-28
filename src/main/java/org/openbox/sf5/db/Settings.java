@@ -20,6 +20,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Component;
 
 @Entity
@@ -39,6 +40,7 @@ public class Settings implements Serializable {
 	private long id;
 
 	@Column(name = "Name", unique = false, nullable = false, length = 50)
+	@NotEmpty
 	private String Name;
 
 	public void setName(String Name) {

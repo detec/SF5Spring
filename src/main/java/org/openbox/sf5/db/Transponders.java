@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Component;
 
 @Entity
@@ -34,7 +35,7 @@ public class Transponders implements Serializable {
 
 	public long getId() {
 
-		return this.id;
+		return id;
 	}
 
 	public void setId(long id) {
@@ -42,10 +43,11 @@ public class Transponders implements Serializable {
 	}
 
 	@Column(name = "Frequency", unique = false, nullable = false, precision = 5)
+	@NotEmpty
 	private long Frequency;
 
 	public long getFrequency() {
-		return this.Frequency;
+		return Frequency;
 	}
 
 	public void setFrequency(long Frequency) {
@@ -54,15 +56,16 @@ public class Transponders implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.valueOf(this.Frequency);
+		return String.valueOf(Frequency);
 	}
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
+	@NotEmpty
 	private Polarization Polarization;
 
 	public Polarization getPolarization() {
-		return this.Polarization;
+		return Polarization;
 	}
 
 	public void setPolarization(Polarization Polarization) {
@@ -74,7 +77,7 @@ public class Transponders implements Serializable {
 	private TypesOfFEC FEC;
 
 	public TypesOfFEC getFEC() {
-		return this.FEC;
+		return FEC;
 	}
 
 	public void setFEC(TypesOfFEC FEC) {
@@ -82,22 +85,24 @@ public class Transponders implements Serializable {
 	}
 
 	@Enumerated(EnumType.ORDINAL)
-	@Column(nullable = true)
+	@Column(nullable = false)
+	@NotEmpty
 	private CarrierFrequency Carrier;
 
 	public CarrierFrequency getCarrier() {
-		return this.Carrier;
+		return Carrier;
 	}
 
 	public void setCarrier(CarrierFrequency Carrier) {
 		this.Carrier = Carrier;
 	}
 
-	@Column(name = "Speed", unique = false, nullable = true, precision = 5)
+	@Column(name = "Speed", unique = false, nullable = false, precision = 5)
+	@NotEmpty
 	private long Speed;
 
 	public long getSpeed() {
-		return this.Speed;
+		return Speed;
 	}
 
 	public void setSpeed(long Speed) {
@@ -105,11 +110,12 @@ public class Transponders implements Serializable {
 	}
 
 	@Enumerated(EnumType.ORDINAL)
-	@Column(nullable = true)
+	@Column(nullable = false)
+	@NotEmpty
 	private DVBStandards VersionOfTheDVB;
 
 	public DVBStandards getVersionOfTheDVB() {
-		return this.VersionOfTheDVB;
+		return VersionOfTheDVB;
 	}
 
 	public void setVersionOfTheDVB(DVBStandards VersionOfTheDVB) {
@@ -117,11 +123,12 @@ public class Transponders implements Serializable {
 	}
 
 	@Enumerated(EnumType.ORDINAL)
-	@Column(nullable = true)
+	@Column(nullable = false)
+	@NotEmpty
 	private RangesOfDVB RangeOfDVB;
 
 	public RangesOfDVB getRangeOfDVB() {
-		return this.RangeOfDVB;
+		return RangeOfDVB;
 	}
 
 	public void setRangeOfDVB(RangesOfDVB RangeOfDVB) {
@@ -130,10 +137,11 @@ public class Transponders implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "Satellite", unique = false, nullable = false)
+	@NotEmpty
 	private Satellites Satellite;
 
 	public Satellites getSatellite() {
-		return this.Satellite;
+		return Satellite;
 	}
 
 	public void setSatellite(Satellites Satellite) {
@@ -172,15 +180,15 @@ public class Transponders implements Serializable {
 			return false;
 		}
 		Transponders otherTransponders = (Transponders) other;
-		if (otherTransponders.Frequency == this.Frequency
-				&& otherTransponders.Polarization.equals(this.Polarization)
-				&& otherTransponders.FEC.equals(this.FEC)
-				&& otherTransponders.Carrier.equals(this.Carrier)
-				&& otherTransponders.Speed == this.Speed
+		if (otherTransponders.Frequency == Frequency
+				&& otherTransponders.Polarization.equals(Polarization)
+				&& otherTransponders.FEC.equals(FEC)
+				&& otherTransponders.Carrier.equals(Carrier)
+				&& otherTransponders.Speed == Speed
 				&& otherTransponders.VersionOfTheDVB
-						.equals(this.VersionOfTheDVB)
-				&& otherTransponders.RangeOfDVB.equals(this.RangeOfDVB)
-				&& otherTransponders.Satellite.equals(this.Satellite)) {
+						.equals(VersionOfTheDVB)
+				&& otherTransponders.RangeOfDVB.equals(RangeOfDVB)
+				&& otherTransponders.Satellite.equals(Satellite)) {
 			return true;
 		} else {
 			return false;
