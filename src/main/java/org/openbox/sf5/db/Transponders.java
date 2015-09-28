@@ -13,8 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Component;
 
 @Entity
@@ -43,7 +44,7 @@ public class Transponders implements Serializable {
 	}
 
 	@Column(name = "Frequency", unique = false, nullable = false, precision = 5)
-	@NotEmpty
+	@Min(value = 2000)
 	private long Frequency;
 
 	public long getFrequency() {
@@ -61,7 +62,7 @@ public class Transponders implements Serializable {
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
-	@NotEmpty
+	@NotNull
 	private Polarization Polarization;
 
 	public Polarization getPolarization() {
@@ -86,7 +87,7 @@ public class Transponders implements Serializable {
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
-	@NotEmpty
+	@NotNull
 	private CarrierFrequency Carrier;
 
 	public CarrierFrequency getCarrier() {
@@ -98,7 +99,7 @@ public class Transponders implements Serializable {
 	}
 
 	@Column(name = "Speed", unique = false, nullable = false, precision = 5)
-	@NotEmpty
+	@Min(value = 1000)
 	private long Speed;
 
 	public long getSpeed() {
@@ -111,7 +112,7 @@ public class Transponders implements Serializable {
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
-	@NotEmpty
+	@NotNull
 	private DVBStandards VersionOfTheDVB;
 
 	public DVBStandards getVersionOfTheDVB() {
@@ -124,7 +125,7 @@ public class Transponders implements Serializable {
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
-	@NotEmpty
+	@NotNull
 	private RangesOfDVB RangeOfDVB;
 
 	public RangesOfDVB getRangeOfDVB() {
@@ -137,7 +138,7 @@ public class Transponders implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "Satellite", unique = false, nullable = false)
-	@NotEmpty
+	@NotNull
 	private Satellites Satellite;
 
 	public Satellites getSatellite() {
@@ -148,10 +149,8 @@ public class Transponders implements Serializable {
 		this.Satellite = Satellite;
 	}
 
-	public Transponders(long Frequency, Polarization Polarization,
-			TypesOfFEC FEC, CarrierFrequency Carrier, long Speed,
-			DVBStandards VersionOfTheDVB, RangesOfDVB RangeOfDVB,
-			Satellites Satellite) {
+	public Transponders(long Frequency, Polarization Polarization, TypesOfFEC FEC, CarrierFrequency Carrier, long Speed,
+			DVBStandards VersionOfTheDVB, RangesOfDVB RangeOfDVB, Satellites Satellite) {
 
 		this.Frequency = Frequency;
 		this.Polarization = Polarization;
@@ -180,15 +179,10 @@ public class Transponders implements Serializable {
 			return false;
 		}
 		Transponders otherTransponders = (Transponders) other;
-		if (otherTransponders.Frequency == Frequency
-				&& otherTransponders.Polarization.equals(Polarization)
-				&& otherTransponders.FEC.equals(FEC)
-				&& otherTransponders.Carrier.equals(Carrier)
-				&& otherTransponders.Speed == Speed
-				&& otherTransponders.VersionOfTheDVB
-						.equals(VersionOfTheDVB)
-				&& otherTransponders.RangeOfDVB.equals(RangeOfDVB)
-				&& otherTransponders.Satellite.equals(Satellite)) {
+		if (otherTransponders.Frequency == Frequency && otherTransponders.Polarization.equals(Polarization)
+				&& otherTransponders.FEC.equals(FEC) && otherTransponders.Carrier.equals(Carrier)
+				&& otherTransponders.Speed == Speed && otherTransponders.VersionOfTheDVB.equals(VersionOfTheDVB)
+				&& otherTransponders.RangeOfDVB.equals(RangeOfDVB) && otherTransponders.Satellite.equals(Satellite)) {
 			return true;
 		} else {
 			return false;
@@ -196,14 +190,12 @@ public class Transponders implements Serializable {
 
 	}
 
-	protected void setObjectFieldsFrom(Transponders origObj)
-			throws IllegalAccessException {
+	protected void setObjectFieldsFrom(Transponders origObj) throws IllegalAccessException {
 		Field fields[];
 		Class curClass = origObj.getClass();
 
 		if (!curClass.isAssignableFrom(this.getClass())) {
-			throw new IllegalArgumentException(
-					"New object must be the same class or a subclass of original");
+			throw new IllegalArgumentException("New object must be the same class or a subclass of original");
 		}
 
 		// Spin through all fields of the class & all its superclasses
