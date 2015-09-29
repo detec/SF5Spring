@@ -115,10 +115,12 @@ public class ValidatorTests {
 			// trsnapondersConstraintViolations.iterator().next();
 
 			ConstraintViolation<Transponders> transViolation = iterator.next();
+			String propertyPath = transViolation.getPropertyPath().toString();
+			assertThat(valuesmap.get(propertyPath).equals(transViolation.getMessage()));
 
 			// There is no obvious need to check fields' names/
 			// assertThat(transViolation.getPropertyPath().toString()).isEqualTo(fieldName);
-			System.out.println(transViolation.getPropertyPath().toString() + " " + transViolation.getMessage());
+			//System.out.println(transViolation.getPropertyPath().toString() + " " + transViolation.getMessage());
 			// assertThat(transViolation.getMessage()).isEqualTo("may not be
 			// empty");
 			// }
