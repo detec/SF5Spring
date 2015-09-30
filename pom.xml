@@ -106,131 +106,135 @@
     </plugins>
   </build>
   
- <profiles>
-<profile>
-  <id>test</id> 
-<properties>
-  <db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5springtest</db.jdbcUrl> 
-  <rp.build.warname>SF5Springtest</rp.build.warname>
-  </properties>
-   
-   
-  </profile>
-<profile>
-  <id>prod</id> 
-<properties>
-  <db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5spring</db.jdbcUrl> 
-  <rp.build.warname>SF5Spring</rp.build.warname>
- </properties>
- </profile>
+<profiles>
+	<profile>
+  	<id>test</id> 
+	<properties>
+  		<db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5springtest</db.jdbcUrl> 
+  		<rp.build.warname>SF5Springtest</rp.build.warname>
+  		<spring.version>4.2.1.RELEASE</spring.version>
+  		<spring.security.version>4.0.2.RELEASE</spring.security.version>
+  		<hibernate.version>5.0.1.Final</hibernate.version>
+  	</properties>
+	</profile>
+	<profile>
+  	<id>prod</id> 
+	<properties>
+  		<db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5spring</db.jdbcUrl> 
+  		<rp.build.warname>SF5Spring</rp.build.warname>
+  		<spring.version>4.2.1.RELEASE</spring.version>
+  		<spring.security.version>4.0.2.RELEASE</spring.security.version>
+  		<hibernate.version>5.0.1.Final</hibernate.version>
+ 	</properties>
+	</profile>
 </profiles>
   
-  <dependencies>
-  	<dependency>
+<dependencies>
+	<dependency>
   		<groupId>org.springframework</groupId>
   		<artifactId>spring-context</artifactId>
-  		<version>4.2.0.RELEASE</version>
+  		<version>${spring.version}</version>
   	</dependency>
-  		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-			<version>4.2.0.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>4.2.0.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>4.2.0.RELEASE</version>
-		</dependency>
- <dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-beans</artifactId>
-    <version>4.2.0.RELEASE</version>
-</dependency>
+  	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-aop</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-web</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+ 	<dependency>
+    	<groupId>org.springframework</groupId>
+    	<artifactId>spring-beans</artifactId>
+    	<version>${spring.version}</version>
+	</dependency>
     <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-web</artifactId>
-        <version>4.0.2.RELEASE</version>
-    </dependency>
-  <dependency>
-	<groupId>org.springframework.security</groupId>
-	<artifactId>spring-security-config</artifactId>
-	<version>4.0.2.RELEASE</version>
-</dependency>
- <dependency>
-	<groupId>org.springframework.security</groupId>
-	<artifactId>spring-security-core</artifactId>
-	<version>4.0.2.RELEASE</version>
-</dependency>
-<dependency>
-	<groupId>org.springframework</groupId>
-	<artifactId>spring-jdbc</artifactId>
-	<version>4.2.0.RELEASE</version>
-</dependency>
-<dependency>
-    <groupId>org.springframework.security</groupId>
-    <artifactId>spring-security-taglibs</artifactId>
-    <version>4.0.2.RELEASE</version>
-</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
-		</dependency>
-  <dependency>
-	<groupId>com.h2database</groupId>
-	<artifactId>h2</artifactId>
-	<version>1.4.187</version>
-</dependency>
-<dependency>
-	<groupId>org.hibernate</groupId>
-	<artifactId>hibernate-core</artifactId>
-	<version>4.3.11.Final</version>
-</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1.3</version>
-		</dependency>  	
-
-<dependency>
-	<groupId>org.hibernate</groupId>
-	<artifactId>hibernate-validator</artifactId>
-	<version>5.2.1.Final</version>
-</dependency>
-
-<dependency>
-	<groupId>javax.servlet</groupId>
-	<artifactId>javax.servlet-api</artifactId>
-	<version>3.1.0</version>
-	<scope>provided</scope>
-</dependency>
-
-<dependency>
-	<groupId>org.springframework</groupId>
-	<artifactId>spring-test</artifactId>
-	<version>4.2.1.RELEASE</version>
-</dependency>
-		
-<dependency>
-	<groupId>junit</groupId>
-	<artifactId>junit</artifactId>
-	<version>4.12</version>
-</dependency>
-
-<dependency>
-	<groupId>org.assertj</groupId>
-	<artifactId>assertj-core</artifactId>
-	<version>3.2.0</version>
-</dependency>
-<dependency>
-   <groupId>javax.el</groupId>
-   <artifactId>javax.el-api</artifactId>
-   <version>3.0.0</version>
-</dependency> 
-  </dependencies>
+        <version>${spring.security.version}</version>
+	</dependency>
+ 	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-config</artifactId>
+		<version>${spring.security.version}</version>
+	</dependency>
+ 	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-core</artifactId>
+		<version>${spring.security.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-jdbc</artifactId>
+		<version>${spring.security.version}</version>
+	</dependency>
+	<dependency>
+    	<groupId>org.springframework.security</groupId>
+    	<artifactId>spring-security-taglibs</artifactId>
+    	<version>${spring.security.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-test</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+    	<groupId>org.springframework</groupId>
+    	<artifactId>spring-tx</artifactId>
+    	<version>${spring.version}</version>
+	</dependency>	
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>jstl</artifactId>
+		<version>1.2</version>
+	</dependency>
+  	<dependency>
+		<groupId>com.h2database</groupId>
+		<artifactId>h2</artifactId>
+		<version>1.4.187</version>
+	</dependency>
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-core</artifactId>
+		<version>${hibernate.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>commons-logging</groupId>
+		<artifactId>commons-logging</artifactId>
+		<version>1.1.3</version>
+	</dependency>  	
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-validator</artifactId>
+		<version>5.2.1.Final</version>
+	</dependency>
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>javax.servlet-api</artifactId>
+		<version>3.1.0</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.12</version>
+	</dependency>
+	<dependency>
+		<groupId>org.assertj</groupId>
+		<artifactId>assertj-core</artifactId>
+		<version>3.2.0</version>
+	</dependency>
+	<dependency>
+   		<groupId>javax.el</groupId>
+   		<artifactId>javax.el-api</artifactId>
+ 		<version>3.0.0</version>
+	</dependency> 
+</dependencies>
 </project>
