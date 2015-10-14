@@ -18,14 +18,6 @@ public class Satellites implements Serializable {
 	 */
 	private static final long serialVersionUID = -2077586473579019427L;
 
-	public long getSerialVersionUID() {
-		return serialVersionUID;
-	}
-
-	public void setSerialVersionUID(long ver) {
-
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	// @SequenceGenerator(sequenceName = "catalog_seq")

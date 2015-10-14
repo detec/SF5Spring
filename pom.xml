@@ -118,7 +118,7 @@
   		<rp.build.warname>SF5Springtest</rp.build.warname>
   		<spring.version>4.2.1.RELEASE</spring.version>
   		<spring.security.version>4.0.2.RELEASE</spring.security.version>
-  		<hibernate.version>5.0.1.Final</hibernate.version>
+  		<hibernate.version>4.3.11.Final</hibernate.version>
   	</properties>
 	</profile>
 	<profile>
@@ -128,7 +128,7 @@
   		<rp.build.warname>SF5Spring</rp.build.warname>
   		<spring.version>4.2.1.RELEASE</spring.version>
   		<spring.security.version>4.0.2.RELEASE</spring.security.version>
-  		<hibernate.version>5.0.1.Final</hibernate.version>
+  		<hibernate.version>4.3.11.Final</hibernate.version>
  	</properties>
 	</profile>
 </profiles>
