@@ -37,6 +37,10 @@
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
+<!--           <compilerArgs> -->
+<!--           <arg>-verbose</arg> -->
+<!--           <arg>-Xlint:all,-options,-path</arg> -->
+<!--           </compilerArgs> -->
         </configuration>
       </plugin>
 	<plugin>
@@ -236,5 +240,10 @@
    		<artifactId>javax.el-api</artifactId>
  		<version>3.0.0</version>
 	</dependency> 
+	<dependency>
+		<groupId>javax.transaction</groupId>
+		<artifactId>javax.transaction-api</artifactId>
+		<version>1.2</version>
+	</dependency>
 </dependencies>
 </project>
