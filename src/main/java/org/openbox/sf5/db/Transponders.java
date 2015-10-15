@@ -16,11 +16,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.stereotype.Component;
-
 @Entity
 @Table(name = "Transponders")
-@Component
+// @Component
 public class Transponders implements Serializable {
 
 	/**

@@ -15,11 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.stereotype.Component;
-
 @Entity
 @Table(name = "SettingsConversion")
-@Component
+// @Component
 public class SettingsConversion implements Serializable {
 
 	/**
@@ -127,8 +125,8 @@ public class SettingsConversion implements Serializable {
 		this.LineNumber = LineNumber;
 	}
 
-	public SettingsConversion(Settings parent_id, Transponders Transponder,
-			long Satindex, long Tpindex, String Note, long TheLineOfIntersection) {
+	public SettingsConversion(Settings parent_id, Transponders Transponder, long Satindex, long Tpindex, String Note,
+			long TheLineOfIntersection) {
 
 		this.parent_id = parent_id;
 		// this.LineNumber = LineNumber;
@@ -158,8 +156,7 @@ public class SettingsConversion implements Serializable {
 		SettingsConversion otherSettingsConversion = (SettingsConversion) other;
 		if (otherSettingsConversion.parent_id.equals(this.parent_id)
 				&& otherSettingsConversion.Transponder.equals(this.Transponder)
-				&& otherSettingsConversion.Satindex == this.Satindex
-				&& otherSettingsConversion.Tpindex == this.Tpindex
+				&& otherSettingsConversion.Satindex == this.Satindex && otherSettingsConversion.Tpindex == this.Tpindex
 				&& otherSettingsConversion.Note.equals(this.Note)
 				&& otherSettingsConversion.TheLineOfIntersection == this.TheLineOfIntersection) {
 			return true;
@@ -169,21 +166,18 @@ public class SettingsConversion implements Serializable {
 
 	}
 
-	protected void setObjectFieldsFrom(SettingsConversion origObj)
-			throws IllegalAccessException {
+	protected void setObjectFieldsFrom(SettingsConversion origObj) throws IllegalAccessException {
 		Field fields[];
 		Class curClass = origObj.getClass();
 
 		if (!curClass.isAssignableFrom(this.getClass())) {
-			throw new IllegalArgumentException(
-					"New object must be the same class or a subclass of original");
+			throw new IllegalArgumentException("New object must be the same class or a subclass of original");
 		}
 
 		// filter only SettingsConversion fields
 		List<String> SCClassList = new ArrayList<String>();
 
-		Field[] thisClassFieldsArray = SettingsConversion.class
-				.getDeclaredFields();
+		Field[] thisClassFieldsArray = SettingsConversion.class.getDeclaredFields();
 		// this.getClass().getDeclaredFields();
 
 		List<Field> thisClassFiledList = Arrays.asList(thisClassFieldsArray);

@@ -1,11 +1,11 @@
 package org.openbox.sf5.db;
 
-	public enum CarrierFrequency{
+public enum CarrierFrequency {
 
-Lower("9750"), Top("10600"), CRange("5150"), TopPie("10750");
+	Lower("9750"), Top("10600"), CRange("5150"), TopPie("10750");
 
 	private CarrierFrequency(String s) {
-	value = s;
+		value = s;
 	}
 
 	private final String value;
@@ -14,6 +14,5 @@ Lower("9750"), Top("10600"), CRange("5150"), TopPie("10750");
 	public String toString() {
 		return value;
 	}
-
 
 }

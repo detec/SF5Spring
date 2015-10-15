@@ -21,11 +21,10 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.stereotype.Component;
 
 @Entity
 @Table(name = "Settings")
-@Component
+// @Component
 public class Settings implements Serializable {
 
 	/**
@@ -116,8 +115,7 @@ public class Settings implements Serializable {
 		this.Satellites = Satellites;
 	}
 
-	public Settings(String Name, Timestamp lastEntry, Users User,
-			List<SettingsConversion> Conversion,
+	public Settings(String Name, Timestamp lastEntry, Users User, List<SettingsConversion> Conversion,
 			List<SettingsSatellites> Satellites) {
 
 		this.Name = Name;
@@ -144,10 +142,8 @@ public class Settings implements Serializable {
 			return false;
 		}
 		Settings otherSettings = (Settings) other;
-		if (otherSettings.Name.equals(Name)
-				&& otherSettings.TheLastEntry == TheLastEntry
-				&& otherSettings.User.equals(User)
-				&& otherSettings.Conversion.equals(Conversion)
+		if (otherSettings.Name.equals(Name) && otherSettings.TheLastEntry == TheLastEntry
+				&& otherSettings.User.equals(User) && otherSettings.Conversion.equals(Conversion)
 				&& otherSettings.Satellites.equals(Satellites)) {
 			return true;
 		} else {

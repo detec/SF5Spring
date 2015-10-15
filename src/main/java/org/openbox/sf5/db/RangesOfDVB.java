@@ -1,11 +1,11 @@
 package org.openbox.sf5.db;
 
-	public enum RangesOfDVB{
+public enum RangesOfDVB {
 
-Ku("Ku"), C("C");
+	Ku("Ku"), C("C");
 
 	private RangesOfDVB(String s) {
-	value = s;
+		value = s;
 	}
 
 	private final String value;
@@ -14,6 +14,5 @@ Ku("Ku"), C("C");
 	public String toString() {
 		return value;
 	}
-
 
 }

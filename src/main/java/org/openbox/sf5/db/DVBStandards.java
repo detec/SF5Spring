@@ -1,11 +1,11 @@
 package org.openbox.sf5.db;
 
-	public enum DVBStandards{
+public enum DVBStandards {
 
-DVBS("DVB-S"), DVBS2("DVB-S2");
+	DVBS("DVB-S"), DVBS2("DVB-S2");
 
 	private DVBStandards(String s) {
-	value = s;
+		value = s;
 	}
 
 	private final String value;
@@ -14,6 +14,5 @@ DVBS("DVB-S"), DVBS2("DVB-S2");
 	public String toString() {
 		return value;
 	}
-
 
 }

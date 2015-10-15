@@ -1,11 +1,11 @@
 package org.openbox.sf5.db;
 
-	public enum TypesOfFEC{
+public enum TypesOfFEC {
 
-_12("1/2"), _23("2/3"), _34("3/4"), _56("5/6"), _78("7/8"), _89("8/9"), _91("9/10"), _35("3/5");
+	_12("1/2"), _23("2/3"), _34("3/4"), _56("5/6"), _78("7/8"), _89("8/9"), _91("9/10"), _35("3/5");
 
 	private TypesOfFEC(String s) {
-	value = s;
+		value = s;
 	}
 
 	private final String value;
@@ -14,6 +14,5 @@ _12("1/2"), _23("2/3"), _34("3/4"), _56("5/6"), _78("7/8"), _89("8/9"), _91("9/1
 	public String toString() {
 		return value;
 	}
-
 
 }

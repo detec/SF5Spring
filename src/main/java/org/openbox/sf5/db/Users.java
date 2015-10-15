@@ -27,9 +27,6 @@ import org.openbox.sf5.service.ObjectsListService;
 @Table(name = "Users")
 public class Users implements Serializable {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -6789497093756301793L;
 
 	@Id
@@ -98,8 +95,7 @@ public class Users implements Serializable {
 		this.authorities = authorities;
 	}
 
-	public Users(String username, String Password, boolean enabled,
-			List<Usersauthorities> authorities) {
+	public Users(String username, String Password, boolean enabled, List<Usersauthorities> authorities) {
 
 		this.username = username;
 		this.Password = Password;
@@ -124,10 +120,8 @@ public class Users implements Serializable {
 			return false;
 		}
 		Users otherUsers = (Users) other;
-		if (otherUsers.username.equals(username)
-				&& otherUsers.Password.equals(Password)
-				&& otherUsers.enabled == enabled
-				&& otherUsers.authorities.equals(authorities)) {
+		if (otherUsers.username.equals(username) && otherUsers.Password.equals(Password)
+				&& otherUsers.enabled == enabled && otherUsers.authorities.equals(authorities)) {
 			return true;
 		} else {
 			return false;
@@ -141,8 +135,7 @@ public class Users implements Serializable {
 		new TableFiller();
 
 		Criterion criterea = Restrictions.eq("username", "admin");
-		List<Users> adminsList = (List<Users>) ObjectsListService
-				.ObjectsCriterionList(Users.class, criterea);
+		List<Users> adminsList = (List<Users>) ObjectsListService.ObjectsCriterionList(Users.class, criterea);
 
 		if (adminsList.isEmpty()) {
 			List<Usersauthorities> rolesList = new ArrayList<>();
@@ -182,7 +175,7 @@ public class Users implements Serializable {
 
 	public void fillTables(Users adminUser, List<Usersauthorities> rolesList) {
 
-	//	ObjectsController contr = new ObjectsController();
+		// ObjectsController contr = new ObjectsController();
 
 		List<String> textRoles = new ArrayList<String>();
 		textRoles.add("ROLE_ADMIN");
@@ -207,16 +200,14 @@ public class Users implements Serializable {
 		// }
 
 		// ROLE_ADMIN
-		Usersauthorities checkRoleAdmin = new Usersauthorities(
-				adminUser.username, "ROLE_ADMIN", adminUser, 1);
+		Usersauthorities checkRoleAdmin = new Usersauthorities(adminUser.username, "ROLE_ADMIN", adminUser, 1);
 
 		if (!rolesList.contains(checkRoleAdmin)) {
 			rolesList.add(checkRoleAdmin);
 		}
 
 		// ROLE_USER
-		Usersauthorities checkRoleUser = new Usersauthorities(
-				adminUser.username, "ROLE_USER", adminUser, 2);
+		Usersauthorities checkRoleUser = new Usersauthorities(adminUser.username, "ROLE_USER", adminUser, 2);
 
 		if (!rolesList.contains(checkRoleUser)) {
 			rolesList.add(checkRoleUser);
