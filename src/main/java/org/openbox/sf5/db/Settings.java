@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -79,6 +80,7 @@ public class Settings implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "User", unique = false, nullable = false)
+	@NotNull
 	private Users User;
 
 	public Users getUser() {
