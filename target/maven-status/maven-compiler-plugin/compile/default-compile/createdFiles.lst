@@ -34,6 +34,7 @@ org\openbox\sf5\db\DVBStandards.class
 org\openbox\sf5\service\AbstractServiceTests.class
 org\openbox\sf5\service\UserService.class
 org\openbox\sf5\application\SF5ApplicationContext.class
+org\openbox\sf5\common\StartupBean.class
 org\openbox\sf5\service\ObjectService.class
 org\openbox\sf5\db\Users.class
 org\openbox\sf5\application\TranspondersListClass.class
