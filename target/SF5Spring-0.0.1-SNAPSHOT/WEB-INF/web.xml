@@ -74,10 +74,10 @@
     <url-pattern>/login</url-pattern>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
-  <jsp-config>
-    <taglib>
-      <taglib-uri>http://www.springframework.org/security/tags</taglib-uri>
-      <taglib-location>/WEB-INF/lib/security.tld</taglib-location>
-    </taglib>
-  </jsp-config>
+<!--   <jsp-config> -->
+<!--     <taglib> -->
+<!--       <taglib-uri>http://www.springframework.org/security/tags</taglib-uri> -->
+<!--       <taglib-location>/WEB-INF/lib/security.tld</taglib-location> -->
+<!--     </taglib> -->
+<!--   </jsp-config> -->
 </web-app>
