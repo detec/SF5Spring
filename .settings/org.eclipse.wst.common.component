@@ -8,7 +8,7 @@
         <wb-resource deploy-path="/WEB-INF" source-path="/src/main/resources/spring"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
     <property name="java-output-path" value="/target/classes"/>
-        <property name="context-root" value="${rp.build.warname}"/>
         <property name="component.exclusion.patterns" value="WEB-INF/web.xml"/>
+        <property name="context-root" value="SF5Spring"/>
   </wb-module>
 </project-modules>

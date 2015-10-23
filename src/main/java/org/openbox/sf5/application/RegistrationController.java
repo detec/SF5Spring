@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.openbox.sf5.converters.UserNotFoundException;
 import org.openbox.sf5.db.Users;
-import org.openbox.sf5.service.UserService;
+import org.openbox.sf5.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -28,7 +28,7 @@ import org.springframework.web.context.request.WebRequest;
 public class RegistrationController {
 
 	@Autowired
-	private UserService service;
+	private IUserService service;
 
 	@Autowired
 	@Qualifier("authenticationManager")

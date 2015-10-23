@@ -21,11 +21,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService implements IUserService, Serializable {
 
-
-
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Transactional
