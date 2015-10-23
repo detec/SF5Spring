@@ -52,7 +52,6 @@ th, td {
     <th>DVB ver.</th>
     <th>DVB range</th>
     <th>Satellite</th>
-  	<th colspan="${colsnumber}"></th>
   	</tr>
  	</thead>
  	<c:forEach items="${wrapper.tclist}" var="transponder" varStatus="x">

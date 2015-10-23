@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Register new user</title>
+<title>Openbox SF-5 settings editor - register new user</title>
 <sec:csrfMetaTags/>
 </head>
 <body>

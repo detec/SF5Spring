@@ -4,6 +4,7 @@
 
 <html>
 <head>
+<title>Openbox SF-5 settings editor - Login</title>
 <sec:csrfMetaTags/>
 </head>
 <body>
