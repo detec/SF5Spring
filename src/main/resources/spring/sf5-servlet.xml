@@ -27,6 +27,10 @@
 <context:component-scan base-package="org.openbox.sf5.db" />
 <context:component-scan base-package="org.openbox.sf5.service" />
 
+<!-- Configurer that replaces ${...} placeholders with values from a properties file -->
+<!-- (in this case, JDBC-related settings for the JPA EntityManager definition below) -->
+<context:property-placeholder location="classpath:data-access.properties" system-properties-mode="OVERRIDE"/>
+
 <mvc:annotation-driven />
  
 
@@ -37,6 +41,8 @@
 	<property name="prefix" value="/" />
 	<property name="suffix" value=".jsp" />
 </bean>
+	
+	
 	
 <bean id="dataSource"
 	class="org.springframework.jdbc.datasource.DriverManagerDataSource">
