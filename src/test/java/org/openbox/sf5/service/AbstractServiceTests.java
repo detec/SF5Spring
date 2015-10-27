@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public class AbstractServiceTests {
 
+	// No autowiring in container-less tests
 	protected ObjectsController contr = new ObjectsController();
 
 	@Test

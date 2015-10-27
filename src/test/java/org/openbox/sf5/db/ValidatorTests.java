@@ -7,19 +7,21 @@ import java.util.Iterator;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
 import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
-import org.openbox.sf5.db.Settings;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-
 
 public class ValidatorTests {
 
-	private Validator createValidator() {
-		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
-		localValidatorFactoryBean.afterPropertiesSet();
-		return localValidatorFactoryBean;
+	private static Validator validator;
+
+	@BeforeClass
+	public static void setUp() {
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		validator = factory.getValidator();
 	}
 
 	@Test
@@ -28,13 +30,20 @@ public class ValidatorTests {
 		Settings setting = new Settings();
 		setting.setName("");
 
-		Validator validator = createValidator();
 		Set<ConstraintViolation<Settings>> constraintViolations = validator.validate(setting);
-		assertThat(constraintViolations.size()).isEqualTo(1);
+		assertThat(constraintViolations.size()).isEqualTo(2);
 
-		ConstraintViolation<Settings> violation = constraintViolations.iterator().next();
+		Iterator<ConstraintViolation<Settings>> settingIterator = constraintViolations.iterator();
+
+		ConstraintViolation<Settings> violation = settingIterator.next();
+
 		assertThat(violation.getPropertyPath().toString()).isEqualTo("Name");
 		assertThat(violation.getMessage()).isEqualTo("may not be empty");
+
+		violation = settingIterator.next();
+
+		assertThat(violation.getPropertyPath().toString()).isEqualTo("User");
+		assertThat(violation.getMessage()).isEqualTo("may not be null");
 
 		Transponders trans = new Transponders();
 
@@ -63,8 +72,6 @@ public class ValidatorTests {
 			assertThat(valuesmap.get(propertyPath).equals(transViolation.getMessage()));
 
 		}
-
-
 
 	}
 }
