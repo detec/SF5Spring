@@ -14,10 +14,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class DAOListImpl implements DAOList {
 
-	// public DAOListImpl(SessionFactory sessionFactory) {
-	// this.sessionFactory = sessionFactory;
-	// }
-
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -25,7 +21,6 @@ public class DAOListImpl implements DAOList {
 	public List<?> list(Class<?> clazz) {
 
 		List<?> list = new ArrayList<>();
-		// Session s = HibernateUtil.openSession();
 
 		Session s = sessionFactory.openSession();
 		s.beginTransaction();
@@ -37,8 +32,6 @@ public class DAOListImpl implements DAOList {
 
 	@Override
 	public List<?> restrictionList(Class<?> clazz, Criterion criterion) {
-		// Session s = HibernateUtil.openSession();
-
 		Session s = sessionFactory.openSession();
 		Criteria criteria = s.createCriteria(clazz).add(criterion);
 		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY); // kill

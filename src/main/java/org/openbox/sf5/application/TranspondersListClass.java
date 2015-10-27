@@ -16,7 +16,7 @@ import org.openbox.sf5.db.Satellites;
 import org.openbox.sf5.db.Transponders;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListService;
+import org.openbox.sf5.service.ObjectsListServiceNonStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -39,12 +39,16 @@ public class TranspondersListClass {
 		binder.setAutoGrowCollectionLimit(4096);
 
 		binder.registerCustomEditor(Users.class, new UserEditor());
-		binder.registerCustomEditor(Transponders.class,
-				new TransponderChoiceEditor());
-		binder.registerCustomEditor(TransponderChoice.class,
-				new TransponderChoiceEditor());
+		binder.registerCustomEditor(Transponders.class, new TransponderChoiceEditor());
+		binder.registerCustomEditor(TransponderChoice.class, new TransponderChoiceEditor());
 
 	}
+
+	@Autowired
+	private ObjectsController contr;
+
+	@Autowired
+	private ObjectsListServiceNonStatic service;
 
 	@Autowired
 	private SF5ApplicationContext AppContext;
@@ -86,29 +90,25 @@ public class TranspondersListClass {
 	private List<TransponderChoice> TransponderChoiceList = new ArrayList<TransponderChoice>();
 
 	@RequestMapping(value = "/transponders", method = RequestMethod.GET)
-	public String getTransponders(
-			@RequestParam(value = "filtersatid", required = false) Long filtersatid,
-			@RequestParam(value = "SelectionMode", required = false) Boolean pSelectionMode,
-			Model model, HttpServletRequest request) {
+	public String getTransponders(@RequestParam(value = "filtersatid", required = false) Long filtersatid,
+			@RequestParam(value = "SelectionMode", required = false) Boolean pSelectionMode, Model model,
+			HttpServletRequest request) {
 
 		if (filtersatid != null) {
 
 			if (filtersatid.longValue() != 0) {
-				ObjectsController contr = new ObjectsController();
-				filterSatellite = (Satellites) contr.select(Satellites.class,
-						filtersatid.longValue());
+				// ObjectsController contr = new ObjectsController();
+				filterSatellite = (Satellites) contr.select(Satellites.class, filtersatid.longValue());
 			}
 		}
 
 		if (filterSatellite != null) {
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
-			TranspondersList = (ArrayList<Transponders>) ObjectsListService
-					.ObjectsCriterionList(Transponders.class, criterion);
+			TranspondersList = (ArrayList<Transponders>) service.ObjectsCriterionList(Transponders.class, criterion);
 		} else {
 			// return (List<Transponders>) ObjectsListService
 			// .ObjectsList(Transponders.class);
-			TranspondersList = (ArrayList<Transponders>) ObjectsListService
-					.ObjectsList(Transponders.class);
+			TranspondersList = (ArrayList<Transponders>) service.ObjectsList(Transponders.class);
 
 		}
 
@@ -125,22 +125,18 @@ public class TranspondersListClass {
 	}
 
 	@RequestMapping(params = "filter", value = "/transponders", method = RequestMethod.POST)
-	public String postGetTransponders(
-			@ModelAttribute("bean") TranspondersListClass bean, Model model) {
+	public String postGetTransponders(@ModelAttribute("bean") TranspondersListClass bean, Model model) {
 
 		if (bean.filterSatelliteId != null) {
-			ObjectsController contr = new ObjectsController();
-			filterSatellite = (Satellites) contr.select(Satellites.class,
-					bean.filterSatelliteId.longValue());
+			// ObjectsController contr = new ObjectsController();
+			filterSatellite = (Satellites) contr.select(Satellites.class, bean.filterSatelliteId.longValue());
 
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
-			TranspondersList = (List<Transponders>) ObjectsListService
-					.ObjectsCriterionList(Transponders.class, criterion);
+			TranspondersList = (List<Transponders>) service.ObjectsCriterionList(Transponders.class, criterion);
 		}
 
 		else {
-			TranspondersList = (List<Transponders>) ObjectsListService
-					.ObjectsList(Transponders.class);
+			TranspondersList = (List<Transponders>) service.ObjectsList(Transponders.class);
 		}
 
 		this.SelectionMode = bean.SelectionMode;
@@ -154,29 +150,24 @@ public class TranspondersListClass {
 	}
 
 	@RequestMapping(params = "select", value = "/transponders", method = RequestMethod.POST)
-	public String postSelectTransponders(
-			@ModelAttribute("bean") TranspondersListClass bean,
-			@ModelAttribute("wrapper") TransponderChoiceListWrapper wrapper,
-			BindingResult result) {
+	public String postSelectTransponders(@ModelAttribute("bean") TranspondersListClass bean,
+			@ModelAttribute("wrapper") TransponderChoiceListWrapper wrapper, BindingResult result) {
 
 		AppContext.getSelectedTransponders().clear();
 
 		List<Transponders> transList = new ArrayList<Transponders>();
 
-		wrapper.getTclist().stream().filter(t -> t.isChecked())
-				.forEach(t -> transList.add(t.getTransponder()));
+		wrapper.getTclist().stream().filter(t -> t.isChecked()).forEach(t -> transList.add(t.getTransponder()));
 
 		AppContext.setSelectedTransponders(transList);
 
-		String idStr = String.valueOf(AppContext.getCurentlyEditedSetting()
-				.getId());
+		String idStr = String.valueOf(AppContext.getCurentlyEditedSetting().getId());
 		String returnAddress = "";
 		if (idStr.equals("0")) {
 			// if it is a new unsaved settings - use add scenario
 			returnAddress = "redirect:/settings/add";
 		} else {
-			returnAddress = "redirect:/editsetting?id=" + idStr
-					+ "&selectionmode=false";
+			returnAddress = "redirect:/editsetting?id=" + idStr + "&selectionmode=false";
 		}
 		return returnAddress;
 	}
@@ -195,9 +186,8 @@ public class TranspondersListClass {
 
 		HashMap<Long, String> satMap = new HashMap<Long, String>();
 
-		((List<Satellites>) ObjectsListService.ObjectsList(Satellites.class))
-				.stream().forEach(
-						t -> satMap.put(new Long(t.getId()), t.getName()));
+		((List<Satellites>) service.ObjectsList(Satellites.class)).stream()
+				.forEach(t -> satMap.put(new Long(t.getId()), t.getName()));
 
 		return satMap;
 

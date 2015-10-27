@@ -13,12 +13,11 @@ import org.openbox.sf5.db.RangesOfDVB;
 import org.openbox.sf5.db.TheDVBRangeValues;
 import org.openbox.sf5.db.ValueOfTheCarrierFrequency;
 import org.openbox.sf5.service.ObjectsController;
+import org.springframework.stereotype.Component;
 
-public final class TableFiller  implements Serializable {
+@Component
+public final class TableFiller implements Serializable {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 8464537239822198552L;
 
 	public TableFiller() {
@@ -32,8 +31,11 @@ public final class TableFiller  implements Serializable {
 
 		for (RangesOfDVB e : list) {
 
-			//TheDVBRangeValues record = (TheDVBRangeValues) service.select("db.TheDVBRangeValues", e);
-			//List<Book> book=(List<Book>)session.createCriteria(Book.class).createAlias("student", "st").add(Restrictions.eq("st.name", "Maxim")).list();
+			// TheDVBRangeValues record = (TheDVBRangeValues)
+			// service.select("db.TheDVBRangeValues", e);
+			// List<Book>
+			// book=(List<Book>)session.createCriteria(Book.class).createAlias("student",
+			// "st").add(Restrictions.eq("st.name", "Maxim")).list();
 			Session session = HibernateUtil.openSession();
 			List<TheDVBRangeValues> rec = session.createCriteria(TheDVBRangeValues.class)
 					.add(Restrictions.eq("RangeOfDVB", e)).list();
@@ -41,14 +43,12 @@ public final class TableFiller  implements Serializable {
 			if (rec.isEmpty()) {
 
 				if (e.equals(RangesOfDVB.C)) {
-					newRecord = new TheDVBRangeValues(
-							e, 3400, 4200);
+					newRecord = new TheDVBRangeValues(e, 3400, 4200);
 
 				}
 
 				if (e.equals(RangesOfDVB.Ku)) {
-					newRecord = new TheDVBRangeValues(
-							e, 10700, 12750);
+					newRecord = new TheDVBRangeValues(e, 10700, 12750);
 
 				}
 
@@ -61,12 +61,11 @@ public final class TableFiller  implements Serializable {
 		ValueOfTheCarrierFrequency value = null;
 		List<ValueOfTheCarrierFrequency> rec = null;
 
-		rec= session.createCriteria(ValueOfTheCarrierFrequency.class)
+		rec = session.createCriteria(ValueOfTheCarrierFrequency.class)
 				.add(Restrictions.eq("TypeOfCarrierFrequency", CarrierFrequency.Lower))
 				.add(Restrictions.eq("Polarization", KindsOfPolarization.Pie)).list();
 		if (rec.isEmpty()) {
-			value = new ValueOfTheCarrierFrequency(CarrierFrequency.Lower,
-					KindsOfPolarization.Pie, 10700, 11699);
+			value = new ValueOfTheCarrierFrequency(CarrierFrequency.Lower, KindsOfPolarization.Pie, 10700, 11699);
 			service.add(value);
 		}
 
@@ -75,8 +74,7 @@ public final class TableFiller  implements Serializable {
 				.add(Restrictions.eq("Polarization", KindsOfPolarization.Linear)).list();
 
 		if (rec.isEmpty()) {
-			value = new ValueOfTheCarrierFrequency(CarrierFrequency.Lower,
-					KindsOfPolarization.Linear, 10700, 11699);
+			value = new ValueOfTheCarrierFrequency(CarrierFrequency.Lower, KindsOfPolarization.Linear, 10700, 11699);
 			service.add(value);
 		}
 
@@ -85,8 +83,7 @@ public final class TableFiller  implements Serializable {
 				.add(Restrictions.eq("Polarization", KindsOfPolarization.Linear)).list();
 
 		if (rec.isEmpty()) {
-			value = new ValueOfTheCarrierFrequency(CarrierFrequency.Top,
-					KindsOfPolarization.Linear, 11700, 12750);
+			value = new ValueOfTheCarrierFrequency(CarrierFrequency.Top, KindsOfPolarization.Linear, 11700, 12750);
 			service.add(value);
 		}
 
@@ -95,8 +92,7 @@ public final class TableFiller  implements Serializable {
 				.add(Restrictions.eq("Polarization", KindsOfPolarization.Linear)).list();
 
 		if (rec.isEmpty()) {
-			value = new ValueOfTheCarrierFrequency(CarrierFrequency.CRange,
-					KindsOfPolarization.Linear, 3400, 4200);
+			value = new ValueOfTheCarrierFrequency(CarrierFrequency.CRange, KindsOfPolarization.Linear, 3400, 4200);
 			service.add(value);
 
 		}
@@ -106,8 +102,7 @@ public final class TableFiller  implements Serializable {
 				.add(Restrictions.eq("Polarization", KindsOfPolarization.Pie)).list();
 
 		if (rec.isEmpty()) {
-			value = new ValueOfTheCarrierFrequency(CarrierFrequency.TopPie,
-					KindsOfPolarization.Pie, 11700, 12750);
+			value = new ValueOfTheCarrierFrequency(CarrierFrequency.TopPie, KindsOfPolarization.Pie, 11700, 12750);
 			service.add(value);
 
 		}

@@ -12,7 +12,7 @@ import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.db.Usersauthorities;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListService;
+import org.openbox.sf5.service.ObjectsListServiceNonStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +32,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SettingsList {
 
 	@Autowired
-	private SF5ApplicationContext AppContext;
+	private ObjectsListServiceNonStatic service;
+
+	@Autowired
+	private ObjectsController contr;
 
 	private Users currentUser;
 
@@ -47,8 +50,7 @@ public class SettingsList {
 	}
 
 	@InitBinder
-	protected void initBinder(HttpServletRequest request,
-			ServletRequestDataBinder binder) {
+	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Users.class, new UserEditor());
 	}
 
@@ -63,15 +65,10 @@ public class SettingsList {
 			return "notauthenticated";
 		}
 
-		// try to initialize wired AppContext
-		// if (AppContext == null) {
-		// AppContext = new SF5ApplicationContext();
-		// }
-
 		// Retrieve all settings
 		Criterion criterion = Restrictions.eq("User", currentUser);
-		settingsList = (List<Settings>) ObjectsListService
-				.ObjectsCriterionList(Settings.class, criterion);
+
+		settingsList = (List<Settings>) service.ObjectsCriterionList(Settings.class, criterion);
 
 		// Attach settings to the Model
 		model.addAttribute("settings", settingsList);
@@ -99,39 +96,35 @@ public class SettingsList {
 	}
 
 	@RequestMapping(value = "/settings/delete", method = RequestMethod.GET)
-	public String deleteSetting(
-			@RequestParam(value = "id", required = true) long id, Model model) {
+	public String deleteSetting(@RequestParam(value = "id", required = true) long id, Model model) {
 
-		ObjectsController contr = new ObjectsController();
+		// ObjectsController contr = new ObjectsController();
 		contr.remove(Settings.class, id);
 		return getSettings(model);
 	}
 
 	private void readCurrentUser() {
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		org.springframework.security.core.userdetails.User secUser = null;
 
 		if (auth.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
-			secUser = (org.springframework.security.core.userdetails.User) auth
-					.getPrincipal();
+			secUser = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
 		} else {
 			return;
 		}
 
 		String username = secUser.getUsername();
 		Criterion criterion = Restrictions.eq("username", username);
-		List<Users> usersList = (List<Users>) ObjectsListService
-				.ObjectsCriterionList(Users.class, criterion);
+
+		List<Users> usersList = (List<Users>) service.ObjectsCriterionList(Users.class, criterion);
 		if (!usersList.isEmpty()) {
 			currentUser = usersList.get(0);
 		}
 	}
 
 	@RequestMapping(value = "/settings/select", method = RequestMethod.GET)
-	public String selectSetting(
-			@RequestParam(value = "selectionmode", required = true) boolean pSelectionMode,
+	public String selectSetting(@RequestParam(value = "selectionmode", required = true) boolean pSelectionMode,
 			Model model) {
 
 		this.SelectionMode = pSelectionMode;
@@ -140,19 +133,16 @@ public class SettingsList {
 	}
 
 	@RequestMapping(value = "/selectedsetting", method = RequestMethod.GET)
-	public String openSettingForSelection(
-			@RequestParam(value = "id", required = true) long id) {
+	public String openSettingForSelection(@RequestParam(value = "id", required = true) long id) {
 
 		String idStr = String.valueOf(id);
-		String returnAddress = "redirect:/editsetting?id=" + idStr
-				+ "&selectionmode=true";
+		String returnAddress = "redirect:/editsetting?id=" + idStr + "&selectionmode=true";
 		return returnAddress;
 	}
 
 	private boolean hasAdminRole() {
 
-		Usersauthorities checkRoleAdmin = new Usersauthorities(
-				currentUser.getusername(), "ROLE_ADMIN", currentUser, 1);
+		Usersauthorities checkRoleAdmin = new Usersauthorities(currentUser.getusername(), "ROLE_ADMIN", currentUser, 1);
 
 		boolean result;
 		if (currentUser.getauthorities().contains(checkRoleAdmin)) {

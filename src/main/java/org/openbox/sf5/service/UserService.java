@@ -12,6 +12,7 @@ import org.openbox.sf5.application.UserDto;
 import org.openbox.sf5.converters.UserNotFoundException;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.db.Usersauthorities;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -21,28 +22,30 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService implements IUserService, Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7134677754855532093L;
+
+	@Autowired
+	private ObjectsController contr;
+
+	@Autowired
+	private ObjectsListServiceNonStatic service;
 
 	@Transactional
 	@Override
-	public Users registerNewUserAccount(UserDto accountDto)
-			throws UserNotFoundException {
+	public Users registerNewUserAccount(UserDto accountDto) throws UserNotFoundException {
 
 		if (userExists(accountDto.getUsername())) {
-			throw new UserNotFoundException(
-					"There is an account with that username: "
-							+ accountDto.getUsername());
+			throw new UserNotFoundException("There is an account with that username: " + accountDto.getUsername());
 		}
 
 		// the rest of the registration operation
-		ObjectsController contr = new ObjectsController();
+		// ObjectsController contr = new ObjectsController();
 		Users newUser = new Users();
 		newUser.setusername(accountDto.getUsername());
 		newUser.setPassword(accountDto.getPassword());
 		List<Usersauthorities> listAuthorities = new ArrayList<Usersauthorities>();
 
-		Usersauthorities newLine = new Usersauthorities(
-				accountDto.getUsername(), "ROLE_USER", newUser, 1);
+		Usersauthorities newLine = new Usersauthorities(accountDto.getUsername(), "ROLE_USER", newUser, 1);
 		listAuthorities.add(newLine);
 		newUser.setauthorities(listAuthorities);
 		newUser.setenabled(true);
@@ -55,8 +58,7 @@ public class UserService implements IUserService, Serializable {
 	public boolean userExists(String username) {
 
 		Criterion criterion = Restrictions.eq("username", username);
-		List<Users> rec = (List<Users>) ObjectsListService
-				.ObjectsCriterionList(Users.class, criterion);
+		List<Users> rec = (List<Users>) service.ObjectsCriterionList(Users.class, criterion);
 		if (rec.isEmpty()) {
 			return false;
 		} else {
@@ -67,8 +69,7 @@ public class UserService implements IUserService, Serializable {
 
 	public static boolean hasAdminRole(Users currentUser) {
 
-		Usersauthorities checkRoleAdmin = new Usersauthorities(
-				currentUser.getusername(), "ROLE_ADMIN", currentUser, 1);
+		Usersauthorities checkRoleAdmin = new Usersauthorities(currentUser.getusername(), "ROLE_ADMIN", currentUser, 1);
 
 		boolean result;
 		if (currentUser.getauthorities().contains(checkRoleAdmin)) {

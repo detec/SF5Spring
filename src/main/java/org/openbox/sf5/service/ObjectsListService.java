@@ -14,14 +14,11 @@ public class ObjectsListService {
 	private static DAOList dao;
 
 	public static List<?> ObjectsList(Class<?> clazz) {
-
-		// DAOListImpl dao = new DAOListImpl();
 		return dao.list(clazz);
 
 	}
 
 	public static List<?> ObjectsCriterionList(Class<?> clazz, Criterion criterion) {
-		// DAOListImpl dao = new DAOListImpl();
 		return dao.restrictionList(clazz, criterion);
 	}
 }

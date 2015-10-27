@@ -37,7 +37,7 @@ import org.openbox.sf5.db.Transponders;
 import org.openbox.sf5.db.TypesOfFEC;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListService;
+import org.openbox.sf5.service.ObjectsListServiceNonStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpEntity;
@@ -70,17 +70,14 @@ public class SettingsForm {
 		binder.setAutoGrowCollectionLimit(4096);
 
 		binder.registerCustomEditor(Users.class, new UserEditor());
-		binder.registerCustomEditor(Transponders.class,
-				new TransponderChoiceEditor());
+		binder.registerCustomEditor(Transponders.class, new TransponderChoiceEditor());
 		// binder.registerCustomEditor(TransponderChoice.class,
 		// new TransponderChoiceEditor());
-		binder.registerCustomEditor(java.sql.Timestamp.class,
-				new SqlTimestampPropertyEditor());
+		binder.registerCustomEditor(java.sql.Timestamp.class, new SqlTimestampPropertyEditor());
 		binder.registerCustomEditor(Settings.class, new SettingsEditor());
 		binder.registerCustomEditor(TypesOfFEC.class, new FECEditor());
 		binder.registerCustomEditor(CarrierFrequency.class, new CarrierEditor());
-		binder.registerCustomEditor(DVBStandards.class,
-				new VersionOfTheDVBEditor());
+		binder.registerCustomEditor(DVBStandards.class, new VersionOfTheDVBEditor());
 	}
 
 	// makes conversion of properties from db layer to controller
@@ -97,28 +94,22 @@ public class SettingsForm {
 		// for new item it is null
 		if (listRead != null) {
 			// sort in ascending order
-			Collections
-					.sort(listRead, (b1, b2) -> (int) (b1.getLineNumber() - b2
-							.getLineNumber()));
+			Collections.sort(listRead, (b1, b2) -> (int) (b1.getLineNumber() - b2.getLineNumber()));
 
 			for (SettingsConversion e : listRead) {
-				dataSettingsConversion
-						.add(new SettingsConversionPresentation(e));
+				dataSettingsConversion.add(new SettingsConversionPresentation(e));
 			}
 		}
 
 	}
 
-	public void writeHeaderFromSettingsFormToSettingsObject(
-			SettingsForm pSetting) {
+	public void writeHeaderFromSettingsFormToSettingsObject(SettingsForm pSetting) {
 
-		SettingsObject = (pSetting.SettingsObject == null) ? new Settings()
-				: pSetting.SettingsObject;
+		SettingsObject = (pSetting.SettingsObject == null) ? new Settings() : pSetting.SettingsObject;
 
 		SettingsObject.setName(pSetting.Name);
 
-		SettingsObject.setTheLastEntry(new java.sql.Timestamp(System
-				.currentTimeMillis()));
+		SettingsObject.setTheLastEntry(new java.sql.Timestamp(System.currentTimeMillis()));
 
 		// let's refresh the user because it returns empty.
 		readCurrentUser();
@@ -141,15 +132,13 @@ public class SettingsForm {
 	}
 
 	private void readCurrentUser() {
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		org.springframework.security.core.userdetails.User secUser = (org.springframework.security.core.userdetails.User) auth
 				.getPrincipal();
 
 		String username = secUser.getUsername();
 		Criterion criterion = Restrictions.eq("username", username);
-		List<Users> usersList = (List<Users>) ObjectsListService
-				.ObjectsCriterionList(Users.class, criterion);
+		List<Users> usersList = (List<Users>) service.ObjectsCriterionList(Users.class, criterion);
 		if (!usersList.isEmpty()) {
 			User = usersList.get(0);
 		}
@@ -157,8 +146,7 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(params = "save", value = "/editsetting", method = RequestMethod.POST)
-	public String editSaveSetting(
-			@ModelAttribute("bean") SettingsForm pSetting, Model model) {
+	public String editSaveSetting(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
 		// here we must check session attributes selectedTransponders,
 		// selectedSettingsConversionPresentations
@@ -183,8 +171,7 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(params = "selectfromother", value = "/settings/add", method = RequestMethod.POST)
-	public String newSelectFromOtherSetting(
-			@ModelAttribute("bean") SettingsForm pSetting) {
+	public String newSelectFromOtherSetting(@ModelAttribute("bean") SettingsForm pSetting) {
 		return prepareSelectFromOtherSetting(pSetting);
 		// return selectTranspondersFromNew(pSetting);
 	}
@@ -201,8 +188,7 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(params = "selectTransponders", value = "/editsetting", method = RequestMethod.POST)
-	public String prepareToSelectTransponders(
-			@ModelAttribute("setting") SettingsForm pSetting) {
+	public String prepareToSelectTransponders(@ModelAttribute("setting") SettingsForm pSetting) {
 
 		AppContext.setCurentlyEditedSetting(pSetting);
 		// we will not save setting, but will just pass it between requests.
@@ -210,14 +196,12 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(params = "selectTransponders", value = "/settings/add", method = RequestMethod.POST)
-	public String selectTranspondersFromNew(
-			@ModelAttribute("bean") SettingsForm pSetting) {
+	public String selectTranspondersFromNew(@ModelAttribute("bean") SettingsForm pSetting) {
 		return prepareToSelectTransponders(pSetting);
 	}
 
 	@RequestMapping(params = "selectfromother", value = "/editsetting", method = RequestMethod.POST)
-	public String prepareSelectFromOtherSetting(
-			@ModelAttribute("bean") SettingsForm pSetting) {
+	public String prepareSelectFromOtherSetting(@ModelAttribute("bean") SettingsForm pSetting) {
 
 		AppContext.setCurentlyEditedSetting(pSetting);
 		return "redirect:/settings/select?selectionmode=true";
@@ -234,10 +218,8 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(value = "/editsetting", method = RequestMethod.GET)
-	public String editSetting(
-			@RequestParam(value = "id", required = true) long pid,
-			@RequestParam(value = "selectionmode", required = true) boolean pSelectionMode,
-			Model model) {
+	public String editSetting(@RequestParam(value = "id", required = true) long pid,
+			@RequestParam(value = "selectionmode", required = true) boolean pSelectionMode, Model model) {
 
 		// SettingsForm setting = null;
 		// check if we have this object in AppContext
@@ -295,11 +277,9 @@ public class SettingsForm {
 	}
 
 	public void putNewSettingsIntoSettingsObject() {
-		SettingsObject = (SettingsObject == null) ? new Settings()
-				: SettingsObject;
+		SettingsObject = (SettingsObject == null) ? new Settings() : SettingsObject;
 		// after selection SettingsObject is null.
-		dataSettingsConversion.stream().forEach(
-				t -> t.setparent_id(SettingsObject));
+		dataSettingsConversion.stream().forEach(t -> t.setparent_id(SettingsObject));
 	}
 
 	public void initializeSettingsFormAsNew() {
@@ -343,15 +323,13 @@ public class SettingsForm {
 		}
 
 		// read prepared SCP rows.
-		List<SettingsConversionPresentation> presList = AppContext
-				.getSelectedSettingsConversionPresentations();
+		List<SettingsConversionPresentation> presList = AppContext.getSelectedSettingsConversionPresentations();
 		if (presList != null) {
 			presList.stream().forEach(t -> addForeignSCProw(t));
 		}
 
 		// clear selected SCP rows
-		AppContext
-				.setSelectedSettingsConversionPresentations(new ArrayList<SettingsConversionPresentation>());
+		AppContext.setSelectedSettingsConversionPresentations(new ArrayList<SettingsConversionPresentation>());
 
 	}
 
@@ -365,8 +343,7 @@ public class SettingsForm {
 	public void addNewLine(Transponders trans, SettingsForm pSetting) {
 		long newLine = new Long(dataSettingsConversion.size() + 1).longValue();
 
-		SettingsConversionPresentation newLineObject = new SettingsConversionPresentation(
-				pSetting.SettingsObject);
+		SettingsConversionPresentation newLineObject = new SettingsConversionPresentation(pSetting.SettingsObject);
 
 		newLineObject.setLineNumber(newLine);
 		// newLineObject.setTransponder(new Transponders()); // to prevent null
@@ -380,14 +357,12 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(params = "removeSCrows", value = "/settings/add", method = RequestMethod.POST)
-	public String newRemoveSCrows(
-			@ModelAttribute("bean") SettingsForm pSetting, Model model) {
+	public String newRemoveSCrows(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		return removwRow(pSetting, model);
 	}
 
 	@RequestMapping(params = "removeSCrows", value = "/editsetting", method = RequestMethod.POST)
-	public String removwRow(@ModelAttribute("bean") SettingsForm pSetting,
-			Model model) {
+	public String removwRow(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
 		writeHeaderFromSettingsFormToSettingsObject(pSetting);
 
@@ -395,9 +370,8 @@ public class SettingsForm {
 		putNewSettingsIntoSettingsObject();
 
 		// there may be unsaved, delete them as selected collection
-		List<SettingsConversionPresentation> firstList = dataSettingsConversion
-				.stream().filter(t -> (t.isChecked() && t.getId() == 0))
-				.collect(Collectors.toList());
+		List<SettingsConversionPresentation> firstList = dataSettingsConversion.stream()
+				.filter(t -> (t.isChecked() && t.getId() == 0)).collect(Collectors.toList());
 		dataSettingsConversion.removeAll(firstList);
 
 		List<SettingsConversionPresentation> toRemove = new ArrayList<SettingsConversionPresentation>();
@@ -444,7 +418,7 @@ public class SettingsForm {
 		// if (deleteArray.size() > 0) {
 		// if (initialSize != finalSize) {
 		SettingsObject.setConversion(tpConversion);
-		ObjectsController contr = new ObjectsController();
+		// ObjectsController contr = new ObjectsController();
 		contr.saveOrUpdate(SettingsObject);
 		// }
 
@@ -459,28 +433,24 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(params = "moveup", value = "/settings/add", method = RequestMethod.POST)
-	public String newMoveUp(@ModelAttribute("bean") SettingsForm pSetting,
-			Model model) {
+	public String newMoveUp(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		return moveUp(pSetting, model);
 	}
 
 	@RequestMapping(params = "movedown", value = "/settings/add", method = RequestMethod.POST)
-	public String newMoveDown(@ModelAttribute("bean") SettingsForm pSetting,
-			Model model) {
+	public String newMoveDown(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		return moveDown(pSetting, model);
 	}
 
 	@RequestMapping(params = "moveup", value = "/editsetting", method = RequestMethod.POST)
-	public String moveUp(@ModelAttribute("bean") SettingsForm pSetting,
-			Model model) {
+	public String moveUp(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
 		writeHeaderFromSettingsFormToSettingsObject(pSetting);
 
 		readToThisBean(pSetting);
 
 		List<SettingsConversionPresentation> selectedRows = new ArrayList<SettingsConversionPresentation>();
-		selectedRows = dataSettingsConversion.stream()
-				.filter(t -> t.isChecked()).collect(Collectors.toList());
+		selectedRows = dataSettingsConversion.stream().filter(t -> t.isChecked()).collect(Collectors.toList());
 		selectedRows.stream().forEach(t -> {
 			int currentIndex = dataSettingsConversion.indexOf(t);
 			if (currentIndex > 0) {
@@ -498,10 +468,6 @@ public class SettingsForm {
 		model.addAttribute("bean", this);
 
 		return "editsetting";
-
-		// String idStr = String.valueOf(SettingsObject.getId());
-		// String returnAddress = "redirect:/editsetting?id=" + idStr;
-		// return returnAddress;
 	}
 
 	public void readToThisBean(SettingsForm pSetting) {
@@ -519,32 +485,28 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(params = "movedown", value = "/editsetting", method = RequestMethod.POST)
-	public String moveDown(@ModelAttribute("bean") SettingsForm pSetting,
-			Model model) {
+	public String moveDown(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
 		writeHeaderFromSettingsFormToSettingsObject(pSetting);
 
 		readToThisBean(pSetting);
 
 		List<SettingsConversionPresentation> selectedRows = new ArrayList<SettingsConversionPresentation>();
-		selectedRows = dataSettingsConversion.stream()
-				.filter(t -> t.isChecked()).collect(Collectors.toList());
+		selectedRows = dataSettingsConversion.stream().filter(t -> t.isChecked()).collect(Collectors.toList());
 
 		// if we have 2 elements, they do not move
 		Collections.reverse(selectedRows);
-		selectedRows.stream().forEach(
-				t -> {
-					int currentIndex = dataSettingsConversion.indexOf(t);
-					if (currentIndex < dataSettingsConversion.size() - 1) {
-						dataSettingsConversion.add(currentIndex + 1, t);
-						dataSettingsConversion.add(currentIndex,
-								dataSettingsConversion.get(currentIndex + 2));
-						// removing superfluous copies.
-						dataSettingsConversion.remove(currentIndex + 2);
-						dataSettingsConversion.remove(currentIndex + 2);
-					}
+		selectedRows.stream().forEach(t -> {
+			int currentIndex = dataSettingsConversion.indexOf(t);
+			if (currentIndex < dataSettingsConversion.size() - 1) {
+				dataSettingsConversion.add(currentIndex + 1, t);
+				dataSettingsConversion.add(currentIndex, dataSettingsConversion.get(currentIndex + 2));
+				// removing superfluous copies.
+				dataSettingsConversion.remove(currentIndex + 2);
+				dataSettingsConversion.remove(currentIndex + 2);
+			}
 
-				});
+		});
 		renumerateLines();
 		model.addAttribute("bean", this);
 
@@ -555,8 +517,7 @@ public class SettingsForm {
 	public String cancelSelectRows(@ModelAttribute("bean") SettingsForm pSetting) {
 
 		String idStr = String.valueOf(AppContext.getCurentlyEditedSetting().id);
-		String returnAddress = "redirect:/editsetting?id=" + idStr
-				+ "&selectionmode=false";
+		String returnAddress = "redirect:/editsetting?id=" + idStr + "&selectionmode=false";
 		return returnAddress;
 	}
 
@@ -565,48 +526,39 @@ public class SettingsForm {
 		dataSettingsConversion = pSetting.dataSettingsConversion;
 
 		List<SettingsConversionPresentation> selectedRows = new ArrayList<SettingsConversionPresentation>();
-		selectedRows = dataSettingsConversion.stream()
-				.filter(t -> t.isChecked()).collect(Collectors.toList());
+		selectedRows = dataSettingsConversion.stream().filter(t -> t.isChecked()).collect(Collectors.toList());
 
 		AppContext.setSelectedSettingsConversionPresentations(selectedRows);
 		String idStr = String.valueOf(AppContext.getCurentlyEditedSetting().id);
-		String returnAddress = "redirect:/editsetting?id=" + idStr
-				+ "&selectionmode=false";
+		String returnAddress = "redirect:/editsetting?id=" + idStr + "&selectionmode=false";
 		return returnAddress;
 	}
 
 	@RequestMapping(params = "checkIntersection", value = "/settings/add", method = RequestMethod.POST)
-	public String newCheckIntersection(
-			@ModelAttribute("bean") SettingsForm pSetting, Model model)
-			throws SQLException {
+	public String newCheckIntersection(@ModelAttribute("bean") SettingsForm pSetting, Model model) throws SQLException {
 		checkIntersection(pSetting, model);
 		return "editsetting";
 
 	}
 
 	@RequestMapping(params = "checkIntersection", value = "/editsetting", method = RequestMethod.POST)
-	public void checkIntersection(
-			@ModelAttribute("bean") SettingsForm pSetting, Model model)
-			throws SQLException {
+	public void checkIntersection(@ModelAttribute("bean") SettingsForm pSetting, Model model) throws SQLException {
 
 		dataSettingsConversion = pSetting.dataSettingsConversion;
 
 		readToThisBean(pSetting);
 
 		// let's clear all old intersections and save setting.
-		dataSettingsConversion.stream().forEach(
-				t -> t.setTheLineOfIntersection(0));
+		dataSettingsConversion.stream().forEach(t -> t.setTheLineOfIntersection(0));
 
 		saveSettingWithoutContext(pSetting);
 
-		int rows = Intersections.checkIntersection(dataSettingsConversion,
-				SettingsObject);
+		int rows = Intersections.checkIntersection(dataSettingsConversion, SettingsObject);
 
 		// reloadDataSettingsConversion();
 
 		model.addAttribute("bean", this);
-		String mesString = "Intersection check result. Unique problem lines: "
-				+ String.valueOf(rows);
+		String mesString = "Intersection check result. Unique problem lines: " + String.valueOf(rows);
 
 		model.addAttribute("viewMsg", mesString);
 
@@ -616,7 +568,7 @@ public class SettingsForm {
 
 		writeFromSettingsFormToSettingsObject(pSetting);
 
-		ObjectsController contr = new ObjectsController();
+		// ObjectsController contr = new ObjectsController();
 		contr.saveOrUpdate(SettingsObject);
 
 	}
@@ -633,21 +585,18 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(params = "generateSatTpStructure", value = "/settings/add", method = RequestMethod.POST)
-	public String newGenerateSatTp(
-			@ModelAttribute("bean") SettingsForm pSetting, Model model) {
+	public String newGenerateSatTp(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		generateSatTpStructureUniversal(pSetting, model);
 
 		return "editsetting";
 	}
 
 	@RequestMapping(params = "generateSatTpStructure", value = "/editsetting", method = RequestMethod.POST)
-	public void generateSatTpStructure(
-			@ModelAttribute("bean") SettingsForm pSetting, Model model) {
+	public void generateSatTpStructure(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		generateSatTpStructureUniversal(pSetting, model);
 	}
 
-	public void generateSatTpStructureUniversal(SettingsForm pSetting,
-			Model model) {
+	public void generateSatTpStructureUniversal(SettingsForm pSetting, Model model) {
 		readToThisBean(pSetting);
 
 		dataSettingsConversion = pSetting.dataSettingsConversion;
@@ -669,15 +618,13 @@ public class SettingsForm {
 
 	@RequestMapping(params = "exportToXML", value = "/editsetting", method = RequestMethod.POST)
 	@ResponseBody
-	public HttpEntity<String> exportToXML(
-			@ModelAttribute("bean") SettingsForm pSetting) {
+	public HttpEntity<String> exportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
 		return universalexportToXML(pSetting);
 	}
 
 	@RequestMapping(params = "exportToXML", value = "/settings/add", method = RequestMethod.POST)
 	@ResponseBody
-	public HttpEntity<String> newExportToXML(
-			@ModelAttribute("bean") SettingsForm pSetting) {
+	public HttpEntity<String> newExportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
 		return universalexportToXML(pSetting);
 	}
 
@@ -692,19 +639,14 @@ public class SettingsForm {
 
 		if (!check32Rows()) {
 			ResponseEntity<String> resp = new ResponseEntity<String>(
-					new String(
-							"Table Transponders must contain exactly 32 rows!"),
-					header, HttpStatus.OK);
+					new String("Table Transponders must contain exactly 32 rows!"), header, HttpStatus.OK);
 			return resp;
 		}
 
-		String filePath = XMLExporter
-				.exportSettingToXML(dataSettingsConversion);
+		String filePath = XMLExporter.exportSettingToXML(dataSettingsConversion);
 
 		if (filePath == "") {
-			return new ResponseEntity<String>(
-					"Error reading export XML file on server!", header,
-					HttpStatus.OK);
+			return new ResponseEntity<String>("Error reading export XML file on server!", header, HttpStatus.OK);
 		}
 
 		header.setContentType(new MediaType("application", "xml"));
@@ -721,14 +663,12 @@ public class SettingsForm {
 			e.printStackTrace();
 		}
 
-		return new ResponseEntity<String>(new String(bytesBuffer,
-				Charset.forName("UTF8")), header, HttpStatus.OK);
+		return new ResponseEntity<String>(new String(bytesBuffer, Charset.forName("UTF8")), header, HttpStatus.OK);
 
 	}
 
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
-	public String printSetting(
-			@RequestParam(value = "id", required = true) long pid, Model model,
+	public String printSetting(@RequestParam(value = "id", required = true) long pid, Model model,
 			HttpSession session) {
 
 		readAndFillBeanfromSetting(pid);
@@ -738,8 +678,7 @@ public class SettingsForm {
 		XMLExporter.generateSatTp(dataSettingsConversion);
 
 		model.addAttribute("bean", this);
-		model.addAttribute("sessiondate",
-				new Date(session.getLastAccessedTime()));
+		model.addAttribute("sessiondate", new Date(session.getLastAccessedTime()));
 		return "settingprintfull";
 	}
 
@@ -750,7 +689,7 @@ public class SettingsForm {
 	}
 
 	public void readAndFillBeanfromSetting(long pid) {
-		ObjectsController contr = new ObjectsController();
+		// ObjectsController contr = new ObjectsController();
 		// setting = (Settings) contr.select(Settings.class, id);
 		SettingsObject = (Settings) contr.select(Settings.class, pid);
 
@@ -764,10 +703,8 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logoutPage(HttpServletRequest request,
-			HttpServletResponse response) {
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
+	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null) {
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
@@ -777,15 +714,13 @@ public class SettingsForm {
 	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.POST)
-	public String postLogout(HttpServletRequest request,
-			HttpServletResponse response) {
+	public String postLogout(HttpServletRequest request, HttpServletResponse response) {
 
 		return logoutPage(request, response);
 	}
 
 	@RequestMapping(value = "/settings/logout", method = RequestMethod.POST)
-	public String settingsLogout(HttpServletRequest request,
-			HttpServletResponse response) {
+	public String settingsLogout(HttpServletRequest request, HttpServletResponse response) {
 
 		return logoutPage(request, response);
 
@@ -827,8 +762,7 @@ public class SettingsForm {
 		return dataSettingsConversion;
 	}
 
-	public void setDataSettingsConversion(
-			List<SettingsConversionPresentation> dataSettingsConversion) {
+	public void setDataSettingsConversion(List<SettingsConversionPresentation> dataSettingsConversion) {
 		this.dataSettingsConversion = dataSettingsConversion;
 	}
 
@@ -864,5 +798,11 @@ public class SettingsForm {
 	private String Name;
 
 	private List<SettingsConversionPresentation> dataSettingsConversion = new ArrayList<SettingsConversionPresentation>();
+
+	@Autowired
+	private ObjectsController contr;
+
+	@Autowired
+	private ObjectsListServiceNonStatic service;
 
 }

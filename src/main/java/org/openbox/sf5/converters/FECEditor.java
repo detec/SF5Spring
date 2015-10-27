@@ -18,12 +18,6 @@ public class FECEditor extends PropertyEditorSupport {
 		FECList.stream().forEach(t -> hm.putIfAbsent(t.toString(), t));
 
 		setValue(hm.get(text));
-		// ObjectsController contr = new ObjectsController();
-		// Long Lid = Long.parseLong(text);
-		// Settings trans = (Settings) contr.select(Settings.class,
-		// Lid.longValue());
-		//
-		// setValue(trans);
 
 	}
 }

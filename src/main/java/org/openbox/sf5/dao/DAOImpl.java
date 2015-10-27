@@ -29,9 +29,6 @@ public class DAOImpl implements DAO {
 
 	@Override
 	public void add(Object obj) {
-		// TODO Auto-generated method stub
-		// Session s = HibernateUtil.openSession();
-
 		Session s = sessionFactory.openSession();
 
 		s.beginTransaction();
@@ -43,10 +40,6 @@ public class DAOImpl implements DAO {
 
 	@Override
 	public void remove(Class<?> clazz, long id) {
-		// TODO Auto-generated method stub
-
-		// Session s = HibernateUtil.openSession();
-
 		Session s = sessionFactory.openSession();
 		s.beginTransaction();
 		Object c = s.get(clazz, id);
@@ -57,9 +50,6 @@ public class DAOImpl implements DAO {
 
 	@Override
 	public void update(Object obj) {
-		// TODO Auto-generated method stub
-		// Session s = HibernateUtil.openSession();
-
 		Session s = sessionFactory.openSession();
 		s.beginTransaction();
 		s.update(obj);
@@ -69,8 +59,6 @@ public class DAOImpl implements DAO {
 
 	@Override
 	public Object select(Class<?> clazz, long id) {
-		// Session s = HibernateUtil.openSession();
-
 		Session s = sessionFactory.openSession();
 		s.beginTransaction();
 		Object obj = s.get(clazz, id);
@@ -80,8 +68,6 @@ public class DAOImpl implements DAO {
 
 	@Override
 	public void saveOrUpdate(Object obj) {
-		// Session s = HibernateUtil.openSession();
-
 		Session s = sessionFactory.openSession();
 		s.beginTransaction();
 		s.saveOrUpdate(obj);

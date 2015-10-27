@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ObjectsController {
 
-	// private ObjectService Service = new ObjectServiceImpl();
 	@Autowired
 	ObjectService Service;
 

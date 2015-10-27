@@ -14,14 +14,11 @@ public class ObjectsListServiceNonStatic {
 	private DAOList dao;
 
 	public List<?> ObjectsList(Class<?> clazz) {
-
-		// DAOListImpl dao = new DAOListImpl();
 		return dao.list(clazz);
 
 	}
 
 	public List<?> ObjectsCriterionList(Class<?> clazz, Criterion criterion) {
-		// DAOListImpl dao = new DAOListImpl();
 		return dao.restrictionList(clazz, criterion);
 	}
 

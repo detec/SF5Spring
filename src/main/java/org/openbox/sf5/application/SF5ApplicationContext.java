@@ -13,9 +13,6 @@ import org.springframework.stereotype.Component;
 @Scope(value = "session")
 public class SF5ApplicationContext implements Serializable {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -7611964920327488619L;
 
 	public SF5ApplicationContext() {

@@ -2,12 +2,13 @@ package org.openbox.sf5.converters;
 
 import org.openbox.sf5.db.Transponders;
 import org.openbox.sf5.service.ObjectsController;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class TransponderChoice extends Transponders {
 
-	/**
-	 *
-	 */
+	@Autowired
+	private ObjectsController contr;
+
 	private static final long serialVersionUID = 3262084796351763445L;
 	private boolean checked;
 
@@ -30,9 +31,8 @@ public class TransponderChoice extends Transponders {
 	}
 
 	public Transponders getTransponder() {
-		ObjectsController contr = new ObjectsController();
-		Transponders trans = (Transponders) contr.select(Transponders.class,
-				super.getId());
+		// ObjectsController contr = new ObjectsController();
+		Transponders trans = (Transponders) contr.select(Transponders.class, super.getId());
 		return trans;
 	}
 
