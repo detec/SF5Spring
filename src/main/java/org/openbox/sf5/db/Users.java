@@ -1,7 +1,6 @@
 package org.openbox.sf5.db;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -17,11 +16,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
-import org.openbox.sf5.common.TableFiller;
-import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListService;
 
 @Entity
 @Table(name = "Users")
@@ -129,89 +123,4 @@ public class Users implements Serializable {
 
 	}
 
-	public void initialize() {
-
-		// insert default values into database.
-		new TableFiller();
-
-		Criterion criterea = Restrictions.eq("username", "admin");
-		List<Users> adminsList = (List<Users>) ObjectsListService.ObjectsCriterionList(Users.class, criterea);
-
-		if (adminsList.isEmpty()) {
-			List<Usersauthorities> rolesList = new ArrayList<>();
-
-			Users admin = new Users("admin", "1", true, rolesList);
-			ObjectsController contr = new ObjectsController();
-			contr.saveOrUpdate(admin);
-
-			fillTables(admin, rolesList);
-			// admin.setauthorities(rolesList);
-
-			contr.saveOrUpdate(admin);
-		}
-
-		else {
-
-			ObjectsController contr = new ObjectsController();
-
-			Users adminUser = adminsList.get(0);
-			List<Usersauthorities> rolesList = adminUser.getauthorities();
-
-			// check if admin role is present
-			boolean save = false;
-
-			fillTables(adminUser, rolesList);
-
-			// if (save) {
-
-			// adminUser.setauthorities(cleanrolesList);
-			contr.saveOrUpdate(adminUser);
-
-			// }
-
-		}
-
-	}
-
-	public void fillTables(Users adminUser, List<Usersauthorities> rolesList) {
-
-		// ObjectsController contr = new ObjectsController();
-
-		List<String> textRoles = new ArrayList<String>();
-		textRoles.add("ROLE_ADMIN");
-		textRoles.add("ROLE_USER");
-
-		boolean save = false;
-		// let's numerate lines because it seem to cause troubles.
-		long numerator = 1;
-		//
-		// for (String e : textRoles) {
-		// Usersauthorities checkRoleAdmin = new Usersauthorities(
-		// adminUser.username, e, adminUser, numerator);
-		//
-		// if (!rolesList.contains(checkRoleAdmin)) {
-		// // contr.saveOrUpdate(checkRoleAdmin);
-		//
-		// rolesList.add(checkRoleAdmin);
-		// save = true;
-		// numerator++;
-		// }
-		//
-		// }
-
-		// ROLE_ADMIN
-		Usersauthorities checkRoleAdmin = new Usersauthorities(adminUser.username, "ROLE_ADMIN", adminUser, 1);
-
-		if (!rolesList.contains(checkRoleAdmin)) {
-			rolesList.add(checkRoleAdmin);
-		}
-
-		// ROLE_USER
-		Usersauthorities checkRoleUser = new Usersauthorities(adminUser.username, "ROLE_USER", adminUser, 2);
-
-		if (!rolesList.contains(checkRoleUser)) {
-			rolesList.add(checkRoleUser);
-		}
-
-	}
 }

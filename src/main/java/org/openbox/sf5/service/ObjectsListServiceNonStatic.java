@@ -8,20 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ObjectsListService {
+public class ObjectsListServiceNonStatic {
 
 	@Autowired
-	private static DAOList dao;
+	private DAOList dao;
 
-	public static List<?> ObjectsList(Class<?> clazz) {
+	public List<?> ObjectsList(Class<?> clazz) {
 
 		// DAOListImpl dao = new DAOListImpl();
 		return dao.list(clazz);
 
 	}
 
-	public static List<?> ObjectsCriterionList(Class<?> clazz, Criterion criterion) {
+	public List<?> ObjectsCriterionList(Class<?> clazz, Criterion criterion) {
 		// DAOListImpl dao = new DAOListImpl();
 		return dao.restrictionList(clazz, criterion);
 	}
+
 }
