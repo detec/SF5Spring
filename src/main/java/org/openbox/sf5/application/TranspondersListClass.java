@@ -38,9 +38,9 @@ public class TranspondersListClass {
 		// exactly this order should be maintained!
 		binder.setAutoGrowCollectionLimit(4096);
 
-		binder.registerCustomEditor(Users.class, new UserEditor());
-		binder.registerCustomEditor(Transponders.class, new TransponderChoiceEditor());
-		binder.registerCustomEditor(TransponderChoice.class, new TransponderChoiceEditor());
+		binder.registerCustomEditor(Users.class, UserEditor);
+		binder.registerCustomEditor(Transponders.class, TransponderChoiceEditor);
+		binder.registerCustomEditor(TransponderChoice.class, TransponderChoiceEditor);
 
 	}
 
@@ -203,5 +203,11 @@ public class TranspondersListClass {
 
 		return TransponderChoiceList;
 	}
+
+	@Autowired
+	private UserEditor UserEditor;
+
+	@Autowired
+	private TransponderChoiceEditor TransponderChoiceEditor;
 
 }

@@ -3,7 +3,9 @@ package org.openbox.sf5.converters;
 import org.openbox.sf5.db.Transponders;
 import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TransponderChoice extends Transponders {
 
 	@Autowired

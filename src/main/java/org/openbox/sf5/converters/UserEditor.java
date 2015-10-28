@@ -8,7 +8,9 @@ import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsListServiceNonStatic;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserEditor extends PropertyEditorSupport {
 
 	@Autowired

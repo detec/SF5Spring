@@ -30,6 +30,7 @@
 <context:component-scan base-package="org.openbox.sf5.dao" /> <!-- Probably this is for autowiring -->
 <context:component-scan base-package="org.openbox.sf5.service" />
 <context:component-scan base-package="org.openbox.sf5.common" />
+<context:component-scan base-package="org.openbox.sf5.converters" />
 
 <!-- Configurer that replaces ${...} placeholders with values from a properties file -->
 <!-- (in this case, JDBC-related settings for the JPA EntityManager definition below) -->

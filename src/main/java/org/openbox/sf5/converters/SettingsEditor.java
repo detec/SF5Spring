@@ -5,7 +5,9 @@ import java.beans.PropertyEditorSupport;
 import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SettingsEditor extends PropertyEditorSupport {
 
 	@Autowired

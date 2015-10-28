@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.openbox.sf5.db.CarrierFrequency;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CarrierEditor extends PropertyEditorSupport {
 
 	@Override

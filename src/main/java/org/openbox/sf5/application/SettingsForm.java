@@ -64,17 +64,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Scope("request")
 public class SettingsForm {
 
+	@Autowired
+	private UserEditor UserEditor;
+
+	@Autowired
+	private SettingsEditor SettingsEditor;
+
+	@Autowired
+	private TransponderChoiceEditor TransponderChoiceEditor;
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		// exactly this order should be maintained!
 		binder.setAutoGrowCollectionLimit(4096);
 
-		binder.registerCustomEditor(Users.class, new UserEditor());
-		binder.registerCustomEditor(Transponders.class, new TransponderChoiceEditor());
+		binder.registerCustomEditor(Users.class, UserEditor);
+		binder.registerCustomEditor(Transponders.class, TransponderChoiceEditor);
 		// binder.registerCustomEditor(TransponderChoice.class,
 		// new TransponderChoiceEditor());
 		binder.registerCustomEditor(java.sql.Timestamp.class, new SqlTimestampPropertyEditor());
-		binder.registerCustomEditor(Settings.class, new SettingsEditor());
+		binder.registerCustomEditor(Settings.class, SettingsEditor);
 		binder.registerCustomEditor(TypesOfFEC.class, new FECEditor());
 		binder.registerCustomEditor(CarrierFrequency.class, new CarrierEditor());
 		binder.registerCustomEditor(DVBStandards.class, new VersionOfTheDVBEditor());

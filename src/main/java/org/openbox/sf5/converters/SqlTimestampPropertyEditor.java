@@ -5,6 +5,9 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class SqlTimestampPropertyEditor extends PropertyEditorSupport {
 	public static final String DEFAULT_BATCH_PATTERN = "yyyy-MM-dd hh:mm:ss";
 
@@ -12,8 +15,7 @@ public class SqlTimestampPropertyEditor extends PropertyEditorSupport {
 
 	/** * uses default pattern yyyy-MM-dd for date parsing. */
 	public SqlTimestampPropertyEditor() {
-		this.sdf = new SimpleDateFormat(
-				SqlTimestampPropertyEditor.DEFAULT_BATCH_PATTERN);
+		this.sdf = new SimpleDateFormat(SqlTimestampPropertyEditor.DEFAULT_BATCH_PATTERN);
 	}
 
 	/**
@@ -31,8 +33,7 @@ public class SqlTimestampPropertyEditor extends PropertyEditorSupport {
 		try {
 			setValue(new Timestamp(this.sdf.parse(text).getTime()));
 		} catch (ParseException ex) {
-			throw new IllegalArgumentException("Could not parse date: "
-					+ ex.getMessage(), ex);
+			throw new IllegalArgumentException("Could not parse date: " + ex.getMessage(), ex);
 		}
 	}
 
