@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import org.openbox.sf5.common.IniReader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,13 +33,13 @@ public class FileUploadController {
 				String absolutePath = temp.getAbsolutePath();
 
 				byte[] bytes = file.getBytes();
-				BufferedOutputStream stream = new BufferedOutputStream(
-						new FileOutputStream(new File(absolutePath)));
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(absolutePath)));
 				stream.write(bytes);
 				stream.close();
 
 				// calling reader class
-				IniReader getResult = new IniReader(absolutePath);
+				iniReader.setFilepath(absolutePath);
+				iniReader.readData(); // doing import
 
 				return "redirect:/transponders";
 			} catch (Exception e) {
@@ -49,5 +50,8 @@ public class FileUploadController {
 		}
 
 	}
+
+	@Autowired
+	private IniReader iniReader;
 
 }

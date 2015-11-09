@@ -2,7 +2,6 @@ package org.openbox.sf5.common;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
@@ -16,6 +15,7 @@ import java.util.regex.Pattern;
 //import org.apache.commons.lang3.text.StrBuilder;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.internal.TypeLocatorImpl;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.EnumType;
@@ -23,7 +23,6 @@ import org.hibernate.type.Type;
 import org.hibernate.type.TypeResolver;
 import org.openbox.sf5.db.CarrierFrequency;
 import org.openbox.sf5.db.DVBStandards;
-import org.openbox.sf5.db.HibernateUtil;
 import org.openbox.sf5.db.Polarization;
 import org.openbox.sf5.db.RangesOfDVB;
 import org.openbox.sf5.db.Satellites;
@@ -32,15 +31,18 @@ import org.openbox.sf5.db.Transponders;
 import org.openbox.sf5.db.TypesOfFEC;
 import org.openbox.sf5.db.ValueOfTheCarrierFrequency;
 import org.openbox.sf5.service.ObjectsController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class IniReader implements Serializable {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -1699774508872380035L;
 
 	private Satellites sat;
+
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	final String REGEX = "(\\d{1,3})=(\\d{5}),(H|V|L|R),(\\d{4,5}),(\\d{2}),(DVB-S|S2),(QPSK|8PSK)(\\sACM)?";
 	private static Pattern pattern;
@@ -56,9 +58,13 @@ public class IniReader implements Serializable {
 		this.result = result;
 	}
 
-	public IniReader(String filepath) throws FileNotFoundException {
+	public IniReader() {
 
-		new TableFiller();
+	}
+
+	public void readData() throws IOException {
+
+		// new TableFiller();
 
 		// Open the file
 		FileInputStream fstream = new FileInputStream(filepath);
@@ -89,13 +95,6 @@ public class IniReader implements Serializable {
 			e.printStackTrace();
 		}
 
-		// System.out.println("Done!");
-		// Alert alert = new Alert(AlertType.INFORMATION);
-		// alert.setTitle("Information");
-		// alert.setHeaderText("INI import result");
-		// alert.setContentText("Import success!");
-		// alert.showAndWait();
-
 		// Close the input stream
 		try {
 			br.close();
@@ -120,8 +119,11 @@ public class IniReader implements Serializable {
 		String satName = satline.substring(2); // 2 characters
 
 		String hql = "select id from Satellites where name = :name";
-		Session s = HibernateUtil.openSession();
-		Query query = s.createQuery(hql);
+
+		// Session s = HibernateUtil.openSession();
+		Session session = sessionFactory.openSession();
+
+		Query query = session.createQuery(hql);
 		query.setParameter("name", satName);
 		ArrayList<Long> rs = (ArrayList<Long>) query.list();
 
@@ -183,8 +185,7 @@ public class IniReader implements Serializable {
 				Long Frequency = Long.parseLong(FrequencyString);
 
 				// polarization
-				Polarization aPolarization = Polarization.valueOf(matcher
-						.group(3));
+				Polarization aPolarization = Polarization.valueOf(matcher.group(3));
 
 				// speed
 				Long Speed = Long.parseLong(matcher.group(4));
@@ -207,27 +208,25 @@ public class IniReader implements Serializable {
 
 				Properties params = new Properties();
 				params.put("enumClass", "org.openbox.sf5.db.RangesOfDVB");
-				params.put("type", "12"); /*
-										 * type 12 instructs to use the String
-										 * representation of enum value
-										 */
-				Type myEnumType = new TypeLocatorImpl(new TypeResolver())
-						.custom(EnumType.class, params);
+				params.put("type",
+						"12"); /*
+								 * type 12 instructs to use the String
+								 * representation of enum value
+								 */
+				Type myEnumType = new TypeLocatorImpl(new TypeResolver()).custom(EnumType.class, params);
 
 				String sqltext = "SELECT RangeOfDVB FROM TheDVBRangeValues where :Frequency between LowerThreshold and UpperThreshold";
-				Session session = HibernateUtil.openSession();
-				List<TheDVBRangeValues> range = session
-						.createSQLQuery(sqltext)
+
+				// Session session = HibernateUtil.openSession();
+				Session session = sessionFactory.openSession();
+
+				List<TheDVBRangeValues> range = session.createSQLQuery(sqltext)
 						// .addScalar("RangeOfDVB",
 						// Hibernate.custom(org.hibernate.type.EnumType.class,
 						// params))
-						.addScalar("RangeOfDVB", myEnumType)
-						.setParameter("Frequency", Frequency)
+						.addScalar("RangeOfDVB", myEnumType).setParameter("Frequency", Frequency)
 						// .setResultTransformer(Transformers.aliasToBean(RangesOfDVB.class)).list();
-						.setResultTransformer(
-								Transformers
-										.aliasToBean(TheDVBRangeValues.class))
-						.list();
+						.setResultTransformer(Transformers.aliasToBean(TheDVBRangeValues.class)).list();
 
 				if (!range.isEmpty()) {
 					rangeEnum = range.get(0).getRangeOfDVB();
@@ -238,34 +237,28 @@ public class IniReader implements Serializable {
 				// get carrier frequency
 				params = new Properties();
 				params.put("enumClass", "org.openbox.sf5.db.CarrierFrequency");
-				params.put("type", "12"); /*
-										 * type 12 instructs to use the String
-										 * representation of enum value
-										 */
-				myEnumType = new TypeLocatorImpl(new TypeResolver()).custom(
-						EnumType.class, params);
+				params.put("type",
+						"12"); /*
+								 * type 12 instructs to use the String
+								 * representation of enum value
+								 */
+				myEnumType = new TypeLocatorImpl(new TypeResolver()).custom(EnumType.class, params);
 
 				sqltext = "SELECT TypeOfCarrierFrequency FROM ValueOfTheCarrierFrequency "
 						+ "where (:Frequency between LowerThreshold and UpperThreshold) "
 						+ "and (Polarization = :KindOfPolarization)";
-				session = HibernateUtil.openSession();
-				List<ValueOfTheCarrierFrequency> carrierList = session
-						.createSQLQuery(sqltext)
-						.addScalar("TypeOfCarrierFrequency", myEnumType)
-						.setParameter("Frequency", Frequency)
-						.setParameter(
-								"KindOfPolarization",
-								Polarization.getPolarizationKind(aPolarization)
-										.ordinal())
+
+				// session = HibernateUtil.openSession();
+				// Session session = sessionFactory.openSession();
+
+				List<ValueOfTheCarrierFrequency> carrierList = session.createSQLQuery(sqltext)
+						.addScalar("TypeOfCarrierFrequency", myEnumType).setParameter("Frequency", Frequency)
+						.setParameter("KindOfPolarization", Polarization.getPolarizationKind(aPolarization).ordinal())
 						// .setResultTransformer(Transformers.aliasToBean(CarrierFrequency.class)).list();
-						.setResultTransformer(
-								Transformers
-										.aliasToBean(ValueOfTheCarrierFrequency.class))
-						.list();
+						.setResultTransformer(Transformers.aliasToBean(ValueOfTheCarrierFrequency.class)).list();
 
 				if (!carrierList.isEmpty()) {
-					carrierEnum = carrierList.get(0)
-							.getTypeOfCarrierFrequency();
+					carrierEnum = carrierList.get(0).getTypeOfCarrierFrequency();
 				} else {
 					continue;
 				}
@@ -277,13 +270,11 @@ public class IniReader implements Serializable {
 				List<Object> transIdList = new ArrayList<>();
 				transIdList = session.createSQLQuery(sqltext)
 						// .addScalar("id")
-						.setParameter("Frequency", Frequency)
-						.setParameter("satelliteId", sat.getId())
+						.setParameter("Frequency", Frequency).setParameter("satelliteId", sat.getId())
 						// .setResultTransformer(Transformers.aliasToBean(Transponders.class))
 						.list();
 
-				Transponders newTrans = new Transponders(Frequency,
-						aPolarization, FEC, carrierEnum, Speed, DVBStandard,
+				Transponders newTrans = new Transponders(Frequency, aPolarization, FEC, carrierEnum, Speed, DVBStandard,
 						rangeEnum, sat);
 
 				if (transIdList.isEmpty()) {
@@ -292,10 +283,8 @@ public class IniReader implements Serializable {
 
 				else {
 
-					long transId = ((BigInteger) transIdList.get(0))
-							.longValue();
-					selectedTrans = (Transponders) contr.select(
-							Transponders.class, transId);
+					long transId = ((BigInteger) transIdList.get(0)).longValue();
+					selectedTrans = (Transponders) contr.select(Transponders.class, transId);
 
 					// check if this trans changed to newly read trans
 					if (!selectedTrans.equals(newTrans)) {
@@ -313,7 +302,19 @@ public class IniReader implements Serializable {
 					}
 
 				}
+
+				session.close();
 			}
 		}
+	}
+
+	private String filepath;
+
+	public String getFilepath() {
+		return filepath;
+	}
+
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
 	}
 }

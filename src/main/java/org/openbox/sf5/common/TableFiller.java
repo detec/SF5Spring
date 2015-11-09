@@ -5,14 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.db.CarrierFrequency;
-import org.openbox.sf5.db.HibernateUtil;
 import org.openbox.sf5.db.KindsOfPolarization;
 import org.openbox.sf5.db.RangesOfDVB;
 import org.openbox.sf5.db.TheDVBRangeValues;
 import org.openbox.sf5.db.ValueOfTheCarrierFrequency;
 import org.openbox.sf5.service.ObjectsController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,14 +21,26 @@ public final class TableFiller implements Serializable {
 
 	private static final long serialVersionUID = 8464537239822198552L;
 
+	@Autowired
+	private ObjectsController contr;
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
 	public TableFiller() {
+		init();
+	}
+
+	public void init() {
 
 		List<RangesOfDVB> list = new ArrayList<RangesOfDVB>();
 		list.add(RangesOfDVB.C);
 		list.add(RangesOfDVB.Ku);
 
-		ObjectsController service = new ObjectsController();
+		// ObjectsController service = new ObjectsController();
 		TheDVBRangeValues newRecord = null;
+
+		Session session = sessionFactory.openSession();
 
 		for (RangesOfDVB e : list) {
 
@@ -36,7 +49,8 @@ public final class TableFiller implements Serializable {
 			// List<Book>
 			// book=(List<Book>)session.createCriteria(Book.class).createAlias("student",
 			// "st").add(Restrictions.eq("st.name", "Maxim")).list();
-			Session session = HibernateUtil.openSession();
+			// Session session = HibernateUtil.openSession();
+
 			List<TheDVBRangeValues> rec = session.createCriteria(TheDVBRangeValues.class)
 					.add(Restrictions.eq("RangeOfDVB", e)).list();
 
@@ -52,12 +66,12 @@ public final class TableFiller implements Serializable {
 
 				}
 
-				service.add(newRecord);
+				contr.add(newRecord);
 			}
 
 		}
 
-		Session session = HibernateUtil.openSession();
+		// Session session = HibernateUtil.openSession();
 		ValueOfTheCarrierFrequency value = null;
 		List<ValueOfTheCarrierFrequency> rec = null;
 
@@ -66,7 +80,7 @@ public final class TableFiller implements Serializable {
 				.add(Restrictions.eq("Polarization", KindsOfPolarization.Pie)).list();
 		if (rec.isEmpty()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.Lower, KindsOfPolarization.Pie, 10700, 11699);
-			service.add(value);
+			contr.add(value);
 		}
 
 		rec = session.createCriteria(ValueOfTheCarrierFrequency.class)
@@ -75,7 +89,7 @@ public final class TableFiller implements Serializable {
 
 		if (rec.isEmpty()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.Lower, KindsOfPolarization.Linear, 10700, 11699);
-			service.add(value);
+			contr.add(value);
 		}
 
 		rec = session.createCriteria(ValueOfTheCarrierFrequency.class)
@@ -84,7 +98,7 @@ public final class TableFiller implements Serializable {
 
 		if (rec.isEmpty()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.Top, KindsOfPolarization.Linear, 11700, 12750);
-			service.add(value);
+			contr.add(value);
 		}
 
 		rec = session.createCriteria(ValueOfTheCarrierFrequency.class)
@@ -93,7 +107,7 @@ public final class TableFiller implements Serializable {
 
 		if (rec.isEmpty()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.CRange, KindsOfPolarization.Linear, 3400, 4200);
-			service.add(value);
+			contr.add(value);
 
 		}
 
@@ -103,9 +117,11 @@ public final class TableFiller implements Serializable {
 
 		if (rec.isEmpty()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.TopPie, KindsOfPolarization.Pie, 11700, 12750);
-			service.add(value);
+			contr.add(value);
 
 		}
+
+		session.close();
 
 	}
 }
