@@ -5,6 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.metamodel.MetadataSources;
+import org.junit.Before;
 import org.junit.Test;
 import org.openbox.sf5.db.CarrierFrequency;
 import org.openbox.sf5.db.DVBStandards;
@@ -20,6 +25,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 public class AbstractServiceTests {
 
+	private SessionFactory sessionFactory;
+
+	@Before
+	private void setUp() {
+
+		// A SessionFactory is set up once for an application!
+		final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+				.configure() // configures settings from hibernate.cfg.xml
+				.build();
+		try {
+			sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+		}
+		catch (Exception e) {
+			// The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
+			// so destroy it manually.
+			StandardServiceRegistryBuilder.destroy( registry );
+		}
+
+
+
+	}
 	// No autowiring in container-less tests
 	protected ObjectsController contr = new ObjectsController();
 
