@@ -15,10 +15,12 @@ public class DAOImpl implements DAO {
 
 	}
 
+	@Override
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
 
+	@Override
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}

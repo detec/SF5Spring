@@ -6,14 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ObjectsController implements Serializable{
+public class ObjectsController implements Serializable {
 
 	private static final long serialVersionUID = 1419450577630607967L;
+
 	@Autowired
 	ObjectService Service;
 
 	public void add(Object obj) {
 		Service.add(obj);
+	}
+
+	public ObjectService getService() {
+		return Service;
+	}
+
+	public void setService(ObjectService service) {
+		Service = service;
 	}
 
 	public void update(Object obj) {

@@ -16,6 +16,16 @@ public class ObjectServiceImpl implements ObjectService {
 	}
 
 	@Override
+	public DAO getDAO() {
+		return DAO;
+	}
+
+	@Override
+	public void setDAO(DAO dAO) {
+		DAO = dAO;
+	}
+
+	@Override
 	public void remove(Class<?> clazz, long id) {
 		DAO.remove(clazz, id);
 	}

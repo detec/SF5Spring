@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.metamodel.MetadataSources;
+import org.hibernate.cfg.Configuration;
 import org.junit.Before;
 import org.junit.Test;
+import org.openbox.sf5.dao.DAO;
+import org.openbox.sf5.dao.DAOImpl;
 import org.openbox.sf5.db.CarrierFrequency;
 import org.openbox.sf5.db.DVBStandards;
 import org.openbox.sf5.db.Polarization;
@@ -27,27 +28,52 @@ public class AbstractServiceTests {
 
 	private SessionFactory sessionFactory;
 
+	private DAO DAO;
+
+	private ObjectService service;
+
+	private ObjectsController contr;
+
 	@Before
-	private void setUp() {
+	public void setUp() {
 
 		// A SessionFactory is set up once for an application!
-		final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-				.configure() // configures settings from hibernate.cfg.xml
-				.build();
-		try {
-			sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
-		}
-		catch (Exception e) {
-			// The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
-			// so destroy it manually.
-			StandardServiceRegistryBuilder.destroy( registry );
-		}
+		// final StandardServiceRegistry registry = new
+		// StandardServiceRegistryBuilder().configure() // configures
+		// // settings
+		// // from
+		// // hibernate.cfg.xml
+		// .build();
+		// try {
+		// sessionFactory = new
+		// MetadataSources(registry).buildMetadata().buildSessionFactory();
+		// } catch (Exception e) {
+		// // The registry would be destroyed by the SessionFactory, but we had
+		// // trouble building the SessionFactory
+		// // so destroy it manually.
+		// StandardServiceRegistryBuilder.destroy(registry);
+		// }
 
+		Configuration configuration = new Configuration().configure();
+		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
+				.applySettings(configuration.getProperties());
+		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
 
+		sessionFactory.openSession();
+
+		DAO = new DAOImpl();
+		DAO.setSessionFactory(sessionFactory);
+
+		service = new ObjectServiceImpl();
+		service.setDAO(DAO);
+
+		contr = new ObjectsController();
+		contr.setService(service);
 
 	}
+
 	// No autowiring in container-less tests
-	protected ObjectsController contr = new ObjectsController();
+	// protected ObjectsController contr = new ObjectsController();
 
 	@Test
 	@Transactional
