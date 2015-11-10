@@ -44,6 +44,9 @@ public class IniReader implements Serializable {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	@Autowired
+	private ObjectsController contr;
+
 	final String REGEX = "(\\d{1,3})=(\\d{5}),(H|V|L|R),(\\d{4,5}),(\\d{2}),(DVB-S|S2),(QPSK|8PSK)(\\sACM)?";
 	private static Pattern pattern;
 	private static Matcher matcher;
@@ -63,9 +66,6 @@ public class IniReader implements Serializable {
 	}
 
 	public void readData() throws IOException {
-
-		// new TableFiller();
-
 		// Open the file
 		FileInputStream fstream = new FileInputStream(filepath);
 		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
@@ -110,24 +110,18 @@ public class IniReader implements Serializable {
 
 		br.readLine(); // 1=0130
 		String satline = br.readLine();
-		// In web server, Glassfish 4, it cannot work with Apache commons.
-		// We will replace with Java Core methods.
-		// StrBuilder aStrBuilder = new StrBuilder(satline);
 
-		// String satName = aStrBuilder.substring(2);
 
 		String satName = satline.substring(2); // 2 characters
 
 		String hql = "select id from Satellites where name = :name";
 
-		// Session s = HibernateUtil.openSession();
 		Session session = sessionFactory.openSession();
 
 		Query query = session.createQuery(hql);
 		query.setParameter("name", satName);
 		ArrayList<Long> rs = (ArrayList<Long>) query.list();
 
-		ObjectsController contr = new ObjectsController();
 		if (rs.isEmpty()) {
 			// no satellite found
 			sat = new Satellites(satName);
@@ -139,10 +133,10 @@ public class IniReader implements Serializable {
 			sat = (Satellites) contr.select(Satellites.class, rs.get(0));
 		}
 
+		session.close();
 	}
 
 	private void readTransponderData(BufferedReader br) throws IOException {
-		ObjectsController contr = new ObjectsController();
 
 		Transponders selectedTrans = null;
 		// replace with Java core
@@ -151,8 +145,6 @@ public class IniReader implements Serializable {
 		String transCountString = br.readLine().substring(2);
 
 		int transCount = Integer.parseInt(transCountString);
-
-		// List<Transponders> transList = new ArrayList<Transponders>();
 
 		pattern = Pattern.compile(REGEX);
 
@@ -217,7 +209,6 @@ public class IniReader implements Serializable {
 
 				String sqltext = "SELECT RangeOfDVB FROM TheDVBRangeValues where :Frequency between LowerThreshold and UpperThreshold";
 
-				// Session session = HibernateUtil.openSession();
 				Session session = sessionFactory.openSession();
 
 				List<TheDVBRangeValues> range = session.createSQLQuery(sqltext)
@@ -247,9 +238,6 @@ public class IniReader implements Serializable {
 				sqltext = "SELECT TypeOfCarrierFrequency FROM ValueOfTheCarrierFrequency "
 						+ "where (:Frequency between LowerThreshold and UpperThreshold) "
 						+ "and (Polarization = :KindOfPolarization)";
-
-				// session = HibernateUtil.openSession();
-				// Session session = sessionFactory.openSession();
 
 				List<ValueOfTheCarrierFrequency> carrierList = session.createSQLQuery(sqltext)
 						.addScalar("TypeOfCarrierFrequency", myEnumType).setParameter("Frequency", Frequency)

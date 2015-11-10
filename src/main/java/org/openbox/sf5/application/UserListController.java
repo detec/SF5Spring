@@ -9,7 +9,6 @@ import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
-import org.openbox.sf5.service.ObjectsListServiceNonStatic;
 import org.openbox.sf5.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserListController {
 
 	@Autowired
-	private ObjectsListServiceNonStatic service;
+	private ObjectsListService service;
 
 	@Autowired
 	private ObjectsController contr;
@@ -97,7 +96,7 @@ public class UserListController {
 
 		if (UserService.hasAdminRole(userToDelete)) {
 			model.addAttribute("viewErrMsg", "It is forbidden to remove admin user!");
-			UsersList = (ArrayList<Users>) ObjectsListService.ObjectsList(Users.class);
+			UsersList = (ArrayList<Users>) service.ObjectsList(Users.class);
 
 			model.addAttribute("users", UsersList);
 			return "users";

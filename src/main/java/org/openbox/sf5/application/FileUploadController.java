@@ -43,7 +43,7 @@ public class FileUploadController {
 
 				return "redirect:/transponders";
 			} catch (Exception e) {
-				return "You failed to upload => " + e.getMessage();
+				return "Failed to upload " + e.getMessage();
 			}
 		} else {
 			return "redirect:/transponders";

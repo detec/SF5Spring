@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -14,9 +16,9 @@ import org.openbox.sf5.db.TheDVBRangeValues;
 import org.openbox.sf5.db.ValueOfTheCarrierFrequency;
 import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public final class TableFiller implements Serializable {
 
 	private static final long serialVersionUID = 8464537239822198552L;
@@ -28,9 +30,10 @@ public final class TableFiller implements Serializable {
 	private SessionFactory sessionFactory;
 
 	public TableFiller() {
-		init();
+		//init();
 	}
 
+	@PostConstruct
 	public void init() {
 
 		List<RangesOfDVB> list = new ArrayList<RangesOfDVB>();

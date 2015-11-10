@@ -16,7 +16,7 @@ import org.openbox.sf5.db.Satellites;
 import org.openbox.sf5.db.Transponders;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListServiceNonStatic;
+import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -48,7 +48,7 @@ public class TranspondersListClass {
 	private ObjectsController contr;
 
 	@Autowired
-	private ObjectsListServiceNonStatic service;
+	private ObjectsListService service;
 
 	@Autowired
 	private SF5ApplicationContext AppContext;
@@ -139,7 +139,7 @@ public class TranspondersListClass {
 			TranspondersList = (List<Transponders>) service.ObjectsList(Transponders.class);
 		}
 
-		this.SelectionMode = bean.SelectionMode;
+		SelectionMode = bean.SelectionMode;
 
 		model.addAttribute("bean", this);
 		TransponderChoiceListWrapper wrapper = new TransponderChoiceListWrapper();

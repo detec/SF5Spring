@@ -6,7 +6,7 @@ import java.util.List;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.db.Users;
-import org.openbox.sf5.service.ObjectsListServiceNonStatic;
+import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class UserEditor extends PropertyEditorSupport {
 
 	@Autowired
-	private ObjectsListServiceNonStatic service;
+	private ObjectsListService service;
 
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {

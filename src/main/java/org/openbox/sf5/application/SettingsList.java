@@ -12,7 +12,7 @@ import org.openbox.sf5.db.Settings;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.db.Usersauthorities;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListServiceNonStatic;
+import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SettingsList {
 
 	@Autowired
-	private ObjectsListServiceNonStatic service;
+	private ObjectsListService service;
 
 	@Autowired
 	private ObjectsController contr;
@@ -127,7 +127,7 @@ public class SettingsList {
 	public String selectSetting(@RequestParam(value = "selectionmode", required = true) boolean pSelectionMode,
 			Model model) {
 
-		this.SelectionMode = pSelectionMode;
+		SelectionMode = pSelectionMode;
 		return getSettings(model);
 
 	}

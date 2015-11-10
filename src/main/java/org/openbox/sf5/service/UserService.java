@@ -28,7 +28,7 @@ public class UserService implements IUserService, Serializable {
 	private ObjectsController contr;
 
 	@Autowired
-	private ObjectsListServiceNonStatic service;
+	private ObjectsListService service;
 
 	@Transactional
 	@Override

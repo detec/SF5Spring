@@ -11,14 +11,15 @@ import org.springframework.stereotype.Service;
 public class ObjectsListService {
 
 	@Autowired
-	private static DAOList dao;
+	private DAOList dao;
 
-	public static List<?> ObjectsList(Class<?> clazz) {
+	public List<?> ObjectsList(Class<?> clazz) {
 		return dao.list(clazz);
 
 	}
 
-	public static List<?> ObjectsCriterionList(Class<?> clazz, Criterion criterion) {
+	public List<?> ObjectsCriterionList(Class<?> clazz, Criterion criterion) {
 		return dao.restrictionList(clazz, criterion);
 	}
+
 }

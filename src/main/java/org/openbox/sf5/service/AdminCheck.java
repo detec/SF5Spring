@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class AdminCheck {
 
 	@Autowired
-	private ObjectsListServiceNonStatic service;
+	private ObjectsListService service;
 
 	@Autowired
 	private ObjectsController contr;

@@ -37,7 +37,7 @@ import org.openbox.sf5.db.Transponders;
 import org.openbox.sf5.db.TypesOfFEC;
 import org.openbox.sf5.db.Users;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListServiceNonStatic;
+import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpEntity;
@@ -812,6 +812,6 @@ public class SettingsForm {
 	private ObjectsController contr;
 
 	@Autowired
-	private ObjectsListServiceNonStatic service;
+	private ObjectsListService service;
 
 }
