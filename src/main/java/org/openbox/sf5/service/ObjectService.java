@@ -1,18 +1,19 @@
 package org.openbox.sf5.service;
 
 import org.openbox.sf5.dao.DAO;
+import org.openbox.sf5.model.AbstractDbEntity;
 
 public interface ObjectService {
 
-	public void add(Object obj);
+	public <T extends AbstractDbEntity> void add(T obj);
 
-	public void remove(Class<?> clazz, long id);
+	public <T extends AbstractDbEntity> void remove(Class<T> type, long id);
 
-	public void update(Object obj);
+	public <T extends AbstractDbEntity> void update(T obj);
 
-	public Object select(Class<?> clazz, long id);
+	public <T extends AbstractDbEntity> T select(Class<T> type, long id);
 
-	public void saveOrUpdate(Object obj);
+	public <T extends AbstractDbEntity> void saveOrUpdate(T obj);
 
 	public DAO getDAO();
 

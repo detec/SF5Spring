@@ -38,8 +38,6 @@ public class UserService implements IUserService, Serializable {
 			throw new UserNotFoundException("There is an account with that username: " + accountDto.getUsername());
 		}
 
-		// the rest of the registration operation
-		// ObjectsController contr = new ObjectsController();
 		Users newUser = new Users();
 		newUser.setusername(accountDto.getUsername());
 		newUser.setPassword(accountDto.getPassword());

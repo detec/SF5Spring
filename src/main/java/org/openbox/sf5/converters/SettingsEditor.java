@@ -16,9 +16,8 @@ public class SettingsEditor extends PropertyEditorSupport {
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
 
-		// ObjectsController contr = new ObjectsController();
 		Long Lid = Long.parseLong(text);
-		Settings trans = (Settings) contr.select(Settings.class, Lid.longValue());
+		Settings trans = contr.select(Settings.class, Lid.longValue());
 
 		setValue(trans);
 

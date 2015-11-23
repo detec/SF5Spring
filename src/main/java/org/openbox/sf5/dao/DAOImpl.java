@@ -1,12 +1,63 @@
 package org.openbox.sf5.dao;
 
+import java.io.Serializable;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.openbox.sf5.model.AbstractDbEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DAOImpl implements DAO {
+public class DAOImpl implements DAO, Serializable {
+
+	@Override
+	public <T extends AbstractDbEntity> void add(T obj) {
+		Session s = sessionFactory.openSession();
+		s.beginTransaction();
+		s.save(obj);
+		s.getTransaction().commit();
+		s.close();
+
+	}
+
+	@Override
+	public <T extends AbstractDbEntity> void remove(Class<T> type, long id) {
+		Session s = sessionFactory.openSession();
+		s.beginTransaction();
+		Object c = s.get(type, id);
+		s.delete(c);
+		s.getTransaction().commit();
+		s.close();
+	}
+
+	@Override
+	public <T extends AbstractDbEntity> void update(T obj) {
+		Session s = sessionFactory.openSession();
+		s.beginTransaction();
+		s.update(obj);
+		s.getTransaction().commit();
+		s.close();
+	}
+
+	@Override
+	public <T extends AbstractDbEntity> T select(Class<T> type, long id) {
+		Session s = sessionFactory.openSession();
+		s.beginTransaction();
+		@SuppressWarnings("unchecked")
+		T obj = (T) s.get(type, id);
+		s.close();
+		return obj;
+	}
+
+	@Override
+	public <T extends AbstractDbEntity> void saveOrUpdate(T obj) {
+		Session s = sessionFactory.openSession();
+		s.beginTransaction();
+		s.saveOrUpdate(obj);
+		s.getTransaction().commit();
+		s.close();
+	}
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -29,51 +80,5 @@ public class DAOImpl implements DAO {
 		this.sessionFactory = sessionFactory;
 	}
 
-	@Override
-	public void add(Object obj) {
-		Session s = sessionFactory.openSession();
-
-		s.beginTransaction();
-		s.save(obj);
-		s.getTransaction().commit();
-		s.close();
-
-	}
-
-	@Override
-	public void remove(Class<?> clazz, long id) {
-		Session s = sessionFactory.openSession();
-		s.beginTransaction();
-		Object c = s.get(clazz, id);
-		s.delete(c);
-		s.getTransaction().commit();
-		s.close();
-	}
-
-	@Override
-	public void update(Object obj) {
-		Session s = sessionFactory.openSession();
-		s.beginTransaction();
-		s.update(obj);
-		s.getTransaction().commit();
-		s.close();
-	}
-
-	@Override
-	public Object select(Class<?> clazz, long id) {
-		Session s = sessionFactory.openSession();
-		s.beginTransaction();
-		Object obj = s.get(clazz, id);
-		s.close();
-		return obj;
-	}
-
-	@Override
-	public void saveOrUpdate(Object obj) {
-		Session s = sessionFactory.openSession();
-		s.beginTransaction();
-		s.saveOrUpdate(obj);
-		s.getTransaction().commit();
-		s.close();
-	}
+	private static final long serialVersionUID = 643710250463318145L;
 }

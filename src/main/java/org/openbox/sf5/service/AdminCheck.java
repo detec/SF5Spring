@@ -21,10 +21,6 @@ public class AdminCheck {
 
 	public void initialize() {
 
-		// insert default values into database.
-		// we will try to initialize it in sf5-servlet.xml
-		// new TableFiller();
-
 		Criterion criterea = Restrictions.eq("username", "admin");
 		@SuppressWarnings("unchecked")
 		List<Users> adminsList = (List<Users>) service.ObjectsCriterionList(Users.class, criterea);
@@ -33,7 +29,6 @@ public class AdminCheck {
 			List<Usersauthorities> rolesList = new ArrayList<>();
 
 			Users admin = new Users("admin", "1", true, rolesList);
-			// ObjectsController contr = new ObjectsController();
 			contr.saveOrUpdate(admin);
 
 			fillTables(admin, rolesList);
@@ -41,8 +36,6 @@ public class AdminCheck {
 		}
 
 		else {
-
-			// ObjectsController contr = new ObjectsController();
 
 			Users adminUser = adminsList.get(0);
 			List<Usersauthorities> rolesList = adminUser.getauthorities();

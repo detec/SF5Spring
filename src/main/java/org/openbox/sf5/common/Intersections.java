@@ -30,6 +30,7 @@ public class Intersections {
 
 		ReturningWork<ResultSet> rowsReturningWork = new ReturningWork<ResultSet>() {
 
+			@SuppressWarnings("resource")
 			@Override
 			public ResultSet execute(Connection connection) throws SQLException {
 				PreparedStatement preparedStatement = null;
@@ -48,7 +49,7 @@ public class Intersections {
 					preparedStatement.execute();
 
 					preparedStatement = connection.prepareStatement(getIntersectionQuery());
-					// preparedStatement.setLong(1, Object.getId());
+
 					resultSet = preparedStatement.executeQuery();
 
 					// 11.08.2015, trying to remove locks
@@ -59,10 +60,7 @@ public class Intersections {
 					return resultSet;
 				} catch (SQLException e) {
 					throw e;
-				} finally {
-
 				}
-
 			}
 		};
 

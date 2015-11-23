@@ -42,40 +42,23 @@ public class RegistrationController {
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String registerUserAccount(
-			@ModelAttribute("user") UserDto accountDto, BindingResult result,
+	public String registerUserAccount(@ModelAttribute("user") UserDto accountDto, BindingResult result,
 			HttpServletRequest request, Errors errors, Model model) {
-
-		// Set<ConstraintViolation<UserDto>> violations = validator
-		// .validate(accountDto);
-		//
-		// for (ConstraintViolation<UserDto> violation : violations) {
-		// String propertyPath = violation.getPropertyPath().toString();
-		// String message = violation.getMessage();
-		// // Add JSR-303 errors to BindingResult
-		// // This allows Spring to display them in view via a FieldError
-		// result.addError(new FieldError("user", propertyPath,
-		//
-		// "Invalid " + propertyPath + "(" + message + ")"));
-		// }
 
 		// Let's manually check if password and other fields are empty
 		if (accountDto.getUsername().equals("")) {
-			model.addAttribute("viewErrMsg",
-					"Field 'Username' cannot be empty!");
+			model.addAttribute("viewErrMsg", "Field 'Username' cannot be empty!");
 			return "register";
 		}
 
 		if (accountDto.getPassword().equals("")) {
-			model.addAttribute("viewErrMsg",
-					"Field 'Password' cannot be empty!");
+			model.addAttribute("viewErrMsg", "Field 'Password' cannot be empty!");
 			// return new ModelAndView("register",
 			return "register";
 		}
 
 		if (accountDto.getMatchingPassword().equals("")) {
-			model.addAttribute("viewErrMsg",
-					"Field 'Matching password' cannot be empty!");
+			model.addAttribute("viewErrMsg", "Field 'Matching password' cannot be empty!");
 			return "register";
 		}
 
@@ -91,8 +74,7 @@ public class RegistrationController {
 		if (user == null) {
 			// result.rejectValue("username", "User not created!");
 			// result.reject("username", "User not created!");
-			model.addAttribute("viewErrMsg",
-					"User not created! There is a user with such name!");
+			model.addAttribute("viewErrMsg", "User not created! There is a user with such name!");
 			return "register";
 		}
 
@@ -107,8 +89,7 @@ public class RegistrationController {
 			// return new ModelAndView("login", "user", accountDto);
 			// return new ModelAndView("settings");
 			model.addAttribute("username", user.getusername());
-			model.addAttribute("viewMsg", user.getusername()
-					+ " successfully registered!");
+			model.addAttribute("viewMsg", user.getusername() + " successfully registered!");
 			return "settings";
 		}
 
@@ -124,27 +105,22 @@ public class RegistrationController {
 		return registered;
 	}
 
-	private void authenticateUserAndSetSession(Users user,
-			HttpServletRequest request) {
+	private void authenticateUserAndSetSession(Users user, HttpServletRequest request) {
 		String username = user.getusername();
 		String password = user.getPassword();
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-				username, password);
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
 
 		// generate session if one doesn't exist
 		request.getSession();
 
 		token.setDetails(new WebAuthenticationDetails(request));
-		Authentication authenticatedUser = authenticationManager
-				.authenticate(token);
+		Authentication authenticatedUser = authenticationManager.authenticate(token);
 
 		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(
-			@RequestParam(value = "error", required = false) boolean loginError,
-			Model model) {
+	public String login(@RequestParam(value = "error", required = false) boolean loginError, Model model) {
 
 		if (loginError) {
 			// indicate about bad credentials.

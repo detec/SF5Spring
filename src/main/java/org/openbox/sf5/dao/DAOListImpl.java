@@ -17,36 +17,40 @@ public class DAOListImpl implements DAOList {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<?> list(Class<?> clazz) {
+	public <T> List<T> list(Class<T> type) {
 
-		List<?> list = new ArrayList<>();
+		List<T> list = new ArrayList<>();
 
 		Session s = sessionFactory.openSession();
 		s.beginTransaction();
-		list = s.createQuery("from " + clazz.getName()).list();
+		list = s.createQuery("from " + type.getName()).list();
 		s.getTransaction().commit();
 		s.close();
 		return list;
 	}
 
 	@Override
-	public List<?> restrictionList(Class<?> clazz, Criterion criterion) {
+	public <T> List<T> restrictionList(Class<T> type, Criterion criterion) {
 		Session s = sessionFactory.openSession();
-		Criteria criteria = s.createCriteria(clazz).add(criterion);
+		Criteria criteria = s.createCriteria(type).add(criterion);
 		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY); // kill
 																					// duplicates
 
-		List<?> list = criteria.list();
+		@SuppressWarnings("unchecked")
+		List<T> list = criteria.list();
 
 		s.close();
 		return list;
 	}
 
+	@Override
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
 
+	@Override
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}

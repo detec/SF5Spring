@@ -2,6 +2,7 @@ package org.openbox.sf5.service;
 
 import java.io.Serializable;
 
+import org.openbox.sf5.model.AbstractDbEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +14,24 @@ public class ObjectsController implements Serializable {
 	@Autowired
 	ObjectService Service;
 
-	public void add(Object obj) {
+	public <T extends AbstractDbEntity> void add(T obj) {
 		Service.add(obj);
+	}
+
+	public <T extends AbstractDbEntity> void update(T obj) {
+		Service.update(obj);
+	}
+
+	public <T extends AbstractDbEntity> void remove(Class<T> type, long id) {
+		Service.remove(type, id);
+	}
+
+	public <T extends AbstractDbEntity> void saveOrUpdate(T obj) {
+		Service.saveOrUpdate(obj);
+	}
+
+	public <T extends AbstractDbEntity> T select(Class<T> type, long id) {
+		return Service.select(type, id);
 	}
 
 	public ObjectService getService() {
@@ -23,22 +40,6 @@ public class ObjectsController implements Serializable {
 
 	public void setService(ObjectService service) {
 		Service = service;
-	}
-
-	public void update(Object obj) {
-		Service.update(obj);
-	}
-
-	public void remove(Class<?> clazz, long id) {
-		Service.remove(clazz, id);
-	}
-
-	public void saveOrUpdate(Object obj) {
-		Service.saveOrUpdate(obj);
-	}
-
-	public Object select(Class<?> clazz, long id) {
-		return Service.select(clazz, id);
 	}
 
 }

@@ -30,9 +30,10 @@ public final class TableFiller implements Serializable {
 	private SessionFactory sessionFactory;
 
 	public TableFiller() {
-		//init();
+
 	}
 
+	@SuppressWarnings("unchecked")
 	@PostConstruct
 	public void init() {
 
@@ -40,19 +41,11 @@ public final class TableFiller implements Serializable {
 		list.add(RangesOfDVB.C);
 		list.add(RangesOfDVB.Ku);
 
-		// ObjectsController service = new ObjectsController();
 		TheDVBRangeValues newRecord = null;
 
 		Session session = sessionFactory.openSession();
 
 		for (RangesOfDVB e : list) {
-
-			// TheDVBRangeValues record = (TheDVBRangeValues)
-			// service.select("db.TheDVBRangeValues", e);
-			// List<Book>
-			// book=(List<Book>)session.createCriteria(Book.class).createAlias("student",
-			// "st").add(Restrictions.eq("st.name", "Maxim")).list();
-			// Session session = HibernateUtil.openSession();
 
 			List<TheDVBRangeValues> rec = session.createCriteria(TheDVBRangeValues.class)
 					.add(Restrictions.eq("RangeOfDVB", e)).list();
@@ -74,7 +67,6 @@ public final class TableFiller implements Serializable {
 
 		}
 
-		// Session session = HibernateUtil.openSession();
 		ValueOfTheCarrierFrequency value = null;
 		List<ValueOfTheCarrierFrequency> rec = null;
 

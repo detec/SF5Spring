@@ -9,9 +9,6 @@ import org.openbox.sf5.model.SettingsConversion;
 // source.
 public class SettingsConversionPresentation extends SettingsConversion {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 7708887469121053073L;
 
 	private transient boolean editable;
@@ -35,7 +32,6 @@ public class SettingsConversionPresentation extends SettingsConversion {
 	}
 
 	public SettingsConversionPresentation(Settings object) {
-		// TODO Auto-generated constructor stub
 		super.setparent_id(object);
 
 		// Note shouldn't be null
@@ -48,8 +44,7 @@ public class SettingsConversionPresentation extends SettingsConversion {
 
 	}
 
-	public SettingsConversionPresentation(
-			SettingsConversionPresentation original, Settings parent) {
+	public SettingsConversionPresentation(SettingsConversionPresentation original, Settings parent) {
 
 		this.setTransponder(original.getTransponder());
 		this.setparent_id(parent);

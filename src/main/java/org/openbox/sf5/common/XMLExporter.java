@@ -19,8 +19,7 @@ import org.w3c.dom.Node;
 
 public class XMLExporter {
 
-	public static String exportSettingToXML(
-			List<SettingsConversionPresentation> dataSettingsConversion) {
+	public static String exportSettingToXML(List<SettingsConversionPresentation> dataSettingsConversion) {
 
 		// Generating sat/tp structure
 		generateSatTp(dataSettingsConversion);
@@ -34,8 +33,6 @@ public class XMLExporter {
 
 		} catch (IOException e) {
 
-			// msgs.add(new FacesMessage("Error saving file on server \n"
-			// + e.getLocalizedMessage()));
 			return "";
 
 		}
@@ -65,11 +62,9 @@ public class XMLExporter {
 
 			}
 
-			Transformer transformer = TransformerFactory.newInstance()
-					.newTransformer();
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
-					"yes");
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 
 			DOMSource source = new DOMSource(doc);
 			StreamResult fileresult = new StreamResult(new File(absolutePath));
@@ -90,22 +85,17 @@ public class XMLExporter {
 		return node;
 	}
 
-	private static Node getTransponderNode(Document doc,
-			SettingsConversionPresentation e) {
+	private static Node getTransponderNode(Document doc, SettingsConversionPresentation e) {
 		Element tpId = null;
 
 		long currentTpIndex = e.getTpindex();
 		tpId = doc.createElement("tp");
 		tpId.setAttribute("index", String.valueOf(currentTpIndex));
-		tpId.appendChild(getTpElements(doc, "LnbFreq",
-				String.valueOf(e.getTransponder().getCarrier())));
-		tpId.appendChild(getTpElements(doc, "Freq",
-				String.valueOf(e.getTransponder().getFrequency())));
-		tpId.appendChild(getTpElements(doc, "Symbol",
-				String.valueOf(e.getTransponder().getSpeed())));
+		tpId.appendChild(getTpElements(doc, "LnbFreq", String.valueOf(e.getTransponder().getCarrier())));
+		tpId.appendChild(getTpElements(doc, "Freq", String.valueOf(e.getTransponder().getFrequency())));
+		tpId.appendChild(getTpElements(doc, "Symbol", String.valueOf(e.getTransponder().getSpeed())));
 		tpId.appendChild(getTpElements(doc, "Polar",
-				org.openbox.sf5.model.Polarization.getXMLpresentation(e
-						.getTransponder().getPolarization())));
+				org.openbox.sf5.model.Polarization.getXMLpresentation(e.getTransponder().getPolarization())));
 		return tpId;
 	}
 

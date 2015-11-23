@@ -13,13 +13,20 @@ public class ObjectsListService {
 	@Autowired
 	private DAOList dao;
 
-	public List<?> ObjectsList(Class<?> clazz) {
-		return dao.list(clazz);
-
+	public <T> List<T> ObjectsList(Class<T> type) {
+		return dao.list(type);
 	}
 
-	public List<?> ObjectsCriterionList(Class<?> clazz, Criterion criterion) {
-		return dao.restrictionList(clazz, criterion);
+	public <T> List<T> ObjectsCriterionList(Class<T> type, Criterion criterion) {
+		return dao.restrictionList(type, criterion);
+	}
+
+	public DAOList getDao() {
+		return dao;
+	}
+
+	public void setDao(DAOList dao) {
+		this.dao = dao;
 	}
 
 }

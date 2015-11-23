@@ -40,7 +40,8 @@ public class TranspondersListClass {
 
 		binder.registerCustomEditor(Users.class, UserEditor);
 		binder.registerCustomEditor(Transponders.class, TransponderChoiceEditor);
-		binder.registerCustomEditor(TransponderChoice.class, TransponderChoiceEditor);
+		// binder.registerCustomEditor(TransponderChoice.class,
+		// TransponderChoiceEditor);
 
 	}
 
@@ -97,17 +98,16 @@ public class TranspondersListClass {
 		if (filtersatid != null) {
 
 			if (filtersatid.longValue() != 0) {
-
-				filterSatellite = (Satellites) contr.select(Satellites.class, filtersatid.longValue());
+				filterSatellite = contr.select(Satellites.class, filtersatid.longValue());
 			}
 		}
 
 		if (filterSatellite != null) {
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
-			TranspondersList = (ArrayList<Transponders>) service.ObjectsCriterionList(Transponders.class, criterion);
+			TranspondersList = service.ObjectsCriterionList(Transponders.class, criterion);
 		} else {
 
-			TranspondersList = (ArrayList<Transponders>) service.ObjectsList(Transponders.class);
+			TranspondersList = service.ObjectsList(Transponders.class);
 
 		}
 
@@ -128,14 +128,14 @@ public class TranspondersListClass {
 
 		if (bean.filterSatelliteId != null) {
 
-			filterSatellite = (Satellites) contr.select(Satellites.class, bean.filterSatelliteId.longValue());
+			filterSatellite = contr.select(Satellites.class, bean.filterSatelliteId.longValue());
 
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
-			TranspondersList = (List<Transponders>) service.ObjectsCriterionList(Transponders.class, criterion);
+			TranspondersList = service.ObjectsCriterionList(Transponders.class, criterion);
 		}
 
 		else {
-			TranspondersList = (List<Transponders>) service.ObjectsList(Transponders.class);
+			TranspondersList = service.ObjectsList(Transponders.class);
 		}
 
 		SelectionMode = bean.SelectionMode;
@@ -156,7 +156,11 @@ public class TranspondersListClass {
 
 		List<Transponders> transList = new ArrayList<Transponders>();
 
-		wrapper.getTclist().stream().filter(t -> t.isChecked()).forEach(t -> transList.add(t.getTransponder()));
+		wrapper.getTclist().stream().filter(t -> t.isChecked()).forEach(t -> {
+			t.setContr(contr); // or we get NPE
+			transList.add(t.getTransponder());
+
+		});
 
 		AppContext.setSelectedTransponders(transList);
 
@@ -185,8 +189,7 @@ public class TranspondersListClass {
 
 		HashMap<Long, String> satMap = new HashMap<Long, String>();
 
-		((List<Satellites>) service.ObjectsList(Satellites.class)).stream()
-				.forEach(t -> satMap.put(new Long(t.getId()), t.getName()));
+		service.ObjectsList(Satellites.class).stream().forEach(t -> satMap.put(new Long(t.getId()), t.getName()));
 
 		return satMap;
 

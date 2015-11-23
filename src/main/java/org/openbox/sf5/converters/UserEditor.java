@@ -21,12 +21,10 @@ public class UserEditor extends PropertyEditorSupport {
 
 		Criterion criterion = Restrictions.eq("username", text);
 
-		@SuppressWarnings("unchecked")
-		List<Users> usersList = (List<Users>) service.ObjectsCriterionList(Users.class, criterion);
+		List<Users> usersList = service.ObjectsCriterionList(Users.class, criterion);
 		if (!usersList.isEmpty()) {
 			setValue(usersList.get(0));
 		}
 
 	}
-
 }

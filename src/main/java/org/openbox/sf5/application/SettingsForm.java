@@ -152,7 +152,7 @@ public class SettingsForm implements Serializable {
 
 		String username = secUser.getUsername();
 		Criterion criterion = Restrictions.eq("username", username);
-		List<Users> usersList = (List<Users>) service.ObjectsCriterionList(Users.class, criterion);
+		List<Users> usersList = service.ObjectsCriterionList(Users.class, criterion);
 		if (!usersList.isEmpty()) {
 			User = usersList.get(0);
 		}
@@ -161,10 +161,6 @@ public class SettingsForm implements Serializable {
 
 	@RequestMapping(params = "save", value = "/editsetting", method = RequestMethod.POST)
 	public String editSaveSetting(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
-
-		// here we must check session attributes selectedTransponders,
-		// selectedSettingsConversionPresentations
-		// and add them to model
 
 		return add(pSetting, model);
 
@@ -235,7 +231,6 @@ public class SettingsForm implements Serializable {
 	public String editSetting(@RequestParam(value = "id", required = true) long pid,
 			@RequestParam(value = "selectionmode", required = true) boolean pSelectionMode, Model model) {
 
-		// SettingsForm setting = null;
 		// check if we have this object in AppContext
 		SettingsForm checkCurrSetting = AppContext.getCurentlyEditedSetting();
 
@@ -326,9 +321,6 @@ public class SettingsForm implements Serializable {
 
 			selTransList.stream().forEach(t -> addNewLine(t, this));
 			// warning about final variable.
-			// for (Transponders t : selTransList) {
-			// addNewLine(t, this);
-			// }
 			// clean after processing
 			selTransList.clear();
 			AppContext.setSelectedTransponders(selTransList);
@@ -360,11 +352,8 @@ public class SettingsForm implements Serializable {
 		SettingsConversionPresentation newLineObject = new SettingsConversionPresentation(pSetting.SettingsObject);
 
 		newLineObject.setLineNumber(newLine);
-		// newLineObject.setTransponder(new Transponders()); // to prevent null
-		// pointer Exception
 		newLineObject.setTransponder(trans);
 		newLineObject.setNote("");
-		// newLineObject.editable = true;
 
 		dataSettingsConversion.add(newLineObject);
 
@@ -405,7 +394,6 @@ public class SettingsForm implements Serializable {
 
 		List<SettingsConversion> tpConversion = SettingsObject.getConversion();
 
-		// int initialSize = tpConversion.size();
 		ArrayList<SettingsConversion> deleteArray = new ArrayList<SettingsConversion>();
 
 		// define elements to be deleted
@@ -416,30 +404,18 @@ public class SettingsForm implements Serializable {
 		}
 
 		tpConversion.removeAll(deleteArray);
-		// TpConversion may be empty. Let's load it with values.
-		// if (tpConversion.size() == 0 && dataSettingsConversion.size() > 0) {
 
 		// we must refresh settings conversion
 		tpConversion.clear();
 		tpConversion.addAll(dataSettingsConversion);
 
-		// }
-
-		// int finalSize = tpConversion.size();
 		renumerateLines();
 
 		// save if row should be deleted from database.
-		// if (deleteArray.size() > 0) {
-		// if (initialSize != finalSize) {
 		SettingsObject.setConversion(tpConversion);
-		// ObjectsController contr = new ObjectsController();
-		contr.saveOrUpdate(SettingsObject);
-		// }
 
-		// String idStr = String.valueOf(SettingsObject.getId());
-		// String returnAddress = "redirect:/editsetting?id=" + idStr
-		// + "&selectionmode=false";
-		// return returnAddress;
+		contr.saveOrUpdate(SettingsObject);
+
 		model.addAttribute("bean", this);
 
 		return "editsetting";
@@ -705,7 +681,7 @@ public class SettingsForm implements Serializable {
 	public void readAndFillBeanfromSetting(long pid) {
 		// ObjectsController contr = new ObjectsController();
 		// setting = (Settings) contr.select(Settings.class, id);
-		SettingsObject = (Settings) contr.select(Settings.class, pid);
+		SettingsObject = contr.select(Settings.class, pid);
 
 		// fill form values.
 		writeFromSettingsObjectToSettingsForm();

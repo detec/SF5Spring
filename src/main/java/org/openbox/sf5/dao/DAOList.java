@@ -2,12 +2,17 @@ package org.openbox.sf5.dao;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 
 public interface DAOList {
 
-	public List<?> list(Class<?> clazz);
+	public <T> List<T> list(Class<T> type);
 
-	public List<?> restrictionList(Class<?> clazz, Criterion criterion);
+	public <T> List<T> restrictionList(Class<T> type, Criterion criterion);
+
+	public SessionFactory getSessionFactory();
+
+	public void setSessionFactory(SessionFactory sessionFactory);
 
 }

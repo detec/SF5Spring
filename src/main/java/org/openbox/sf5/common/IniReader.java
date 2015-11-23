@@ -75,30 +75,23 @@ public class IniReader implements Serializable {
 		// (\d{1,3})=(\d{5}),(H|V|L|R),(\d{4,5}),(\d{2,3}),(DVB-S|S2),(QPSK|8PSK)(\sACM)?
 
 		// Read File Line By Line
-		try {
-			while ((strLine = br.readLine()) != null) {
+		while ((strLine = br.readLine()) != null) {
 
-				if (strLine.equals("[SATTYPE]")) {
-					readSatData(br);
-				}
-
-				if (strLine.equals("[DVB]")) {
-					readTransponderData(br);
-				}
-
+			if (strLine.equals("[SATTYPE]")) {
+				readSatData(br);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+
+			if (strLine.equals("[DVB]")) {
+				readTransponderData(br);
+			}
+
 		}
 
-		// Close the input stream
-		try {
-			br.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		fstream.close();
+		br.close();
 
 		result = true;
+
 	}
 
 	private void readSatData(BufferedReader br) throws IOException {
@@ -125,7 +118,7 @@ public class IniReader implements Serializable {
 			contr.saveOrUpdate(sat);
 		} else {
 			// get sat
-			sat = (Satellites) contr.select(Satellites.class, rs.get(0));
+			sat = contr.select(Satellites.class, rs.get(0));
 		}
 
 		session.close();
@@ -137,7 +130,6 @@ public class IniReader implements Serializable {
 		Transponders selectedTrans = null;
 		// replace with Java core
 
-		// String transCountString = new StrBuilder(br.readLine()).substring(2);
 		String transCountString = br.readLine().substring(2);
 
 		int transCount = Integer.parseInt(transCountString);
@@ -263,7 +255,7 @@ public class IniReader implements Serializable {
 				else {
 
 					long transId = ((BigInteger) transIdList.get(0)).longValue();
-					selectedTrans = (Transponders) contr.select(Transponders.class, transId);
+					selectedTrans = contr.select(Transponders.class, transId);
 
 					// check if this trans changed to newly read trans
 					if (!selectedTrans.equals(newTrans)) {

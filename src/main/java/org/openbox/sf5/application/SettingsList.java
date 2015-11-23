@@ -37,6 +37,9 @@ public class SettingsList {
 	@Autowired
 	private ObjectsController contr;
 
+	@Autowired
+	private UserEditor UserEditor;
+
 	private Users currentUser;
 
 	private boolean SelectionMode;
@@ -51,7 +54,7 @@ public class SettingsList {
 
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
-		binder.registerCustomEditor(Users.class, new UserEditor());
+		binder.registerCustomEditor(Users.class, UserEditor);
 	}
 
 	// we cannot use such mapping with custom form.
@@ -68,7 +71,7 @@ public class SettingsList {
 		// Retrieve all settings
 		Criterion criterion = Restrictions.eq("User", currentUser);
 
-		settingsList = (List<Settings>) service.ObjectsCriterionList(Settings.class, criterion);
+		settingsList = service.ObjectsCriterionList(Settings.class, criterion);
 
 		// Attach settings to the Model
 		model.addAttribute("settings", settingsList);
@@ -98,7 +101,6 @@ public class SettingsList {
 	@RequestMapping(value = "/settings/delete", method = RequestMethod.GET)
 	public String deleteSetting(@RequestParam(value = "id", required = true) long id, Model model) {
 
-		// ObjectsController contr = new ObjectsController();
 		contr.remove(Settings.class, id);
 		return getSettings(model);
 	}
@@ -117,7 +119,7 @@ public class SettingsList {
 		String username = secUser.getUsername();
 		Criterion criterion = Restrictions.eq("username", username);
 
-		List<Users> usersList = (List<Users>) service.ObjectsCriterionList(Users.class, criterion);
+		List<Users> usersList = service.ObjectsCriterionList(Users.class, criterion);
 		if (!usersList.isEmpty()) {
 			currentUser = usersList.get(0);
 		}
