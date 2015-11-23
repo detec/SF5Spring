@@ -104,7 +104,7 @@ public class XMLExporter {
 		tpId.appendChild(getTpElements(doc, "Symbol",
 				String.valueOf(e.getTransponder().getSpeed())));
 		tpId.appendChild(getTpElements(doc, "Polar",
-				org.openbox.sf5.db.Polarization.getXMLpresentation(e
+				org.openbox.sf5.model.Polarization.getXMLpresentation(e
 						.getTransponder().getPolarization())));
 		return tpId;
 	}

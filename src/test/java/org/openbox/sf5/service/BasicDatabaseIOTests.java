@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -12,21 +13,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openbox.sf5.dao.DAO;
 import org.openbox.sf5.dao.DAOImpl;
-import org.openbox.sf5.db.CarrierFrequency;
-import org.openbox.sf5.db.DVBStandards;
-import org.openbox.sf5.db.Polarization;
-import org.openbox.sf5.db.RangesOfDVB;
-import org.openbox.sf5.db.Satellites;
-import org.openbox.sf5.db.Settings;
-import org.openbox.sf5.db.SettingsConversion;
-import org.openbox.sf5.db.Transponders;
-import org.openbox.sf5.db.TypesOfFEC;
-import org.openbox.sf5.db.Users;
+import org.openbox.sf5.model.AbstractDbEntity;
+import org.openbox.sf5.model.CarrierFrequency;
+import org.openbox.sf5.model.DVBStandards;
+import org.openbox.sf5.model.Polarization;
+import org.openbox.sf5.model.RangesOfDVB;
+import org.openbox.sf5.model.Satellites;
+import org.openbox.sf5.model.Settings;
+import org.openbox.sf5.model.SettingsConversion;
+import org.openbox.sf5.model.Transponders;
+import org.openbox.sf5.model.TypesOfFEC;
+import org.openbox.sf5.model.Users;
+import org.reflections.Reflections;
 import org.springframework.transaction.annotation.Transactional;
 
-public class AbstractServiceTests {
-
-	private SessionFactory sessionFactory;
+public class BasicDatabaseIOTests {
 
 	private DAO DAO;
 
@@ -37,24 +38,13 @@ public class AbstractServiceTests {
 	@Before
 	public void setUp() {
 
-		// A SessionFactory is set up once for an application!
-		// final StandardServiceRegistry registry = new
-		// StandardServiceRegistryBuilder().configure() // configures
-		// // settings
-		// // from
-		// // hibernate.cfg.xml
-		// .build();
-		// try {
-		// sessionFactory = new
-		// MetadataSources(registry).buildMetadata().buildSessionFactory();
-		// } catch (Exception e) {
-		// // The registry would be destroyed by the SessionFactory, but we had
-		// // trouble building the SessionFactory
-		// // so destroy it manually.
-		// StandardServiceRegistryBuilder.destroy(registry);
-		// }
-
 		Configuration configuration = new Configuration().configure();
+
+		Set<Class<? extends AbstractDbEntity>> annotatedSet = getAllSubclassesAbstractDbEntity();
+
+		// adding classes as annotated.
+		annotatedSet.stream().forEach(t -> configuration.addAnnotatedClass(t));
+
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
 		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
@@ -72,8 +62,13 @@ public class AbstractServiceTests {
 
 	}
 
-	// No autowiring in container-less tests
-	// protected ObjectsController contr = new ObjectsController();
+	public static Set<Class<? extends AbstractDbEntity>> getAllSubclassesAbstractDbEntity() {
+		Reflections reflections = new Reflections("org.openbox.sf5");
+
+		Set<Class<? extends AbstractDbEntity>> subTypes = reflections.getSubTypesOf(AbstractDbEntity.class);
+		return subTypes;
+
+	}
 
 	@Test
 	@Transactional

@@ -60,7 +60,7 @@
 	
 <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
     <property name="dataSource" ref="dataSource" />
-    <property name="packagesToScan" value="org.openbox.sf5.db" />   
+    <property name="packagesToScan" value="org.openbox.sf5.model" />   
     <property name="configLocation"> 
 		<value>classpath:hibernate.cfg.xml</value> 
     </property> 

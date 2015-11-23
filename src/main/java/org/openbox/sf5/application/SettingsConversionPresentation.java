@@ -1,7 +1,7 @@
 package org.openbox.sf5.application;
 
-import org.openbox.sf5.db.Settings;
-import org.openbox.sf5.db.SettingsConversion;
+import org.openbox.sf5.model.Settings;
+import org.openbox.sf5.model.SettingsConversion;
 
 // http://stackoverflow.com/questions/21988598/how-to-get-selected-tablecell-in-javafx-tableview
 // If you need data from multiple sources in single table, it is better to

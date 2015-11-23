@@ -13,6 +13,8 @@ import javax.validation.ValidatorFactory;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openbox.sf5.model.Settings;
+import org.openbox.sf5.model.Transponders;
 
 public class ValidatorTests {
 

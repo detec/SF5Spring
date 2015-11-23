@@ -1,4 +1,4 @@
-package org.openbox.sf5.db;
+package org.openbox.sf5.model;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -17,18 +17,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "SettingsConversion")
-// @Component
-public class SettingsConversion implements Serializable {
+public class SettingsConversion extends AbstractDbEntity implements Serializable {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -399944579251735871L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	// @SequenceGenerator(name = "my_entity_seq_gen", sequenceName =
-	// "catalog_seq")
 	private long id;
 
 	public long getId() {
@@ -49,7 +43,6 @@ public class SettingsConversion implements Serializable {
 	public SettingsConversion(Settings parent_id) {
 
 		this.parent_id = parent_id;
-		// this.LineNumber = LineNumber;
 
 	}
 
@@ -129,7 +122,6 @@ public class SettingsConversion implements Serializable {
 			long TheLineOfIntersection) {
 
 		this.parent_id = parent_id;
-		// this.LineNumber = LineNumber;
 		this.Transponder = Transponder;
 		this.Satindex = Satindex;
 		this.Tpindex = Tpindex;
@@ -166,6 +158,7 @@ public class SettingsConversion implements Serializable {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void setObjectFieldsFrom(SettingsConversion origObj) throws IllegalAccessException {
 		Field fields[];
 		Class curClass = origObj.getClass();

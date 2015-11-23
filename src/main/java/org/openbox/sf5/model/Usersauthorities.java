@@ -1,4 +1,4 @@
-package org.openbox.sf5.db;
+package org.openbox.sf5.model;
 
 import java.io.Serializable;
 
@@ -14,11 +14,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Usersauthorities")
-public class Usersauthorities implements Serializable {
+public class Usersauthorities extends AbstractDbEntity implements Serializable {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 108703010218830663L;
 
 	@Id
@@ -85,8 +82,7 @@ public class Usersauthorities implements Serializable {
 		this.LineNumber = LineNumber;
 	}
 
-	public Usersauthorities(String username, String authority, Users parent_id,
-			long pLine) {
+	public Usersauthorities(String username, String authority, Users parent_id, long pLine) {
 
 		this.username = username;
 		this.authority = authority;
@@ -117,8 +113,7 @@ public class Usersauthorities implements Serializable {
 			return false;
 		}
 		Usersauthorities otherUsersauthorities = (Usersauthorities) other;
-		if (otherUsersauthorities.username.equals(username)
-				&& otherUsersauthorities.authority.equals(authority)) {
+		if (otherUsersauthorities.username.equals(username) && otherUsersauthorities.authority.equals(authority)) {
 			return true;
 		} else {
 			return false;

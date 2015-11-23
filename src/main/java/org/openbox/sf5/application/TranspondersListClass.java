@@ -12,9 +12,9 @@ import org.openbox.sf5.converters.TransponderChoice;
 import org.openbox.sf5.converters.TransponderChoiceEditor;
 import org.openbox.sf5.converters.TransponderChoiceListWrapper;
 import org.openbox.sf5.converters.UserEditor;
-import org.openbox.sf5.db.Satellites;
-import org.openbox.sf5.db.Transponders;
-import org.openbox.sf5.db.Users;
+import org.openbox.sf5.model.Satellites;
+import org.openbox.sf5.model.Transponders;
+import org.openbox.sf5.model.Users;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +97,7 @@ public class TranspondersListClass {
 		if (filtersatid != null) {
 
 			if (filtersatid.longValue() != 0) {
-				// ObjectsController contr = new ObjectsController();
+
 				filterSatellite = (Satellites) contr.select(Satellites.class, filtersatid.longValue());
 			}
 		}
@@ -106,8 +106,7 @@ public class TranspondersListClass {
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
 			TranspondersList = (ArrayList<Transponders>) service.ObjectsCriterionList(Transponders.class, criterion);
 		} else {
-			// return (List<Transponders>) ObjectsListService
-			// .ObjectsList(Transponders.class);
+
 			TranspondersList = (ArrayList<Transponders>) service.ObjectsList(Transponders.class);
 
 		}
@@ -128,7 +127,7 @@ public class TranspondersListClass {
 	public String postGetTransponders(@ModelAttribute("bean") TranspondersListClass bean, Model model) {
 
 		if (bean.filterSatelliteId != null) {
-			// ObjectsController contr = new ObjectsController();
+
 			filterSatellite = (Satellites) contr.select(Satellites.class, bean.filterSatelliteId.longValue());
 
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);

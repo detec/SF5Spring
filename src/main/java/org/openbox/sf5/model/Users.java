@@ -1,4 +1,4 @@
-package org.openbox.sf5.db;
+package org.openbox.sf5.model;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,7 +19,7 @@ import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table(name = "Users")
-public class Users implements Serializable {
+public class Users extends AbstractDbEntity implements Serializable {
 
 	private static final long serialVersionUID = -6789497093756301793L;
 

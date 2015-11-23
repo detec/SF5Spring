@@ -1,4 +1,4 @@
-package org.openbox.sf5.db;
+package org.openbox.sf5.model;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Satellites")
-public class Satellites implements Serializable {
+public class Satellites extends AbstractDbEntity implements Serializable {
 
 	/**
 	 *

@@ -21,15 +21,15 @@ import org.hibernate.transform.Transformers;
 import org.hibernate.type.EnumType;
 import org.hibernate.type.Type;
 import org.hibernate.type.TypeResolver;
-import org.openbox.sf5.db.CarrierFrequency;
-import org.openbox.sf5.db.DVBStandards;
-import org.openbox.sf5.db.Polarization;
-import org.openbox.sf5.db.RangesOfDVB;
-import org.openbox.sf5.db.Satellites;
-import org.openbox.sf5.db.TheDVBRangeValues;
-import org.openbox.sf5.db.Transponders;
-import org.openbox.sf5.db.TypesOfFEC;
-import org.openbox.sf5.db.ValueOfTheCarrierFrequency;
+import org.openbox.sf5.model.CarrierFrequency;
+import org.openbox.sf5.model.DVBStandards;
+import org.openbox.sf5.model.Polarization;
+import org.openbox.sf5.model.RangesOfDVB;
+import org.openbox.sf5.model.Satellites;
+import org.openbox.sf5.model.TheDVBRangeValues;
+import org.openbox.sf5.model.Transponders;
+import org.openbox.sf5.model.TypesOfFEC;
+import org.openbox.sf5.model.ValueOfTheCarrierFrequency;
 import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,9 +78,6 @@ public class IniReader implements Serializable {
 		try {
 			while ((strLine = br.readLine()) != null) {
 
-				// Print the content on the console
-				// System.out.println (strLine);
-
 				if (strLine.equals("[SATTYPE]")) {
 					readSatData(br);
 				}
@@ -91,7 +88,6 @@ public class IniReader implements Serializable {
 
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -99,7 +95,6 @@ public class IniReader implements Serializable {
 		try {
 			br.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -111,7 +106,6 @@ public class IniReader implements Serializable {
 		br.readLine(); // 1=0130
 		String satline = br.readLine();
 
-
 		String satName = satline.substring(2); // 2 characters
 
 		String hql = "select id from Satellites where name = :name";
@@ -120,6 +114,7 @@ public class IniReader implements Serializable {
 
 		Query query = session.createQuery(hql);
 		query.setParameter("name", satName);
+		@SuppressWarnings("unchecked")
 		ArrayList<Long> rs = (ArrayList<Long>) query.list();
 
 		if (rs.isEmpty()) {
@@ -136,6 +131,7 @@ public class IniReader implements Serializable {
 		session.close();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void readTransponderData(BufferedReader br) throws IOException {
 
 		Transponders selectedTrans = null;
@@ -158,12 +154,12 @@ public class IniReader implements Serializable {
 			CarrierFrequency carrierEnum = null;
 
 			// 62=11919,V,27500,23,S2,8PSK ACM/VCM
-			int count = 0;
+			// int count = 0;
 			while (matcher.find()) {
-				count++;
+				// count++;
 
 				// name will be transponder number in
-				String Name = matcher.group(1);
+				// String Name = matcher.group(1);
 
 				// let's check, that it isn't Multistream
 				String Multistream = matcher.group(8);
@@ -199,7 +195,7 @@ public class IniReader implements Serializable {
 				// define range
 
 				Properties params = new Properties();
-				params.put("enumClass", "org.openbox.sf5.db.RangesOfDVB");
+				params.put("enumClass", RangesOfDVB.class.getName());
 				params.put("type",
 						"12"); /*
 								 * type 12 instructs to use the String
@@ -211,12 +207,8 @@ public class IniReader implements Serializable {
 
 				Session session = sessionFactory.openSession();
 
-				List<TheDVBRangeValues> range = session.createSQLQuery(sqltext)
-						// .addScalar("RangeOfDVB",
-						// Hibernate.custom(org.hibernate.type.EnumType.class,
-						// params))
-						.addScalar("RangeOfDVB", myEnumType).setParameter("Frequency", Frequency)
-						// .setResultTransformer(Transformers.aliasToBean(RangesOfDVB.class)).list();
+				List<TheDVBRangeValues> range = session.createSQLQuery(sqltext).addScalar("RangeOfDVB", myEnumType)
+						.setParameter("Frequency", Frequency)
 						.setResultTransformer(Transformers.aliasToBean(TheDVBRangeValues.class)).list();
 
 				if (!range.isEmpty()) {
@@ -227,7 +219,7 @@ public class IniReader implements Serializable {
 
 				// get carrier frequency
 				params = new Properties();
-				params.put("enumClass", "org.openbox.sf5.db.CarrierFrequency");
+				params.put("enumClass", CarrierFrequency.class.getName());
 				params.put("type",
 						"12"); /*
 								 * type 12 instructs to use the String
@@ -242,7 +234,7 @@ public class IniReader implements Serializable {
 				List<ValueOfTheCarrierFrequency> carrierList = session.createSQLQuery(sqltext)
 						.addScalar("TypeOfCarrierFrequency", myEnumType).setParameter("Frequency", Frequency)
 						.setParameter("KindOfPolarization", Polarization.getPolarizationKind(aPolarization).ordinal())
-						// .setResultTransformer(Transformers.aliasToBean(CarrierFrequency.class)).list();
+
 						.setResultTransformer(Transformers.aliasToBean(ValueOfTheCarrierFrequency.class)).list();
 
 				if (!carrierList.isEmpty()) {
@@ -256,10 +248,9 @@ public class IniReader implements Serializable {
 				sqltext = "Select id FROM Transponders where frequency = :Frequency and satellite = :satelliteId";
 
 				List<Object> transIdList = new ArrayList<>();
-				transIdList = session.createSQLQuery(sqltext)
-						// .addScalar("id")
-						.setParameter("Frequency", Frequency).setParameter("satelliteId", sat.getId())
-						// .setResultTransformer(Transformers.aliasToBean(Transponders.class))
+				transIdList = session.createSQLQuery(sqltext).setParameter("Frequency", Frequency)
+						.setParameter("satelliteId", sat.getId())
+
 						.list();
 
 				Transponders newTrans = new Transponders(Frequency, aPolarization, FEC, carrierEnum, Speed, DVBStandard,

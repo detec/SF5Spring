@@ -1,4 +1,4 @@
-package org.openbox.sf5.db;
+package org.openbox.sf5.model;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -18,18 +18,13 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Transponders")
-// @Component
-public class Transponders implements Serializable {
 
-	/**
-	 *
-	 */
+public class Transponders extends AbstractDbEntity implements Serializable {
+
 	private static final long serialVersionUID = -3945460836260580586L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	// @SequenceGenerator(name = "my_entity_seq_gen", sequenceName =
-	// "catalog_seq")
 	private long id;
 
 	public long getId() {
@@ -188,6 +183,7 @@ public class Transponders implements Serializable {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void setObjectFieldsFrom(Transponders origObj) throws IllegalAccessException {
 		Field fields[];
 		Class curClass = origObj.getClass();

@@ -217,6 +217,11 @@
 		<version>${hibernate.version}</version>
 	</dependency>
 	<dependency>
+    	<groupId>org.reflections</groupId>
+    	<artifactId>reflections</artifactId>
+    	<version>0.9.10</version>
+	</dependency>
+	<dependency>
 		<groupId>commons-logging</groupId>
 		<artifactId>commons-logging</artifactId>
 		<version>1.2</version>

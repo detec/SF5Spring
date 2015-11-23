@@ -1,4 +1,4 @@
-package org.openbox.sf5.db;
+package org.openbox.sf5.model;
 
 import java.io.Serializable;
 
@@ -9,11 +9,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ValueOfTheCarrierFrequency")
-public class ValueOfTheCarrierFrequency implements Serializable {
+public class ValueOfTheCarrierFrequency extends AbstractDbEntity implements Serializable {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -6095308495476745108L;
 
 	@Id
@@ -23,8 +20,7 @@ public class ValueOfTheCarrierFrequency implements Serializable {
 		return TypeOfCarrierFrequency;
 	}
 
-	public void setTypeOfCarrierFrequency(
-			CarrierFrequency TypeOfCarrierFrequency) {
+	public void setTypeOfCarrierFrequency(CarrierFrequency TypeOfCarrierFrequency) {
 		this.TypeOfCarrierFrequency = TypeOfCarrierFrequency;
 	}
 
@@ -53,9 +49,8 @@ public class ValueOfTheCarrierFrequency implements Serializable {
 		this.UpperThreshold = UpperThreshold;
 	}
 
-	public ValueOfTheCarrierFrequency(CarrierFrequency TypeOfCarrierFrequency,
-			KindsOfPolarization Polarization, long LowerThreshold,
-			long UpperThreshold) {
+	public ValueOfTheCarrierFrequency(CarrierFrequency TypeOfCarrierFrequency, KindsOfPolarization Polarization,
+			long LowerThreshold, long UpperThreshold) {
 
 		this.TypeOfCarrierFrequency = TypeOfCarrierFrequency;
 		this.Polarization = Polarization;

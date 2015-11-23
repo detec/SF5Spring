@@ -1,6 +1,7 @@
 package org.openbox.sf5.application;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -29,13 +30,13 @@ import org.openbox.sf5.converters.SqlTimestampPropertyEditor;
 import org.openbox.sf5.converters.TransponderChoiceEditor;
 import org.openbox.sf5.converters.UserEditor;
 import org.openbox.sf5.converters.VersionOfTheDVBEditor;
-import org.openbox.sf5.db.CarrierFrequency;
-import org.openbox.sf5.db.DVBStandards;
-import org.openbox.sf5.db.Settings;
-import org.openbox.sf5.db.SettingsConversion;
-import org.openbox.sf5.db.Transponders;
-import org.openbox.sf5.db.TypesOfFEC;
-import org.openbox.sf5.db.Users;
+import org.openbox.sf5.model.CarrierFrequency;
+import org.openbox.sf5.model.DVBStandards;
+import org.openbox.sf5.model.Settings;
+import org.openbox.sf5.model.SettingsConversion;
+import org.openbox.sf5.model.Transponders;
+import org.openbox.sf5.model.TypesOfFEC;
+import org.openbox.sf5.model.Users;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @PreAuthorize("hasRole('ROLE_USER')")
 @Scope("request")
-public class SettingsForm {
+public class SettingsForm implements Serializable {
+
+	private static final long serialVersionUID = 3787216569270743476L;
 
 	@Autowired
 	private UserEditor UserEditor;
@@ -73,6 +76,9 @@ public class SettingsForm {
 	@Autowired
 	private TransponderChoiceEditor TransponderChoiceEditor;
 
+	@Autowired
+	private Intersections intersections;
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		// exactly this order should be maintained!
@@ -80,8 +86,7 @@ public class SettingsForm {
 
 		binder.registerCustomEditor(Users.class, UserEditor);
 		binder.registerCustomEditor(Transponders.class, TransponderChoiceEditor);
-		// binder.registerCustomEditor(TransponderChoice.class,
-		// new TransponderChoiceEditor());
+
 		binder.registerCustomEditor(java.sql.Timestamp.class, new SqlTimestampPropertyEditor());
 		binder.registerCustomEditor(Settings.class, SettingsEditor);
 		binder.registerCustomEditor(TypesOfFEC.class, new FECEditor());
@@ -562,7 +567,7 @@ public class SettingsForm {
 
 		saveSettingWithoutContext(pSetting);
 
-		int rows = Intersections.checkIntersection(dataSettingsConversion, SettingsObject);
+		int rows = intersections.checkIntersection(dataSettingsConversion, SettingsObject);
 
 		// reloadDataSettingsConversion();
 
