@@ -4,16 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 import org.junit.Before;
 import org.junit.Test;
-import org.openbox.sf5.dao.DAO;
-import org.openbox.sf5.dao.DAOImpl;
-import org.openbox.sf5.model.AbstractDbEntity;
+import org.openbox.sf5.json.service.AbstractJsonizerTest;
 import org.openbox.sf5.model.CarrierFrequency;
 import org.openbox.sf5.model.DVBStandards;
 import org.openbox.sf5.model.Polarization;
@@ -24,58 +18,47 @@ import org.openbox.sf5.model.SettingsConversion;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.TypesOfFEC;
 import org.openbox.sf5.model.Users;
-import org.reflections.Reflections;
 import org.springframework.transaction.annotation.Transactional;
 
-public class BasicDatabaseIOTests {
+public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 
-	private DAO DAO;
-
-	private ObjectService service;
-
-	private ObjectsController contr;
 
 	@Before
 	public void setUp() {
 
-		Configuration configuration = new Configuration().configure();
-
-		Set<Class<? extends AbstractDbEntity>> annotatedSet = getAllSubclassesAbstractDbEntity();
-
-		// adding classes as annotated.
-		annotatedSet.stream().forEach(t -> configuration.addAnnotatedClass(t));
-
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-
-		sessionFactory.openSession();
-
-		DAO = new DAOImpl();
-		DAO.setSessionFactory(sessionFactory);
-
-		service = new ObjectServiceImpl();
-		service.setDAO(DAO);
-
-		contr = new ObjectsController();
-		contr.setService(service);
-
-	}
-
-	public static Set<Class<? extends AbstractDbEntity>> getAllSubclassesAbstractDbEntity() {
-		Reflections reflections = new Reflections("org.openbox.sf5");
-
-		Set<Class<? extends AbstractDbEntity>> subTypes = reflections.getSubTypesOf(AbstractDbEntity.class);
-		return subTypes;
+		super.setUpAbstract();
+//		Configuration configuration = new Configuration().configure();
+//
+//		Set<Class<? extends AbstractDbEntity>> annotatedSet = getAllSubclassesAbstractDbEntity();
+//
+//		// adding classes as annotated.
+//		annotatedSet.stream().forEach(t -> configuration.addAnnotatedClass(t));
+//
+//		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
+//				.applySettings(configuration.getProperties());
+//		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
+//
+//		sessionFactory.openSession();
+//
+//		DAO = new DAOImpl();
+//		DAO.setSessionFactory(sessionFactory);
+//
+//		service = new ObjectServiceImpl();
+//		service.setDAO(DAO);
+//
+//		contr = new ObjectsController();
+//		contr.setService(service);
 
 	}
+
+
 
 	@Test
 	@Transactional
 	public void shouldInsertSatellite() {
 
 		Satellites newSat = getNewSatellite();
-		contr.saveOrUpdate(newSat);
+		objectController.saveOrUpdate(newSat);
 		assertThat(newSat.getId()).isNotEqualTo(0);
 	}
 
@@ -83,7 +66,7 @@ public class BasicDatabaseIOTests {
 	@Transactional
 	public void shouldInsertTransponder() {
 		Transponders trans = getNewTransponder();
-		contr.saveOrUpdate(trans);
+		objectController.saveOrUpdate(trans);
 		assertThat(trans.getId()).isNotEqualTo(0);
 
 	}
@@ -92,7 +75,7 @@ public class BasicDatabaseIOTests {
 	@Transactional
 	public void shouldInsertSetting() {
 		Settings setting = getNewSetting();
-		contr.saveOrUpdate(setting);
+		objectController.saveOrUpdate(setting);
 		assertThat(setting.getId()).isNotEqualTo(0);
 	}
 
@@ -105,7 +88,7 @@ public class BasicDatabaseIOTests {
 
 	private Transponders getNewTransponder() {
 		Satellites newSat = getNewSatellite();
-		contr.saveOrUpdate(newSat);
+		objectController.saveOrUpdate(newSat);
 
 		Transponders trans = new Transponders();
 		trans.setCarrier(CarrierFrequency.Top);
@@ -123,7 +106,7 @@ public class BasicDatabaseIOTests {
 	private SettingsConversion getNewSettingsConversionLine() {
 		Transponders trans = getNewTransponder();
 		trans.setSpeed(10500);
-		contr.saveOrUpdate(trans);
+		objectController.saveOrUpdate(trans);
 
 		SettingsConversion sc = new SettingsConversion();
 		sc.setLineNumber(1);
@@ -145,7 +128,7 @@ public class BasicDatabaseIOTests {
 
 	private Settings getNewSetting() {
 		Users user = getNewUser();
-		contr.saveOrUpdate(user);
+		objectController.saveOrUpdate(user);
 
 		Settings setting = new Settings();
 		setting.setName("Test");
