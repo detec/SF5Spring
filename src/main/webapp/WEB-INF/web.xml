@@ -33,10 +33,10 @@
     <param-name>spring.profiles.active</param-name>
     <param-value>production</param-value>
   </context-param>
-  <context-param>
-    <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
-    <param-value>true</param-value>
-  </context-param>
+<!--   <context-param> -->
+<!--     <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name> -->
+<!--     <param-value>true</param-value> -->
+<!--   </context-param> -->
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
@@ -74,10 +74,4 @@
     <url-pattern>/login</url-pattern>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
-<!--   <jsp-config> -->
-<!--     <taglib> -->
-<!--       <taglib-uri>http://www.springframework.org/security/tags</taglib-uri> -->
-<!--       <taglib-location>/WEB-INF/lib/security.tld</taglib-location> -->
-<!--     </taglib> -->
-<!--   </jsp-config> -->
 </web-app>

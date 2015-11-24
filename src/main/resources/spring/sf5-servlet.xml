@@ -31,6 +31,8 @@
 <context:component-scan base-package="org.openbox.sf5.service" />
 <context:component-scan base-package="org.openbox.sf5.common" />
 <context:component-scan base-package="org.openbox.sf5.converters" />
+<context:component-scan base-package="org.openbox.sf5.json.endpoints" />
+<context:component-scan base-package="org.openbox.sf5.json.service" />
 
 <!-- Configurer that replaces ${...} placeholders with values from a properties file -->
 <!-- (in this case, JDBC-related settings for the JPA EntityManager definition below) -->
@@ -82,6 +84,8 @@
 	
 <bean id="adminCheck" class="org.openbox.sf5.service.AdminCheck" init-method="initialize"></bean>
 
+
+
 <!-- Special TableFiller bean to insert default values  Substituted with @Component annotation -->
 <!-- <bean id="tableFiller" class="org.openbox.sf5.common.TableFiller"></bean> -->
  
@@ -97,8 +101,13 @@
 
 	<security:intercept-url pattern="/login" access="isAnonymous()"/>
 	<security:intercept-url pattern="/register" access="isAnonymous()"/>
-
+	
 	<security:intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
+	
+	<!-- Anonymous access to json endpoints. -->
+	<security:intercept-url pattern="/json/*" access="isAnonymous()"/>
+	
+	
 	<security:intercept-url pattern="/transponders*" access="hasRole('ROLE_USER')" />
 	<security:logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID" invalidate-session="true"/>
 	

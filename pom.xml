@@ -119,6 +119,7 @@
   		<spring.version>4.2.2.RELEASE</spring.version>
   		<spring.security.version>4.0.2.RELEASE</spring.security.version>
   		<hibernate.version>4.3.11.Final</hibernate.version>
+  		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	</properties>
 	</profile>
 	<profile>
@@ -129,6 +130,7 @@
   		<spring.version>4.2.1.RELEASE</spring.version>
   		<spring.security.version>4.0.2.RELEASE</spring.security.version>
   		<hibernate.version>4.3.11.Final</hibernate.version>
+  		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
  	</properties>
 	</profile>
 </profiles>
@@ -206,6 +208,11 @@
 		<artifactId>jstl</artifactId>
 		<version>1.2</version>
 	</dependency>
+	<dependency>
+    	<groupId>org.glassfish</groupId>
+    	<artifactId>javax.json</artifactId>
+    	<version>1.0.4</version>
+</dependency>
   	<dependency>
 		<groupId>com.h2database</groupId>
 		<artifactId>h2</artifactId>
@@ -221,6 +228,18 @@
     	<artifactId>reflections</artifactId>
     	<version>0.9.10</version>
 	</dependency>
+	<dependency>
+    	<groupId>com.fasterxml.jackson.core</groupId>
+    	<artifactId>jackson-databind</artifactId>
+    	<version>2.6.3</version>
+	</dependency>
+	<dependency>
+		<groupId>com.fasterxml.jackson.jaxrs</groupId>
+		<artifactId>jackson-jaxrs-json-provider</artifactId>
+		<version>2.6.3</version>
+		<scope>test</scope>
+	</dependency>
+	
 	<dependency>
 		<groupId>commons-logging</groupId>
 		<artifactId>commons-logging</artifactId>

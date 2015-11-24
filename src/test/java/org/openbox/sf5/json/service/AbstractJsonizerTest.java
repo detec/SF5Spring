@@ -23,6 +23,8 @@ public abstract class AbstractJsonizerTest {
 
 	public void setUpAbstract() {
 
+		disableLogsWhenTesting();
+
 		Configuration configuration = new Configuration().configure();
 
 		Set<Class<? extends AbstractDbEntity>> annotatedSet = getAllSubclassesAbstractDbEntity();
@@ -52,6 +54,11 @@ public abstract class AbstractJsonizerTest {
 
 		Set<Class<? extends AbstractDbEntity>> subTypes = reflections.getSubTypesOf(AbstractDbEntity.class);
 		return subTypes;
+
+	}
+
+	public void disableLogsWhenTesting() {
+		java.util.logging.Logger.getLogger("org.hibernate").setLevel(java.util.logging.Level.OFF);
 
 	}
 }
