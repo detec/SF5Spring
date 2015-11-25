@@ -41,15 +41,6 @@ public class ValidatorTests {
 
 		Iterator<ConstraintViolation<Settings>> settingIterator = constraintViolations.iterator();
 
-		// check user
-		// ConstraintViolation<Settings> violation = settingIterator.next();
-		// assertThat(violation.getPropertyPath().toString()).isEqualTo("User");
-		// assertThat(violation.getMessage()).isEqualTo("may not be null");
-		//
-		// violation = settingIterator.next();
-		// assertThat(violation.getPropertyPath().toString()).isEqualTo("Name");
-		// assertThat(violation.getMessage()).isEqualTo("may not be empty");
-
 		while (settingIterator.hasNext()) {
 			ConstraintViolation<Settings> settingViolation = settingIterator.next();
 			String propertyPath = settingViolation.getPropertyPath().toString();
@@ -62,8 +53,6 @@ public class ValidatorTests {
 		Set<ConstraintViolation<Transponders>> trsnapondersConstraintViolations = validator.validate(trans);
 		assertThat(trsnapondersConstraintViolations.size()).isEqualTo(7);
 		// we move iterator in the cycle
-		// ConstraintViolation<Transponders> transViolation =
-		// trsnapondersConstraintViolations.iterator().next();
 
 		Iterator<ConstraintViolation<Transponders>> iterator = trsnapondersConstraintViolations.iterator();
 

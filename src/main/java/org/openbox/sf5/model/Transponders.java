@@ -16,9 +16,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "Transponders")
-
 public class Transponders extends AbstractDbEntity implements Serializable {
 
 	private static final long serialVersionUID = -3945460836260580586L;
@@ -38,6 +39,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 
 	@Column(name = "Frequency", unique = false, nullable = false, precision = 5)
 	@Min(value = 2000)
+	@JsonProperty("Frequency")
 	private long Frequency;
 
 	public long getFrequency() {
@@ -56,6 +58,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	@NotNull
+	@JsonProperty("Polarization")
 	private Polarization Polarization;
 
 	public Polarization getPolarization() {
@@ -68,6 +71,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = true)
+	@JsonProperty("FEC")
 	private TypesOfFEC FEC;
 
 	public TypesOfFEC getFEC() {
@@ -81,6 +85,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	@NotNull
+	@JsonProperty("Carrier")
 	private CarrierFrequency Carrier;
 
 	public CarrierFrequency getCarrier() {
@@ -93,6 +98,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 
 	@Column(name = "Speed", unique = false, nullable = false, precision = 5)
 	@Min(value = 1000)
+	@JsonProperty("Speed")
 	private long Speed;
 
 	public long getSpeed() {
@@ -106,6 +112,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	@NotNull
+	@JsonProperty("VersionOfTheDVB")
 	private DVBStandards VersionOfTheDVB;
 
 	public DVBStandards getVersionOfTheDVB() {
@@ -119,6 +126,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	@NotNull
+	@JsonProperty("RangeOfDVB")
 	private RangesOfDVB RangeOfDVB;
 
 	public RangesOfDVB getRangeOfDVB() {
@@ -132,6 +140,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "Satellite", unique = false, nullable = false)
 	@NotNull
+	@JsonProperty("Satellite")
 	private Satellites Satellite;
 
 	public Satellites getSatellite() {
@@ -183,7 +192,6 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void setObjectFieldsFrom(Transponders origObj) throws IllegalAccessException {
 		Field fields[];
 		Class curClass = origObj.getClass();

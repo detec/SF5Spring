@@ -120,6 +120,7 @@
   		<spring.security.version>4.0.2.RELEASE</spring.security.version>
   		<hibernate.version>4.3.11.Final</hibernate.version>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  		<jackson.version>2.6.3</jackson.version>
   	</properties>
 	</profile>
 	<profile>
@@ -131,6 +132,7 @@
   		<spring.security.version>4.0.2.RELEASE</spring.security.version>
   		<hibernate.version>4.3.11.Final</hibernate.version>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  		<jackson.version>2.6.3</jackson.version>
  	</properties>
 	</profile>
 </profiles>
@@ -208,11 +210,18 @@
 		<artifactId>jstl</artifactId>
 		<version>1.2</version>
 	</dependency>
+	<!--  or we get package javax.ws.rs does not exist -->
+	<dependency>
+    	<groupId>javax</groupId>
+    	<artifactId>javaee-web-api</artifactId>
+    	<version>7.0</version>
+    	<scope>provided</scope>
+	</dependency>
 	<dependency>
     	<groupId>org.glassfish</groupId>
     	<artifactId>javax.json</artifactId>
     	<version>1.0.4</version>
-</dependency>
+	</dependency>
   	<dependency>
 		<groupId>com.h2database</groupId>
 		<artifactId>h2</artifactId>
@@ -227,6 +236,7 @@
     	<groupId>org.reflections</groupId>
     	<artifactId>reflections</artifactId>
     	<version>0.9.10</version>
+    	<scope>test</scope>
 	</dependency>
 	<dependency>
     	<groupId>com.fasterxml.jackson.core</groupId>
@@ -234,12 +244,52 @@
     	<version>2.6.3</version>
 	</dependency>
 	<dependency>
+  		<groupId>com.fasterxml.jackson.datatype</groupId>
+  		<artifactId>jackson-datatype-jdk8</artifactId>
+  		<version>${jackson.version}</version>
+	</dependency>
+	<dependency>
+    	<groupId>com.fasterxml.jackson.datatype</groupId>
+    	<artifactId>jackson-datatype-jsr310</artifactId>
+    	<version>2.6.1</version>
+	</dependency>  
+	<dependency>
 		<groupId>com.fasterxml.jackson.jaxrs</groupId>
 		<artifactId>jackson-jaxrs-json-provider</artifactId>
-		<version>2.6.3</version>
+		<version>${jackson.version}</version>
 		<scope>test</scope>
 	</dependency>
-	
+	<!-- This is needed to run Hibernate validator -->
+	<dependency>
+		<groupId>org.glassfish.web</groupId>
+		<artifactId>el-impl</artifactId>
+		<version>2.2</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.glassfish.jersey.core</groupId>
+		<artifactId>jersey-client</artifactId>
+		<version>2.22.1</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.glassfish.jersey.media</groupId>
+		<artifactId>jersey-media-json-jackson</artifactId>
+		<version>2.22.1</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.glassfish.jersey.media</groupId>
+		<artifactId>jersey-media-json-processing</artifactId>
+		<version>2.22.1</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.glassfish.hk2</groupId>
+		<artifactId>hk2-api</artifactId>
+		<version>2.4.0-b33</version>
+		<scope>test</scope>
+	</dependency>
 	<dependency>
 		<groupId>commons-logging</groupId>
 		<artifactId>commons-logging</artifactId>
@@ -260,16 +310,19 @@
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
 		<version>4.12</version>
+		<scope>test</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.assertj</groupId>
 		<artifactId>assertj-core</artifactId>
 		<version>3.2.0</version>
+		<scope>test</scope>
 	</dependency>
 	<dependency>
    		<groupId>javax.el</groupId>
    		<artifactId>javax.el-api</artifactId>
  		<version>3.0.0</version>
+ 		<scope>test</scope>
 	</dependency> 
 	<dependency>
 		<groupId>javax.transaction</groupId>
