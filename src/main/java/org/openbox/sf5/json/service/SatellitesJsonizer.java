@@ -22,17 +22,10 @@ public class SatellitesJsonizer implements Serializable {
 	}
 
 	public List<Satellites> getSatellitesByArbitraryFilter(String fieldName, String typeValue) {
-		String returnString = "";
 
 		Criterion criterion = criterionService.getCriterionByClassFieldAndStringValue(Satellites.class, fieldName,
 				typeValue);
 		List<Satellites> satList = listService.ObjectsCriterionList(Satellites.class, criterion);
-		// if (criterion == null) {
-		// return returnString;
-		// }
-		// returnString = JsonObjectFiller.getJsonFromObjectsList(satList);
-
-		// return returnString;
 
 		return satList;
 	}

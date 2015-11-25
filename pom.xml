@@ -210,6 +210,25 @@
 		<artifactId>jstl</artifactId>
 		<version>1.2</version>
 	</dependency>
+	<dependency>
+		<groupId>javax.servlet.jsp.jstl</groupId>
+		<artifactId>javax.servlet.jsp.jstl-api</artifactId>
+		<version>1.2.1</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>javax.servlet.jsp</groupId>
+		<artifactId>jsp-api</artifactId>
+		<version>2.2.1-b03</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.taglibs</groupId>
+		<artifactId>taglibs-standard-impl</artifactId>
+		<version>1.2.5</version>
+		<scope>provided</scope>
+	</dependency>
+
 	<!--  or we get package javax.ws.rs does not exist -->
 	<dependency>
     	<groupId>javax</groupId>
@@ -236,7 +255,6 @@
     	<groupId>org.reflections</groupId>
     	<artifactId>reflections</artifactId>
     	<version>0.9.10</version>
-    	<scope>test</scope>
 	</dependency>
 	<dependency>
     	<groupId>com.fasterxml.jackson.core</groupId>
@@ -257,32 +275,27 @@
 		<groupId>com.fasterxml.jackson.jaxrs</groupId>
 		<artifactId>jackson-jaxrs-json-provider</artifactId>
 		<version>${jackson.version}</version>
-		<scope>test</scope>
 	</dependency>
 	<!-- This is needed to run Hibernate validator -->
 	<dependency>
 		<groupId>org.glassfish.web</groupId>
 		<artifactId>el-impl</artifactId>
 		<version>2.2</version>
-		<scope>test</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.glassfish.jersey.core</groupId>
 		<artifactId>jersey-client</artifactId>
 		<version>2.22.1</version>
-		<scope>test</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.glassfish.jersey.media</groupId>
 		<artifactId>jersey-media-json-jackson</artifactId>
 		<version>2.22.1</version>
-		<scope>test</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.glassfish.jersey.media</groupId>
 		<artifactId>jersey-media-json-processing</artifactId>
 		<version>2.22.1</version>
-		<scope>test</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.glassfish.hk2</groupId>
@@ -310,13 +323,11 @@
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
 		<version>4.12</version>
-		<scope>test</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.assertj</groupId>
 		<artifactId>assertj-core</artifactId>
 		<version>3.2.0</version>
-		<scope>test</scope>
 	</dependency>
 	<dependency>
    		<groupId>javax.el</groupId>

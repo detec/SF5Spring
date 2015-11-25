@@ -38,7 +38,8 @@
 <!-- (in this case, JDBC-related settings for the JPA EntityManager definition below) -->
 <context:property-placeholder location="classpath:data-access.properties" system-properties-mode="OVERRIDE"/>
 
-<mvc:annotation-driven />
+<mvc:annotation-driven  enable-matrix-variables="true" />
+
  
 
 <bean id="viewResolver"
