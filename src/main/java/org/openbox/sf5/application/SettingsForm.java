@@ -543,7 +543,13 @@ public class SettingsForm implements Serializable {
 
 		saveSettingWithoutContext(pSetting);
 
-		int rows = intersections.checkIntersection(dataSettingsConversion, SettingsObject);
+		List<SettingsConversion> scList = new ArrayList<SettingsConversion>();
+		dataSettingsConversion.stream().forEach(t -> {
+			SettingsConversion sc = t;
+			scList.add(sc);
+		});
+
+		int rows = intersections.checkIntersection(scList, SettingsObject);
 
 		// reloadDataSettingsConversion();
 

@@ -45,7 +45,7 @@ public class IniReader implements Serializable {
 	private SessionFactory sessionFactory;
 
 	@Autowired
-	private ObjectsController contr;
+	private ObjectsController objectController;
 
 	final String REGEX = "(\\d{1,3})=(\\d{5}),(H|V|L|R),(\\d{4,5}),(\\d{2}),(DVB-S|S2),(QPSK|8PSK)(\\sACM)?";
 	private static Pattern pattern;
@@ -115,10 +115,10 @@ public class IniReader implements Serializable {
 			sat = new Satellites(satName);
 
 			// saving satellite
-			contr.saveOrUpdate(sat);
+			objectController.saveOrUpdate(sat);
 		} else {
 			// get sat
-			sat = contr.select(Satellites.class, rs.get(0));
+			sat = objectController.select(Satellites.class, rs.get(0));
 		}
 
 		session.close();
@@ -249,13 +249,13 @@ public class IniReader implements Serializable {
 						rangeEnum, sat);
 
 				if (transIdList.isEmpty()) {
-					contr.saveOrUpdate(newTrans);
+					objectController.saveOrUpdate(newTrans);
 				}
 
 				else {
 
 					long transId = ((BigInteger) transIdList.get(0)).longValue();
-					selectedTrans = contr.select(Transponders.class, transId);
+					selectedTrans = objectController.select(Transponders.class, transId);
 
 					// check if this trans changed to newly read trans
 					if (!selectedTrans.equals(newTrans)) {
@@ -269,7 +269,7 @@ public class IniReader implements Serializable {
 						selectedTrans.setSatellite(sat);
 						selectedTrans.setSpeed(Speed);
 						selectedTrans.setVersionOfTheDVB(DVBStandard);
-						contr.update(selectedTrans);
+						objectController.update(selectedTrans);
 					}
 
 				}
@@ -277,6 +277,22 @@ public class IniReader implements Serializable {
 				session.close();
 			}
 		}
+	}
+
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	public ObjectsController getObjectController() {
+		return objectController;
+	}
+
+	public void setObjectController(ObjectsController objectController) {
+		this.objectController = objectController;
 	}
 
 	private String filepath;

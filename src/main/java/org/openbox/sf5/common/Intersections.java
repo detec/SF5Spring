@@ -13,7 +13,6 @@ import java.util.Set;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.jdbc.ReturningWork;
-import org.openbox.sf5.application.SettingsConversionPresentation;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.SettingsConversion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,15 @@ public class Intersections {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	public int checkIntersection(List<SettingsConversionPresentation> dataSettingsConversion, Settings Object)
-			throws SQLException {
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	public int checkIntersection(List<SettingsConversion> dataSettingsConversion, Settings Object) throws SQLException {
 
 		ReturningWork<ResultSet> rowsReturningWork = new ReturningWork<ResultSet>() {
 
