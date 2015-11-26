@@ -7,19 +7,28 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.openbox.sf5.dao.DAO;
 import org.openbox.sf5.dao.DAOImpl;
+import org.openbox.sf5.dao.DAOList;
+import org.openbox.sf5.dao.DAOListImpl;
 import org.openbox.sf5.model.AbstractDbEntity;
 import org.openbox.sf5.service.ObjectService;
 import org.openbox.sf5.service.ObjectServiceImpl;
 import org.openbox.sf5.service.ObjectsController;
+import org.openbox.sf5.service.ObjectsListService;
 import org.reflections.Reflections;
 
 public abstract class AbstractJsonizerTest {
 
 	public DAO DAO;
 
+	public DAOList DAOList;
+
 	public ObjectService Service;
 
 	public ObjectsController objectController;
+
+	public ObjectsListService listService;
+
+	public SessionFactory sessionFactory;
 
 	public void setUpAbstract() {
 
@@ -34,7 +43,7 @@ public abstract class AbstractJsonizerTest {
 
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
+		sessionFactory = configuration.buildSessionFactory(builder.build());
 
 		sessionFactory.openSession();
 
@@ -46,6 +55,12 @@ public abstract class AbstractJsonizerTest {
 
 		objectController = new ObjectsController();
 		objectController.setService(Service);
+
+		DAOList = new DAOListImpl();
+		DAOList.setSessionFactory(sessionFactory);
+
+		listService = new ObjectsListService();
+		listService.setDao(DAOList);
 
 	}
 

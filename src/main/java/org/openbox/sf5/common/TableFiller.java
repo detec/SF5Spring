@@ -21,13 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public final class TableFiller implements Serializable {
 
-	private static final long serialVersionUID = 8464537239822198552L;
 
-	@Autowired
-	private ObjectsController contr;
-
-	@Autowired
-	private SessionFactory sessionFactory;
 
 	public TableFiller() {
 
@@ -62,7 +56,7 @@ public final class TableFiller implements Serializable {
 
 				}
 
-				contr.add(newRecord);
+				objectController.add(newRecord);
 			}
 
 		}
@@ -75,7 +69,7 @@ public final class TableFiller implements Serializable {
 				.add(Restrictions.eq("Polarization", KindsOfPolarization.Pie)).list();
 		if (rec.isEmpty()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.Lower, KindsOfPolarization.Pie, 10700, 11699);
-			contr.add(value);
+			objectController.add(value);
 		}
 
 		rec = session.createCriteria(ValueOfTheCarrierFrequency.class)
@@ -84,7 +78,7 @@ public final class TableFiller implements Serializable {
 
 		if (rec.isEmpty()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.Lower, KindsOfPolarization.Linear, 10700, 11699);
-			contr.add(value);
+			objectController.add(value);
 		}
 
 		rec = session.createCriteria(ValueOfTheCarrierFrequency.class)
@@ -93,7 +87,7 @@ public final class TableFiller implements Serializable {
 
 		if (rec.isEmpty()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.Top, KindsOfPolarization.Linear, 11700, 12750);
-			contr.add(value);
+			objectController.add(value);
 		}
 
 		rec = session.createCriteria(ValueOfTheCarrierFrequency.class)
@@ -102,7 +96,7 @@ public final class TableFiller implements Serializable {
 
 		if (rec.isEmpty()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.CRange, KindsOfPolarization.Linear, 3400, 4200);
-			contr.add(value);
+			objectController.add(value);
 
 		}
 
@@ -112,11 +106,35 @@ public final class TableFiller implements Serializable {
 
 		if (rec.isEmpty()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.TopPie, KindsOfPolarization.Pie, 11700, 12750);
-			contr.add(value);
+			objectController.add(value);
 
 		}
 
 		session.close();
 
 	}
+
+	private static final long serialVersionUID = 8464537239822198552L;
+
+	@Autowired
+	private ObjectsController objectController;
+
+	public ObjectsController getObjectController() {
+		return objectController;
+	}
+
+	public void setObjectController(ObjectsController objectController) {
+		this.objectController = objectController;
+	}
+
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	@Autowired
+	private SessionFactory sessionFactory;
 }
