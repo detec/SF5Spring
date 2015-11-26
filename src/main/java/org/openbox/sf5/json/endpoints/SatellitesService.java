@@ -13,15 +13,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 // http://websystique.com/springmvc/spring-mvc-4-restful-web-services-crud-example-resttemplate/
 @RestController
-@RequestMapping("/json/satellites/")
+@EnableWebMvc
+@RequestMapping(value = "/json/satellites/", headers = "Accept=*/*", produces = "application/json")
 public class SatellitesService {
 
-	@RequestMapping(value = "all/", method = RequestMethod.GET) // , headers =
-																// "Accept=application/xml,
-																// application/json")
+	@RequestMapping(value = "all/", method = RequestMethod.GET, produces = "application/json") // ,
+																								// headers
+																								// =
+	// "Accept=application/xml,
+	// application/json")
 	public ResponseEntity<List<Satellites>> getAllSatellites() {
 		List<Satellites> satList = listService.ObjectsList(Satellites.class);
 		if (satList.isEmpty()) {
@@ -31,7 +35,7 @@ public class SatellitesService {
 		return new ResponseEntity<List<Satellites>>(satList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "filter/id/{satelliteId}", method = RequestMethod.GET)
+	@RequestMapping(value = "filter/id/{satelliteId}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<Satellites> getSatelliteById(@PathVariable("satelliteId") long satId) {
 		Satellites sat = objectController.select(Satellites.class, satId);
 		if (sat == null) {
@@ -41,7 +45,7 @@ public class SatellitesService {
 		return new ResponseEntity<Satellites>(sat, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET)
+	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Satellites>> getSatellitesByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue) {
 

@@ -13,10 +13,15 @@ import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+@EnableWebMvc
+@RestController
+@RequestMapping(value = "/json/usersettings/", headers = "Accept=*/*", produces = "application/json")
 public class SettingsService {
 
-	@RequestMapping(value = "filter/login/{typeValue}", method = RequestMethod.GET)
+	@RequestMapping(value = "filter/login/{typeValue}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Settings>> getSettingsByUserLogin(@PathParam("typeValue") String typeValue) {
 		List<Settings> settList = settingsJsonizer.getSettingsByUserLogin(typeValue);
 		if (settList.isEmpty()) {
@@ -25,7 +30,7 @@ public class SettingsService {
 		return new ResponseEntity<List<Settings>>(settList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET)
+	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Settings>> getSettingsByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue, @MatrixVariable("login") String login) {
 
@@ -37,7 +42,7 @@ public class SettingsService {
 
 	}
 
-	@RequestMapping(value = "filter/id/{settingId}", method = RequestMethod.GET)
+	@RequestMapping(value = "filter/id/{settingId}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<Settings> getSettingById(@PathVariable("settingId") long settingId,
 			@MatrixVariable("login") String login) {
 

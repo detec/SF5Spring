@@ -25,9 +25,8 @@
   </filter-mapping>
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>
-            /WEB-INF/sf5-servlet.xml
-        </param-value>
+<!--     <param-value>/WEB-INF/sf5-servlet.xml</param-value> -->
+<param-value>/WEB-INF/root-context.xml</param-value>
   </context-param>
   <context-param>
     <param-name>spring.profiles.active</param-name>
@@ -57,10 +56,12 @@
       <param-name>contextConfigLocation</param-name>
       <param-value>/WEB-INF/sf5-servlet.xml</param-value>
     </init-param>
-    <init-param>
+<!-- This parameter says not to use servlet-based config file     
+
+<init-param>
       <param-name>contextAttribute</param-name>
       <param-value>org.springframework.web.context.WebApplicationContext.ROOT</param-value>
-    </init-param>
+    </init-param> -->
     <load-on-startup>1</load-on-startup>
     <enabled>true</enabled>
     <multipart-config>
@@ -71,7 +72,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>sf5</servlet-name>
-    <url-pattern>/login</url-pattern>
+<!--     <url-pattern>/login</url-pattern> -->
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 </web-app>

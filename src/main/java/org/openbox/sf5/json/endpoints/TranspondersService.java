@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RestController
-@RequestMapping("/json/transponders/")
+@EnableWebMvc
+@RequestMapping(value = "/json/transponders/", headers = "Accept=*/*", produces = "application/json")
 public class TranspondersService {
 
-	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET)
+	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Transponders>> getTranspondersByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue) {
 		List<Transponders> transList = transpondersJsonizer.getTranspondersByArbitraryFilter(fieldName, typeValue);
@@ -29,7 +31,7 @@ public class TranspondersService {
 		return new ResponseEntity<List<Transponders>>(transList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "filter/id/{transponderId}", method = RequestMethod.GET)
+	@RequestMapping(value = "filter/id/{transponderId}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<Transponders> getTransponderById(@PathVariable("transponderId") long tpId) {
 		Transponders trans = objectController.select(Transponders.class, tpId);
 		if (trans == null) {
@@ -40,7 +42,7 @@ public class TranspondersService {
 
 	}
 
-	@RequestMapping(value = "/{filter}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{filter}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Transponders>> getTranspondersBySatelliteId(@PathVariable("filter") String ignore,
 			@MatrixVariable(required = true, value = "satId") long satId) {
 
@@ -51,7 +53,7 @@ public class TranspondersService {
 		return new ResponseEntity<List<Transponders>>(transList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "all/", method = RequestMethod.GET)
+	@RequestMapping(value = "all/", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Transponders>> getTransponders() {
 		List<Transponders> transList = listService.ObjectsList(Transponders.class);
 		if (transList.isEmpty()) {

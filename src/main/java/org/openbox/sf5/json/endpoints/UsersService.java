@@ -8,11 +8,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-@RequestMapping("/json/users/")
+@RestController
+@EnableWebMvc
+@RequestMapping(value = "/json/users/", headers = "Accept=*/*", produces = "application/json")
 public class UsersService {
 
-	@RequestMapping(value = "filter/login/{login}", method = RequestMethod.GET)
+	@RequestMapping(value = "filter/login/{login}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<Users> getUserByLogin(@PathVariable("login") String login) {
 		Users retUser = usersJsonizer.getUserByLogin(login);
 		if (retUser == null) {

@@ -86,7 +86,8 @@
             	<directory>src/main/resources/spring</directory>
              	<targetPath>WEB-INF</targetPath>
              	<includes>
-                <include>sf5-servlet.xml</include>
+<!--                 <include>sf5-servlet.xml</include> -->
+					<include>*.xml</include>
                 </includes>
             </resource>
         </webResources>

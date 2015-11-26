@@ -23,7 +23,7 @@ public class AdminCheck {
 
 		Criterion criterea = Restrictions.eq("username", "admin");
 		@SuppressWarnings("unchecked")
-		List<Users> adminsList = (List<Users>) service.ObjectsCriterionList(Users.class, criterea);
+		List<Users> adminsList = service.ObjectsCriterionList(Users.class, criterea);
 
 		if (adminsList.isEmpty()) {
 			List<Usersauthorities> rolesList = new ArrayList<>();

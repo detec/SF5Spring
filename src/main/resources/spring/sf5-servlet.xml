@@ -11,36 +11,30 @@
 	http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
 	http://www.springframework.org/schema/context 
 	http://www.springframework.org/schema/context/spring-context-4.2.xsd
-	http://www.springframework.org/schema/security 
- 	http://www.springframework.org/schema/security/spring-security-4.0.xsd
+
  	http://www.springframework.org/schema/mvc
     http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
     http://www.springframework.org/schema/tx 
     http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
 	 
 
-<!-- This is for annotations to work -->	
-<context:annotation-config />
 
-<tx:annotation-driven transaction-manager="transactionManager"/>
 
-	
+<!-- <mvc:annotation-driven  enable-matrix-variables="true" /> -->
+
 <context:component-scan base-package="org.openbox.sf5.application" />
-<context:component-scan base-package="org.openbox.sf5.model" />
-<context:component-scan base-package="org.openbox.sf5.dao" /> <!-- Probably this is for autowiring -->
-<context:component-scan base-package="org.openbox.sf5.service" />
-<context:component-scan base-package="org.openbox.sf5.common" />
 <context:component-scan base-package="org.openbox.sf5.converters" />
 <context:component-scan base-package="org.openbox.sf5.json.endpoints" />
-<context:component-scan base-package="org.openbox.sf5.json.service" />
 
-<!-- Configurer that replaces ${...} placeholders with values from a properties file -->
-<!-- (in this case, JDBC-related settings for the JPA EntityManager definition below) -->
-<context:property-placeholder location="classpath:data-access.properties" system-properties-mode="OVERRIDE"/>
 
-<mvc:annotation-driven  enable-matrix-variables="true" />
-
- 
+<!-- activates annotation driven binding -->
+<mvc:annotation-driven enable-matrix-variables="true">
+    <mvc:message-converters>
+        <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
+        <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
+<!--         <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/> -->
+    </mvc:message-converters>
+</mvc:annotation-driven>
 
 <bean id="viewResolver"
 	class="org.springframework.web.servlet.view.UrlBasedViewResolver">
@@ -50,101 +44,8 @@
 	<property name="suffix" value=".jsp" />
 </bean>
 	
-	
-	
-<bean id="dataSource"
-	class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-	<property name="driverClassName" value="org.h2.Driver" />
-	<property name="url" value="${db.jdbcUrl}" />
-	<property name="username" value="sa" />
-	<property name="password" value="" />
-</bean>
-	
-	
-<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-    <property name="dataSource" ref="dataSource" />
-    <property name="packagesToScan" value="org.openbox.sf5.model" />   
-    <property name="configLocation"> 
-		<value>classpath:hibernate.cfg.xml</value> 
-    </property> 
-<!--     <property name="configurationClass">  -->
-<!--     	<value>org.hibernate.cfg.AnnotationConfiguration</value>  -->
-<!--     </property>  -->
-</bean>
-
-<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"> 
-	<property name="sessionFactory" ref="sessionFactory"/> 
-</bean> 
-
-<!-- It seems that in order to use autowiring we must specially declare beans -->
-<!-- <bean id="DAOListImpl" class="org.openbox.sf5.dao.DAOListImpl"> -->
-<!-- 	<constructor-arg> -->
-<!-- 		<ref bean="sessionFactory" /> -->
-<!-- 	</constructor-arg> -->
-<!-- </bean> -->
-	
-<bean id="adminCheck" class="org.openbox.sf5.service.AdminCheck" init-method="initialize"></bean>
-
-
-
-<!-- Special TableFiller bean to insert default values  Substituted with @Component annotation -->
-<!-- <bean id="tableFiller" class="org.openbox.sf5.common.TableFiller"></bean> -->
- 
-<!-- Global Security Settings -->
-<security:global-method-security pre-post-annotations="enabled" />
- 
- 
-<security:http auto-config="true" use-expressions="true" disable-url-rewriting="true">
-
-	<security:session-management invalid-session-url="/login?time=1">
-    	<security:concurrency-control max-sessions="1" expired-url="/login?time=1" />
-    </security:session-management>
-
-	<security:intercept-url pattern="/login" access="isAnonymous()"/>
-	<security:intercept-url pattern="/register" access="isAnonymous()"/>
-	
-	<security:intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
-	
-	<!-- Anonymous access to json endpoints. -->
-	<security:intercept-url pattern="/json/*" access="isAnonymous()"/>
-	
-	
-	<security:intercept-url pattern="/transponders*" access="hasRole('ROLE_USER')" />
-	<security:logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID" invalidate-session="true"/>
-	
-	
- <!-- 	This code makes the application totally dead.   
-     <security:form-login
-         login-page='/login.jsp'
-         login-processing-url="/perform_login"
-         default-target-url="/settings.jsp"
-         authentication-failure-url="/login.jsp?error=true"
-         always-use-default-target="true" />
-	
-	 
-	-->
-		 
-	<security:form-login 
-		login-page= '/login' 
-		default-target-url="/"
-		authentication-failure-url='/login.jsp?error=true'
-		always-use-default-target='true'
- 	/>
-	
-	<!-- enable csrf protection -->
-	<security:csrf/>
-</security:http>
- 
- 
-<security:authentication-manager  alias="authenticationManager">
-	<security:authentication-provider>
-	<security:jdbc-user-service
-		data-source-ref="dataSource"
-		users-by-username-query="
-			select	username, password, enabled from users	where username =?"
-		authorities-by-username-query="select username, authority from usersauthorities where username =?" />
-	</security:authentication-provider>
-</security:authentication-manager>
-
-	
+<bean id="requestMappingHandlerMapping" 
+	class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+ 	<property name="removeSemicolonContent" value="false" />
+</bean>	
 </beans>

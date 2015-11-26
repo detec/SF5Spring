@@ -19,7 +19,8 @@ th, td {
 </style>
 </head>
 <body>
-<h2>Users list</h2>
+<h2>Openbox SF5 settings editor</h2>
+<h3>Users list</h3>
  <c:if test="${not empty viewMsg}" >
 	<div style="color:#408080;"> ${viewMsg}</div>
 </c:if>
