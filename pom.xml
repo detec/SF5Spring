@@ -18,18 +18,21 @@
       </resource>
     </resources>
     
-<!-- 	Seems like it causes errors when updating maven project
 
+
+<!-- Seems like it causes errors when updating maven project 
+declared explicitly so Spring config files can be placed next to their corresponding JUnit test class
+-->
+	
 	<defaultGoal>install</defaultGoal>
 		<testResources>
 		  <testResource>
-		  	declared explicitly so Spring config files can be placed next to their corresponding JUnit test class 
 		    <directory>${project.basedir}/src/test/java</directory>
 		  </testResource>
 		  <testResource>
 		    <directory>${project.basedir}/src/test/resources</directory>
 		  </testResource>
-		</testResources>    --> 
+		</testResources>    
     
     
     <plugins>
