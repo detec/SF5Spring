@@ -6,7 +6,7 @@
   <packaging>war</packaging>
   <name>Openbox SF5 Spring settings editor</name>
   <build>
-    <sourceDirectory>src</sourceDirectory>
+<!--     <sourceDirectory>src</sourceDirectory> -->
       <resources>
       <resource>
         <directory>src/main/java</directory> <!-- This excludes webapp resources from copying to classes! -->
@@ -18,22 +18,24 @@
       </resource>
     </resources>
     
+<!-- 	Seems like it causes errors when updating maven project
+
 	<defaultGoal>install</defaultGoal>
 		<testResources>
 		  <testResource>
-		  	<!-- declared explicitly so Spring config files can be placed next to their corresponding JUnit test class  -->
+		  	declared explicitly so Spring config files can be placed next to their corresponding JUnit test class 
 		    <directory>${project.basedir}/src/test/java</directory>
 		  </testResource>
 		  <testResource>
 		    <directory>${project.basedir}/src/test/resources</directory>
 		  </testResource>
-		</testResources>    
+		</testResources>    --> 
     
     
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <version>3.3</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -116,8 +118,8 @@
   	<id>test</id> 
 	<properties>
   		<db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5springtest</db.jdbcUrl> 
-  		<rp.build.warname>SF5Springtest</rp.build.warname>
-  		<spring.version>4.2.2.RELEASE</spring.version>
+  		<rp.build.warname>SF5Spring-test</rp.build.warname>
+  		<spring.version>4.2.3.RELEASE</spring.version>
   		<spring.security.version>4.0.2.RELEASE</spring.security.version>
   		<hibernate.version>4.3.11.Final</hibernate.version>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -129,7 +131,7 @@
 	<properties>
   		<db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5spring</db.jdbcUrl> 
   		<rp.build.warname>SF5Spring</rp.build.warname>
-  		<spring.version>4.2.1.RELEASE</spring.version>
+  		<spring.version>4.2.3.RELEASE</spring.version>
   		<spring.security.version>4.0.2.RELEASE</spring.security.version>
   		<hibernate.version>4.3.11.Final</hibernate.version>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
