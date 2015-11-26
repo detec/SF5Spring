@@ -32,7 +32,12 @@
     <mvc:message-converters>
         <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
         <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
-<!--         <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/> -->
+            <bean
+                class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="jacksonObjectMapper" />
+			</bean>
+  
+        
     </mvc:message-converters>
 </mvc:annotation-driven>
 
@@ -48,4 +53,11 @@
 	class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
  	<property name="removeSemicolonContent" value="false" />
 </bean>	
+
+<!-- Trying to enable pretty printing -->
+<bean id="jacksonObjectMapper" 
+	class="com.fasterxml.jackson.databind.ObjectMapper">
+	
+	</bean>
+	
 </beans>
