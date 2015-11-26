@@ -31,27 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Scope("request")
 public class SettingsList {
 
-	@Autowired
-	private ObjectsListService service;
-
-	@Autowired
-	private ObjectsController contr;
-
-	@Autowired
-	private UserEditor UserEditor;
-
-	private Users currentUser;
-
-	private boolean SelectionMode;
-
-	public boolean isSelectionMode() {
-		return SelectionMode;
-	}
-
-	public void setSelectionMode(boolean selectionMode) {
-		SelectionMode = selectionMode;
-	}
-
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Users.class, UserEditor);
@@ -71,7 +50,7 @@ public class SettingsList {
 		// Retrieve all settings
 		Criterion criterion = Restrictions.eq("User", currentUser);
 
-		settingsList = service.ObjectsCriterionList(Settings.class, criterion);
+		settingsList = listService.ObjectsCriterionList(Settings.class, criterion);
 
 		// Attach settings to the Model
 		model.addAttribute("settings", settingsList);
@@ -101,7 +80,7 @@ public class SettingsList {
 	@RequestMapping(value = "/settings/delete", method = RequestMethod.GET)
 	public String deleteSetting(@RequestParam(value = "id", required = true) long id, Model model) {
 
-		contr.remove(Settings.class, id);
+		objectsController.remove(Settings.class, id);
 		return getSettings(model);
 	}
 
@@ -119,7 +98,7 @@ public class SettingsList {
 		String username = secUser.getUsername();
 		Criterion criterion = Restrictions.eq("username", username);
 
-		List<Users> usersList = service.ObjectsCriterionList(Users.class, criterion);
+		List<Users> usersList = listService.ObjectsCriterionList(Users.class, criterion);
 		if (!usersList.isEmpty()) {
 			currentUser = usersList.get(0);
 		}
@@ -164,6 +143,27 @@ public class SettingsList {
 
 	public void setCurrentUser(Users currentUser) {
 		this.currentUser = currentUser;
+	}
+
+	@Autowired
+	private ObjectsListService listService;
+
+	@Autowired
+	private ObjectsController objectsController;
+
+	@Autowired
+	private UserEditor UserEditor;
+
+	private Users currentUser;
+
+	private boolean SelectionMode;
+
+	public boolean isSelectionMode() {
+		return SelectionMode;
+	}
+
+	public void setSelectionMode(boolean selectionMode) {
+		SelectionMode = selectionMode;
 	}
 
 }

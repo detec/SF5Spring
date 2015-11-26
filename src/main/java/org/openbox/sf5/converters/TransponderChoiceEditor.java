@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 public class TransponderChoiceEditor extends PropertyEditorSupport {
 
 	@Autowired
-	private ObjectsController contr;
+	private ObjectsController objectsController;
 
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
 		Long Lid = Long.parseLong(text);
-		Transponders trans = contr.select(Transponders.class, Lid.longValue());
+		Transponders trans = objectsController.select(Transponders.class, Lid.longValue());
 
 		setValue(trans);
 	}
@@ -25,7 +25,7 @@ public class TransponderChoiceEditor extends PropertyEditorSupport {
 	public String getAsText() {
 
 		Transponders oldTrans = (Transponders) this.getValue();
-		Transponders trans = contr.select(Transponders.class, oldTrans.getId());
+		Transponders trans = objectsController.select(Transponders.class, oldTrans.getId());
 
 		return String.valueOf(trans.getFrequency());
 	}

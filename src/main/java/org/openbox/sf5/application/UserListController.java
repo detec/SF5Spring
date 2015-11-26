@@ -24,18 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Scope("request")
 public class UserListController {
 
-	@Autowired
-	private ObjectsListService service;
-
-	@Autowired
-	private ObjectsController contr;
-
-	private List<Users> UsersList = new ArrayList<Users>();
-
 	@RequestMapping(value = "/users/", method = RequestMethod.GET)
 	public String getUserList(Model model) {
 
-		UsersList = service.ObjectsList(Users.class);
+		UsersList = listService.ObjectsList(Users.class);
 
 		model.addAttribute("users", UsersList);
 
@@ -59,13 +51,13 @@ public class UserListController {
 
 	@RequestMapping(value = "/users/change", method = RequestMethod.GET)
 	public String changeState(@RequestParam(value = "id", required = true) long pid, Model model) {
-		Users user = contr.select(Users.class, pid);
+		Users user = objectsController.select(Users.class, pid);
 
 		String username = user.getusername();
 
 		if (UserService.hasAdminRole(user)) {
 			model.addAttribute("viewErrMsg", "It is forbidden to change state of admin user!");
-			UsersList = service.ObjectsList(Users.class);
+			UsersList = listService.ObjectsList(Users.class);
 
 			model.addAttribute("users", UsersList);
 			return "users";
@@ -75,10 +67,10 @@ public class UserListController {
 
 		String state = user.getenabled() ? "enabled" : "disabled";
 
-		contr.saveOrUpdate(user);
+		objectsController.saveOrUpdate(user);
 
 		model.addAttribute("viewMsg", "Successfully " + state + " user " + username + "!");
-		UsersList = service.ObjectsList(Users.class);
+		UsersList = listService.ObjectsList(Users.class);
 
 		model.addAttribute("users", UsersList);
 		return "users";
@@ -88,13 +80,13 @@ public class UserListController {
 	@RequestMapping(value = "/users/delete", method = RequestMethod.GET)
 	public String deleteUser(@RequestParam(value = "id", required = true) long pid, Model model) {
 
-		Users userToDelete = contr.select(Users.class, pid);
+		Users userToDelete = objectsController.select(Users.class, pid);
 
 		String username = userToDelete.getusername();
 
 		if (UserService.hasAdminRole(userToDelete)) {
 			model.addAttribute("viewErrMsg", "It is forbidden to remove admin user!");
-			UsersList = service.ObjectsList(Users.class);
+			UsersList = listService.ObjectsList(Users.class);
 
 			model.addAttribute("users", UsersList);
 			return "users";
@@ -102,15 +94,15 @@ public class UserListController {
 
 		// first we must remove user's settings
 		Criterion criterion = Restrictions.eq("User", userToDelete);
-		List<Settings> userSettings = service.ObjectsCriterionList(Settings.class, criterion);
+		List<Settings> userSettings = listService.ObjectsCriterionList(Settings.class, criterion);
 
-		userSettings.stream().forEach(t -> contr.remove(Settings.class, t.getId()));
+		userSettings.stream().forEach(t -> objectsController.remove(Settings.class, t.getId()));
 
 		// removing user
-		contr.remove(Users.class, pid);
+		objectsController.remove(Users.class, pid);
 		// return "redirect:/users/";
 		model.addAttribute("viewMsg", "Successfully deleted user " + username + "!");
-		UsersList = service.ObjectsList(Users.class);
+		UsersList = listService.ObjectsList(Users.class);
 
 		model.addAttribute("users", UsersList);
 		return "users";
@@ -125,4 +117,11 @@ public class UserListController {
 		UsersList = usersList;
 	}
 
+	@Autowired
+	private ObjectsListService listService;
+
+	@Autowired
+	private ObjectsController objectsController;
+
+	private List<Users> UsersList = new ArrayList<Users>();
 }

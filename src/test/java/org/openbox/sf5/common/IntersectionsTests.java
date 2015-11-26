@@ -42,7 +42,6 @@ public class IntersectionsTests extends AbstractJsonizerTest {
 		try {
 			positiveResult = getIniImportResult();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -72,7 +71,6 @@ public class IntersectionsTests extends AbstractJsonizerTest {
 				iniReader.readData();
 				resultList.add(iniReader.isResult());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		});

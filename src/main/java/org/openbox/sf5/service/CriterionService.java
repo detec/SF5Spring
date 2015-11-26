@@ -94,12 +94,12 @@ public class CriterionService implements Serializable {
 		return Arrays.asList(cls.getEnumConstants());
 	}
 
-	public ObjectsController getContr() {
+	public ObjectsController getObjectController() {
 		return objectController;
 	}
 
-	public void setContr(ObjectsController contr) {
-		this.objectController = contr;
+	public void setObjectController(ObjectsController objectController) {
+		this.objectController = objectController;
 	}
 
 	private static final long serialVersionUID = -2669096886833468746L;

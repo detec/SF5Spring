@@ -14,14 +14,14 @@ import org.springframework.stereotype.Component;
 public class UserEditor extends PropertyEditorSupport {
 
 	@Autowired
-	private ObjectsListService service;
+	private ObjectsListService listService;
 
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
 
 		Criterion criterion = Restrictions.eq("username", text);
 
-		List<Users> usersList = service.ObjectsCriterionList(Users.class, criterion);
+		List<Users> usersList = listService.ObjectsCriterionList(Users.class, criterion);
 		if (!usersList.isEmpty()) {
 			setValue(usersList.get(0));
 		}

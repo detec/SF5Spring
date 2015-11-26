@@ -45,11 +45,133 @@ public class TranspondersListClass {
 
 	}
 
-	@Autowired
-	private ObjectsController contr;
+	@RequestMapping(value = "/transponders", method = RequestMethod.GET)
+	public String getTransponders(@RequestParam(value = "filtersatid", required = false) Long filtersatid,
+			@RequestParam(value = "SelectionMode", required = false) Boolean pSelectionMode, Model model,
+			HttpServletRequest request) {
+
+		if (filtersatid != null) {
+
+			if (filtersatid.longValue() != 0) {
+				filterSatellite = objectsController.select(Satellites.class, filtersatid.longValue());
+			}
+		}
+
+		if (filterSatellite != null) {
+			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
+			TranspondersList = listService.ObjectsCriterionList(Transponders.class, criterion);
+		} else {
+
+			TranspondersList = listService.ObjectsList(Transponders.class);
+
+		}
+
+		if (pSelectionMode != null) {
+			SelectionMode = pSelectionMode;
+		}
+
+		TransponderChoiceListWrapper wrapper = new TransponderChoiceListWrapper();
+		wrapper.setTclist(getTransponderChoiceList());
+		model.addAttribute("bean", this);
+		model.addAttribute("wrapper", wrapper);
+
+		return "transponders";
+	}
+
+	@RequestMapping(params = "filter", value = "/transponders", method = RequestMethod.POST)
+	public String postGetTransponders(@ModelAttribute("bean") TranspondersListClass bean, Model model) {
+
+		if (bean.filterSatelliteId != null) {
+
+			filterSatellite = objectsController.select(Satellites.class, bean.filterSatelliteId.longValue());
+
+			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
+			TranspondersList = listService.ObjectsCriterionList(Transponders.class, criterion);
+		}
+
+		else {
+			TranspondersList = listService.ObjectsList(Transponders.class);
+		}
+
+		SelectionMode = bean.SelectionMode;
+
+		model.addAttribute("bean", this);
+		TransponderChoiceListWrapper wrapper = new TransponderChoiceListWrapper();
+		wrapper.setTclist(getTransponderChoiceList());
+		model.addAttribute("wrapper", wrapper);
+
+		return "transponders";
+	}
+
+	@RequestMapping(params = "select", value = "/transponders", method = RequestMethod.POST)
+	public String postSelectTransponders(@ModelAttribute("bean") TranspondersListClass bean,
+			@ModelAttribute("wrapper") TransponderChoiceListWrapper wrapper, BindingResult result) {
+
+		AppContext.getSelectedTransponders().clear();
+
+		List<Transponders> transList = new ArrayList<Transponders>();
+
+		wrapper.getTclist().stream().filter(t -> t.isChecked()).forEach(t -> {
+			t.setObjectsController(objectsController); // or we get NPE
+			transList.add(t.getTransponder());
+
+		});
+
+		AppContext.setSelectedTransponders(transList);
+
+		String idStr = String.valueOf(AppContext.getCurentlyEditedSetting().getId());
+		String returnAddress = "";
+		if (idStr.equals("0")) {
+			// if it is a new unsaved settings - use add scenario
+			returnAddress = "redirect:/settings/add";
+		} else {
+			returnAddress = "redirect:/editsetting?id=" + idStr + "&selectionmode=false";
+		}
+		return returnAddress;
+	}
+
+	@ModelAttribute("transpondersList")
+	public List<Transponders> getTranspondersList() {
+		return TranspondersList;
+	}
+
+	public void setTranspondersList(ArrayList<Transponders> transpondersList) {
+		TranspondersList = transpondersList;
+	}
+
+	@ModelAttribute("satellites")
+	public HashMap<Long, String> getSatellites() {
+
+		HashMap<Long, String> satMap = new HashMap<Long, String>();
+
+		listService.ObjectsList(Satellites.class).stream().forEach(t -> satMap.put(new Long(t.getId()), t.getName()));
+
+		return satMap;
+
+	}
+
+	public List<TransponderChoice> getTransponderChoiceList() {
+
+		TransponderChoiceList.clear();
+
+		for (Transponders e : TranspondersList) {
+			TransponderChoiceList.add(new TransponderChoice(e));
+		}
+
+		return TransponderChoiceList;
+	}
 
 	@Autowired
-	private ObjectsListService service;
+	private UserEditor UserEditor;
+
+	@Autowired
+	private TransponderChoiceEditor TransponderChoiceEditor;
+
+	@Autowired
+	private ObjectsController objectsController;
+
+	@Autowired
+	private ObjectsListService listService;
 
 	@Autowired
 	private SF5ApplicationContext AppContext;
@@ -89,127 +211,5 @@ public class TranspondersListClass {
 	private List<Transponders> TranspondersList = new ArrayList<Transponders>();
 
 	private List<TransponderChoice> TransponderChoiceList = new ArrayList<TransponderChoice>();
-
-	@RequestMapping(value = "/transponders", method = RequestMethod.GET)
-	public String getTransponders(@RequestParam(value = "filtersatid", required = false) Long filtersatid,
-			@RequestParam(value = "SelectionMode", required = false) Boolean pSelectionMode, Model model,
-			HttpServletRequest request) {
-
-		if (filtersatid != null) {
-
-			if (filtersatid.longValue() != 0) {
-				filterSatellite = contr.select(Satellites.class, filtersatid.longValue());
-			}
-		}
-
-		if (filterSatellite != null) {
-			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
-			TranspondersList = service.ObjectsCriterionList(Transponders.class, criterion);
-		} else {
-
-			TranspondersList = service.ObjectsList(Transponders.class);
-
-		}
-
-		if (pSelectionMode != null) {
-			SelectionMode = pSelectionMode;
-		}
-
-		TransponderChoiceListWrapper wrapper = new TransponderChoiceListWrapper();
-		wrapper.setTclist(getTransponderChoiceList());
-		model.addAttribute("bean", this);
-		model.addAttribute("wrapper", wrapper);
-
-		return "transponders";
-	}
-
-	@RequestMapping(params = "filter", value = "/transponders", method = RequestMethod.POST)
-	public String postGetTransponders(@ModelAttribute("bean") TranspondersListClass bean, Model model) {
-
-		if (bean.filterSatelliteId != null) {
-
-			filterSatellite = contr.select(Satellites.class, bean.filterSatelliteId.longValue());
-
-			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
-			TranspondersList = service.ObjectsCriterionList(Transponders.class, criterion);
-		}
-
-		else {
-			TranspondersList = service.ObjectsList(Transponders.class);
-		}
-
-		SelectionMode = bean.SelectionMode;
-
-		model.addAttribute("bean", this);
-		TransponderChoiceListWrapper wrapper = new TransponderChoiceListWrapper();
-		wrapper.setTclist(getTransponderChoiceList());
-		model.addAttribute("wrapper", wrapper);
-
-		return "transponders";
-	}
-
-	@RequestMapping(params = "select", value = "/transponders", method = RequestMethod.POST)
-	public String postSelectTransponders(@ModelAttribute("bean") TranspondersListClass bean,
-			@ModelAttribute("wrapper") TransponderChoiceListWrapper wrapper, BindingResult result) {
-
-		AppContext.getSelectedTransponders().clear();
-
-		List<Transponders> transList = new ArrayList<Transponders>();
-
-		wrapper.getTclist().stream().filter(t -> t.isChecked()).forEach(t -> {
-			t.setContr(contr); // or we get NPE
-			transList.add(t.getTransponder());
-
-		});
-
-		AppContext.setSelectedTransponders(transList);
-
-		String idStr = String.valueOf(AppContext.getCurentlyEditedSetting().getId());
-		String returnAddress = "";
-		if (idStr.equals("0")) {
-			// if it is a new unsaved settings - use add scenario
-			returnAddress = "redirect:/settings/add";
-		} else {
-			returnAddress = "redirect:/editsetting?id=" + idStr + "&selectionmode=false";
-		}
-		return returnAddress;
-	}
-
-	@ModelAttribute("transpondersList")
-	public List<Transponders> getTranspondersList() {
-		return TranspondersList;
-	}
-
-	public void setTranspondersList(ArrayList<Transponders> transpondersList) {
-		TranspondersList = transpondersList;
-	}
-
-	@ModelAttribute("satellites")
-	public HashMap<Long, String> getSatellites() {
-
-		HashMap<Long, String> satMap = new HashMap<Long, String>();
-
-		service.ObjectsList(Satellites.class).stream().forEach(t -> satMap.put(new Long(t.getId()), t.getName()));
-
-		return satMap;
-
-	}
-
-	public List<TransponderChoice> getTransponderChoiceList() {
-
-		TransponderChoiceList.clear();
-
-		for (Transponders e : TranspondersList) {
-			TransponderChoiceList.add(new TransponderChoice(e));
-		}
-
-		return TransponderChoiceList;
-	}
-
-	@Autowired
-	private UserEditor UserEditor;
-
-	@Autowired
-	private TransponderChoiceEditor TransponderChoiceEditor;
 
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class TransponderChoice extends Transponders {
 
 	@Autowired
-	private ObjectsController contr;
+	private ObjectsController objectsController;
 
 	private static final long serialVersionUID = 3262084796351763445L;
 
@@ -30,12 +30,12 @@ public class TransponderChoice extends Transponders {
 		checked = false;
 	}
 
-	public ObjectsController getContr() {
-		return contr;
+	public ObjectsController getObjectsController() {
+		return objectsController;
 	}
 
-	public void setContr(ObjectsController contr) {
-		this.contr = contr;
+	public void setObjectsController(ObjectsController objectsController) {
+		this.objectsController = objectsController;
 	}
 
 	// Spring needs default constructor for components
@@ -44,7 +44,7 @@ public class TransponderChoice extends Transponders {
 	}
 
 	public Transponders getTransponder() {
-		Transponders trans = contr.select(Transponders.class, super.getId());
+		Transponders trans = objectsController.select(Transponders.class, super.getId());
 		return trans;
 	}
 

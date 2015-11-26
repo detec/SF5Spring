@@ -14,25 +14,24 @@ import org.springframework.stereotype.Component;
 public class AdminCheck {
 
 	@Autowired
-	private ObjectsListService service;
+	private ObjectsListService listService;
 
 	@Autowired
-	private ObjectsController contr;
+	private ObjectsController objectsController;
 
 	public void initialize() {
 
 		Criterion criterea = Restrictions.eq("username", "admin");
-		@SuppressWarnings("unchecked")
-		List<Users> adminsList = service.ObjectsCriterionList(Users.class, criterea);
+		List<Users> adminsList = listService.ObjectsCriterionList(Users.class, criterea);
 
 		if (adminsList.isEmpty()) {
 			List<Usersauthorities> rolesList = new ArrayList<>();
 
 			Users admin = new Users("admin", "1", true, rolesList);
-			contr.saveOrUpdate(admin);
+			objectsController.saveOrUpdate(admin);
 
 			fillTables(admin, rolesList);
-			contr.saveOrUpdate(admin);
+			objectsController.saveOrUpdate(admin);
 		}
 
 		else {
@@ -41,7 +40,7 @@ public class AdminCheck {
 			List<Usersauthorities> rolesList = adminUser.getauthorities();
 
 			fillTables(adminUser, rolesList);
-			contr.saveOrUpdate(adminUser);
+			objectsController.saveOrUpdate(adminUser);
 
 		}
 

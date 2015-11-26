@@ -36,7 +36,6 @@ public class Intersections {
 
 		ReturningWork<ResultSet> rowsReturningWork = new ReturningWork<ResultSet>() {
 
-			@SuppressWarnings("resource")
 			@Override
 			public ResultSet execute(Connection connection) throws SQLException {
 				PreparedStatement preparedStatement = null;

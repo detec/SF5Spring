@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 public class SettingsEditor extends PropertyEditorSupport {
 
 	@Autowired
-	private ObjectsController contr;
+	private ObjectsController objectsController;
 
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
 
 		Long Lid = Long.parseLong(text);
-		Settings trans = contr.select(Settings.class, Lid.longValue());
+		Settings trans = objectsController.select(Settings.class, Lid.longValue());
 
 		setValue(trans);
 

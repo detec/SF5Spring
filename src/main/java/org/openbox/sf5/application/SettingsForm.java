@@ -34,6 +34,7 @@ import org.openbox.sf5.model.CarrierFrequency;
 import org.openbox.sf5.model.DVBStandards;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.SettingsConversion;
+import org.openbox.sf5.model.SettingsConversionPresentation;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.TypesOfFEC;
 import org.openbox.sf5.model.Users;
@@ -64,20 +65,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Scope("request")
 public class SettingsForm implements Serializable {
-
-	private static final long serialVersionUID = 3787216569270743476L;
-
-	@Autowired
-	private UserEditor UserEditor;
-
-	@Autowired
-	private SettingsEditor SettingsEditor;
-
-	@Autowired
-	private TransponderChoiceEditor TransponderChoiceEditor;
-
-	@Autowired
-	private Intersections intersections;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -152,7 +139,7 @@ public class SettingsForm implements Serializable {
 
 		String username = secUser.getUsername();
 		Criterion criterion = Restrictions.eq("username", username);
-		List<Users> usersList = service.ObjectsCriterionList(Users.class, criterion);
+		List<Users> usersList = listService.ObjectsCriterionList(Users.class, criterion);
 		if (!usersList.isEmpty()) {
 			User = usersList.get(0);
 		}
@@ -414,7 +401,7 @@ public class SettingsForm implements Serializable {
 		// save if row should be deleted from database.
 		SettingsObject.setConversion(tpConversion);
 
-		contr.saveOrUpdate(SettingsObject);
+		objectsController.saveOrUpdate(SettingsObject);
 
 		model.addAttribute("bean", this);
 
@@ -565,7 +552,7 @@ public class SettingsForm implements Serializable {
 		writeFromSettingsFormToSettingsObject(pSetting);
 
 		// ObjectsController contr = new ObjectsController();
-		contr.saveOrUpdate(SettingsObject);
+		objectsController.saveOrUpdate(SettingsObject);
 
 	}
 
@@ -687,7 +674,7 @@ public class SettingsForm implements Serializable {
 	public void readAndFillBeanfromSetting(long pid) {
 		// ObjectsController contr = new ObjectsController();
 		// setting = (Settings) contr.select(Settings.class, id);
-		SettingsObject = contr.select(Settings.class, pid);
+		SettingsObject = objectsController.select(Settings.class, pid);
 
 		// fill form values.
 		writeFromSettingsObjectToSettingsForm();
@@ -796,9 +783,23 @@ public class SettingsForm implements Serializable {
 	private List<SettingsConversionPresentation> dataSettingsConversion = new ArrayList<SettingsConversionPresentation>();
 
 	@Autowired
-	private ObjectsController contr;
+	private ObjectsController objectsController;
 
 	@Autowired
-	private ObjectsListService service;
+	private ObjectsListService listService;
+
+	private static final long serialVersionUID = 3787216569270743476L;
+
+	@Autowired
+	private UserEditor UserEditor;
+
+	@Autowired
+	private SettingsEditor SettingsEditor;
+
+	@Autowired
+	private TransponderChoiceEditor TransponderChoiceEditor;
+
+	@Autowired
+	private Intersections intersections;
 
 }

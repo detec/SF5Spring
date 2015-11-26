@@ -130,7 +130,6 @@ public class JsonObjectFiller {
 				JsonObjectBuilder trans = JsonObjectFiller.getJsonObjectBuilderFromClassInstance(t);
 				arrayOfObjects.add(trans);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

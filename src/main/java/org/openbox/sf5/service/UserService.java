@@ -8,8 +8,8 @@ import javax.transaction.Transactional;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
-import org.openbox.sf5.application.UserDto;
 import org.openbox.sf5.converters.UserNotFoundException;
+import org.openbox.sf5.model.UserDto;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +25,10 @@ public class UserService implements IUserService, Serializable {
 	private static final long serialVersionUID = 7134677754855532093L;
 
 	@Autowired
-	private ObjectsController contr;
+	private ObjectsController objectsController;
 
 	@Autowired
-	private ObjectsListService service;
+	private ObjectsListService listService;
 
 	@Transactional
 	@Override
@@ -47,7 +47,7 @@ public class UserService implements IUserService, Serializable {
 		listAuthorities.add(newLine);
 		newUser.setauthorities(listAuthorities);
 		newUser.setenabled(true);
-		contr.saveOrUpdate(newUser);
+		objectsController.saveOrUpdate(newUser);
 
 		return newUser;
 
@@ -56,7 +56,7 @@ public class UserService implements IUserService, Serializable {
 	public boolean userExists(String username) {
 
 		Criterion criterion = Restrictions.eq("username", username);
-		List<Users> rec = (List<Users>) service.ObjectsCriterionList(Users.class, criterion);
+		List<Users> rec = listService.ObjectsCriterionList(Users.class, criterion);
 		if (rec.isEmpty()) {
 			return false;
 		} else {

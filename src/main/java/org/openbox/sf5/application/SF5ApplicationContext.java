@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openbox.sf5.model.SettingsConversionPresentation;
 import org.openbox.sf5.model.Transponders;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
