@@ -56,7 +56,7 @@
 
 <!-- Trying to enable pretty printing -->
 <bean id="jacksonObjectMapper" 
-	class="com.fasterxml.jackson.databind.ObjectMapper">
+	class="org.openbox.sf5.json.service.CustomObjectMapper">
 	
 	</bean>
 	
