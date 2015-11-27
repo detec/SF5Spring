@@ -11,6 +11,36 @@ import javax.persistence.Table;
 @Table(name = "ValueOfTheCarrierFrequency")
 public class ValueOfTheCarrierFrequency extends AbstractDbEntity implements Serializable {
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((Polarization == null) ? 0 : Polarization.hashCode());
+		result = prime * result + ((TypeOfCarrierFrequency == null) ? 0 : TypeOfCarrierFrequency.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		ValueOfTheCarrierFrequency other = (ValueOfTheCarrierFrequency) obj;
+		if (Polarization != other.Polarization) {
+			return false;
+		}
+		if (TypeOfCarrierFrequency != other.TypeOfCarrierFrequency) {
+			return false;
+		}
+		return true;
+	}
+
 	private static final long serialVersionUID = -6095308495476745108L;
 
 	@Id

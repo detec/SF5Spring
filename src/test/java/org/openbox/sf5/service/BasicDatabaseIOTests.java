@@ -22,36 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 
-
 	@Before
 	public void setUp() {
-
 		super.setUpAbstract();
-//		Configuration configuration = new Configuration().configure();
-//
-//		Set<Class<? extends AbstractDbEntity>> annotatedSet = getAllSubclassesAbstractDbEntity();
-//
-//		// adding classes as annotated.
-//		annotatedSet.stream().forEach(t -> configuration.addAnnotatedClass(t));
-//
-//		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-//				.applySettings(configuration.getProperties());
-//		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-//
-//		sessionFactory.openSession();
-//
-//		DAO = new DAOImpl();
-//		DAO.setSessionFactory(sessionFactory);
-//
-//		service = new ObjectServiceImpl();
-//		service.setDAO(DAO);
-//
-//		contr = new ObjectsController();
-//		contr.setService(service);
-
 	}
-
-
 
 	@Test
 	@Transactional

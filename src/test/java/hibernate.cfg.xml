@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
                                          "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+                                         
+<!-- This is test configuration file -->                                         
 <hibernate-configuration>
  <session-factory>
   <property name="hibernate.connection.driver_class">org.h2.Driver</property>
@@ -14,15 +16,6 @@
   
   <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
   <property name="hibernate.hbm2ddl.auto">update</property>
-  
-<!--   <mapping class="org.openbox.sf5.db.Settings"/>
-  <mapping class="org.openbox.sf5.db.Satellites"/>
-  <mapping class="org.openbox.sf5.db.Transponders"/>
-  <mapping class="org.openbox.sf5.db.ValueOfTheCarrierFrequency"/>
-  <mapping class="org.openbox.sf5.db.TheDVBRangeValues"/>
-  <mapping class="org.openbox.sf5.db.SettingsConversion"/>
-  <mapping class="org.openbox.sf5.db.SettingsSatellites"/>
-  <mapping class="org.openbox.sf5.db.Users"/>
-  <mapping class="org.openbox.sf5.db.Usersauthorities" /> -->
+
  </session-factory>
 </hibernate-configuration>

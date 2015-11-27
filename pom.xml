@@ -1,10 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>SF5Spring</groupId>
+  <groupId>org.openbox.sf5</groupId>
   <artifactId>SF5Spring</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>Openbox SF5 Spring settings editor</name>
+  <name>Openbox SF5 settings editor - Spring </name>
+  
+	<properties>
+  		<spring.version>4.2.3.RELEASE</spring.version>
+  		<spring.security.version>4.0.2.RELEASE</spring.security.version>
+  		<hibernate.version>4.3.11.Final</hibernate.version>
+  		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  		<jackson.version>2.6.3</jackson.version>
+	</properties>
+  	 
   <build>
 <!--     <sourceDirectory>src</sourceDirectory> -->
       <resources>
@@ -47,7 +56,7 @@ declared explicitly so Spring config files can be placed next to their correspon
 <!--           <arg>-Xlint:all,-options,-path</arg> -->
 <!--           </compilerArgs> -->
         </configuration>
-      </plugin>
+    </plugin>
 	<plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-surefire-plugin</artifactId>
@@ -56,7 +65,27 @@ declared explicitly so Spring config files can be placed next to their correspon
 			<includes>
 				<include>**/*Tests.java</include>
 			</includes>
+			<excludes>
+            	<exclude>**/*ITests.java</exclude>
+            </excludes>
 		</configuration>
+		<executions>
+        <execution>
+            <phase>integration-test</phase>
+            <goals>
+               <goal>test</goal>
+            </goals>
+            <configuration>
+               <excludes>
+                  <exclude>**/*Tests.java</exclude>
+               </excludes>
+            <includes>
+				<include>**/*ITests.java</include>
+			</includes>
+            </configuration>
+        </execution>
+      	</executions>
+		
 	</plugin>
 				  
 	 <plugin>
@@ -83,7 +112,8 @@ declared explicitly so Spring config files can be placed next to their correspon
                 <directory>src/main/resources</directory>
                 <targetPath>WEB-INF/classes/</targetPath>
                 <includes>
-                <include>**/hibernate.cfg.xml</include> <!-- the path to hibernate.cfg.xml -->
+                	<include>**/hibernate.cfg.xml</include> <!-- the path to hibernate.cfg.xml -->
+                	<include>**/*.properties</include>
                 </includes>
             </resource>
             <resource>
@@ -91,7 +121,6 @@ declared explicitly so Spring config files can be placed next to their correspon
             	<directory>src/main/resources/spring</directory>
              	<targetPath>WEB-INF</targetPath>
              	<includes>
-<!--                 <include>sf5-servlet.xml</include> -->
 					<include>*.xml</include>
                 </includes>
             </resource>
@@ -116,30 +145,117 @@ declared explicitly so Spring config files can be placed next to their correspon
     </plugins>
   </build>
   
+<!-- Different profiles properties
+http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcesplaceholderconfigurer-with-custom-classpathres
+ -->  
 <profiles>
 	<profile>
-  	<id>test</id> 
+  	<id>test</id>
+  		<activation>
+            <activeByDefault>false</activeByDefault>
+        </activation>  		   	 
 	<properties>
-  		<db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5springtest</db.jdbcUrl> 
+  		<db.jdbcUrl>jdbc:h2:mem:test</db.jdbcUrl> 
   		<rp.build.warname>SF5Spring-test</rp.build.warname>
-  		<spring.version>4.2.3.RELEASE</spring.version>
-  		<spring.security.version>4.0.2.RELEASE</spring.security.version>
-  		<hibernate.version>4.3.11.Final</hibernate.version>
-  		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  		<jackson.version>2.6.3</jackson.version>
+  		<property.placeholder>test.properties</property.placeholder>
   	</properties>
+  	
+  	<!-- http://stackoverflow.com/questions/20916581/how-to-do-in-container-testing-of-a-web-app-in-spring -->
+  	<build>
+    	<plugins>
+    	<!--
+        	<plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>1.0.0</version>
+            	<executions>
+                	<execution>
+                    	<phase>initialize</phase>
+                        	<goals>
+                            	<goal>read-project-properties</goal>
+                            </goals>
+                             <configuration>
+                                    <files>
+                                        <file>${basedir}/performance-tests/performance-tests.properties</file>
+                                    </files>
+                                </configuration> 
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+             <plugin>
+             <groupId>org.codehaus.cargo</groupId>
+             <artifactId>cargo-maven2-plugin</artifactId>
+             <version>1.4.16</version>
+             	<configuration>
+                     <container>
+                         <containerId>tomcat8x</containerId>
+<!--                          <home>${basedir}/performance-tests/tomcat6-install</home> -->
+						      <zipUrlInstaller>
+						        <url>http://apache.ip-connect.vn.ua/tomcat/tomcat-8/v8.0.29/bin/apache-tomcat-8.0.29.zip</url>
+						      </zipUrlInstaller>
+                     </container>
+                     <configuration>
+                         <properties>
+                             <cargo.servlet.port>8085</cargo.servlet.port>
+                             <cargo.protocol>http</cargo.protocol>
+<!--                              <cargo.tomcat.connector.clientAuth>false</cargo.tomcat.connector.clientAuth>
+                             <cargo.tomcat.connector.sslProtocol>TLS</cargo.tomcat.connector.sslProtocol>
+                             <cargo.tomcat.connector.keystoreFile>${basedir}/tomcat/keystore.jks</cargo.tomcat.connector.keystoreFile>
+                             <cargo.tomcat.connector.keystorePass>secret</cargo.tomcat.connector.keystorePass> -->
+                             <cargo.tomcat.httpSecure>false</cargo.tomcat.httpSecure>
+                             
+                             <!-- we do not use Apache Tomcat datasource -->
+<!--                              <cargo.datasource.datasource.ds1>
+                                 cargo.datasource.url=jdbc:h2:mem:test|
+                                 cargo.datasource.driver=org.h2.Driver|
+                                 cargo.datasource.username=sa|
+                                 cargo.datasource.password=
+                             </cargo.datasource.datasource.ds1> -->
+                       </properties>
+                	</configuration>
+                </configuration>
+                <executions>
+                     <execution>
+                        <id>start-container</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                        <goal>start</goal>
+                    </goals>
+                    </execution>
+                    	<execution>
+                    	<id>stop-container</id>
+                    	<phase>post-integration-test</phase>
+                    	<goals>
+                    		<goal>stop</goal>
+                    	</goals>
+                	</execution>
+            	</executions>
+        	</plugin>
+	   	</plugins>
+    </build>	
 	</profile>
 	<profile>
-  	<id>prod</id> 
-	<properties>
-  		<db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5spring</db.jdbcUrl> 
-  		<rp.build.warname>SF5Spring</rp.build.warname>
-  		<spring.version>4.2.3.RELEASE</spring.version>
-  		<spring.security.version>4.0.2.RELEASE</spring.security.version>
-  		<hibernate.version>4.3.11.Final</hibernate.version>
-  		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  		<jackson.version>2.6.3</jackson.version>
- 	</properties>
+  		<id>prod</id>
+  		<activation>
+            <activeByDefault>false</activeByDefault>
+        </activation>  		 
+		<properties>
+  			<db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5spring</db.jdbcUrl> 
+  			<rp.build.warname>SF5Spring</rp.build.warname>
+  			<property.placeholder>production.properties</property.placeholder>
+		</properties>
+	</profile>
+	<profile>
+  		<id>dev</id>
+  		<activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+		<properties>
+  			<db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5springdev</db.jdbcUrl> 
+  			<rp.build.warname>SF5Spring-dev</rp.build.warname>
+  			<property.placeholder>developer.properties</property.placeholder>
+  		</properties>
 	</profile>
 </profiles>
   
