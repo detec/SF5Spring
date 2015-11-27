@@ -8,9 +8,8 @@ import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
+//@Component // NFO: Overriding bean definition for bean
 public class AdminCheck {
 
 	@Autowired
