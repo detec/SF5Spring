@@ -32,7 +32,7 @@ public class SettingsService {
 
 	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Settings>> getSettingsByArbitraryFilter(@PathVariable("type") String fieldName,
-			@PathVariable("typeValue") String typeValue, @MatrixVariable("login") String login) {
+			@PathVariable("typeValue") String typeValue, @MatrixVariable("username") String login) {
 
 		List<Settings> settList = settingsJsonizer.getSettingsByArbitraryFilter(fieldName, typeValue, login);
 		if (settList.isEmpty()) {
@@ -44,7 +44,7 @@ public class SettingsService {
 
 	@RequestMapping(value = "filter/id/{settingId}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<Settings> getSettingById(@PathVariable("settingId") long settingId,
-			@MatrixVariable("login") String login) {
+			@MatrixVariable("username") String login) {
 
 		Settings setting = settingsJsonizer.getSettingById(settingId, login);
 		if (setting == null) {

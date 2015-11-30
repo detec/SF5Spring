@@ -73,7 +73,7 @@ public class CriterionService implements Serializable {
 		SimpleExpression criterion = null;
 		Criterion userCriterion = null;
 
-		criterion = Restrictions.eq("Login", login);
+		criterion = Restrictions.eq("username", login);
 		List<Users> usersList = listService.ObjectsCriterionList(Users.class, criterion);
 
 		if (usersList.size() == 0) {

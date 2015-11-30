@@ -14,7 +14,8 @@ public class UsersJsonizer {
 
 	public Users getUserByLogin(String typeValue) {
 		Users returnUser = null;
-		Criterion criterion = criterionService.getCriterionByClassFieldAndStringValue(Users.class, "Login", typeValue);
+		Criterion criterion = criterionService.getCriterionByClassFieldAndStringValue(Users.class, "username",
+				typeValue);
 
 		if (criterion == null) {
 			return returnUser;

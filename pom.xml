@@ -12,6 +12,8 @@
   		<hibernate.version>4.3.11.Final</hibernate.version>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   		<jackson.version>2.6.3</jackson.version>
+  		<jersey.version>2.22.1</jersey.version>
+  		<rename.tmp.directory>${project.build.directory}/generated-sources</rename.tmp.directory>
 	</properties>
   	 
   <build>
@@ -43,7 +45,7 @@ declared explicitly so Spring config files can be placed next to their correspon
 		  </testResource>
 		</testResources>    
     
-    
+  <pluginManagement>  
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -97,6 +99,43 @@ declared explicitly so Spring config files can be placed next to their correspon
           <encoding>UTF-8</encoding>
         </configuration>
      </plugin>
+     <!-- http://stackoverflow.com/questions/28859421/renaming-static-files-when-building-war-file-using-maven -->
+     <plugin>
+     	<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-antrun-plugin</artifactId>
+		<version>1.8</version>
+        <executions>
+          <execution>
+
+            <id>generate-sources</id>
+            <!-- perform copy before the package phase, 
+            when maven-war-plugin builds the WAR file -->
+            <phase>process-resources</phase>
+<!-- 			<phase>generate-sources</phase> -->
+			<goals>
+            	<goal>run</goal>
+            </goals>
+            <configuration>
+	
+
+            <target>
+               	  <mkdir dir="${project.build.directory}/tmp" />
+              <!-- copy renamed files. -->
+<!--                  <copy todir="${rename.tmp.directory}/properties"> -->
+					<copy todir="${project.build.directory}/tmp">
+                   	<fileset dir="src/main/resources/spring">
+                    	<include name="${property.placeholder}" />
+                   </fileset>
+                   <!-- See other Mappers available at http://ant.apache.org/manual/Types/mapper.html -->
+                   <mapper type="glob" from="${property.placeholder}" to="application.properties"/>
+                 </copy>
+               </target>
+            </configuration>
+
+            
+          </execution>
+        </executions>
+      </plugin>
      <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>2.6</version>
@@ -113,8 +152,15 @@ declared explicitly so Spring config files can be placed next to their correspon
                 <targetPath>WEB-INF/classes/</targetPath>
                 <includes>
                 	<include>**/hibernate.cfg.xml</include> <!-- the path to hibernate.cfg.xml -->
-                	<include>**/*.properties</include>
+<!--                 	<include>**/*.properties</include> -->
                 </includes>
+            </resource>
+            <!-- Changing application properties -->
+            <resource>
+            	<directory>${project.build.directory}/tmp</directory>
+              	<includes>
+                	<include>**/application.properties</include>
+              	</includes>
             </resource>
             <resource>
             	<filtering>true</filtering> <!-- THIS IS IMPORTANT! It tells maven to replace your variables with the properties values -->
@@ -143,6 +189,8 @@ declared explicitly so Spring config files can be placed next to their correspon
    
       
     </plugins>
+    </pluginManagement>
+    
   </build>
   
 <!-- Different profiles properties
@@ -277,7 +325,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<properties>
   			<db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5spring</db.jdbcUrl> 
   			<rp.build.warname>SF5Spring</rp.build.warname>
-  			<property.placeholder>production.properties</property.placeholder>
+  			<property.placeholder>prod.properties</property.placeholder>
 		</properties>
 	</profile>
 	<profile>
@@ -288,7 +336,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<properties>
   			<db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5springdev</db.jdbcUrl> 
   			<rp.build.warname>SF5Spring-dev</rp.build.warname>
-  			<property.placeholder>developer.properties</property.placeholder>
+  			<property.placeholder>dev.properties</property.placeholder>
   		</properties>
 	</profile>
 </profiles>
@@ -412,6 +460,8 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
     	<artifactId>reflections</artifactId>
     	<version>0.9.10</version>
 	</dependency>
+	
+	<!-- Jackson dependencies -->
 	<dependency>
     	<groupId>com.fasterxml.jackson.core</groupId>
     	<artifactId>jackson-databind</artifactId>
@@ -438,21 +488,29 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<artifactId>el-impl</artifactId>
 		<version>2.2</version>
 	</dependency>
+	
+	<!-- Jersey dependencies -->
 	<dependency>
 		<groupId>org.glassfish.jersey.core</groupId>
 		<artifactId>jersey-client</artifactId>
-		<version>2.22.1</version>
+		<version>${jersey.version}</version>
 	</dependency>
 	<dependency>
 		<groupId>org.glassfish.jersey.media</groupId>
 		<artifactId>jersey-media-json-jackson</artifactId>
-		<version>2.22.1</version>
+		<version>${jersey.version}</version>
 	</dependency>
 	<dependency>
 		<groupId>org.glassfish.jersey.media</groupId>
 		<artifactId>jersey-media-json-processing</artifactId>
-		<version>2.22.1</version>
+		<version>${jersey.version}</version>
 	</dependency>
+	<dependency>
+		<groupId>org.glassfish.jersey.media</groupId>
+		<artifactId>jersey-media-multipart</artifactId>
+		<version>${jersey.version}</version>
+	</dependency>
+	
 	<dependency>
 		<groupId>org.glassfish.hk2</groupId>
 		<artifactId>hk2-api</artifactId>

@@ -23,6 +23,8 @@ import org.openbox.sf5.model.Settings;
 @RunWith(JUnit4.class)
 public class SettingsServiceIT extends AbstractServiceTest {
 
+	private static final String servicePath = "usersettings";
+
 	@Test
 	public void shouldGetSettings() {
 		WebTarget target = null;
@@ -36,7 +38,11 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		Settings sett = settList.get(0);
 
-		target = client.target(appLocation + "usersettings/filter/id/" + Long.toString(sett.getId()) + ";login=admin");
+		// target = client.target(appLocation + "usersettings/filter/id/" +
+		// Long.toString(sett.getId()) + ";login=admin");
+
+		target = client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("id")
+				.path(Long.toString(sett.getId())).matrixParam("login", "admin");
 
 		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -46,7 +52,11 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		List<Settings> settList = new ArrayList<Settings>();
 
 		// Let's check, if there is user with login admin
-		WebTarget target = client.target(appLocation + "users/filter/login/admin");
+		// WebTarget target = client.target(appLocation +
+		// "users/filter/login/admin");
+		WebTarget target = client.target(appLocation).path(jsonPath).path("users").path("filter").path("username")
+				.path("admin");
+
 		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 
 		if (response.getStatus() == (Status.NOT_FOUND.getStatusCode())) {
@@ -57,7 +67,10 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		};
 
 		// getting settings by userlogin
-		target = client.target(appLocation + "usersettings/filter/login/admin");
+		// target = client.target(appLocation +
+		// "usersettings/filter/login/admin");
+		target = client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("username")
+				.path("admin");
 
 		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 		// response =
@@ -92,14 +105,18 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		Settings sett = settList.get(0);
 
-		target = client.target(appLocation + "usersettings/filter/Name/" + sett.getName() + ";login=admin");
+		// target = client.target(appLocation + "usersettings/filter/Name/" +
+		// sett.getName() + ";login=admin");
+		target = client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("Name")
+				.path(sett.getName()).matrixParam("login", "admin");
 
 		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 	}
 
-	Client createClient() {
+	@Override
+	public Client createClient() {
 		// return
 		// ClientBuilder.newBuilder().register(JacksonJaxbJsonProvider.class).build();
 

@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RequestMapping(value = "/json/users/", headers = "Accept=*/*", produces = "application/json")
 public class UsersService {
 
-	@RequestMapping(value = "filter/login/{login}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "filter/username/{login}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<Users> getUserByLogin(@PathVariable("login") String login) {
 		Users retUser = usersJsonizer.getUserByLogin(login);
 		if (retUser == null) {

@@ -21,11 +21,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RequestMapping(value = "/json/satellites/", headers = "Accept=*/*", produces = "application/json")
 public class SatellitesService {
 
-	@RequestMapping(value = "all/", method = RequestMethod.GET, produces = "application/json") // ,
-																								// headers
-																								// =
-	// "Accept=application/xml,
-	// application/json")
+	@RequestMapping(value = "all", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Satellites>> getAllSatellites() {
 		List<Satellites> satList = listService.ObjectsList(Satellites.class);
 		if (satList.isEmpty()) {

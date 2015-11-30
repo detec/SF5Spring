@@ -34,7 +34,8 @@
 <!-- (in this case, JDBC-related settings for the JPA EntityManager definition below) -->
 <!-- <context:property-placeholder location="classpath:data-access.properties" system-properties-mode="OVERRIDE"/> -->
 
-<context:property-placeholder location="classpath:${property.placeholder}"   system-properties-mode="OVERRIDE"/>
+<!-- application.properties are for Eclipse - file contains dev properties -->
+<context:property-placeholder location="classpath:application.properties"   system-properties-mode="OVERRIDE"/>
 <tx:annotation-driven transaction-manager="transactionManager"/>
 
 	
