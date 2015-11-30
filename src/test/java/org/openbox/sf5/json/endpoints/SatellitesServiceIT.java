@@ -16,17 +16,32 @@ import org.junit.runners.JUnit4;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 
 @RunWith(JUnit4.class)
-public class TranspondersServiceITests extends AbstractServiceTest {
-
-	// private static final String appLocation =
-	// "http://localhost:8080/SF5Spring/json/";
+public class SatellitesServiceIT extends AbstractServiceTest {
 
 	@Test
-	public void shouldGetTranspondersByArbitraryFilter() {
+	public void shouldgetSatelliteById() {
+
+		WebTarget target = null;
+		Response response = null;
+
+		Client client = createClient();
+
+		target = client.target(appLocation + "satellites/filter/id/1");
+
+		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+	}
+
+	@Test
+	public void shouldgetAllSatellites() {
+
 		WebTarget target = null;
 		Response response = null;
 		Client client = createClient();
-		target = client.target(appLocation + "transponders/filter/Speed/27500");
+
+		target = client.target(appLocation + "satellites/all/");
 
 		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -34,35 +49,12 @@ public class TranspondersServiceITests extends AbstractServiceTest {
 	}
 
 	@Test
-	public void shouldGetTransponderById() {
-		WebTarget target = null;
-		Response response = null;
-		Client client = createClient();
-		target = client.target(appLocation + "transponders/filter/id/1");
-
-		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-	}
-
-	@Test
-	public void shouldGetTranspondersBySatelliteId() {
+	public void getSatellitesByArbitraryFilter() {
 		WebTarget target = null;
 		Response response = null;
 		Client client = createClient();
 
-		target = client.target(appLocation + "transponders/filter;satId=1");
-		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-	}
-
-	@Test
-	public void shouldGetAllTransponders() {
-		WebTarget target = null;
-		Response response = null;
-		Client client = createClient();
-
-		target = client.target(appLocation + "transponders/all/");
+		target = client.target(appLocation + "satellites/filter/Name/13E");
 
 		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());

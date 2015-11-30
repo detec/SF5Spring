@@ -48,7 +48,7 @@ public class SettingsService {
 
 		Settings setting = settingsJsonizer.getSettingById(settingId, login);
 		if (setting == null) {
-			return new ResponseEntity<Settings>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Settings>(HttpStatus.NO_CONTENT);
 		}
 
 		return new ResponseEntity<Settings>(setting, HttpStatus.OK);

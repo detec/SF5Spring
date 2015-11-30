@@ -66,7 +66,7 @@ declared explicitly so Spring config files can be placed next to their correspon
 				<include>**/*Tests.java</include>
 			</includes>
 			<excludes>
-            	<exclude>**/*ITests.java</exclude>
+            	<exclude>**/*IT.java</exclude>
             </excludes>
 		</configuration>
 		<executions>
@@ -76,11 +76,11 @@ declared explicitly so Spring config files can be placed next to their correspon
                <goal>test</goal>
             </goals>
             <configuration>
- <!--               <excludes>
+               <excludes>
                   <exclude>**/*Tests.java</exclude>
-               </excludes> -->
+               </excludes>
             <includes>
-				<include>**/*ITests.java</include>
+				<include>**/*IT.java</include>
 			</includes>
             </configuration>
         </execution>

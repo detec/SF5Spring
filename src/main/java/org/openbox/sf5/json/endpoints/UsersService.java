@@ -20,7 +20,7 @@ public class UsersService {
 	public ResponseEntity<Users> getUserByLogin(@PathVariable("login") String login) {
 		Users retUser = usersJsonizer.getUserByLogin(login);
 		if (retUser == null) {
-			return new ResponseEntity<Users>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Users>(HttpStatus.NO_CONTENT);
 		}
 
 		return new ResponseEntity<Users>(retUser, HttpStatus.OK);

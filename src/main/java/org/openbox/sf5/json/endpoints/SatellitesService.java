@@ -39,7 +39,7 @@ public class SatellitesService {
 	public ResponseEntity<Satellites> getSatelliteById(@PathVariable("satelliteId") long satId) {
 		Satellites sat = objectController.select(Satellites.class, satId);
 		if (sat == null) {
-			return new ResponseEntity<Satellites>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Satellites>(HttpStatus.NO_CONTENT);
 		}
 
 		return new ResponseEntity<Satellites>(sat, HttpStatus.OK);

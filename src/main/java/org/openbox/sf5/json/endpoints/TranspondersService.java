@@ -35,7 +35,7 @@ public class TranspondersService {
 	public ResponseEntity<Transponders> getTransponderById(@PathVariable("transponderId") long tpId) {
 		Transponders trans = objectController.select(Transponders.class, tpId);
 		if (trans == null) {
-			return new ResponseEntity<Transponders>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Transponders>(HttpStatus.NO_CONTENT);
 		}
 
 		return new ResponseEntity<Transponders>(trans, HttpStatus.OK);
