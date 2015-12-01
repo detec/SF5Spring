@@ -13,7 +13,7 @@
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   		<jackson.version>2.6.3</jackson.version>
   		<jersey.version>2.22.1</jersey.version>
-  		<rename.tmp.directory>${project.build.directory}/generated-sources</rename.tmp.directory>
+<!--   		<rename.tmp.directory>${project.build.directory}/generated-sources</rename.tmp.directory> -->
 	</properties>
   	 
   <build>
@@ -100,7 +100,7 @@ declared explicitly so Spring config files can be placed next to their correspon
         </configuration>
      </plugin>
      <!-- http://stackoverflow.com/questions/28859421/renaming-static-files-when-building-war-file-using-maven -->
-     <plugin>
+  <!--    <plugin>
      	<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-antrun-plugin</artifactId>
 		<version>1.8</version>
@@ -108,34 +108,55 @@ declared explicitly so Spring config files can be placed next to their correspon
           <execution>
 
             <id>generate-sources</id>
-            <!-- perform copy before the package phase, 
-            when maven-war-plugin builds the WAR file -->
+            perform copy before the package phase, 
+            when maven-war-plugin builds the WAR file
             <phase>process-resources</phase>
-<!-- 			<phase>generate-sources</phase> -->
-			<goals>
-            	<goal>run</goal>
-            </goals>
+			<phase>generate-sources</phase>
+
             <configuration>
 	
 
             <target>
                	  <mkdir dir="${project.build.directory}/tmp" />
-              <!-- copy renamed files. -->
-<!--                  <copy todir="${rename.tmp.directory}/properties"> -->
+				<mkdir dir="target/tmp"/>
+
+              copy renamed files.
+                 <copy todir="${rename.tmp.directory}/properties">
 					<copy todir="${project.build.directory}/tmp">
                    	<fileset dir="src/main/resources/spring">
                     	<include name="${property.placeholder}" />
                    </fileset>
-                   <!-- See other Mappers available at http://ant.apache.org/manual/Types/mapper.html -->
+                   See other Mappers available at http://ant.apache.org/manual/Types/mapper.html
                    <mapper type="glob" from="${property.placeholder}" to="application.properties"/>
                  </copy>
                </target>
             </configuration>
-
+			<goals>
+            	<goal>run</goal>
+            </goals>
             
           </execution>
         </executions>
+      </plugin> -->
+  <!--     <plugin>
+        <groupId>com.coderplus.maven.plugins</groupId>
+        <artifactId>copy-rename-maven-plugin</artifactId>
+        <version>1.0</version>
+        <executions>
+          <execution>
+            <id>copy-file</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>rename</goal>
+            </goals>
+            <configuration>
+              <sourceFile>src/main/resources/${property.placeholder}</sourceFile>
+              <destinationFile>WEB-INF/classes/application.properties</destinationFile>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
+       -->
      <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>2.6</version>
@@ -156,18 +177,27 @@ declared explicitly so Spring config files can be placed next to their correspon
                 </includes>
             </resource>
             <!-- Changing application properties -->
-            <resource>
-            	<directory>${project.build.directory}/tmp</directory>
+<!--             <resource>
+					<directory>target/tmp</directory>
               	<includes>
                 	<include>**/application.properties</include>
               	</includes>
-            </resource>
+            </resource> -->
             <resource>
             	<filtering>true</filtering> <!-- THIS IS IMPORTANT! It tells maven to replace your variables with the properties values -->
             	<directory>src/main/resources/spring</directory>
              	<targetPath>WEB-INF</targetPath>
              	<includes>
 					<include>*.xml</include>
+                </includes>
+            </resource>
+            
+            <resource>
+            	<filtering>true</filtering> <!-- THIS IS IMPORTANT! It tells maven to replace your variables with the properties values -->
+            	<directory>src/main/resources/spring/${property.placeholder}/</directory>
+             	<targetPath>WEB-INF/classes/</targetPath>
+             	<includes>
+					<include>application.properties</include>
                 </includes>
             </resource>
         </webResources>
@@ -206,7 +236,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
   		<db.jdbcUrl>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</db.jdbcUrl> 
   		<!-- jdbc:h2:tcp://localhost:8085/mem:test -->
   		<rp.build.warname>SF5Spring-test</rp.build.warname>
-  		<property.placeholder>test.properties</property.placeholder>
+  		<property.placeholder>test</property.placeholder>
   	</properties>
   	
   	<!-- http://stackoverflow.com/questions/20916581/how-to-do-in-container-testing-of-a-web-app-in-spring -->
@@ -325,7 +355,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<properties>
   			<db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5spring</db.jdbcUrl> 
   			<rp.build.warname>SF5Spring</rp.build.warname>
-  			<property.placeholder>prod.properties</property.placeholder>
+  			<property.placeholder>prod</property.placeholder>
 		</properties>
 	</profile>
 	<profile>
@@ -336,7 +366,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<properties>
   			<db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5springdev</db.jdbcUrl> 
   			<rp.build.warname>SF5Spring-dev</rp.build.warname>
-  			<property.placeholder>dev.properties</property.placeholder>
+  			<property.placeholder>dev</property.placeholder>
   		</properties>
 	</profile>
 </profiles>
