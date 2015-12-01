@@ -26,8 +26,7 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		Client client = createClient();
 
 		// target = client.target(appLocation + "satellites/filter/id/1");
-		target = client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("1");
-		System.out.println(target.getUri());
+		target = client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("id").path("1");
 
 		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 
@@ -44,7 +43,6 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 
 		// target = client.target(appLocation + "satellites/all/");
 		target = client.target(appLocation).path(jsonPath).path(servicePath).path("all");
-		System.out.println(target.getUri());
 
 		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -59,7 +57,6 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 
 		// target = client.target(appLocation + "satellites/filter/Name/13E");
 		target = client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("Name").path("13E");
-		System.out.println(target.getUri());
 
 		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());

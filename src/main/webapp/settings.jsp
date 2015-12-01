@@ -26,7 +26,7 @@ th, td {
 </c:if>
  <h3>Settings</h3>
 <c:url var="addUrl" value="/settings/add" />
-<table style="text-align:center">
+<table style="text-align:center" id="SettingsTable">
  <thead >
 
   <tr>

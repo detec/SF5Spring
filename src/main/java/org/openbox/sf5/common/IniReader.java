@@ -1,7 +1,10 @@
 package org.openbox.sf5.common;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
@@ -33,6 +36,7 @@ import org.openbox.sf5.model.ValueOfTheCarrierFrequency;
 import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class IniReader implements Serializable {
@@ -63,6 +67,22 @@ public class IniReader implements Serializable {
 
 	public IniReader() {
 
+	}
+
+	public void readMultiPartFile(MultipartFile file) throws IOException {
+
+		// create a temp file
+		File temp = File.createTempFile("transponders", ".xml");
+		String absolutePath = temp.getAbsolutePath();
+
+		byte[] bytes = file.getBytes();
+		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(absolutePath)));
+		stream.write(bytes);
+		stream.close();
+
+		// calling reader class
+		setFilepath(absolutePath);
+		readData(); // doing import
 	}
 
 	public void readData() throws IOException {

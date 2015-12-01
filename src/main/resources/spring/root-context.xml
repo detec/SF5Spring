@@ -21,13 +21,10 @@
 <context:annotation-config />
 
 <!-- This section enables autowiring -->	
-<!-- <context:component-scan base-package="org.openbox.sf5.application" /> -->
 <context:component-scan base-package="org.openbox.sf5.model" />
 <context:component-scan base-package="org.openbox.sf5.dao" /> <!-- Probably this is for autowiring -->
 <context:component-scan base-package="org.openbox.sf5.service" />
 <context:component-scan base-package="org.openbox.sf5.common" />
-<!-- <context:component-scan base-package="org.openbox.sf5.converters" /> -->
-<!-- <context:component-scan base-package="org.openbox.sf5.json.endpoints" /> -->
 <context:component-scan base-package="org.openbox.sf5.json.service" />
 
 <!-- Configurer that replaces ${...} placeholders with values from a properties file -->
@@ -64,6 +61,8 @@
 	
 <bean id="adminCheck" class="org.openbox.sf5.service.AdminCheck" init-method="initialize"></bean>
 
+<!-- http://stackoverflow.com/questions/12123516/getting-exception-no-bean-named-springsecurityfilterchain-is-defined -->
+<!-- <bean id="springSecurityFilterChain" class="org.springframework.web.filter.DelegatingFilterProxy"/> -->
  
 <!-- Global Security Settings -->
 <security:global-method-security pre-post-annotations="enabled" />

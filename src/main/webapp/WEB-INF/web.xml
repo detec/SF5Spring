@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
-	<display-name>SF5Spring</display-name>
+
+<display-name>SF5Spring</display-name>
+	
+	<!-- Filters -->
 	<filter>
     	<display-name>springMultipartFilter</display-name>
     	<filter-name>springMultipartFilter</filter-name>
@@ -10,6 +13,7 @@
     	<filter-name>springMultipartFilter</filter-name>
     	<servlet-name>sf5</servlet-name>
     	<url-pattern>/*</url-pattern>
+    	<url-pattern>/json/*</url-pattern>
 	</filter-mapping>
   <filter>
     <filter-name>springSecurityFilterChain</filter-name>
@@ -23,32 +27,35 @@
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-<!--     <param-value>/WEB-INF/sf5-servlet.xml</param-value> -->
-<param-value>/WEB-INF/root-context.xml</param-value>
-  </context-param>
-  <context-param>
-    <param-name>spring.profiles.active</param-name>
-    <param-value>production</param-value>
-  </context-param>
-<!--   <context-param> -->
-<!--     <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name> -->
-<!--     <param-value>true</param-value> -->
-<!--   </context-param> -->
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
-  <listener>
-    <listener-class>
-    org.springframework.web.context.request.RequestContextListener
-	</listener-class>
-  </listener>
-  <listener>
-    <listener-class>
-		org.springframework.security.web.session.HttpSessionEventPublisher
-</listener-class>
-  </listener>
+  
+	<context-param>
+    	<param-name>contextConfigLocation</param-name>
+<!-- 		<param-value>/WEB-INF/root-context.xml</param-value> -->
+		<param-value>/WEB-INF/springWebMultipartContext.xml, /WEB-INF/root-context.xml</param-value>
+  	</context-param>
+  	
+<!--   	<context-param>
+    	<param-name>spring.profiles.active</param-name>
+    	<param-value>production</param-value>
+  	</context-param> -->
+	
+	<!-- Taken from https://gist.github.com/manish-in-java/8661970 -->
+<!-- 	<context-param> -->
+<!-- 		<param-name>contextConfigLocation</param-name>  -->
+<!--         <param-value>/WEB-INF/springWebMultipartContext.xml</param-value> -->
+<!-- 	</context-param> -->
+	
+	<!-- Listeners -->
+	<listener>
+    	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+    	<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	<listener>
+    	<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+	</listener>
+  
   <servlet>
     <servlet-name>sf5</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -75,4 +82,5 @@
 <!--     <url-pattern>/login</url-pattern> -->
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+  
 </web-app>

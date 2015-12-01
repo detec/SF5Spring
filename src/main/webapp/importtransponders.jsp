@@ -12,9 +12,10 @@
 <body>
 <h2>Openbox SF5 settings editor</h2>
  <h3>Import transponders from  *.ini files</h3>
-	<form method="POST" enctype="multipart/form-data" action="upload">
-		File to upload: <input type="file" name="file"> <br /> <input type="submit"
-			value="Upload">
+ 
+	<form method="POST" enctype="multipart/form-data" action="upload" id="UploadForm">
+		File to upload: <input type="file" name="file" id="UploadField"> <br /> <input type="submit"
+			value="Upload" id="uploadButton">
 		
 	<input type="hidden" name="${_csrf.parameterName}"
                 value="${_csrf.token}" />		

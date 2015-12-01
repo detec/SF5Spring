@@ -13,13 +13,29 @@ import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RestController
 @EnableWebMvc
 @RequestMapping(value = "/json/transponders/", headers = "Accept=*/*", produces = "application/json")
 public class TranspondersService {
+
+	@RequestMapping(value = "upload", method = RequestMethod.POST, produces = "application/json", headers = "content-type=multipart/form-data")
+	public ResponseEntity<Boolean> uploadTransponders(@RequestParam("file") MultipartFile file) {
+
+		Boolean result = new Boolean(false);
+		if (!file.isEmpty()) {
+
+			result = transpondersJsonizer.uploadTransponders(file);
+		} else {
+			return new ResponseEntity<Boolean>(result, HttpStatus.NOT_IMPLEMENTED);
+		}
+
+		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+	}
 
 	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Transponders>> getTranspondersByArbitraryFilter(@PathVariable("type") String fieldName,

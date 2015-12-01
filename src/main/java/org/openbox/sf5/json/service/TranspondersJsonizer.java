@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.openbox.sf5.common.IniReader;
 import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.service.CriterionService;
@@ -12,9 +13,22 @@ import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class TranspondersJsonizer {
+
+	public Boolean uploadTransponders(MultipartFile file) {
+		try {
+			iniReader.readMultiPartFile(file);
+
+		} catch (Exception e) {
+			return new Boolean(false);
+		}
+
+		return new Boolean(iniReader.isResult());
+
+	}
 
 	public List<Transponders> getTranspondersByArbitraryFilter(String fieldName, String typeValue) {
 		List<Transponders> transList = new ArrayList<Transponders>();
@@ -46,6 +60,9 @@ public class TranspondersJsonizer {
 		return transList;
 
 	}
+
+	@Autowired
+	private IniReader iniReader;
 
 	@Autowired
 	private ObjectsListService listService;
