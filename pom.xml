@@ -99,64 +99,7 @@ declared explicitly so Spring config files can be placed next to their correspon
           <encoding>UTF-8</encoding>
         </configuration>
      </plugin>
-     <!-- http://stackoverflow.com/questions/28859421/renaming-static-files-when-building-war-file-using-maven -->
-  <!--    <plugin>
-     	<groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-antrun-plugin</artifactId>
-		<version>1.8</version>
-        <executions>
-          <execution>
 
-            <id>generate-sources</id>
-            perform copy before the package phase, 
-            when maven-war-plugin builds the WAR file
-            <phase>process-resources</phase>
-			<phase>generate-sources</phase>
-
-            <configuration>
-	
-
-            <target>
-               	  <mkdir dir="${project.build.directory}/tmp" />
-				<mkdir dir="target/tmp"/>
-
-              copy renamed files.
-                 <copy todir="${rename.tmp.directory}/properties">
-					<copy todir="${project.build.directory}/tmp">
-                   	<fileset dir="src/main/resources/spring">
-                    	<include name="${property.placeholder}" />
-                   </fileset>
-                   See other Mappers available at http://ant.apache.org/manual/Types/mapper.html
-                   <mapper type="glob" from="${property.placeholder}" to="application.properties"/>
-                 </copy>
-               </target>
-            </configuration>
-			<goals>
-            	<goal>run</goal>
-            </goals>
-            
-          </execution>
-        </executions>
-      </plugin> -->
-  <!--     <plugin>
-        <groupId>com.coderplus.maven.plugins</groupId>
-        <artifactId>copy-rename-maven-plugin</artifactId>
-        <version>1.0</version>
-        <executions>
-          <execution>
-            <id>copy-file</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>rename</goal>
-            </goals>
-            <configuration>
-              <sourceFile>src/main/resources/${property.placeholder}</sourceFile>
-              <destinationFile>WEB-INF/classes/application.properties</destinationFile>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-       -->
      <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>2.6</version>
@@ -164,7 +107,6 @@ declared explicitly so Spring config files can be placed next to their correspon
         	<warSourceDirectory>src/main/webapp</warSourceDirectory>
           	<failOnMissingWebXml>false</failOnMissingWebXml>
 			<packagingExcludes>WEB-INF/web.xml</packagingExcludes>
-			<!-- <packagingExcludes>WEB-INF/sf5-servlet.xml</packagingExcludes> -->
         <warName>${rp.build.warname}</warName>
 		<webResources>
 			<resource>
@@ -173,16 +115,9 @@ declared explicitly so Spring config files can be placed next to their correspon
                 <targetPath>WEB-INF/classes/</targetPath>
                 <includes>
                 	<include>**/hibernate.cfg.xml</include> <!-- the path to hibernate.cfg.xml -->
-<!--                 	<include>**/*.properties</include> -->
                 </includes>
             </resource>
-            <!-- Changing application properties -->
-<!--             <resource>
-					<directory>target/tmp</directory>
-              	<includes>
-                	<include>**/application.properties</include>
-              	</includes>
-            </resource> -->
+
             <resource>
             	<filtering>true</filtering> <!-- THIS IS IMPORTANT! It tells maven to replace your variables with the properties values -->
             	<directory>src/main/resources/spring</directory>
@@ -234,7 +169,6 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
         </activation>  		   	 
 	<properties>
   		<db.jdbcUrl>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</db.jdbcUrl> 
-  		<!-- jdbc:h2:tcp://localhost:8085/mem:test -->
   		<rp.build.warname>SF5Spring-test</rp.build.warname>
   		<property.placeholder>test</property.placeholder>
   	</properties>
@@ -242,26 +176,6 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
   	<!-- http://stackoverflow.com/questions/20916581/how-to-do-in-container-testing-of-a-web-app-in-spring -->
   	<build>
     	<plugins>
-    	<!--
-        	<plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>properties-maven-plugin</artifactId>
-            <version>1.0.0</version>
-            	<executions>
-                	<execution>
-                    	<phase>initialize</phase>
-                        	<goals>
-                            	<goal>read-project-properties</goal>
-                            </goals>
-                             <configuration>
-                                    <files>
-                                        <file>${basedir}/performance-tests/performance-tests.properties</file>
-                                    </files>
-                                </configuration> 
-                    </execution>
-                </executions>
-            </plugin>
-            -->
              <plugin>
              <groupId>org.codehaus.cargo</groupId>
              <artifactId>cargo-maven2-plugin</artifactId>
@@ -269,31 +183,31 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
              	<configuration>
                      <container>
                          <containerId>tomcat8x</containerId>
-<!--                          <home>${basedir}/performance-tests/tomcat6-install</home> -->
 						      <zipUrlInstaller>
 						        <url>http://apache.ip-connect.vn.ua/tomcat/tomcat-8/v8.0.29/bin/apache-tomcat-8.0.29.zip</url>
 						      </zipUrlInstaller>
                      </container>
                      <configuration>
-                         <properties>
-                             <cargo.servlet.port>8085</cargo.servlet.port>
+                     	<properties>
+                             <cargo.servlet.port>8080</cargo.servlet.port>
                              <cargo.protocol>http</cargo.protocol>
-<!--                              <cargo.tomcat.connector.clientAuth>false</cargo.tomcat.connector.clientAuth>
-                             <cargo.tomcat.connector.sslProtocol>TLS</cargo.tomcat.connector.sslProtocol>
-                             <cargo.tomcat.connector.keystoreFile>${basedir}/tomcat/keystore.jks</cargo.tomcat.connector.keystoreFile>
-                             <cargo.tomcat.connector.keystorePass>secret</cargo.tomcat.connector.keystorePass> -->
                              <cargo.tomcat.httpSecure>false</cargo.tomcat.httpSecure>
-                             
-                             <!-- we do not use Apache Tomcat datasource -->
-<!--                              <cargo.datasource.datasource.ds1>
-                                 cargo.datasource.url=jdbc:h2:mem:test|
-                                 cargo.datasource.driver=org.h2.Driver|
-                                 cargo.datasource.username=sa|
-                                 cargo.datasource.password=
-                             </cargo.datasource.datasource.ds1> -->
-                       </properties>
+                                             
+                    	</properties>
                 	</configuration>
+<!--                 	<deployer> -->
+                		<deployables>
+                		<deployable>
+                		 	<properties>
+                		     	<context>${rp.build.warname}</context>
+              				</properties>
+                		</deployable>
+                		</deployables>
+<!--                 	</deployer>                	 -->
                 </configuration>
+
+                
+                
                 <executions>
                      <execution>
                         <id>start-container</id>
@@ -311,40 +225,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
                 	</execution>
             	</executions>
         	</plugin>
-        	<!-- http://inmemdb-maven-plugin.btmatthews.com/examples/integration_webapp.html -->
- <!--        	<plugin>
-                <groupId>com.btmatthews.maven.plugins.inmemdb</groupId>
-                <artifactId>inmemdb-maven-plugin</artifactId>
-                <version>1.4.3</version>
-                <configuration>
-                    <monitorKey>inmemdb</monitorKey>
-                    <monitorPort>8086</monitorPort>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>run</id>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <phase>pre-integration-test</phase>
-                <configuration>
-                   	<daemon>true</daemon>
-                    <type>h2</type>
-                    <database>test</database>
-                    <username>sa</username>
-                	<password></password>
-        	 	</configuration>
-             	</execution>
-              	<execution>
-                        <id>stop</id>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                	<phase>post-integration-test</phase>
-            	</execution>
-        	</executions>
-    	</plugin> -->
-	</plugins>
+ 	</plugins>
     </build>	
 	</profile>
 	<profile>

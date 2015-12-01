@@ -8,7 +8,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 
 public abstract class AbstractServiceTest {
-	public static final String appLocation = "http://localhost:8085/SF5Spring/";
+	public static final String appLocation = "http://localhost:8080/SF5Spring-test/";
 
 	public static final String jsonPath = "json";
 
