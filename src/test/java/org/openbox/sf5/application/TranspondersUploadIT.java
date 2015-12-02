@@ -35,8 +35,8 @@ public class TranspondersUploadIT extends AbstractSeleniumTest {
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
 		// check that we got
-		UploadForm = driver.findElement(By.id("UploadForm"));
-		assertThat(UploadForm.isDisplayed());
+		WebElement transponderListForm = driver.findElement(By.id("transponderListForm"));
+		assertThat(transponderListForm.isDisplayed());
 
 	}
 

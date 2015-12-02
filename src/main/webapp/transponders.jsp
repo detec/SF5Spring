@@ -33,7 +33,7 @@ th, td {
 	
 <c:set var="colsnumber" value="${bean.selectionMode ? 9 : 8}" />
 	
-<form:form modelAttribute="wrapper" method="POST" action="transponders" items="${wrapper.tclist}" >
+<form:form modelAttribute="wrapper" method="POST" action="transponders" items="${wrapper.tclist}" id="transponderListForm" >
   	<c:if test="${bean.selectionMode}">
 	<input type="submit" value="Select" name="select"/>
 	</c:if>

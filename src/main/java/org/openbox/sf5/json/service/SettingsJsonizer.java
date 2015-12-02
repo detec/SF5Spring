@@ -13,10 +13,21 @@ import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.service.CriterionService;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SettingsJsonizer {
+
+	public HttpStatus saveSetting(Settings setting) {
+		long id = setting.getId();
+		// if we receive non-empty id
+		if (id != 0) {
+			return HttpStatus.CONFLICT;
+		}
+
+		//Settings DBsetting =
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<Settings> getSettingsByArbitraryFilter(String fieldName, String typeValue, String login) {
