@@ -10,7 +10,9 @@ import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.model.Settings;
+import org.openbox.sf5.model.Users;
 import org.openbox.sf5.service.CriterionService;
+import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,24 +21,29 @@ import org.springframework.stereotype.Service;
 @Service
 public class SettingsJsonizer {
 
-	public HttpStatus saveSetting(Settings setting) {
+	public HttpStatus saveNewSetting(Settings setting) {
 		long id = setting.getId();
 		// if we receive non-empty id
 		if (id != 0) {
 			return HttpStatus.CONFLICT;
 		}
-
-		//Settings DBsetting =
+		objectsController.saveOrUpdate(setting);
+		return HttpStatus.CREATED;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Settings> getSettingsByArbitraryFilter(String fieldName, String typeValue, String login) {
+	// public List<Settings> getSettingsByArbitraryFilter(String fieldName,
+	// String typeValue, String login) {
+	public List<Settings> getSettingsByArbitraryFilter(String fieldName, String typeValue, Users user) {
 		List<Settings> settList = new ArrayList<>();
 
-		Criterion userCriterion = criterionService.getUserCriterion(login, Settings.class);
-		if (userCriterion == null) {
-			return settList;
-		}
+		// Criterion userCriterion = criterionService.getUserCriterion(login,
+		// Settings.class);
+		// if (userCriterion == null) {
+		// return settList;
+		// }
+
+		Criterion userCriterion = Restrictions.eq("User", user);
 
 		// building arbitrary criterion
 		Criterion arbitraryCriterion = criterionService.getCriterionByClassFieldAndStringValue(Settings.class,
@@ -58,6 +65,16 @@ public class SettingsJsonizer {
 
 	}
 
+	public List<Settings> getSettingsByUser(Users user) {
+		List<Settings> settList = new ArrayList<>();
+
+		Criterion userCriterion = Restrictions.eq("User", user);
+		settList = listService.ObjectsCriterionList(Settings.class, userCriterion);
+
+		return settList;
+
+	}
+
 	public List<Settings> getSettingsByUserLogin(String login) {
 		List<Settings> settList = new ArrayList<>();
 
@@ -71,13 +88,16 @@ public class SettingsJsonizer {
 		return settList;
 	}
 
-	public Settings getSettingById(long settingId, String login) {
+	public Settings getSettingById(long settingId, Users user) {
 		Settings setting = null;
 
-		Criterion userCriterion = criterionService.getUserCriterion(login, Settings.class);
-		if (userCriterion == null) {
-			return setting;
-		}
+		// Criterion userCriterion = criterionService.getUserCriterion(login,
+		// Settings.class);
+		// if (userCriterion == null) {
+		// return setting;
+		// }
+
+		Criterion userCriterion = Restrictions.eq("User", user);
 
 		Criterion settingIdCriterion = Restrictions.eq("id", settingId);
 
@@ -105,6 +125,17 @@ public class SettingsJsonizer {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+
+	@Autowired
+	private ObjectsController objectsController;
+
+	public ObjectsController getObjectsController() {
+		return objectsController;
+	}
+
+	public void setObjectsController(ObjectsController objectsController) {
+		this.objectsController = objectsController;
+	}
 
 	public CriterionService getCriterionService() {
 		return criterionService;

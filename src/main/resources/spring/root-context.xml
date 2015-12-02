@@ -82,6 +82,8 @@
 	<!-- Anonymous access to json endpoints. -->
 	<security:intercept-url pattern="/json/*" access="isAnonymous()"/>
 	
+	<!-- Secure access to user settings -->
+	<security:intercept-url pattern="/json/usersettings/*" access="hasRole('ROLE_USER')" />
 	
 	<security:intercept-url pattern="/transponders*" access="hasRole('ROLE_USER')" />
 	<security:logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID" invalidate-session="true"/>

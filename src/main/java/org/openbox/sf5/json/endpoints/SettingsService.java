@@ -1,16 +1,16 @@
 package org.openbox.sf5.json.endpoints;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.PathParam;
-
+import org.openbox.sf5.common.SF5SecurityContext;
 import org.openbox.sf5.json.service.SettingsJsonizer;
 import org.openbox.sf5.model.Settings;
+import org.openbox.sf5.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,32 +26,58 @@ public class SettingsService {
 
 	// http://websystique.com/springmvc/spring-mvc-4-restful-web-services-crud-example-resttemplate/
 
-	 @RequestMapping(value = "/create/", method = RequestMethod.POST)
-	 public ResponseEntity<Void> createSetting(@RequestBody Settings setting,  UriComponentsBuilder ucBuilder) {
-		 HttpStatus statusResult = settingsJsonizer.saveSetting(setting);
-		 if (statusResult.equals(HttpStatus.CONFLICT)) {
-			  return new ResponseEntity<Void>(HttpStatus.CONFLICT);
-		 }
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/filter/id/{id}").buildAndExpand(setting.getId()).toUri());
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-	 }
+	@RequestMapping(value = "/create/", method = RequestMethod.POST)
+	public ResponseEntity<Void> createSetting(@RequestBody Settings setting, UriComponentsBuilder ucBuilder) {
+		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 
+		if (!currentUser.equals(setting.getUser())) {
+			// authenticated user and setting user do not coincide.
+			return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		HttpStatus statusResult = settingsJsonizer.saveNewSetting(setting);
+		if (statusResult.equals(HttpStatus.CONFLICT)) {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
 
-	@RequestMapping(value = "filter/login/{typeValue}", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<Settings>> getSettingsByUserLogin(@PathParam("typeValue") String typeValue) {
-		List<Settings> settList = settingsJsonizer.getSettingsByUserLogin(typeValue);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(ucBuilder.path("/filter/id/{id}").buildAndExpand(setting.getId()).toUri());
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+
+	// @RequestMapping(value = "filter/login/{typeValue}", method =
+	// RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "all", method = RequestMethod.GET, produces = "application/json")
+	// public ResponseEntity<List<Settings>>
+	// getSettingsByUserLogin(@PathParam("typeValue") String typeValue) {
+	public ResponseEntity<List<Settings>> getSettingsByUserLogin() {
+
+		// List<Settings> settList =
+		// settingsJsonizer.getSettingsByUserLogin(typeValue);
+
+		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
+		if (currentUser == null) {
+			return new ResponseEntity<List<Settings>>(HttpStatus.UNAUTHORIZED);
+		}
+
+		List<Settings> settList = settingsJsonizer.getSettingsByUser(currentUser);
 		if (settList.isEmpty()) {
 			return new ResponseEntity<List<Settings>>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<Settings>>(settList, HttpStatus.OK);
+
 	}
 
 	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Settings>> getSettingsByArbitraryFilter(@PathVariable("type") String fieldName,
-			@PathVariable("typeValue") String typeValue, @MatrixVariable("username") String login) {
+			@PathVariable("typeValue") String typeValue) {
 
-		List<Settings> settList = settingsJsonizer.getSettingsByArbitraryFilter(fieldName, typeValue, login);
+		List<Settings> settList = new ArrayList<>();
+		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
+		if (currentUser == null) {
+			return new ResponseEntity<List<Settings>>(HttpStatus.UNAUTHORIZED);
+		}
+
+		settList = settingsJsonizer.getSettingsByArbitraryFilter(fieldName, typeValue, currentUser);
 		if (settList.isEmpty()) {
 			return new ResponseEntity<List<Settings>>(HttpStatus.NO_CONTENT);
 		}
@@ -60,10 +86,13 @@ public class SettingsService {
 	}
 
 	@RequestMapping(value = "filter/id/{settingId}", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<Settings> getSettingById(@PathVariable("settingId") long settingId,
-			@MatrixVariable("username") String login) {
+	public ResponseEntity<Settings> getSettingById(@PathVariable("settingId") long settingId) {
+		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
+		if (currentUser == null) {
+			return new ResponseEntity<Settings>(HttpStatus.UNAUTHORIZED);
+		}
 
-		Settings setting = settingsJsonizer.getSettingById(settingId, login);
+		Settings setting = settingsJsonizer.getSettingById(settingId, currentUser);
 		if (setting == null) {
 			return new ResponseEntity<Settings>(HttpStatus.NO_CONTENT);
 		}
@@ -71,6 +100,9 @@ public class SettingsService {
 		return new ResponseEntity<Settings>(setting, HttpStatus.OK);
 
 	}
+
+	@Autowired
+	private SF5SecurityContext securityContext;
 
 	@Autowired
 	private SettingsJsonizer settingsJsonizer;

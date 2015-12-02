@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "Users")
 public class Users extends AbstractDbEntity implements Serializable {
@@ -54,6 +56,7 @@ public class Users extends AbstractDbEntity implements Serializable {
 	}
 
 	@Column(name = "Password", unique = false, nullable = false, length = 15)
+	@JsonProperty("Password")
 	private String Password;
 
 	public String getPassword() {

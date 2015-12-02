@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "Usersauthorities")
 public class Usersauthorities extends AbstractDbEntity implements Serializable {
@@ -23,8 +25,21 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 	@SequenceGenerator(name = "t_gen", sequenceName = "T_SEQ")
 	private long id;
 
-	public long getId() {
+	@ManyToOne
+	@JoinColumn(name = "parent_id", unique = false, nullable = false)
+	// @JsonIgnore
+	private Users parent_id;
 
+	@Column(name = "username", unique = false, nullable = false)
+	private String username;
+
+	@JsonProperty("LineNumber")
+	private long LineNumber;
+
+	@Column(name = "authority", unique = false, nullable = true, length = 50)
+	private String authority;
+
+	public long getId() {
 		return id;
 	}
 
@@ -32,45 +47,19 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "parent_id", unique = false, nullable = false)
-	private Users parent_id;
-
-	public Users getparent_id() {
+	public Users getParent_id() {
 		return parent_id;
 	}
 
-	public void setparent_id(Users parent_id) {
+	public void setParent_id(Users parent_id) {
 		this.parent_id = parent_id;
 	}
 
-	@Column(name = "username", unique = false, nullable = false)
-	private String username;
-
-	private long LineNumber;
-
-	public Usersauthorities(String username) {
-
-		this.username = username;
-
-	}
-
-	@Column(name = "authority", unique = false, nullable = true, length = 50)
-	private String authority;
-
-	public String getauthority() {
-		return authority;
-	}
-
-	public void setauthority(String authority) {
-		this.authority = authority;
-	}
-
-	public String getusername() {
+	public String getUsername() {
 		return username;
 	}
 
-	public void setparent_id(String username) {
+	public void setUsername(String username) {
 		this.username = username;
 	}
 
@@ -78,8 +67,16 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 		return LineNumber;
 	}
 
-	public void setLineNumber(long LineNumber) {
-		this.LineNumber = LineNumber;
+	public void setLineNumber(long lineNumber) {
+		LineNumber = lineNumber;
+	}
+
+	public String getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(String authority) {
+		this.authority = authority;
 	}
 
 	public Usersauthorities(String username, String authority, Users parent_id, long pLine) {
@@ -88,12 +85,6 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 		this.authority = authority;
 		this.parent_id = parent_id;
 		this.LineNumber = pLine;
-
-	}
-
-	public Usersauthorities(Users parent_id) {
-
-		this.parent_id = parent_id;
 
 	}
 

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.openbox.sf5.common.SF5SecurityContext;
 import org.openbox.sf5.converters.UserEditor;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.Users;
@@ -16,8 +17,6 @@ import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -85,23 +84,30 @@ public class SettingsList {
 	}
 
 	private void readCurrentUser() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		// Authentication auth =
+		// SecurityContextHolder.getContext().getAuthentication();
+		//
+		// org.springframework.security.core.userdetails.User secUser = null;
+		//
+		// if (auth.getPrincipal() instanceof
+		// org.springframework.security.core.userdetails.User) {
+		// secUser = (org.springframework.security.core.userdetails.User)
+		// auth.getPrincipal();
+		// } else {
+		// return;
+		// }
+		//
+		// String username = secUser.getUsername();
+		// Criterion criterion = Restrictions.eq("username", username);
+		//
+		// List<Users> usersList = listService.ObjectsCriterionList(Users.class,
+		// criterion);
+		// if (!usersList.isEmpty()) {
+		// currentUser = usersList.get(0);
+		// }
 
-		org.springframework.security.core.userdetails.User secUser = null;
+		this.currentUser = securityContext.getCurrentlyAuthenticatedUser();
 
-		if (auth.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
-			secUser = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
-		} else {
-			return;
-		}
-
-		String username = secUser.getUsername();
-		Criterion criterion = Restrictions.eq("username", username);
-
-		List<Users> usersList = listService.ObjectsCriterionList(Users.class, criterion);
-		if (!usersList.isEmpty()) {
-			currentUser = usersList.get(0);
-		}
 	}
 
 	@RequestMapping(value = "/settings/select", method = RequestMethod.GET)
@@ -153,6 +159,9 @@ public class SettingsList {
 
 	@Autowired
 	private UserEditor UserEditor;
+
+	@Autowired
+	private SF5SecurityContext securityContext;
 
 	private Users currentUser;
 

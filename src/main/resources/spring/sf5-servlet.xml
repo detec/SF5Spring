@@ -49,6 +49,7 @@
 	<property name="suffix" value=".jsp" />
 </bean>
 	
+	<!-- Matrix params require this -->
 <bean id="requestMappingHandlerMapping" 
 	class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
  	<property name="removeSemicolonContent" value="false" />
