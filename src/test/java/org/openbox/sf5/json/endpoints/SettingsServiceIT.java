@@ -19,25 +19,21 @@ import javax.ws.rs.core.Response.Status;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.junit.runners.MethodSorters;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.Users;
 
 @RunWith(JUnit4.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SettingsServiceIT extends AbstractServiceTest {
 
 	private static final String servicePath = "usersettings";
 
-	private Users adminUser;
-
-	@Before
-	public void setUp() {
-		setUpAbstract();
-		serviceTarget = commonTarget.path(servicePath);
-
-		// here we should create a setting.
+	private Users getAdminUser() {
 
 		// check that admin user exists
 		Invocation.Builder invocationBuilder = commonTarget.path("users").path("filter").path("username").path("admin")
@@ -50,30 +46,58 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		// }
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
+		Users adminUser = response.readEntity(Users.class);
 
-		adminUser = response.readEntity(Users.class);
+		return adminUser;
+	}
+
+	@Before
+	public void setUp() {
+		setUpAbstract();
+	}
+
+	@Test
+	public void shouldCreateSetting() {
+
+		serviceTarget = commonTarget.path(servicePath);
+
+		// here we should create a setting.
+		Users adminUser = getAdminUser();
+
+		assertThat(adminUser).isNotNull();
 
 		Settings setting = new Settings();
 		setting.setName("Simple");
 		setting.setUser(adminUser);
 
+		// //
 		// http://howtodoinjava.com/2015/08/07/jersey-restful-client-examples/#post
-		invocationBuilder = serviceTarget.path("create").request(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON);
+		Invocation.Builder invocationBuilder = serviceTarget.path("create").request(MediaType.APPLICATION_JSON);
 		addAdminCredentials(invocationBuilder);
 
-		response = invocationBuilder.post(Entity.entity(setting, MediaType.APPLICATION_JSON));
+		Response responsePost = invocationBuilder.post(Entity.entity(setting, MediaType.APPLICATION_JSON));
+		// System.out.println(responsePost.toString());
+		assertEquals(Status.CREATED.getStatusCode(), responsePost.getStatus());
 
-		assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
+		// RestTemplate restTemplate = new RestTemplate();
+		//
+		// URI uri =
+		// restTemplate.postForLocation(serviceTarget.getUri().toString() +
+		// "/create", setting, Settings.class);
+		// assertThat(uri.toASCIIString()).isNotEqualTo("http://localhost:8080/SF5Spring-test/login?time=1");
+		// System.out.println("Location : " + uri.toASCIIString());
+
 	}
 
 	@Test
-	public void shouldGetSettings() {
+	public void shouldGetSettingById() {
+
+		Users adminUser = getAdminUser();
 		assertThat(adminUser).isNotNull();
 
-		WebTarget target = null;
-		Response response = null;
-		Client client = createClient();
+		// WebTarget target = null;
+		// Response response = null;
+		// Client client = createClient();
 
 		List<Settings> settList = getUserSettings(client);
 		if (settList.size() == 0) {
@@ -85,16 +109,25 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		// target = client.target(appLocation + "usersettings/filter/id/" +
 		// Long.toString(sett.getId()) + ";login=admin");
 
-		target = client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("id")
-				.path(Long.toString(sett.getId())).matrixParam("login", "admin");
+		// target =
+		// client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("id")
+		// .path(Long.toString(sett.getId())).matrixParam("login", "admin");
+		//
+		// response =
+		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 
-		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("id").path(Long.toString(sett.getId()))
+				.request(MediaType.APPLICATION_JSON);
+		addAdminCredentials(invocationBuilder);
+
+		Response response = invocationBuilder.get();
+
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 	}
 
 	// getting all user settings with authentication
 	private List<Settings> getUserSettings(Client client) {
-
+		Users adminUser = getAdminUser();
 		assertThat(adminUser).isNotNull();
 
 		List<Settings> settList = new ArrayList<Settings>();
@@ -159,8 +192,9 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 	@Test
 	public void shouldGetSettingsByArbitraryFilter() {
-		WebTarget target = null;
-		Response response = null;
+
+		// WebTarget target = null;
+		// Response response = null;
 		// Client client = createClient();
 
 		// here we should check, if such user exists and find only his settings.
@@ -173,10 +207,19 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		// target = client.target(appLocation + "usersettings/filter/Name/" +
 		// sett.getName() + ";login=admin");
-		target = client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("Name")
-				.path(sett.getName()).matrixParam("login", "admin");
+		// target =
+		// client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("Name")
+		// .path(sett.getName());
+		// addAdminCredentials(target);
+		//
+		// response =
+		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("Name").path(sett.getName())
+				.request(MediaType.APPLICATION_JSON);
+		addAdminCredentials(invocationBuilder);
 
-		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+		Response response = invocationBuilder.get();
+
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 	}

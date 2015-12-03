@@ -46,17 +46,7 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 	@Test
 	public void shouldGetTransponderById() {
-
-		// WebTarget target = null;
 		Response response = null;
-		// Client client = createClient();
-
-		// target = client.target(appLocation + "transponders/filter/id/1");
-		// target =
-		// client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("id").path("1");
-
-		// response =
-		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 
 		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("id").path("1")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
@@ -67,17 +57,9 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 	@Test
 	public void shouldGetTranspondersBySatelliteId() {
-		// WebTarget target = null;
+
 		Response response = null;
-		// Client client = createClient();
 
-		// target = client.target(appLocation + "transponders/filter;satId=1");
-		// target =
-		// client.target(appLocation).path(jsonPath).path(servicePath).path("filter").matrixParam("satId",
-		// "1");
-
-		// response =
-		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 		Invocation.Builder invocationBuilder = serviceTarget.path("filter").matrixParam("satId", "1")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
@@ -86,16 +68,9 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 	@Test
 	public void shouldGetAllTransponders() {
-		// WebTarget target = null;
+
 		Response response = null;
-		// Client client = createClient();
 
-		// target = client.target(appLocation + "transponders/all/");
-		// target =
-		// client.target(appLocation).path(jsonPath).path(servicePath).path("all");
-
-		// response =
-		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 		Invocation.Builder invocationBuilder = serviceTarget.path("all").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();

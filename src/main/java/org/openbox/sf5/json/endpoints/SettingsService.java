@@ -21,13 +21,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @EnableWebMvc
 @RestController
-@RequestMapping(value = "/json/usersettings/", headers = "Accept=*/*", produces = "application/json")
+@RequestMapping(value = "/json/usersettings/", headers = "Accept=*/*", produces = "application/json", consumes = "application/json")
 public class SettingsService {
 
 	// http://websystique.com/springmvc/spring-mvc-4-restful-web-services-crud-example-resttemplate/
 
-	@RequestMapping(value = "/create/", method = RequestMethod.POST)
+	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public ResponseEntity<Void> createSetting(@RequestBody Settings setting, UriComponentsBuilder ucBuilder) {
+		System.out.println("Create setting called");
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 
 		if (!currentUser.equals(setting.getUser())) {
@@ -40,19 +41,14 @@ public class SettingsService {
 		}
 
 		HttpHeaders headers = new HttpHeaders();
+		headers.add("Usersettings", "created");
 		headers.setLocation(ucBuilder.path("/filter/id/{id}").buildAndExpand(setting.getId()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
-	// @RequestMapping(value = "filter/login/{typeValue}", method =
-	// RequestMethod.GET, produces = "application/json")
 	@RequestMapping(value = "all", method = RequestMethod.GET, produces = "application/json")
-	// public ResponseEntity<List<Settings>>
-	// getSettingsByUserLogin(@PathParam("typeValue") String typeValue) {
 	public ResponseEntity<List<Settings>> getSettingsByUserLogin() {
-
-		// List<Settings> settList =
-		// settingsJsonizer.getSettingsByUserLogin(typeValue);
+		System.out.println("Request all user settings called");
 
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 		if (currentUser == null) {
@@ -71,6 +67,7 @@ public class SettingsService {
 	public ResponseEntity<List<Settings>> getSettingsByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue) {
 
+		System.out.println("Request all user settings by arbitrary filter called");
 		List<Settings> settList = new ArrayList<>();
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 		if (currentUser == null) {
@@ -87,6 +84,8 @@ public class SettingsService {
 
 	@RequestMapping(value = "filter/id/{settingId}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<Settings> getSettingById(@PathVariable("settingId") long settingId) {
+		System.out.println("Request user settings by id");
+
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 		if (currentUser == null) {
 			return new ResponseEntity<Settings>(HttpStatus.UNAUTHORIZED);
