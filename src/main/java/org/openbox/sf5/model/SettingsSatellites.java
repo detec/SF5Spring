@@ -8,8 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "SettingsSatellites")
@@ -23,7 +25,7 @@ public class SettingsSatellites extends AbstractDbEntity implements Serializable
 
 	public long getId() {
 
-		return this.id;
+		return id;
 	}
 
 	public void setId(long id) {
@@ -32,10 +34,11 @@ public class SettingsSatellites extends AbstractDbEntity implements Serializable
 
 	@ManyToOne
 	@JoinColumn(name = "parent_id", unique = false, nullable = false)
+	@JsonBackReference
 	private Settings parent_id;
 
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "my_entity_seq_gen")
-	@SequenceGenerator(name = "my_entity_seq_gen", sequenceName = "catalog_seq")
+
+	@JsonProperty("LineNumber")
 	private long LineNumber;
 
 	public SettingsSatellites(Settings parent_id, long LineNumber) {
@@ -47,10 +50,11 @@ public class SettingsSatellites extends AbstractDbEntity implements Serializable
 
 	@ManyToOne
 	@JoinColumn(name = "Satellite", unique = false, nullable = false)
+	@JsonProperty("Satellite")
 	private Satellites Satellite;
 
 	public Satellites getSatellite() {
-		return this.Satellite;
+		return Satellite;
 	}
 
 	public void setSatellite(Satellites Satellite) {
@@ -58,7 +62,7 @@ public class SettingsSatellites extends AbstractDbEntity implements Serializable
 	}
 
 	public Settings getparent_id() {
-		return this.parent_id;
+		return parent_id;
 	}
 
 	public void setparent_id(Settings parent_id) {
@@ -66,7 +70,7 @@ public class SettingsSatellites extends AbstractDbEntity implements Serializable
 	}
 
 	public long getLineNumber() {
-		return this.LineNumber;
+		return LineNumber;
 	}
 
 	public void setLineNumber(long LineNumber) {
@@ -97,8 +101,8 @@ public class SettingsSatellites extends AbstractDbEntity implements Serializable
 			return false;
 		}
 		SettingsSatellites otherSettingsSatellites = (SettingsSatellites) other;
-		if (otherSettingsSatellites.parent_id.equals(this.parent_id)
-				&& otherSettingsSatellites.Satellite.equals(this.Satellite)) {
+		if (otherSettingsSatellites.parent_id.equals(parent_id)
+				&& otherSettingsSatellites.Satellite.equals(Satellite)) {
 			return true;
 		} else {
 			return false;

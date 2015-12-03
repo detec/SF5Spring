@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -27,7 +28,7 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "parent_id", unique = false, nullable = false)
-	// @JsonIgnore
+	@JsonBackReference
 	private Users parent_id;
 
 	@Column(name = "username", unique = false, nullable = false)
@@ -84,7 +85,7 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 		this.username = username;
 		this.authority = authority;
 		this.parent_id = parent_id;
-		this.LineNumber = pLine;
+		LineNumber = pLine;
 
 	}
 

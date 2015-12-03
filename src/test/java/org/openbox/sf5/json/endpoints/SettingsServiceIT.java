@@ -49,6 +49,8 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		// adminUser = response.readEntity(Users.class);
 		// }
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+
 		adminUser = response.readEntity(Users.class);
 
 		Settings setting = new Settings();

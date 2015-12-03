@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -82,6 +83,7 @@ public class Users extends AbstractDbEntity implements Serializable {
 	// @Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE })
 	@Cascade({ CascadeType.ALL })
 	@OrderColumn(name = "LineNumber")
+	@JsonManagedReference
 	public List<Usersauthorities> authorities;
 
 	public List<Usersauthorities> getauthorities() {

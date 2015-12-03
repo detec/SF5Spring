@@ -23,6 +23,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -94,6 +95,7 @@ public class Settings extends AbstractDbEntity implements Serializable {
 	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE })
 	@OrderColumn(name = "LineNumber")
 	@JsonProperty("Conversion")
+	@JsonManagedReference
 	private List<SettingsConversion> Conversion = new ArrayList<SettingsConversion>();
 
 	public List<SettingsConversion> getConversion() {

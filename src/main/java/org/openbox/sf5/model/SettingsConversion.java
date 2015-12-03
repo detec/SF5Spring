@@ -15,6 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "SettingsConversion")
 public class SettingsConversion extends AbstractDbEntity implements Serializable {
@@ -27,7 +30,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 
 	public long getId() {
 
-		return this.id;
+		return id;
 	}
 
 	public void setId(long id) {
@@ -36,8 +39,10 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 
 	@ManyToOne
 	@JoinColumn(name = "parent_id", unique = false, nullable = false)
+	@JsonBackReference
 	private Settings parent_id;
 
+	@JsonProperty("LineNumber")
 	private long LineNumber;
 
 	public SettingsConversion(Settings parent_id) {
@@ -48,10 +53,11 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 
 	@ManyToOne
 	@JoinColumn(name = "Transponder", unique = false, nullable = false)
+	@JsonProperty("Transponder")
 	private Transponders Transponder;
 
 	public Transponders getTransponder() {
-		return this.Transponder;
+		return Transponder;
 	}
 
 	public void setTransponder(Transponders Transponder) {
@@ -59,10 +65,11 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	@Column(name = "Satindex", unique = false, nullable = true, precision = 1)
+	@JsonProperty("Satindex")
 	private long Satindex;
 
 	public long getSatindex() {
-		return this.Satindex;
+		return Satindex;
 	}
 
 	public void setSatindex(long Satindex) {
@@ -70,10 +77,11 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	@Column(name = "Tpindex", unique = false, nullable = true, precision = 1)
+	@JsonProperty("Tpindex")
 	private long Tpindex;
 
 	public long getTpindex() {
-		return this.Tpindex;
+		return Tpindex;
 	}
 
 	public void setTpindex(long Tpindex) {
@@ -81,10 +89,11 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	@Column(name = "Note", unique = false, nullable = true, length = 120)
+	@JsonProperty("Note")
 	private String Note;
 
 	public String getNote() {
-		return this.Note;
+		return Note;
 	}
 
 	public void setNote(String Note) {
@@ -92,10 +101,11 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	@Column(name = "TheLineOfIntersection", unique = false, nullable = true, precision = 2)
+	@JsonProperty("TheLineOfIntersection")
 	private long TheLineOfIntersection;
 
 	public long getTheLineOfIntersection() {
-		return this.TheLineOfIntersection;
+		return TheLineOfIntersection;
 	}
 
 	public void setTheLineOfIntersection(long TheLineOfIntersection) {
@@ -103,7 +113,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	public Settings getparent_id() {
-		return this.parent_id;
+		return parent_id;
 	}
 
 	public void setparent_id(Settings parent_id) {
@@ -111,7 +121,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	public long getLineNumber() {
-		return this.LineNumber;
+		return LineNumber;
 	}
 
 	public void setLineNumber(long LineNumber) {
@@ -146,11 +156,11 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 			return false;
 		}
 		SettingsConversion otherSettingsConversion = (SettingsConversion) other;
-		if (otherSettingsConversion.parent_id.equals(this.parent_id)
-				&& otherSettingsConversion.Transponder.equals(this.Transponder)
-				&& otherSettingsConversion.Satindex == this.Satindex && otherSettingsConversion.Tpindex == this.Tpindex
-				&& otherSettingsConversion.Note.equals(this.Note)
-				&& otherSettingsConversion.TheLineOfIntersection == this.TheLineOfIntersection) {
+		if (otherSettingsConversion.parent_id.equals(parent_id)
+				&& otherSettingsConversion.Transponder.equals(Transponder)
+				&& otherSettingsConversion.Satindex == Satindex && otherSettingsConversion.Tpindex == Tpindex
+				&& otherSettingsConversion.Note.equals(Note)
+				&& otherSettingsConversion.TheLineOfIntersection == TheLineOfIntersection) {
 			return true;
 		} else {
 			return false;
@@ -171,7 +181,6 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 		List<String> SCClassList = new ArrayList<String>();
 
 		Field[] thisClassFieldsArray = SettingsConversion.class.getDeclaredFields();
-		// this.getClass().getDeclaredFields();
 
 		List<Field> thisClassFiledList = Arrays.asList(thisClassFieldsArray);
 		thisClassFiledList.stream().forEach(t -> {
@@ -186,13 +195,12 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 			fields = thisClassFieldsArray;
 
 			for (int i = 0; i < fields.length; i++) {
-				// if (fields[i].getName().equals("serialVersionUID")) {
+
 				if (SCClassList.contains(fields[i].getName())) {
 					// add only checked classes
 					// continue;
 					fields[i].set(this, fields[i].get(origObj));
 				}
-				//
 			}
 			curClass = curClass.getSuperclass();
 		} while (curClass != null);
