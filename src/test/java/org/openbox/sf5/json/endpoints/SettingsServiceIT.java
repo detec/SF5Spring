@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
@@ -16,8 +15,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -54,6 +51,8 @@ public class SettingsServiceIT extends AbstractServiceTest {
 	@Before
 	public void setUp() {
 		setUpAbstract();
+
+		serviceTarget = commonTarget.path(servicePath);
 	}
 
 	@Test
@@ -73,7 +72,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		// //
 		// http://howtodoinjava.com/2015/08/07/jersey-restful-client-examples/#post
 		Invocation.Builder invocationBuilder = serviceTarget.path("create").request(MediaType.APPLICATION_JSON);
-		addAdminCredentials(invocationBuilder);
+		// addAdminCredentials(invocationBuilder);
 
 		Response responsePost = invocationBuilder.post(Entity.entity(setting, MediaType.APPLICATION_JSON));
 		// System.out.println(responsePost.toString());
@@ -118,7 +117,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("id").path(Long.toString(sett.getId()))
 				.request(MediaType.APPLICATION_JSON);
-		addAdminCredentials(invocationBuilder);
+		// addAdminCredentials(invocationBuilder);
 
 		Response response = invocationBuilder.get();
 
@@ -140,54 +139,52 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		// client.target(appLocation).path(jsonPath).path("users").path("filter").path("username")
 		// .path("admin");
 
-		Invocation.Builder invocationBuilder = commonTarget.path("users").path("filter").path("username").path("admin")
-				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+		// We have already checked that there is admin user.
+		// Invocation.Builder invocationBuilder =
+		// commonTarget.path("users").path("filter").path("username").path("admin")
+		// .request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+		//
+		// Response response = invocationBuilder.get();
+		//
+		// if (response.getStatus() == (Status.NOT_FOUND.getStatusCode())) {
+		// return settList; // no user with login admin
+		// }
 
-		Response response = invocationBuilder.get();
-
-		if (response.getStatus() == (Status.NOT_FOUND.getStatusCode())) {
-			return settList; // no user with login admin
-		}
-
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		// assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 		GenericType<List<Settings>> genList = new GenericType<List<Settings>>() {
 		};
 
-		WebTarget target = client.target(appLocation).path(jsonPath).path(servicePath).path("all");
-		addAdminCredentials(target);
+		WebTarget target = serviceTarget.path("all");
+		// addAdminCredentials(target);
 
-		// setting credentials
-		// invocationBuilder =
-		// serviceTarget.path("all").request(MediaType.APPLICATION_JSON)
-		// .accept(MediaType.APPLICATION_JSON);
-		//
-		// addAdminCredentials(invocationBuilder);
-		//
-		// response = invocationBuilder.get();
-
-		// response =
+		// Response response =
 		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+		// assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-		// response =
-		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get(genList);
-
-		// http://stackoverflow.com/questions/27643822/marshal-un-marshal-list-objects-in-jersey-jax-rs-using-jaxb
-		// Jersey 2
-
-		// List<Book> books =
-		// client.target(REST_SERVICE_URL).request().get(bookType);
-
-		// settList = response.readEntity(genList);
-		// settList =
-		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get(genList);
-
-		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+		settList = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get(genList);
 
 		assertThat(settList).isNotNull();
 		assertThat(settList.size()).isGreaterThan(0);
 		return settList;
 
+		// // getting settings by userlogin
+		// target = client.target(appLocation +
+		// "usersettings/filter/login/admin");
+		//
+		// response =
+		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+		// assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		//
+		// //
+		// http://stackoverflow.com/questions/27643822/marshal-un-marshal-list-objects-in-jersey-jax-rs-using-jaxb
+		// // Jersey 2
+		//
+		// settList =
+		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get(genList);
+		//
+		// assertThat(settList).isNotNull();
+		// return settList;
 	}
 
 	@Test
@@ -224,11 +221,13 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 	}
 
-	@Override
-	public Client createClient() {
-		HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.universalBuilder().build();
-
-		return ClientBuilder.newBuilder().register(JacksonFeature.class).register(authenticationFeature).build();
-	}
+	// @Override
+	// public Client createClient() {
+	// HttpAuthenticationFeature authenticationFeature =
+	// HttpAuthenticationFeature.universalBuilder().build();
+	//
+	// return
+	// ClientBuilder.newBuilder().register(JacksonFeature.class).register(authenticationFeature).build();
+	// }
 
 }

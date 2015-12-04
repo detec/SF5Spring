@@ -28,10 +28,16 @@ public class SettingsService {
 
 	// http://websystique.com/springmvc/spring-mvc-4-restful-web-services-crud-example-resttemplate/
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public ResponseEntity<Void> createSetting(@RequestBody Settings setting, UriComponentsBuilder ucBuilder) {
-		System.out.println("Create setting called");
+		// System.out.println("Create setting called");
+
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
+
+		if (currentUser == null) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
 
 		if (!currentUser.equals(setting.getUser())) {
 			// authenticated user and setting user do not coincide.
@@ -48,6 +54,7 @@ public class SettingsService {
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "all", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Settings>> getSettingsByUserLogin() {
 		System.out.println("Request all user settings called");
@@ -65,6 +72,7 @@ public class SettingsService {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Settings>> getSettingsByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue) {
@@ -84,6 +92,7 @@ public class SettingsService {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "filter/id/{settingId}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<Settings> getSettingById(@PathVariable("settingId") long settingId) {
 		System.out.println("Request user settings by id");

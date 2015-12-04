@@ -14,15 +14,13 @@ import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Component
-@Scope(value = "session")
 @Service
+@Scope(value = "session")
 public class UserService implements IUserService, Serializable {
 
-	private static final long serialVersionUID = 7134677754855532093L;
+	private static final long serialVersionUID = -5341605268427837922L;
 
 	@Autowired
 	private ObjectsController objectsController;
@@ -63,6 +61,22 @@ public class UserService implements IUserService, Serializable {
 			return true;
 		}
 
+	}
+
+	public ObjectsController getObjectsController() {
+		return objectsController;
+	}
+
+	public void setObjectsController(ObjectsController objectsController) {
+		this.objectsController = objectsController;
+	}
+
+	public ObjectsListService getListService() {
+		return listService;
+	}
+
+	public void setListService(ObjectsListService listService) {
+		this.listService = listService;
 	}
 
 	public static boolean hasAdminRole(Users currentUser) {

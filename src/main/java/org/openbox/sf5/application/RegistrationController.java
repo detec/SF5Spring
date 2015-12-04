@@ -29,7 +29,8 @@ import org.springframework.web.context.request.WebRequest;
 public class RegistrationController {
 
 	@Autowired
-	private IUserService service;
+	// @Qualifier("userService")
+	private IUserService userService;
 
 	@Autowired
 	@Qualifier("authenticationManager")
@@ -73,22 +74,20 @@ public class RegistrationController {
 			user = createUserAccount(accountDto, result);
 		}
 		if (user == null) {
-			// result.rejectValue("username", "User not created!");
-			// result.reject("username", "User not created!");
+
 			model.addAttribute("viewErrMsg", "User not created! There is a user with such name!");
 			return "register";
 		}
 
 		if (result.hasErrors()) {
-			// return new ModelAndView("register", "user", accountDto);
+
 			model.addAttribute("viewErrMsg", "Unknown error!");
 			return "register";
 		} else {
 
 			// I added this from stackoverflow example
 			authenticateUserAndSetSession(user, request);
-			// return new ModelAndView("login", "user", accountDto);
-			// return new ModelAndView("settings");
+
 			model.addAttribute("username", user.getusername());
 			model.addAttribute("viewMsg", user.getusername() + " successfully registered!");
 			return "settings";
@@ -99,7 +98,7 @@ public class RegistrationController {
 	private Users createUserAccount(UserDto accountDto, BindingResult result) {
 		Users registered = null;
 		try {
-			registered = service.registerNewUserAccount(accountDto);
+			registered = userService.registerNewUserAccount(accountDto);
 		} catch (UserNotFoundException e) {
 			return null;
 		}

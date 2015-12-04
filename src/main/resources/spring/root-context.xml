@@ -67,7 +67,7 @@
 
 <bean id="digestFilter" class=
 	"org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
-<property name="userDetailsService" ref="userService"/>
+<property name="userDetailsService" ref="JDBCUserService"/>
 <property name="authenticationEntryPoint" ref="digestEntryPoint"/>
 <!-- <property name="userCache" ref="userCache"/> -->
 </bean>
@@ -79,28 +79,86 @@
 <property name="nonceValiditySeconds" value="10"/>
 </bean>
 
-<!-- Global Security Settings -->
-<security:global-method-security pre-post-annotations="enabled" />
+<bean id="expressionHandler" class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"/>
+
+<!-- http://docs.spring.io/spring-security/site/docs/4.0.3.RELEASE/reference/htmlsingle/#el-access -->
+
+<!-- Global Security Settings  To use expressions like @PreAuthorize-->
+<!-- http://stackoverflow.com/questions/32552528/spring-security-4-preauthorizehasrole-not-working -->
+<security:global-method-security pre-post-annotations="enabled" >
+	 <security:expression-handler ref="expressionHandler"/>
+</security:global-method-security>
+	 
  
+<!-- auto-config 
+Automatically registers a login form, BASIC authentication, logout services. If set to "true", all of these capabilities are added 
+(although you can still customize the configuration of each by providing the respective element). If unspecified, defaults to "false". Use of this attribute 
+is not recommended. Use explicit configuration elements instead to avoid confusion. -->  
  
-<security:http auto-config="true" use-expressions="true" disable-url-rewriting="true">
+<!-- 
+disable-url-rewriting  
+ Prevents session IDs from being appended to URLs in the application. Clients must use cookies if this attribute is set to true. The default is true.  -->
+ 
+<!-- entry-point-ref 
+Normally the AuthenticationEntryPoint used will be set depending on which authentication mechanisms have been configured. This attribute allows this behaviour 
+to be overridden by defining a customized AuthenticationEntryPoint bean which will start the authentication process. -->
+
+<!-- name 
+A bean identifier, used for referring to the bean elsewhere in the context. -->  
+
+<!-- use-expressions 
+Enables EL-expressions in the access attribute, as described in the chapter on expression-based access-control. The default value is true. -->
+
+<!-- pattern 
+Defining a pattern for the http element controls the requests which will be filtered through the list of filters which it defines. 
+The interpretation is dependent on the configured request-matcher. If no pattern is defined, all requests will be matched, so the most specific patterns should be declared first.  -->
+
+<!-- request-matcher 
+Defines the RequestMatcher strategy used in the FilterChainProxy and the beans created by the intercept-url to match incoming requests. 
+Options are currently ant, regex and ciRegex, for ant, regular-expression and case-insensitive regular-expression repsectively. 
+A separate instance is created for each intercept-url element using its pattern and method attributes. Ant paths are matched using an AntPathRequestMatcher 
+and regular expressions are matched using a RegexRequestMatcher. See the Javadoc for these classes for more details on exactly how the matching is preformed. 
+Ant paths are the default strategy.    -->
+
+<!-- <security:debug/> -->
+
+    <!-- REST security -->
+    <security:http entry-point-ref="digestEntryPoint" pattern="/json/usersettings/*" name="DigetsAuthentication" create-session="stateless">
+    	<!-- We do not need sessions in stateless REST API -->
+    	<security:csrf disabled="true"/>
+    	
+    
+<!--         <security:intercept-url pattern="/json/usersettings/*" access="hasRole('ROLE_USER')" /> -->
+        <security:custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
+<!--         <security:custom-filter ref="digestFilter" /> -->
+    </security:http>
+ 
+<!-- <security:http auto-config="true" use-expressions="true" disable-url-rewriting="true"> -->
+<security:http name="LoginFormAuthentication">
 
 	<security:session-management invalid-session-url="/login?time=1">
     	<security:concurrency-control max-sessions="1" expired-url="/login?time=1" />
     </security:session-management>
 
+<!-- Let's not use intercept-url - we use annotations instead -->
+
+	
 	<security:intercept-url pattern="/login" access="isAnonymous()"/>
 	<security:intercept-url pattern="/register" access="isAnonymous()"/>
 	
-<!-- 	<security:intercept-url pattern="/*" access="hasRole('ROLE_USER')" /> -->
 	
-	<!-- Anonymous access to json endpoints. -->
+ 	<security:intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
+	
+	
+	
+	
+	<!--	Anonymous access to json endpoints. --> 
 	<security:intercept-url pattern="/json/*" access="isAnonymous()"/>
 	
-	<!-- Secure access to user settings -->
-<!-- 	<security:intercept-url pattern="/json/usersettings/*" access="hasRole('ROLE_USER')" /> -->
 	
-	<security:intercept-url pattern="/transponders*" access="hasRole('ROLE_USER')" />
+	<!--  For all other requests -->
+<!-- 	<security:intercept-url pattern="/*" access="isAnonymous()"/> -->
+	
 	<security:logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID" invalidate-session="true"/>
 	
 		 
@@ -116,16 +174,12 @@
 </security:http>
 
  
-    <!-- the security namespace configuration -->
-    <security:http use-expressions="true" entry-point-ref="digestEntryPoint">
-        <security:intercept-url pattern="/json/usersettings/*" access="hasRole('ROLE_USER')" />
-         <security:custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
-    </security:http>
+
  
  
 <security:authentication-manager  alias="authenticationManager">
 	<security:authentication-provider>
-	<security:jdbc-user-service id="userService"
+	<security:jdbc-user-service id="JDBCUserService"
 		data-source-ref="dataSource"
 		users-by-username-query="
 			select	username, password, enabled from users	where username =?"

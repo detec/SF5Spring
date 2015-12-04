@@ -6,6 +6,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -31,10 +32,10 @@ public abstract class AbstractServiceTest {
 
 		// https://jersey.java.net/documentation/latest/user-guide.html#d0e5127
 		// adding universal, digest and non-preemptive authentication.
-		HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.universalBuilder().build();
+		HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.digest("admin", "1");
 
-		return ClientBuilder.newBuilder().register(JacksonJaxbJsonProvider.class).register(MultiPartFeature.class)
-				.register(authenticationFeature).build();
+		return ClientBuilder.newBuilder().register(JacksonJaxbJsonProvider.class).register(JacksonFeature.class)
+				.register(MultiPartFeature.class).register(authenticationFeature).build();
 	}
 
 	public void setUpAbstract() {

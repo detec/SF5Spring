@@ -7,6 +7,7 @@ import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,11 @@ public class SF5SecurityContext {
 		Users returnUser = null;
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		// http://stackoverflow.com/questions/26101738/why-is-the-anonymoususer-authenticated-in-spring-security
+		if (auth instanceof AnonymousAuthenticationToken) {
+			return returnUser;
+		}
 
 		org.springframework.security.core.userdetails.User secUser = null;
 
