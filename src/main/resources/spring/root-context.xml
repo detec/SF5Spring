@@ -64,6 +64,21 @@
 <!-- http://stackoverflow.com/questions/12123516/getting-exception-no-bean-named-springsecurityfilterchain-is-defined -->
 <!-- <bean id="springSecurityFilterChain" class="org.springframework.web.filter.DelegatingFilterProxy"/> -->
  
+
+<bean id="digestFilter" class=
+	"org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+<property name="userDetailsService" ref="userService"/>
+<property name="authenticationEntryPoint" ref="digestEntryPoint"/>
+<!-- <property name="userCache" ref="userCache"/> -->
+</bean>
+
+<bean id="digestEntryPoint" class=
+	"org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
+<property name="realmName" value="Contacts Realm via Digest Authentication"/>
+<property name="key" value="acegi"/>
+<property name="nonceValiditySeconds" value="10"/>
+</bean>
+
 <!-- Global Security Settings -->
 <security:global-method-security pre-post-annotations="enabled" />
  
@@ -77,7 +92,7 @@
 	<security:intercept-url pattern="/login" access="isAnonymous()"/>
 	<security:intercept-url pattern="/register" access="isAnonymous()"/>
 	
-	<security:intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
+<!-- 	<security:intercept-url pattern="/*" access="hasRole('ROLE_USER')" /> -->
 	
 	<!-- Anonymous access to json endpoints. -->
 	<security:intercept-url pattern="/json/*" access="isAnonymous()"/>
@@ -101,9 +116,16 @@
 </security:http>
 
  
+    <!-- the security namespace configuration -->
+    <security:http use-expressions="true" entry-point-ref="digestEntryPoint">
+        <security:intercept-url pattern="/json/usersettings/*" access="hasRole('ROLE_USER')" />
+         <security:custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
+    </security:http>
+ 
+ 
 <security:authentication-manager  alias="authenticationManager">
 	<security:authentication-provider>
-	<security:jdbc-user-service
+	<security:jdbc-user-service id="userService"
 		data-source-ref="dataSource"
 		users-by-username-query="
 			select	username, password, enabled from users	where username =?"
