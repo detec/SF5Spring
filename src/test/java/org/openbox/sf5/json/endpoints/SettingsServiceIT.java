@@ -156,11 +156,6 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		};
 
 		WebTarget target = serviceTarget.path("all");
-		// addAdminCredentials(target);
-
-		// Response response =
-		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
-		// assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 		settList = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get(genList);
 

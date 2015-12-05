@@ -15,6 +15,9 @@ public class SendTransponderFilesIT extends AbstractServiceTest {
 
 	// http://howtodoinjava.com/2015/08/07/jersey-restful-client-examples/
 
+	// http://stackoverflow.com/questions/31977185/web-application-exception-javax-ws-rs-notsupportedexception-http-415-unsupport
+	// about multipart Jesrey
+
 	public WebDriver driver;
 
 	public void setUp() throws Exception {

@@ -25,6 +25,36 @@ In my humble opinion, I tried to do my best of pure Spring MVC, better then famo
 
 This implementation of Openbox SF-5 settings editor provides SQL-based user authentication (Spring Security 4 used) and registration, so that it can be run in a cloud. Each user can access only his/her own SF-5 settings. At the same time, a user has the right to update common catalogue with transponder data, without the need for the administrator to do this routine job. User administrator with credentials admin/1 is checked and, if necessary, created at every application startup.
 
+There are 2 authentication modes:
+
+- login form for JSP-based Spring MVC controllers;
+- digest authentication for RESTful Spring MVC API.
+
+## REST service ##
+
+This Openbox SF-5 settings editor implementation provides JAX-RS JSON API for getting entities from database with the help of Spring MVC 4. Here is the list of supported endpoints, relative to application context path:
+
+- Satellites
+	- json/satellites/all 							- get all satellites as JSON Array;
+	- json/satellites/filter/id/{satelliteId} 		- get satellite by its ID as JSON value;
+	- json/satellites/filter/{type}/{typeValue} 	- get satellites, filtered by arbitrary field name and field value, as JSON Array.
+	
+- Transponders
+	- json/transponders/filter/{type}/{typeValue} 	- get transponders, filtered by arbitrary field name and field value, as JSON Array;
+	- json/transponders/filter/id/{transponderId} 	- get transponder by its ID as JSON value;
+	- json/transponders/filter;satId={satId} 		- get all transponders from specified satellite as JSON Array;
+	- json/transponders/all 						- get all transponders as JSON Array.
+	
+- Users
+	- json/users/filter/username/{login} 			- get user by its login as JSON value.
+	
+- OpenBox SF-5 settings (requires digest authentication)
+	- json/usersettings/create 						- post user setting to this endpoint to create a new setting. User authenticated and the one in setting should coincide.
+	- json/usersettings/all 						- get all user's settings, based on credentials provided, as JSON Array;
+	- json/usersettings/filter/{type}/{typeValue} 	- get user's settings, filtered by arbitrary field name and field value, based on credentials provided, as JSON Array;
+	- json/usersettings/filter/id/{settingId} 		- get setting by its ID as JSON value, based on credentials provided.
+	
+
 ## System requirements ##
 
 - Apache Tomcat 8 with H2 database jar in lib folder;

@@ -40,6 +40,9 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("Speed").path("27500")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
+
+
+//		List<Transponders> transList = response.readEntity(List<Transponders>);
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 	}
