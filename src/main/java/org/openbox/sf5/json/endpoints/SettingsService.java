@@ -23,7 +23,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 @EnableWebMvc
 @RestController
 @PreAuthorize("hasRole('ROLE_USER')")
-@RequestMapping(value = "/json/usersettings/", headers = "Accept=*/*", produces = "application/json", consumes = "application/json")
+// Be careful not to use annotations produces, consumes - it kicks away
+// requests.
+@RequestMapping(value = "/json/usersettings/")
 public class SettingsService {
 
 	// http://websystique.com/springmvc/spring-mvc-4-restful-web-services-crud-example-resttemplate/
@@ -50,50 +52,93 @@ public class SettingsService {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Usersettings", "created");
-		headers.setLocation(ucBuilder.path("/filter/id/{id}").buildAndExpand(setting.getId()).toUri());
+		headers.setLocation(
+				ucBuilder.path("/json/usersettings/filter/id/{id}").buildAndExpand(setting.getId()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
+	// @PreAuthorize("hasRole('ROLE_USER')")
+	// @RequestMapping(value = "all", method = RequestMethod.GET, produces =
+	// "application/json", consumes = "application/json")
+	// public ResponseEntity<List<Settings>> getSettingsByUserLogin() {
+	// System.out.println("Request all user settings called");
+	//
+	// Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
+	// if (currentUser == null) {
+	// return new ResponseEntity<List<Settings>>(HttpStatus.UNAUTHORIZED);
+	// }
+	//
+	// List<Settings> settList =
+	// settingsJsonizer.getSettingsByUser(currentUser);
+	// if (settList.isEmpty()) {
+	// return new ResponseEntity<List<Settings>>(HttpStatus.NO_CONTENT);
+	// }
+	// return new ResponseEntity<List<Settings>>(settList, HttpStatus.OK);
+	//
+	// }
+
+	// http://community.hpe.com/t5/Software-Developers/A-Comprehensive-Example-of-a-Spring-MVC-Application-Part-3/ba-p/6135449
+
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "all", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<Settings>> getSettingsByUserLogin() {
+	@RequestMapping(value = "all", method = RequestMethod.GET)
+	public List<Settings> getSettingsByUserLogin() {
 		System.out.println("Request all user settings called");
 
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 		if (currentUser == null) {
-			return new ResponseEntity<List<Settings>>(HttpStatus.UNAUTHORIZED);
+			return new ArrayList<Settings>();
 		}
 
 		List<Settings> settList = settingsJsonizer.getSettingsByUser(currentUser);
-		if (settList.isEmpty()) {
-			return new ResponseEntity<List<Settings>>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<List<Settings>>(settList, HttpStatus.OK);
+
+		return settList;
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<Settings>> getSettingsByArbitraryFilter(@PathVariable("type") String fieldName,
-			@PathVariable("typeValue") String typeValue) {
+	// @PreAuthorize("hasRole('ROLE_USER')")
+	// @RequestMapping(value = "filter/{type}/{typeValue}", method =
+	// RequestMethod.GET, produces = "application/json", consumes =
+	// "application/json")
+	// public ResponseEntity<List<Settings>>
+	// getSettingsByArbitraryFilter(@PathVariable("type") String fieldName,
+	// @PathVariable("typeValue") String typeValue) {
+	//
+	// System.out.println("Request all user settings by arbitrary filter
+	// called");
+	// List<Settings> settList = new ArrayList<>();
+	// Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
+	// if (currentUser == null) {
+	// return new ResponseEntity<List<Settings>>(HttpStatus.UNAUTHORIZED);
+	// }
+	//
+	// settList = settingsJsonizer.getSettingsByArbitraryFilter(fieldName,
+	// typeValue, currentUser);
+	// if (settList.isEmpty()) {
+	// return new ResponseEntity<List<Settings>>(HttpStatus.NO_CONTENT);
+	// }
+	// return new ResponseEntity<List<Settings>>(settList, HttpStatus.OK);
+	//
+	// }
 
-		System.out.println("Request all user settings by arbitrary filter called");
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET)
+	public List<Settings> getSettingsByArbitraryFilter(@PathVariable("type") String fieldName,
+			@PathVariable("typeValue") String typeValue) {
+		System.out.println("Request all user settings by arbitrary filter	 called");
 		List<Settings> settList = new ArrayList<>();
+
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 		if (currentUser == null) {
-			return new ResponseEntity<List<Settings>>(HttpStatus.UNAUTHORIZED);
+			return settList;
 		}
 
 		settList = settingsJsonizer.getSettingsByArbitraryFilter(fieldName, typeValue, currentUser);
-		if (settList.isEmpty()) {
-			return new ResponseEntity<List<Settings>>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<List<Settings>>(settList, HttpStatus.OK);
+		return settList;
 
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "filter/id/{settingId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "filter/id/{settingId}", method = RequestMethod.GET)
 	public ResponseEntity<Settings> getSettingById(@PathVariable("settingId") long settingId) {
 		System.out.println("Request user settings by id");
 

@@ -6,6 +6,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
@@ -35,7 +36,11 @@ public abstract class AbstractServiceTest {
 		HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.digest("admin", "1");
 
 		return ClientBuilder.newBuilder().register(JacksonJaxbJsonProvider.class).register(JacksonFeature.class)
-				.register(MultiPartFeature.class).register(authenticationFeature).build();
+				.register(MultiPartFeature.class).register(authenticationFeature)
+
+				.register(new LoggingFilter())
+
+				.build();
 	}
 
 	public void setUpAbstract() {

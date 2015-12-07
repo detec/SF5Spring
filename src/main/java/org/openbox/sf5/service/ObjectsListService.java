@@ -1,5 +1,6 @@
 package org.openbox.sf5.service;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.criterion.Criterion;
@@ -8,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ObjectsListService {
+public class ObjectsListService implements Serializable {
 
+	private static final long serialVersionUID = 16870793872936297L;
 	@Autowired
 	private DAOList dao;
 

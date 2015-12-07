@@ -33,7 +33,7 @@ The following security annotation forces @PreAuthorize to read digest authentica
 
 <!-- activates annotation driven binding -->
 <mvc:annotation-driven enable-matrix-variables="true">
-    <mvc:message-converters>
+   <!--  <mvc:message-converters>
         <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
         <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
         <bean
@@ -41,8 +41,19 @@ The following security annotation forces @PreAuthorize to read digest authentica
              <property name="objectMapper" ref="jacksonObjectMapper" />
 		</bean>
   
-        
+     
+    </mvc:message-converters> -->
+
+<!-- https://diterius.wordpress.com/2013/09/11/spring/ -->
+    
+	<!-- <mvc:message-converters register-defaults="true">
+	</mvc:message-converters> -->
+    
+    <mvc:message-converters>
+        <bean id="jsonMessageConverter" 
+              class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"  />
     </mvc:message-converters>
+	    
 </mvc:annotation-driven>
 
 <bean id="viewResolver"
