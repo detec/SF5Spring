@@ -103,8 +103,6 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 	// getting all user settings with authentication
 	private List<Settings> getUserSettings(Client client) {
-		// Users adminUser = getAdminUser();
-		// assertThat(adminUser).isNotNull();
 
 		List<Settings> settList = new ArrayList<Settings>();
 
@@ -113,7 +111,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		WebTarget target = serviceTarget.path("all");
 
-		Response result = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+		//Response result = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 		settList = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get(genList);
 
 		assertThat(settList).isNotNull();
@@ -145,19 +143,24 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		// Invocation.Builder invocationBuilder =
 		// serviceTarget.path("filter").path("Name").path(sett.getName())
-		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("Name").path("Simple")
-				.request(MediaType.APPLICATION_JSON);
-		// addAdminCredentials(invocationBuilder);
+//		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("Name").path("Simple")
+//				.request(MediaType.APPLICATION_JSON);
+//
+//
+//		Response response = invocationBuilder.get();
 
-		Response response = invocationBuilder.get();
 
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+//		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 		GenericType<List<Settings>> genList = new GenericType<List<Settings>>() {
 		};
 
-		List<Settings> settList = response.readEntity(genList);
-		assertThat(settList).isNotEmpty();
+		List<Settings> settList = serviceTarget.path("filter").path("Name").path("Simple")
+		.request(MediaType.APPLICATION_JSON).get(genList);
+
+		assertThat(settList).isNotNull();
+		assertThat(settList.size()).isGreaterThan(0);
 
 	}
 
