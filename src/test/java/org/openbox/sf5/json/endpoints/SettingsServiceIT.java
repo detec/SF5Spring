@@ -3,6 +3,8 @@ package org.openbox.sf5.json.endpoints;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,22 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.AuthCache;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.auth.DigestScheme;
+import org.apache.http.impl.client.BasicAuthCache;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -86,11 +104,15 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		Settings sett = settList.get(0);
 
-		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("id").path(Long.toString(sett.getId()))
+		// Invocation.Builder invocationBuilder =
+		// serviceTarget.path("filter").path("id").path(Long.toString(sett.getId()))
+		//
+		// .request(MediaType.APPLICATION_JSON);
+		//
+		// Response response = invocationBuilder.get();
 
-				.request(MediaType.APPLICATION_JSON);
-
-		Response response = invocationBuilder.get();
+		WebTarget target = serviceTarget.path("filter").path("id").path(Long.toString(sett.getId()));
+		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
@@ -111,7 +133,8 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		WebTarget target = serviceTarget.path("all");
 
-		//Response result = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+		// Response result =
+		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 		settList = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get(genList);
 
 		assertThat(settList).isNotNull();
@@ -121,7 +144,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 	}
 
 	@Test
-	public void shouldGetSettingsByArbitraryFilter() {
+	public void shouldGetSettingsByArbitraryFilter() throws ClientProtocolException, IOException {
 
 		// here we should check, if such user exists and find only his settings.
 		// List<Settings> settList = getUserSettings(client);
@@ -143,25 +166,88 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		// Invocation.Builder invocationBuilder =
 		// serviceTarget.path("filter").path("Name").path(sett.getName())
-//		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("Name").path("Simple")
-//				.request(MediaType.APPLICATION_JSON);
-//
-//
-//		Response response = invocationBuilder.get();
+		// Invocation.Builder invocationBuilder =
+		// serviceTarget.path("filter").path("Name").path("Simple")
+		// .request(MediaType.APPLICATION_JSON);
+		//
+		//
+		// Response response = invocationBuilder.get();
 
+		// assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
+		// 08.12.2015
+		// GenericType<List<Settings>> genList = new
+		// GenericType<List<Settings>>() {
+		// };
+		//
+		// List<Settings> settList =
+		// serviceTarget.path("filter").path("Name").path("Simple")
+		// .request(MediaType.APPLICATION_JSON).get(genList);
+		//
+		// assertThat(settList).isNotNull();
+		// assertThat(settList.size()).isGreaterThan(0);
+		// 08.12.2015
 
-//		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		// HttpComponentsClientHttpRequestFactory factory = new
+		// HttpComponentsClientHttpRequestFactory();
 
-		GenericType<List<Settings>> genList = new GenericType<List<Settings>>() {
-		};
+		// DefaultHttpClient client = (DefaultHttpClient)
+		// factory.getHttpClient();
+		// 3 client.getCredentialsProvider().setCredentials(
+		// 4 new AuthScope(hostName, portNumber),
+		// 5 new UsernamePasswordCredentials(username, password));
+		// 6 RestTemplate restTemplate = new RestTemplate(factory);
 
-		List<Settings> settList = serviceTarget.path("filter").path("Name").path("Simple")
-		.request(MediaType.APPLICATION_JSON).get(genList);
+		URI url = serviceTarget.path("filter").path("Name").path("Simple").getUri();
 
-		assertThat(settList).isNotNull();
-		assertThat(settList.size()).isGreaterThan(0);
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials("admin", "1");
+		AuthScope authScope = new AuthScope(new HttpHost("localhost", 8080));
+		// // credProvider = new CredentialsProvider(authScope, credentials);
+		// HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 
+		CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+		credentialsProvider.setCredentials(authScope, credentials);
+		CloseableHttpClient httpclient = HttpClients.custom().setDefaultCredentialsProvider(credentialsProvider)
+				.build();
+
+		HttpHost target = new HttpHost("localhost", 8080, "http");
+
+		try {
+
+			// Create AuthCache instance
+			AuthCache authCache = new BasicAuthCache();
+			// Generate DIGEST scheme object, initialize it and add it to the
+			// local
+			// auth cache
+			DigestScheme digestAuth = new DigestScheme();
+			// Suppose we already know the realm name
+			digestAuth.overrideParamter("realm", "some realm");
+			// Suppose we already know the expected nonce value
+			digestAuth.overrideParamter("nonce", "whatever");
+			authCache.put(target, digestAuth);
+
+			// Add AuthCache to the execution context
+			HttpClientContext localContext = HttpClientContext.create();
+			localContext.setAuthCache(authCache);
+
+			HttpGet httpget = new HttpGet(url);
+
+			System.out.println("Executing request " + httpget.getRequestLine() + " to target " + target);
+			for (int i = 0; i < 3; i++) {
+				CloseableHttpResponse response = httpclient.execute(target, httpget, localContext);
+				HttpEntity entity = response.getEntity();
+
+				try {
+					System.out.println("----------------------------------------");
+					System.out.println(response.getStatusLine());
+					System.out.println(EntityUtils.toString(response.getEntity()));
+				} finally {
+					response.close();
+				}
+			}
+		} finally {
+			httpclient.close();
+		}
 	}
 
 }

@@ -137,23 +137,39 @@ public class SettingsService {
 
 	}
 
+	// @PreAuthorize("hasRole('ROLE_USER')")
+	// @RequestMapping(value = "filter/id/{settingId}", method =
+	// RequestMethod.GET)
+	// public ResponseEntity<Settings> getSettingById(@PathVariable("settingId")
+	// long settingId) {
+	// System.out.println("Request user settings by id");
+	//
+	// Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
+	// if (currentUser == null) {
+	// return new ResponseEntity<Settings>(HttpStatus.UNAUTHORIZED);
+	// }
+	//
+	// Settings setting = settingsJsonizer.getSettingById(settingId,
+	// currentUser);
+	// if (setting == null) {
+	// return new ResponseEntity<Settings>(HttpStatus.NO_CONTENT);
+	// }
+	//
+	// return new ResponseEntity<Settings>(setting, HttpStatus.OK);
+	//
+	// }
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "filter/id/{settingId}", method = RequestMethod.GET)
-	public ResponseEntity<Settings> getSettingById(@PathVariable("settingId") long settingId) {
-		System.out.println("Request user settings by id");
-
+	public Settings getSettingById(@PathVariable("settingId") long settingId) {
+		System.out.println("Request user settings by id called");
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 		if (currentUser == null) {
-			return new ResponseEntity<Settings>(HttpStatus.UNAUTHORIZED);
+			return new Settings();
 		}
-
 		Settings setting = settingsJsonizer.getSettingById(settingId, currentUser);
-		if (setting == null) {
-			return new ResponseEntity<Settings>(HttpStatus.NO_CONTENT);
-		}
 
-		return new ResponseEntity<Settings>(setting, HttpStatus.OK);
-
+		return setting;
 	}
 
 	@Autowired
