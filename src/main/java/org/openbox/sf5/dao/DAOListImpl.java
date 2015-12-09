@@ -1,5 +1,6 @@
 package org.openbox.sf5.dao;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DAOListImpl implements DAOList {
+public class DAOListImpl implements DAOList, Serializable {
 
+	private static final long serialVersionUID = 9132749811478277495L;
 	@Autowired
 	private SessionFactory sessionFactory;
 

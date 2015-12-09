@@ -22,7 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @EnableWebMvc
 @RestController
-@PreAuthorize("hasRole('ROLE_USER')")
+//@PreAuthorize("hasRole('ROLE_USER')")
 // Be careful not to use annotations produces, consumes - it kicks away
 // requests.
 @RequestMapping(value = "/json/usersettings/")
@@ -120,7 +120,7 @@ public class SettingsService {
 	//
 	// }
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	//@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET)
 	public List<Settings> getSettingsByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue) {

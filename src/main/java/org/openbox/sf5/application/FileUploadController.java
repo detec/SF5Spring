@@ -2,6 +2,7 @@ package org.openbox.sf5.application;
 
 import org.openbox.sf5.common.IniReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,11 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class FileUploadController {
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/upload", method = RequestMethod.GET)
 	public String provideUploadInfo() {
 		return "importtransponders";
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public String handleFileUpload(@RequestParam("file") MultipartFile file) {
 		if (!file.isEmpty()) {

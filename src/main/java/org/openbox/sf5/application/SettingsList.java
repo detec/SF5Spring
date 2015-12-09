@@ -61,21 +61,25 @@ public class SettingsList {
 		return "settings";
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/settings", method = RequestMethod.GET)
 	public String settingsGetSettings(Model model) {
 		return getSettings(model);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String rootsettingsGetSettings(Model model) {
 		return getSettings(model);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String barerootsettingsGetSettings(Model model) {
 		return getSettings(model);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/settings/delete", method = RequestMethod.GET)
 	public String deleteSetting(@RequestParam(value = "id", required = true) long id, Model model) {
 
@@ -106,10 +110,11 @@ public class SettingsList {
 		// currentUser = usersList.get(0);
 		// }
 
-		this.currentUser = securityContext.getCurrentlyAuthenticatedUser();
+		currentUser = securityContext.getCurrentlyAuthenticatedUser();
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/settings/select", method = RequestMethod.GET)
 	public String selectSetting(@RequestParam(value = "selectionmode", required = true) boolean pSelectionMode,
 			Model model) {
@@ -119,6 +124,7 @@ public class SettingsList {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/selectedsetting", method = RequestMethod.GET)
 	public String openSettingForSelection(@RequestParam(value = "id", required = true) long id) {
 

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Scope("request")
 public class UserListController {
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/users/", method = RequestMethod.GET)
 	public String getUserList(Model model) {
 
@@ -34,21 +35,25 @@ public class UserListController {
 		return "users";
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/users/settings", method = RequestMethod.GET)
 	public String redirectToSettings() {
 		return "redirect:/settings";
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/users/logout", method = RequestMethod.POST)
 	public String redirectToLogout() {
 		return "redirect:/logout";
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/users/transponders", method = RequestMethod.GET)
 	public String redirectToTransponders() {
 		return "redirect:/transponders";
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/users/change", method = RequestMethod.GET)
 	public String changeState(@RequestParam(value = "id", required = true) long pid, Model model) {
 		Users user = objectsController.select(Users.class, pid);
@@ -77,6 +82,7 @@ public class UserListController {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/users/delete", method = RequestMethod.GET)
 	public String deleteUser(@RequestParam(value = "id", required = true) long pid, Model model) {
 

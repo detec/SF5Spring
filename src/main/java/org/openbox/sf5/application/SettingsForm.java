@@ -146,6 +146,7 @@ public class SettingsForm implements Serializable {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "save", value = "/editsetting", method = RequestMethod.POST)
 	public String editSaveSetting(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
@@ -154,6 +155,7 @@ public class SettingsForm implements Serializable {
 	}
 
 	// here we save setting
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "add", value = "/settings/add", method = RequestMethod.POST)
 	public String add(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
@@ -167,23 +169,27 @@ public class SettingsForm implements Serializable {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "selectfromother", value = "/settings/add", method = RequestMethod.POST)
 	public String newSelectFromOtherSetting(@ModelAttribute("bean") SettingsForm pSetting) {
 		return prepareSelectFromOtherSetting(pSetting);
 		// return selectTranspondersFromNew(pSetting);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "cancel", value = "/settings/add", method = RequestMethod.POST)
 	public String newCancelSettingEdit() {
 		return "redirect:/settings";
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "cancel", value = "/editsetting", method = RequestMethod.POST)
 	public String cancelSettingEdit() {
 
 		return "redirect:/settings";
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "selectTransponders", value = "/editsetting", method = RequestMethod.POST)
 	public String prepareToSelectTransponders(@ModelAttribute("setting") SettingsForm pSetting) {
 
@@ -192,11 +198,13 @@ public class SettingsForm implements Serializable {
 		return "redirect:/transponders?SelectionMode=true";
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "selectTransponders", value = "/settings/add", method = RequestMethod.POST)
 	public String selectTranspondersFromNew(@ModelAttribute("bean") SettingsForm pSetting) {
 		return prepareToSelectTransponders(pSetting);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "selectfromother", value = "/editsetting", method = RequestMethod.POST)
 	public String prepareSelectFromOtherSetting(@ModelAttribute("bean") SettingsForm pSetting) {
 
@@ -214,6 +222,7 @@ public class SettingsForm implements Serializable {
 		}
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/editsetting", method = RequestMethod.GET)
 	public String editSetting(@RequestParam(value = "id", required = true) long pid,
 			@RequestParam(value = "selectionmode", required = true) boolean pSelectionMode, Model model) {
@@ -243,6 +252,7 @@ public class SettingsForm implements Serializable {
 	}
 
 	// here we start to create setting
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/settings/add", method = RequestMethod.GET)
 	public String getAdd(Model model) {
 
@@ -346,11 +356,13 @@ public class SettingsForm implements Serializable {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "removeSCrows", value = "/settings/add", method = RequestMethod.POST)
 	public String newRemoveSCrows(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		return removwRow(pSetting, model);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "removeSCrows", value = "/editsetting", method = RequestMethod.POST)
 	public String removwRow(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
@@ -409,16 +421,19 @@ public class SettingsForm implements Serializable {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "moveup", value = "/settings/add", method = RequestMethod.POST)
 	public String newMoveUp(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		return moveUp(pSetting, model);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "movedown", value = "/settings/add", method = RequestMethod.POST)
 	public String newMoveDown(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		return moveDown(pSetting, model);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "moveup", value = "/editsetting", method = RequestMethod.POST)
 	public String moveUp(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
@@ -461,6 +476,7 @@ public class SettingsForm implements Serializable {
 		SelectionMode = pSetting.SelectionMode;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "movedown", value = "/editsetting", method = RequestMethod.POST)
 	public String moveDown(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
@@ -490,6 +506,7 @@ public class SettingsForm implements Serializable {
 		return "editsetting";
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "cancelselectRows", value = "/editsetting", method = RequestMethod.POST)
 	public String cancelSelectRows(@ModelAttribute("bean") SettingsForm pSetting) {
 
@@ -498,6 +515,7 @@ public class SettingsForm implements Serializable {
 		return returnAddress;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "selectRows", value = "/editsetting", method = RequestMethod.POST)
 	public String selectSCProws(@ModelAttribute("bean") SettingsForm pSetting) {
 		dataSettingsConversion = pSetting.dataSettingsConversion;
@@ -511,6 +529,7 @@ public class SettingsForm implements Serializable {
 		return returnAddress;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "checkIntersection", value = "/settings/add", method = RequestMethod.POST)
 	public String newCheckIntersection(@ModelAttribute("bean") SettingsForm pSetting, Model model) throws SQLException {
 		checkIntersection(pSetting, model);
@@ -518,6 +537,7 @@ public class SettingsForm implements Serializable {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "checkIntersection", value = "/editsetting", method = RequestMethod.POST)
 	public void checkIntersection(@ModelAttribute("bean") SettingsForm pSetting, Model model) throws SQLException {
 
@@ -567,6 +587,7 @@ public class SettingsForm implements Serializable {
 		}
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "generateSatTpStructure", value = "/settings/add", method = RequestMethod.POST)
 	public String newGenerateSatTp(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		generateSatTpStructureUniversal(pSetting, model);
@@ -574,6 +595,7 @@ public class SettingsForm implements Serializable {
 		return "editsetting";
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "generateSatTpStructure", value = "/editsetting", method = RequestMethod.POST)
 	public void generateSatTpStructure(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		generateSatTpStructureUniversal(pSetting, model);
@@ -599,18 +621,21 @@ public class SettingsForm implements Serializable {
 		model.addAttribute("bean", this);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "exportToXML", value = "/editsetting", method = RequestMethod.POST)
 	@ResponseBody
 	public HttpEntity<String> exportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
 		return universalexportToXML(pSetting);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "exportToXML", value = "/settings/add", method = RequestMethod.POST)
 	@ResponseBody
 	public HttpEntity<String> newExportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
 		return universalexportToXML(pSetting);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	public HttpEntity<String> universalexportToXML(SettingsForm pSetting) {
 		dataSettingsConversion = pSetting.dataSettingsConversion;
@@ -650,6 +675,7 @@ public class SettingsForm implements Serializable {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
 	public String printSetting(@RequestParam(value = "id", required = true) long pid, Model model,
 			HttpSession session) {
@@ -665,6 +691,7 @@ public class SettingsForm implements Serializable {
 		return "settingprintfull";
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "print", value = "/editsetting", method = RequestMethod.POST)
 	public String printSettingPost(@ModelAttribute("bean") SettingsForm pSetting) {
 
@@ -680,11 +707,13 @@ public class SettingsForm implements Serializable {
 		writeFromSettingsObjectToSettingsForm();
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/settings/settings", method = RequestMethod.GET)
 	public String redirectToSettings() {
 		return "redirect:/settings";
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -696,12 +725,14 @@ public class SettingsForm implements Serializable {
 										// show login screen again.
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/logout", method = RequestMethod.POST)
 	public String postLogout(HttpServletRequest request, HttpServletResponse response) {
 
 		return logoutPage(request, response);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/settings/logout", method = RequestMethod.POST)
 	public String settingsLogout(HttpServletRequest request, HttpServletResponse response) {
 

@@ -233,7 +233,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 			HttpGet httpget = new HttpGet(url);
 
 			System.out.println("Executing request " + httpget.getRequestLine() + " to target " + target);
-			for (int i = 0; i < 3; i++) {
+			//for (int i = 0; i < 3; i++) {
 				CloseableHttpResponse response = httpclient.execute(target, httpget, localContext);
 				HttpEntity entity = response.getEntity();
 
@@ -244,7 +244,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 				} finally {
 					response.close();
 				}
-			}
+			//}
 		} finally {
 			httpclient.close();
 		}

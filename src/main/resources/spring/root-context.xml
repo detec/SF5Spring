@@ -69,14 +69,14 @@
 	"org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
 <property name="userDetailsService" ref="JDBCUserService"/>
 <property name="authenticationEntryPoint" ref="digestEntryPoint"/>
-<!-- <property name="userCache" ref="userCache"/> -->
+
 </bean>
 
 <bean id="digestEntryPoint" class=
 	"org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
-<property name="realmName" value="Contacts Realm via Digest Authentication"/>
+<property name="realmName" value="Custom Realm Name"/>
 <property name="key" value="acegi"/>
-<property name="nonceValiditySeconds" value="60"/>
+<!-- <property name="nonceValiditySeconds" value="60"/> -->
 </bean>
 
 <bean id="expressionHandler" class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"/>
@@ -122,13 +122,20 @@ Ant paths are the default strategy.    -->
 
 <!-- <security:debug/> -->
 
-    <!-- REST security -->
-    <security:http entry-point-ref="digestEntryPoint" pattern="/json/usersettings/*" name="DigetsAuthentication" create-session="stateless">
+<!-- REST security -->
+<!-- <security:http entry-point-ref="digestEntryPoint" pattern="/json/usersettings/*" name="DigetsAuthentication" create-session="stateless"> -->
+<security:http entry-point-ref="digestEntryPoint" pattern="/json/*" name="DigetsAuthentication" create-session="stateless">
     	<!-- We do not need sessions in stateless REST API -->
     	<security:csrf disabled="true"/>
-    	
         <security:custom-filter ref="digestFilter" before="FORM_LOGIN_FILTER" />
-    </security:http>
+        
+        <security:intercept-url pattern="json/satellites/*" access="isAnonymous()"/>
+        <security:intercept-url pattern="json/transponders/*" access="isAnonymous()"/>
+        <security:intercept-url pattern="json/users/*" access="isAnonymous()"/>
+        <security:intercept-url pattern="/json/usersettings/*" access="hasRole('ROLE_USER')"/>
+        
+ </security:http>
+ 
  
 <!-- <security:http auto-config="true" use-expressions="true" disable-url-rewriting="true"> -->
 <security:http name="LoginFormAuthentication">
@@ -150,7 +157,7 @@ Ant paths are the default strategy.    -->
 	
 	
 	<!--	Anonymous access to json endpoints. --> 
-	<security:intercept-url pattern="/json/*" access="isAnonymous()"/>
+<!-- 	<security:intercept-url pattern="/json/*" access="isAnonymous()"/> -->
 	
 	
 	<!--  For all other requests -->
