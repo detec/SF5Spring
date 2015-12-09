@@ -2,7 +2,6 @@ package org.openbox.sf5.json.endpoints;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -28,7 +27,11 @@ public abstract class AbstractServiceTest {
 
 	public WebTarget serviceTarget;
 
-	public Client createClient() {
+	public String testUsername = "ITUser";
+
+	public String testUserPassword = "Test123";
+
+	public Client createAdminClient() {
 
 		// https://jersey.java.net/documentation/latest/user-guide.html#d0e5127
 		// adding universal, digest and non-preemptive authentication.
@@ -42,8 +45,25 @@ public abstract class AbstractServiceTest {
 				.build();
 	}
 
-	public void setUpAbstract() {
-		client = createClient();
+	public Client createTestUserClient() {
+		HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.digest(this.testUsername,
+				this.testUserPassword);
+
+		return ClientBuilder.newBuilder().register(JacksonJaxbJsonProvider.class).register(JacksonFeature.class)
+				.register(MultiPartFeature.class).register(authenticationFeature)
+
+				// .register(new LoggingFilter())
+
+				.build();
+	}
+
+	public void setUpAbstractTestUser() {
+		client = createTestUserClient();
+		commonTarget = client.target(appLocation).path(jsonPath);
+	}
+
+	public void setUpAbstractAdmin() {
+		client = createAdminClient();
 		commonTarget = client.target(appLocation).path(jsonPath);
 	}
 
@@ -54,14 +74,18 @@ public abstract class AbstractServiceTest {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
-	public void addAdminCredentials(Invocation.Builder invocationBuilder) {
-		invocationBuilder.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_DIGEST_USERNAME, "admin")
-				.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_DIGEST_PASSWORD, "1");
-
-	}
-
-	public void addAdminCredentials(WebTarget target) {
-		target.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_DIGEST_USERNAME, "admin")
-				.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_DIGEST_PASSWORD, "1");
-	}
+	// public void addAdminCredentials(Invocation.Builder invocationBuilder) {
+	// invocationBuilder.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_DIGEST_USERNAME,
+	// "admin")
+	// .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_DIGEST_PASSWORD,
+	// "1");
+	//
+	// }
+	//
+	// public void addAdminCredentials(WebTarget target) {
+	// target.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_DIGEST_USERNAME,
+	// "admin")
+	// .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_DIGEST_PASSWORD,
+	// "1");
+	// }
 }

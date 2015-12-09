@@ -1,8 +1,12 @@
 package org.openbox.sf5.json.endpoints;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import javax.ws.rs.client.Invocation;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -11,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.openbox.sf5.model.Transponders;
 
 @RunWith(JUnit4.class)
 public class TranspondersServiceIT extends AbstractServiceTest {
@@ -19,7 +24,7 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 	@Before
 	public void setUp() {
-		setUpAbstract();
+		setUpAbstractTestUser();
 		serviceTarget = commonTarget.path(servicePath);
 	}
 
@@ -41,9 +46,17 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
 
-
-//		List<Transponders> transList = response.readEntity(List<Transponders>);
+		// List<Transponders> transList =
+		// response.readEntity(List<Transponders>);
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		GenericType<List<Transponders>> genList = new GenericType<List<Transponders>>() {
+		};
+
+		List<Transponders> newTransList = response.readEntity(genList);
+
+		assertThat(newTransList).isNotNull();
+		assertThat(newTransList.size()).isGreaterThan(0);
 
 	}
 
@@ -56,6 +69,9 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
+		Transponders trans = response.readEntity(Transponders.class);
+		assertThat(trans).isNotNull();
+
 	}
 
 	@Test
@@ -67,6 +83,14 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		GenericType<List<Transponders>> genList = new GenericType<List<Transponders>>() {
+		};
+
+		List<Transponders> newTransList = response.readEntity(genList);
+
+		assertThat(newTransList).isNotNull();
+		assertThat(newTransList.size()).isGreaterThan(0);
 	}
 
 	@Test
@@ -78,6 +102,14 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 				.accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		GenericType<List<Transponders>> genList = new GenericType<List<Transponders>>() {
+		};
+
+		List<Transponders> newTransList = response.readEntity(genList);
+
+		assertThat(newTransList).isNotNull();
+		assertThat(newTransList.size()).isGreaterThan(0);
 	}
 
 }

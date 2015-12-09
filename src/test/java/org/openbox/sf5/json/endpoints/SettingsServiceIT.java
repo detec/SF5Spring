@@ -47,9 +47,35 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		return adminUser;
 	}
 
+	// private boolean checkThatUsernameExists(String username) {
+	// Invocation.Builder invocationBuilder =
+	// commonTarget.path("users").path("exists").path("username").path(username)
+	// .request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+	//
+	// Response response = invocationBuilder.get();
+	// assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	// Boolean result = response.readEntity(Boolean.class);
+	//
+	// return result.booleanValue();
+	//
+	// }
+
+	private Users getTestUser() {
+		Invocation.Builder invocationBuilder = commonTarget.path("users").path("filter").path("username")
+				.path(this.testUsername).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+
+		Response response = invocationBuilder.get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		Users testUser = response.readEntity(Users.class);
+
+		return testUser;
+
+	}
+
 	@Before
 	public void setUp() {
-		setUpAbstract();
+		setUpAbstractTestUser();
 
 		serviceTarget = commonTarget.path(servicePath);
 	}
@@ -57,10 +83,10 @@ public class SettingsServiceIT extends AbstractServiceTest {
 	@Test
 	public void shouldCreateAndGetSettingById() {
 
-		serviceTarget = commonTarget.path(servicePath);
+		// serviceTarget = commonTarget.path(servicePath);
 
 		// here we should create a setting.
-		Users adminUser = getAdminUser();
+		Users adminUser = getTestUser();
 
 		assertThat(adminUser).isNotNull();
 

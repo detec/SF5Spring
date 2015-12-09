@@ -17,6 +17,9 @@ th, td {
     padding: 5px;
 }
 </style>
+
+<!-- http://stackoverflow.com/questions/2521606/spring-mvc-absolute-url-problem -->
+<base href="${pageContext.request.contextPath}"><base>
 </head>
 <body>
 <h2>Openbox SF5 settings editor</h2>
@@ -64,10 +67,17 @@ th, td {
  <i>There are currently no settings in the list.</i> 
 </c:if>
 <a href="${addUrl}">Add</a>
-<a href="transponders">Transponders</a>
-<a href="upload">Import transponders from file</a>
+<!-- <a href="/transponders">Transponders</a>
+<a href="upload">Import transponders from file</a> -->
+<c:url var="transpondersUrl" value="/transponders" />
+<c:url var="uploadUrl" value="/upload" />
+<a href="${transpondersUrl}">Transponders</a>
+<a href="${uploadUrl}">Import transponders from file</a>
+
 <c:if test="${hasAdminRole}">
-<a href="users/">User administration</a>
+<c:url var="usersUrl" value="/users/" />
+<!-- <a href="/users/">User administration</a> -->
+<a href="${usersUrl}">User administration</a>
 </c:if>
 <form:form method="POST" action="logout">
 <input type="submit" value="Logout" />

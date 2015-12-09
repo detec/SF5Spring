@@ -65,8 +65,14 @@ th, td {
 </c:if>
 
 
-<a href="settings">Settings</a>
-<a href="transponders">Transponders</a>	
+<!-- <a href="settings">Settings</a>
+<a href="transponders">Transponders</a> -->	
+
+<c:url var="transpondersUrl" value="/transponders" />
+<c:url var="settingsUrl" value="/settings/" />
+<a href="${settingsUrl}">Settings</a>
+<a href="${transpondersUrl}">Transponders</a>
+
  
  <form:form method="POST" action="logout">
 <input type="submit" value="Logout" />

@@ -5,12 +5,25 @@ import java.util.List;
 import org.hibernate.criterion.Criterion;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.service.CriterionService;
+import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UsersJsonizer {
+
+	public HttpStatus saveNewUser(Users user) {
+		long id = user.getId();
+		// if we receive non-empty id
+		if (id != 0) {
+			return HttpStatus.CONFLICT;
+		}
+		objectsController.saveOrUpdate(user);
+		return HttpStatus.CREATED;
+
+	}
 
 	public Users getUserByLogin(String typeValue) {
 		Users returnUser = null;
@@ -29,6 +42,25 @@ public class UsersJsonizer {
 		return returnUser;
 	}
 
+	// returns false if there is no such user.
+	public Boolean checkIfUsernameExists(String typeValue) {
+		Boolean result = false;
+		Criterion criterion = criterionService.getCriterionByClassFieldAndStringValue(Users.class, "username",
+				typeValue);
+
+		if (criterion == null) {
+			return result;
+		}
+		List<Users> userList = listService.ObjectsCriterionList(Users.class, criterion);
+		if (userList.size() == 0) {
+			return result;
+		} else {
+			result = true;
+		}
+
+		return result;
+	}
+
 	public ObjectsListService getListService() {
 		return listService;
 	}
@@ -42,6 +74,17 @@ public class UsersJsonizer {
 
 	@Autowired
 	private CriterionService criterionService;
+
+	@Autowired
+	private ObjectsController objectsController;
+
+	public ObjectsController getObjectsController() {
+		return objectsController;
+	}
+
+	public void setObjectsController(ObjectsController objectsController) {
+		this.objectsController = objectsController;
+	}
 
 	public CriterionService getCriterionService() {
 		return criterionService;

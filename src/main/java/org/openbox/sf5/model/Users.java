@@ -84,6 +84,9 @@ public class Users extends AbstractDbEntity implements Serializable {
 	@Cascade({ CascadeType.ALL })
 	@OrderColumn(name = "LineNumber")
 	@JsonManagedReference
+	// @Valid
+	// @NotNull
+	// @Size(min = 1)
 	public List<Usersauthorities> authorities;
 
 	public List<Usersauthorities> getauthorities() {

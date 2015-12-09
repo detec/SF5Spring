@@ -24,7 +24,7 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 
 	@Before
 	public void setUp() {
-		setUpAbstract();
+		setUpAbstractTestUser();
 		serviceTarget = commonTarget.path(servicePath);
 	}
 
