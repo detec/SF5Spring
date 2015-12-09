@@ -22,7 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @EnableWebMvc
 @RestController
-//@PreAuthorize("hasRole('ROLE_USER')")
+// @PreAuthorize("hasRole('ROLE_USER')")
 // Be careful not to use annotations produces, consumes - it kicks away
 // requests.
 @RequestMapping(value = "/json/usersettings/")
@@ -33,7 +33,6 @@ public class SettingsService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public ResponseEntity<Void> createSetting(@RequestBody Settings setting, UriComponentsBuilder ucBuilder) {
-		// System.out.println("Create setting called");
 
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 
@@ -51,7 +50,7 @@ public class SettingsService {
 		}
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Usersettings", "created");
+		headers.add("SettingId", Long.toString(setting.getId()));
 		headers.setLocation(
 				ucBuilder.path("/json/usersettings/filter/id/{id}").buildAndExpand(setting.getId()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -82,7 +81,7 @@ public class SettingsService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "all", method = RequestMethod.GET)
 	public List<Settings> getSettingsByUserLogin() {
-		System.out.println("Request all user settings called");
+		// System.out.println("Request all user settings called");
 
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 		if (currentUser == null) {
@@ -120,11 +119,12 @@ public class SettingsService {
 	//
 	// }
 
-	//@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET)
 	public List<Settings> getSettingsByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue) {
-		System.out.println("Request all user settings by arbitrary filter	 called");
+		// System.out.println("Request all user settings by arbitrary filter
+		// called");
 		List<Settings> settList = new ArrayList<>();
 
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
@@ -162,7 +162,7 @@ public class SettingsService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "filter/id/{settingId}", method = RequestMethod.GET)
 	public Settings getSettingById(@PathVariable("settingId") long settingId) {
-		System.out.println("Request user settings by id called");
+		// System.out.println("Request user settings by id called");
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 		if (currentUser == null) {
 			return new Settings();

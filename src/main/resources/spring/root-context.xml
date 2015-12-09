@@ -65,18 +65,19 @@
 <!-- <bean id="springSecurityFilterChain" class="org.springframework.web.filter.DelegatingFilterProxy"/> -->
  
 
+<!-- digestFilter and digestEntryPoint have been verified with the official docs -->
 <bean id="digestFilter" class=
 	"org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
-<property name="userDetailsService" ref="JDBCUserService"/>
-<property name="authenticationEntryPoint" ref="digestEntryPoint"/>
+	<property name="userDetailsService" ref="JDBCUserService"/>
+	<property name="authenticationEntryPoint" ref="digestEntryPoint"/>
 
 </bean>
 
 <bean id="digestEntryPoint" class=
 	"org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
-<property name="realmName" value="Custom Realm Name"/>
-<property name="key" value="acegi"/>
-<!-- <property name="nonceValiditySeconds" value="60"/> -->
+	<property name="realmName" value="Custom Realm Name"/>
+	<property name="key" value="acegi"/>
+	<property name="nonceValiditySeconds" value="60"/>
 </bean>
 
 <bean id="expressionHandler" class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"/>
@@ -122,9 +123,16 @@ Ant paths are the default strategy.    -->
 
 <!-- <security:debug/> -->
 
+<!-- http://stackoverflow.com/questions/18722471/when-to-use-double-star-in-glob-syntax-within-java -->
+<!-- Two asterisks, **, works like * but crosses directory boundaries. This syntax is generally used for matching complete paths. 
+
+So when specifying patterns in action-based frameworks we should use only ** 
+
+-->
+
 <!-- REST security -->
-<!-- <security:http entry-point-ref="digestEntryPoint" pattern="/json/usersettings/*" name="DigetsAuthentication" create-session="stateless"> -->
-<security:http entry-point-ref="digestEntryPoint" pattern="/json/*" name="DigetsAuthentication" create-session="stateless">
+<!-- Be careful to use ** in pattern!!! -->
+<security:http pattern="/json/**" name="DigetsAuthentication" create-session="stateless" entry-point-ref="digestEntryPoint" >
     	<!-- We do not need sessions in stateless REST API -->
     	<security:csrf disabled="true"/>
         <security:custom-filter ref="digestFilter" before="FORM_LOGIN_FILTER" />
@@ -151,7 +159,7 @@ Ant paths are the default strategy.    -->
 	<security:intercept-url pattern="/register" access="isAnonymous()"/>
 	
 	
- 	<security:intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
+ 	<security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
 	
 	
 	
