@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
-import org.junit.Test;
+import org.junit.Before;
 import org.openbox.sf5.application.LoginIT;
 import org.openbox.sf5.application.TranspondersUploadIT;
 import org.openbox.sf5.json.endpoints.AbstractServiceTest;
@@ -20,6 +20,7 @@ public class SendTransponderFilesIT extends AbstractServiceTest {
 
 	public WebDriver driver;
 
+	@Before
 	public void setUp() throws Exception {
 		driver = new FirefoxDriver();
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -29,13 +30,14 @@ public class SendTransponderFilesIT extends AbstractServiceTest {
 		driver.quit();
 	}
 
-	@Test
+	// @Test
+	// We replaced it with native json upload.
 	public void shouldSendFiles() throws Exception {
 
 		Stream<Path> transponderFilesPathes = IntersectionsTests.getTransponderFilesStreamPath();
 
 		// Will use Selenium, as it is more practical.
-		setUp();
+		// setUp();
 		LoginIT loginTest = new LoginIT();
 		loginTest.setAppLocation(appLocation);
 		loginTest.driver = driver;
