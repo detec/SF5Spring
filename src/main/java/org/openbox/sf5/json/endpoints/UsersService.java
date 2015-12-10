@@ -21,7 +21,8 @@ public class UsersService {
 
 	// https://docs.spring.io/spring-security/site/docs/3.0.x/reference/el-access.html
 	// We allow only for admin and enabled user.
-	@PreAuthorize("hasRole('ROLE_ADMIN') or (#login == principal and principal.enabled)")
+	//@PreAuthorize("hasRole('ROLE_ADMIN') or (#login == principal and principal.enabled)")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or (#login  == authentication.name)")
 	@RequestMapping(value = "filter/username/{login}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<Users> getUserByLogin(@PathVariable("login") String login) {
 		Users retUser = usersJsonizer.getUserByLogin(login);
