@@ -46,8 +46,6 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
 
-		// List<Transponders> transList =
-		// response.readEntity(List<Transponders>);
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 		GenericType<List<Transponders>> genList = new GenericType<List<Transponders>>() {

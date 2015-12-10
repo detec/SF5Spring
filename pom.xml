@@ -463,11 +463,11 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 	</dependency>
 	 
 	 <!-- Test ready application with Selenium -->
-<!-- 	<dependency>
+	<dependency>
         <groupId>org.seleniumhq.selenium</groupId>
         <artifactId>selenium-firefox-driver</artifactId>
         <version>2.48.2</version>
-    </dependency> -->
+    </dependency>
      
 	<dependency>
    		<groupId>javax.el</groupId>

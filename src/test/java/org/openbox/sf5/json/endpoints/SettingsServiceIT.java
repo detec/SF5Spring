@@ -17,7 +17,6 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.http.client.ClientProtocolException;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -25,6 +24,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
 import org.openbox.sf5.model.Settings;
+import org.openbox.sf5.model.SettingsConversion;
+import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.Users;
 
 @RunWith(JUnit4.class)
@@ -56,18 +57,55 @@ public class SettingsServiceIT extends AbstractServiceTest {
 	@Test
 	public void shouldCreateAndGetSettingById() {
 
+		Response response = null;
+
 		// here we should create a setting.
 		Users adminUser = getTestUser();
 
 		assertThat(adminUser).isNotNull();
 
+		// get some transponders to make lines objects.
+		Invocation.Builder invocationBuilder = commonTarget.path("transponders").path("filter").path("Speed")
+				.path("27500").request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+		response = invocationBuilder.get();
+
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		GenericType<List<Transponders>> genList = new GenericType<List<Transponders>>() {
+		};
+
+		List<Transponders> newTransList = response.readEntity(genList);
+
 		Settings setting = new Settings();
 		setting.setName("Simple");
 		setting.setUser(adminUser);
+		setting.setTheLastEntry(new java.sql.Timestamp(System.currentTimeMillis()));
+
+		// filter up to 32 transponders
+		newTransList.stream().filter(t -> newTransList.indexOf(t) <= 31).forEach(t -> {
+			int currentIndex = newTransList.indexOf(t);
+			int currentNumber = currentIndex + 1;
+			int satIndex = (int) Math.ceil((double) currentNumber / 4);
+			// int tpIndex = currentNumber - (satIndex * 4);
+			int tpIndex = (currentNumber % 4 == 0) ? 4 : currentNumber % 4; // %
+																			// is
+																			// remainder
+
+			SettingsConversion sc = new SettingsConversion(setting, t, satIndex, tpIndex,
+					Long.toString(t.getFrequency()), 0);
+			sc.setLineNumber(currentNumber);
+			setting.getConversion().add(sc);
+		});
+
+		// SettingsConversionPresentation newLineObject = new
+		// SettingsConversionPresentation(pSetting.SettingsObject);
+		// newLineObject.setLineNumber(newLine);
+		// newLineObject.setTransponder(trans);
+		// newLineObject.setNote("");
 
 		// //
 		// http://howtodoinjava.com/2015/08/07/jersey-restful-client-examples/#post
-		Invocation.Builder invocationBuilder = serviceTarget.path("create").request(MediaType.APPLICATION_JSON);
+		invocationBuilder = serviceTarget.path("create").request(MediaType.APPLICATION_JSON);
 		Response responsePost = invocationBuilder.post(Entity.entity(setting, MediaType.APPLICATION_JSON));
 		assertEquals(Status.CREATED.getStatusCode(), responsePost.getStatus());
 
@@ -87,7 +125,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 				.request(MediaType.APPLICATION_JSON);
 
-		Response response = invocationBuilder.get();
+		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 		Settings settingRead = response.readEntity(Settings.class);
@@ -118,7 +156,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 	}
 
 	@Test
-	public void shouldGetSettingsByArbitraryFilter() throws ClientProtocolException, IOException {
+	public void shouldGetSettingsByArbitraryFilter() throws IOException {
 		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("Name").path("Simple")
 				.request(MediaType.APPLICATION_JSON);
 

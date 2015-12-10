@@ -173,7 +173,7 @@ public class SettingsForm implements Serializable {
 	@RequestMapping(params = "selectfromother", value = "/settings/add", method = RequestMethod.POST)
 	public String newSelectFromOtherSetting(@ModelAttribute("bean") SettingsForm pSetting) {
 		return prepareSelectFromOtherSetting(pSetting);
-		// return selectTranspondersFromNew(pSetting);
+
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -570,8 +570,6 @@ public class SettingsForm implements Serializable {
 	public void saveSettingWithoutContext(SettingsForm pSetting) {
 
 		writeFromSettingsFormToSettingsObject(pSetting);
-
-		// ObjectsController contr = new ObjectsController();
 		objectsController.saveOrUpdate(SettingsObject);
 
 	}
@@ -667,7 +665,6 @@ public class SettingsForm implements Serializable {
 			Files.deleteIfExists(Paths.get(filePath));
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -699,8 +696,7 @@ public class SettingsForm implements Serializable {
 	}
 
 	public void readAndFillBeanfromSetting(long pid) {
-		// ObjectsController contr = new ObjectsController();
-		// setting = (Settings) contr.select(Settings.class, id);
+
 		SettingsObject = objectsController.select(Settings.class, pid);
 
 		// fill form values.
