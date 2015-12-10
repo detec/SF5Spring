@@ -23,7 +23,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RequestMapping(value = "/json/transponders/")
 public class TranspondersService {
 
-	@RequestMapping(value = "upload", method = RequestMethod.POST, produces = "application/json", headers = "content-type=multipart/form-data")
+	@RequestMapping(value = "upload", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
 	public ResponseEntity<Boolean> uploadTransponders(@RequestParam("file") MultipartFile file) {
 
 		Boolean result = new Boolean(false);

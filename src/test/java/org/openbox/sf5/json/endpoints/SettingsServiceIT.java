@@ -33,33 +33,6 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 	private static final String servicePath = "usersettings";
 
-	private Users getAdminUser() {
-
-		// check that admin user exists
-		Invocation.Builder invocationBuilder = commonTarget.path("users").path("filter").path("username").path("admin")
-				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
-
-		Response response = invocationBuilder.get();
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-		Users adminUser = response.readEntity(Users.class);
-
-		return adminUser;
-	}
-
-	// private boolean checkThatUsernameExists(String username) {
-	// Invocation.Builder invocationBuilder =
-	// commonTarget.path("users").path("exists").path("username").path(username)
-	// .request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
-	//
-	// Response response = invocationBuilder.get();
-	// assertEquals(Status.OK.getStatusCode(), response.getStatus());
-	// Boolean result = response.readEntity(Boolean.class);
-	//
-	// return result.booleanValue();
-	//
-	// }
-
 	private Users getTestUser() {
 		Invocation.Builder invocationBuilder = commonTarget.path("users").path("filter").path("username")
 				.path(this.testUsername).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
@@ -82,8 +55,6 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 	@Test
 	public void shouldCreateAndGetSettingById() {
-
-		// serviceTarget = commonTarget.path(servicePath);
 
 		// here we should create a setting.
 		Users adminUser = getTestUser();
@@ -133,8 +104,6 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		WebTarget target = serviceTarget.path("all");
 
-		// Response result =
-		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 		settList = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get(genList);
 
 		assertThat(settList).isNotNull();
@@ -156,7 +125,6 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		Response response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-		// 09.12.2015
 		GenericType<List<Settings>> genList = new GenericType<List<Settings>>() {
 		};
 
@@ -164,74 +132,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		assertThat(newSettingsList).isNotNull();
 		assertThat(newSettingsList.size()).isGreaterThan(0);
-		// 09.12.2015
 
-		// HttpComponentsClientHttpRequestFactory factory = new
-		// HttpComponentsClientHttpRequestFactory();
-
-		// DefaultHttpClient client = (DefaultHttpClient)
-		// factory.getHttpClient();
-		// 3 client.getCredentialsProvider().setCredentials(
-		// 4 new AuthScope(hostName, portNumber),
-		// 5 new UsernamePasswordCredentials(username, password));
-		// 6 RestTemplate restTemplate = new RestTemplate(factory);
-
-		// URI url =
-		// serviceTarget.path("filter").path("Name").path("Simple").getUri();
-		//
-		// UsernamePasswordCredentials credentials = new
-		// UsernamePasswordCredentials("admin", "1");
-		// AuthScope authScope = new AuthScope(new HttpHost("localhost", 8080));
-		// // // credProvider = new CredentialsProvider(authScope, credentials);
-		// // HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
-		//
-		// CredentialsProvider credentialsProvider = new
-		// BasicCredentialsProvider();
-		// credentialsProvider.setCredentials(authScope, credentials);
-		// CloseableHttpClient httpclient =
-		// HttpClients.custom().setDefaultCredentialsProvider(credentialsProvider)
-		// .build();
-		//
-		// HttpHost target = new HttpHost("localhost", 8080, "http");
-		//
-		// try {
-		//
-		// // Create AuthCache instance
-		// AuthCache authCache = new BasicAuthCache();
-		// // Generate DIGEST scheme object, initialize it and add it to the
-		// // local
-		// // auth cache
-		// DigestScheme digestAuth = new DigestScheme();
-		// // Suppose we already know the realm name
-		// digestAuth.overrideParamter("realm", "some realm");
-		// // Suppose we already know the expected nonce value
-		// digestAuth.overrideParamter("nonce", "whatever");
-		// authCache.put(target, digestAuth);
-		//
-		// // Add AuthCache to the execution context
-		// HttpClientContext localContext = HttpClientContext.create();
-		// localContext.setAuthCache(authCache);
-		//
-		// HttpGet httpget = new HttpGet(url);
-		//
-		// System.out.println("Executing request " + httpget.getRequestLine() +
-		// " to target " + target);
-		// //for (int i = 0; i < 3; i++) {
-		// CloseableHttpResponse response = httpclient.execute(target, httpget,
-		// localContext);
-		// HttpEntity entity = response.getEntity();
-		//
-		// try {
-		// System.out.println("----------------------------------------");
-		// System.out.println(response.getStatusLine());
-		// System.out.println(EntityUtils.toString(response.getEntity()));
-		// } finally {
-		// response.close();
-		// }
-		// //}
-		// } finally {
-		// httpclient.close();
-		// }
 	}
 
 }

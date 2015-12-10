@@ -22,6 +22,7 @@
 <context:component-scan base-package="org.openbox.sf5.application" />
 <context:component-scan base-package="org.openbox.sf5.converters" />
 <context:component-scan base-package="org.openbox.sf5.json.endpoints" />
+<context:component-scan base-package="org.openbox.sf5.json.service" />
 
 
 <!-- http://huahsin68.blogspot.com/2014/05/why-secured-and-preauthorize-isnt.html
@@ -33,6 +34,7 @@ The following security annotation forces @PreAuthorize to read digest authentica
 
 <!-- activates annotation driven binding -->
 <mvc:annotation-driven enable-matrix-variables="true">
+ 
    <!--  <mvc:message-converters>
         <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
         <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
@@ -43,16 +45,26 @@ The following security annotation forces @PreAuthorize to read digest authentica
   
      
     </mvc:message-converters> -->
+    
+
+    <mvc:message-converters>
+        <bean
+             class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+             <property name="objectMapper" ref="jacksonObjectMapper" />
+		</bean>
+	</mvc:message-converters>
 
 <!-- https://diterius.wordpress.com/2013/09/11/spring/ -->
     
 	<!-- <mvc:message-converters register-defaults="true">
 	</mvc:message-converters> -->
     
-    <mvc:message-converters>
+    
+    <!-- It is not clear why this annotation is needed. -->
+<!--     <mvc:message-converters>
         <bean id="jsonMessageConverter" 
               class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"  />
-    </mvc:message-converters>
+    </mvc:message-converters> -->
 	    
 </mvc:annotation-driven>
 
@@ -70,7 +82,9 @@ The following security annotation forces @PreAuthorize to read digest authentica
  	<property name="removeSemicolonContent" value="false" />
 </bean>	
 
-<!-- Trying to enable pretty printing -->
+<!-- Trying to enable pretty printing 
+!! It is used in message-converters
+-->
 <bean id="jacksonObjectMapper" 
 	class="org.openbox.sf5.json.service.CustomObjectMapper">
 	
