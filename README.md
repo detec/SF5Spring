@@ -67,7 +67,7 @@ Different Maven profiles are required to use different database schemes and inte
 	- prod 			- profile for production builds, database url is jdbc:h2:tcp://localhost/~/sf5spring.
 
 	
-## Tests description ##	
+## Tests notice ##	
 
 There are several JUnit tests, run in H2 in-memory mode. They check if Hibernate works with the database engine specified and if backend data processing features work. But as a former 1C:Enterprise developer I strongly believe that only real client-server environment can show if there are some errors with settings or annotations. That is why Cargo maven plugin is used in Maven test profile. Its paramount purpose is to test JAX-RS endpoints. Every aspect of Openbox SF 5 settings editor is tested: transponders upload and select, user creation and select, satellites select, usersettings creation and select. Jersey 2 client is used in integration tests.
 
