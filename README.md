@@ -46,21 +46,22 @@ This Openbox SF-5 settings editor implementation provides JAX-RS JSON API for ge
 	- json/transponders/all GET 						- get all transponders as JSON Array;
 	- json/transponders/upload POST						- upload .ini file with transponders.
 	
-- Users
+- Users (most endpoints require digest authentication)
 	- json/users/filter/username/{login} GET 			- get user by its login as JSON value, for ADMIN role or user authenticated;
 	- json/users/create POST 							- create new user, only for ADMIN role; 
 	- json/users/exists/username/{login} GET 			- check if such username exists, boolean value returned.
 	
 - OpenBox SF-5 settings (requires digest authentication)
-	- json/usersettings/create 						- post user setting to this endpoint to create a new setting. User authenticated and the one in setting should coincide.
-	- json/usersettings/all 						- get all user's settings, based on credentials provided, as JSON Array;
-	- json/usersettings/filter/{type}/{typeValue} 	- get user's settings, filtered by arbitrary field name and field value, based on credentials provided, as JSON Array;
-	- json/usersettings/filter/id/{settingId} 		- get setting by its ID as JSON value, based on credentials provided.
+	- json/usersettings/create POST						- post user setting to this endpoint to create a new setting. User authenticated and the one in setting should coincide.
+	- json/usersettings/all GET							- get all user's settings, based on credentials provided, as JSON Array;
+	- json/usersettings/filter/{type}/{typeValue} GET 	- get user's settings, filtered by arbitrary field name and field value, based on credentials provided, as JSON Array;
+	- json/usersettings/filter/id/{settingId} GET 		- get setting by its ID as JSON value, based on credentials provided.
 	
 
 ## Maven profiles ##
 
 Different Maven profiles are required to use different database schemes and integration tests. Openbox SF-5 settings editor uses 3 maven profiles:
+
 	- dev 	- default profile, database url is jdbc:h2:tcp://localhost/~/sf5springdev. This database url is used in Eclipse-based container deploy.
 	- test 	- profile for additional integration tests, run with Cargo Maven plugin in H2 in-memory mode
 	- prod 	- profile for production builds, database url is jdbc:h2:tcp://localhost/~/sf5spring.
