@@ -65,6 +65,7 @@ Different Maven profiles are required to use different database schemes and inte
 	- dev 			- default profile, database url is jdbc:h2:tcp://localhost/~/sf5springdev. This database url is used in Eclipse-based container deploy.
 	- test 			- profile for additional integration tests, run with Cargo Maven plugin in H2 in-memory mode;
 	- prod 			- profile for production builds, database url is jdbc:h2:tcp://localhost/~/sf5spring.
+
 	
 ## Tests description ##	
 
