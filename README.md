@@ -62,11 +62,12 @@ This Openbox SF-5 settings editor implementation provides JAX-RS JSON API for ge
 
 Different Maven profiles are required to use different database schemes and integration tests. Openbox SF-5 settings editor uses 3 maven profiles:
 
-	- dev 	Default profile, database url is jdbc:h2:tcp://localhost/~/sf5springdev. This database url is used in Eclipse-based container deploy.
+	- dev 	Default profile, database url is jdbc:h2:tcp://localhost/~/sf5springdev. 
+			This database url is used in Eclipse-based container deploy.
 	- test 	Profile for additional integration tests, run with Cargo Maven plugin in H2 in-memory mode;
 	- prod 	Profile for production builds, database url is jdbc:h2:tcp://localhost/~/sf5spring.
 	
-## Tests notice ##	
+## Tests notice ##
 
 There are several JUnit tests, run in H2 in-memory mode. They check if Hibernate works with the database engine specified and if backend data processing features work. But as a former 1C:Enterprise developer I strongly believe that only real client-server environment can show if there are some errors with settings or annotations. That is why Cargo maven plugin is used in Maven test profile. Its paramount purpose is to test JAX-RS endpoints. Every aspect of Openbox SF 5 settings editor is tested: transponders upload and select, user creation and select, satellites select, usersettings creation and select. Jersey 2 client is used in integration tests.
 
