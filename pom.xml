@@ -11,9 +11,8 @@
   		<spring.security.version>4.0.2.RELEASE</spring.security.version>
   		<hibernate.version>4.3.11.Final</hibernate.version>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  		<jackson.version>2.6.3</jackson.version>
+  		<jackson.version>2.6.4</jackson.version>
   		<jersey.version>2.22.1</jersey.version>
-<!--   		<rename.tmp.directory>${project.build.directory}/generated-sources</rename.tmp.directory> -->
 	</properties>
   	 
   <build>
@@ -386,7 +385,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 	<dependency>
     	<groupId>com.fasterxml.jackson.datatype</groupId>
     	<artifactId>jackson-datatype-jsr310</artifactId>
-    	<version>2.6.1</version>
+    	<version>${jackson.version}</version>
 	</dependency>  
 	<dependency>
 		<groupId>com.fasterxml.jackson.jaxrs</groupId>
