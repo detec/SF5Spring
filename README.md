@@ -86,7 +86,7 @@ There is an option to utilize tomcat7-maven-plugin in pom.xml. Default administr
 - Spring 4 (Spring Core, Security, MVC, XML-based configuration);
 - Hibernate ORM 4.3.11;
 - Hibernate POJO classes and mappings were generated from my 1C:Enterprise database using my 1C:Enterprise project <https://github.com/detec/POJOClassesGenerationForHibernate>;
-- Hibernate Validator 5.2.1;
+- Hibernate Validator 5.2;
 - JUnit 4.12;
 - JDBC (for Spring Security only);
 - Jersey 2 client;
