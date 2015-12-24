@@ -86,6 +86,9 @@
 
 <!-- Global Security Settings  To use expressions like @PreAuthorize-->
 <!-- http://stackoverflow.com/questions/32552528/spring-security-4-preauthorizehasrole-not-working -->
+<!-- This should probably go to MVC config file as JUnit shows Configuration problem: Duplicate <global-method-security> detected. 
+We do not have to load MVC servlet config file
+-->
 <security:global-method-security pre-post-annotations="enabled" >
 	 <security:expression-handler ref="expressionHandler"/>
 </security:global-method-security>

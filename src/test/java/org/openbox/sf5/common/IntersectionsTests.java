@@ -17,21 +17,33 @@ import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openbox.sf5.json.service.AbstractJsonizerTest;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.SettingsConversion;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.Users;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+// Taken from http://stackoverflow.com/questions/10385452/location-of-spring-context-xml
+@ContextConfiguration(locations = { "file:src/main/resources/spring/root-context.xml" })
+@RunWith(SpringJUnit4ClassRunner.class)
 public class IntersectionsTests extends AbstractJsonizerTest {
+
+	@Autowired
+	private TableFillerTests tft;
 
 	@Before
 	public void setUp() {
 		super.setUpAbstract();
 
 		// we need 2 to setup catalogues before transponders import
-		TableFillerTests tft = new TableFillerTests();
-		tft.setUpAbstract(); // fill dependencies
+		// we cannot create new object, should use autowiring.
+		// TableFillerTests tft = new TableFillerTests();
+		tft.setUpAbstract(); // disable logging, formerly used to set up
+								// dependencies.
 		tft.executeTableFiller();
 	}
 

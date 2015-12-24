@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openbox.sf5.json.service.AbstractJsonizerTest;
 import org.openbox.sf5.model.CarrierFrequency;
 import org.openbox.sf5.model.DVBStandards;
@@ -18,8 +19,12 @@ import org.openbox.sf5.model.SettingsConversion;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.TypesOfFEC;
 import org.openbox.sf5.model.Users;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+@ContextConfiguration(locations = { "file:src/main/resources/spring/root-context.xml" })
+@RunWith(SpringJUnit4ClassRunner.class)
 public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 
 	@Before
