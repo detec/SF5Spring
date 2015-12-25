@@ -13,7 +13,6 @@
     	<filter-name>springMultipartFilter</filter-name>
     	<servlet-name>sf5</servlet-name>
     	<url-pattern>/*</url-pattern>
-    	<url-pattern>/json/*</url-pattern>
 	</filter-mapping>
   <filter>
     <filter-name>springSecurityFilterChain</filter-name>
@@ -30,20 +29,9 @@
   
 	<context-param>
     	<param-name>contextConfigLocation</param-name>
-<!-- 		<param-value>/WEB-INF/root-context.xml</param-value> -->
-		<param-value>/WEB-INF/springWebMultipartContext.xml, /WEB-INF/root-context.xml</param-value>
+		<param-value>/WEB-INF/springWebMultipartContext.xml, /WEB-INF/root-context.xml, /WEB-INF/security-context.xml</param-value>
   	</context-param>
   	
-<!--   	<context-param>
-    	<param-name>spring.profiles.active</param-name>
-    	<param-value>production</param-value>
-  	</context-param> -->
-	
-	<!-- Taken from https://gist.github.com/manish-in-java/8661970 -->
-<!-- 	<context-param> -->
-<!-- 		<param-name>contextConfigLocation</param-name>  -->
-<!--         <param-value>/WEB-INF/springWebMultipartContext.xml</param-value> -->
-<!-- 	</context-param> -->
 	
 	<!-- Listeners -->
 	<listener>
@@ -79,7 +67,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>sf5</servlet-name>
-<!--     <url-pattern>/login</url-pattern> -->
     <url-pattern>/</url-pattern>
   </servlet-mapping>
   
