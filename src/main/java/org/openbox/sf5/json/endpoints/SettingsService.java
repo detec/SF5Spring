@@ -26,7 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 // @PreAuthorize("hasRole('ROLE_USER')")
 // Be careful not to use annotations produces, consumes - it kicks away
 // requests.
-@RequestMapping(value = "/json/usersettings/")
+@RequestMapping(value = "/jaxrs/usersettings/")
 public class SettingsService {
 
 	// http://websystique.com/springmvc/spring-mvc-4-restful-web-services-crud-example-resttemplate/

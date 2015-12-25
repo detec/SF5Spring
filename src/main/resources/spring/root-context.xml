@@ -32,9 +32,33 @@
 <!-- <context:property-placeholder location="classpath:data-access.properties" system-properties-mode="OVERRIDE"/> -->
 
 <!-- application.properties are for Eclipse - file contains dev properties -->
-<context:property-placeholder location="classpath:application.properties"   system-properties-mode="OVERRIDE"/>
+<context:property-placeholder location="classpath:application.properties" system-properties-mode="OVERRIDE"/>
 <tx:annotation-driven transaction-manager="transactionManager"/>
 
+<!-- Trying to load placeholders. 
+Seems not to work
+-->	
+<!-- <bean id="appProperties"
+    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+ 
+    <property name="location" value="classpath:application.properties" />
+ 
+</bean> -->
+
+<!-- http://www.mkyong.com/spring3/spring-value-default-value/ 
+Must register a static PropertySourcesPlaceholderConfigurer bean in either XML or annotation, so that Spring @Value know how to interpret ${}
+-->
+<!-- <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+    <property name="ignoreUnresolvablePlaceholders" value="false" />
+    <property name="localOverride" value="false" />
+    <property name="ignoreResourceNotFound" value="true" />
+    <property name="locations">
+        <list>
+            <value>classpath:application.properties</value>
+        </list>
+    </property>
+</bean> -->
+	
 	
 <bean id="dataSource"
 	class="org.springframework.jdbc.datasource.DriverManagerDataSource">

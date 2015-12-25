@@ -7,6 +7,7 @@ import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,9 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 // http://websystique.com/springmvc/spring-mvc-4-restful-web-services-crud-example-resttemplate/
+// http://stackoverflow.com/questions/17128463/overriding-requestmapping-on-springmvc-controller
 @RestController
 @EnableWebMvc
-@RequestMapping(value = "/json/satellites/", headers = "Accept=*/*", produces = "application/json")
+@RequestMapping("jaxrs/satellites/")
 public class SatellitesService {
 
 	@RequestMapping(value = "all", method = RequestMethod.GET, produces = "application/json")
@@ -55,6 +57,11 @@ public class SatellitesService {
 
 	@Autowired
 	private ObjectsController objectController;
+
+	// http://www.mkyong.com/spring3/spring-value-default-value/
+
+	@Value("${jaxrs.path​}")
+	private static String jaxRSPath;
 
 	@Autowired
 	private ObjectsListService listService;

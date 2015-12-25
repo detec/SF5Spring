@@ -25,6 +25,12 @@
 <context:component-scan base-package="org.openbox.sf5.json.service" />
 
 
+<!--  http://stackoverflow.com/questions/23395984/requestmapping-with-placeholder-not-working   
+No, it gives Could not resolve placeholder 'jaxrs.path?'
+ -->
+<!-- <context:property-placeholder location="classpath:application.properties"/> -->
+
+
 <!-- http://huahsin68.blogspot.com/2014/05/why-secured-and-preauthorize-isnt.html
 
 The following security annotation forces @PreAuthorize to read digest authentication and not use anonymous user.

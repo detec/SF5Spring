@@ -1,5 +1,9 @@
 package org.openbox.sf5.json.endpoints;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -17,7 +21,11 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 public abstract class AbstractServiceTest {
 	public static final String appLocation = "http://localhost:8080/SF5Spring-test/";
 
-	public static final String jsonPath = "json";
+	// public static final String jsonPath = "json";
+
+	// it doesn't work in abstract class
+	// @Value("${jaxrs.path}")
+	public static String jsonPath;
 
 	public Client client;
 
@@ -57,13 +65,27 @@ public abstract class AbstractServiceTest {
 				.build();
 	}
 
+	private void readJAXRSPath() {
+		Properties property = new Properties();
+
+		try (InputStream in = getClass().getResourceAsStream("/application.properties")) {
+			property.load(in);
+			AbstractServiceTest.jsonPath = property.getProperty("jaxrs.path");
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+	}
+
 	public void setUpAbstractTestUser() {
 		client = createTestUserClient();
+		readJAXRSPath();
 		commonTarget = client.target(appLocation).path(jsonPath);
 	}
 
 	public void setUpAbstractAdmin() {
 		client = createAdminClient();
+		readJAXRSPath();
 		commonTarget = client.target(appLocation).path(jsonPath);
 	}
 
