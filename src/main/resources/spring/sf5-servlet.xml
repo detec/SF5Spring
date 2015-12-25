@@ -37,9 +37,29 @@ The following security annotation forces @PreAuthorize to read digest authentica
  -->
 <security:global-method-security pre-post-annotations="enabled"/>
 
+<!-- http://spring.io/blog/2013/05/11/content-negotiation-using-spring-mvc/ -->
+<bean id="contentNegotiationManager"
+             class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+    <property name="favorPathExtension" value="false" />
+    <property name="favorParameter" value="true" />
+    <property name="parameterName" value="mediaType" />
+    <property name="ignoreAcceptHeader" value="true"/>
+    <property name="useJaf" value="false"/>
+    <property name="defaultContentType" value="application/json" />
+ 
+    <property name="mediaTypes">
+        <map>
+        	<entry key="html" value="text/html" />
+            <entry key="json" value="application/json" />
+            <entry key="xml" value="application/xml" />
+       </map>
+    </property>
+</bean>
+
 
 <!-- activates annotation driven binding -->
-<mvc:annotation-driven enable-matrix-variables="true">
+<!-- http://spring.io/blog/2013/05/11/content-negotiation-using-spring-mvc/ -->
+<mvc:annotation-driven enable-matrix-variables="true" content-negotiation-manager="contentNegotiationManager">
  
    <!--  <mvc:message-converters>
         <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>

@@ -20,10 +20,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 // http://stackoverflow.com/questions/17128463/overriding-requestmapping-on-springmvc-controller
 @RestController
 @EnableWebMvc
-@RequestMapping("jaxrs/satellites/")
+@RequestMapping(value = "jaxrs/satellites/", produces = { "application/xml", "application/json" })
 public class SatellitesService {
 
-	@RequestMapping(value = "all", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "all", method = RequestMethod.GET)
 	public ResponseEntity<List<Satellites>> getAllSatellites() {
 		List<Satellites> satList = listService.ObjectsList(Satellites.class);
 		if (satList.isEmpty()) {
@@ -33,7 +33,7 @@ public class SatellitesService {
 		return new ResponseEntity<List<Satellites>>(satList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "filter/id/{satelliteId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "filter/id/{satelliteId}", method = RequestMethod.GET)
 	public ResponseEntity<Satellites> getSatelliteById(@PathVariable("satelliteId") long satId) {
 		Satellites sat = objectController.select(Satellites.class, satId);
 		if (sat == null) {
@@ -43,7 +43,7 @@ public class SatellitesService {
 		return new ResponseEntity<Satellites>(sat, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET)
 	public ResponseEntity<List<Satellites>> getSatellitesByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue) {
 
