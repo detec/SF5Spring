@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
+import org.openbox.sf5.model.AbstractDbEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class DAOListImpl implements DAOList, Serializable {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> list(Class<T> type) {
+	public <T extends AbstractDbEntity> List<T> list(Class<T> type) {
 
 		List<T> list = new ArrayList<>();
 
@@ -34,7 +35,7 @@ public class DAOListImpl implements DAOList, Serializable {
 	}
 
 	@Override
-	public <T> List<T> restrictionList(Class<T> type, Criterion criterion) {
+	public <T extends AbstractDbEntity> List<T> restrictionList(Class<T> type, Criterion criterion) {
 		Session s = sessionFactory.openSession();
 		Criteria criteria = s.createCriteria(type).add(criterion);
 		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY); // kill

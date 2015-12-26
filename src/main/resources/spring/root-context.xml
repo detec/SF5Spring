@@ -28,9 +28,6 @@
 <context:component-scan base-package="org.openbox.sf5.json.service" />
 
 <!-- Configurer that replaces ${...} placeholders with values from a properties file -->
-<!-- (in this case, JDBC-related settings for the JPA EntityManager definition below) -->
-<!-- <context:property-placeholder location="classpath:data-access.properties" system-properties-mode="OVERRIDE"/> -->
-
 <!-- application.properties are for Eclipse - file contains dev properties -->
 <context:property-placeholder location="classpath:application.properties" system-properties-mode="OVERRIDE"/>
 <tx:annotation-driven transaction-manager="transactionManager"/>
@@ -81,15 +78,7 @@ Must register a static PropertySourcesPlaceholderConfigurer bean in either XML o
 <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"> 
 	<property name="sessionFactory" ref="sessionFactory"/> 
 </bean> 
-
 	
 <bean id="adminCheck" class="org.openbox.sf5.service.AdminCheck" init-method="initialize"></bean>
-
-<!-- http://stackoverflow.com/questions/12123516/getting-exception-no-bean-named-springsecurityfilterchain-is-defined -->
-<!-- <bean id="springSecurityFilterChain" class="org.springframework.web.filter.DelegatingFilterProxy"/> -->
- 
-
- 
-
    
 </beans>    

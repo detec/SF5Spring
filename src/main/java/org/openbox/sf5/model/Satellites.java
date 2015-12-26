@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "Satellites")
-@XmlRootElement
+@XmlRootElement(name = "satellite")
 public class Satellites extends AbstractDbEntity implements Serializable {
 
 	private static final long serialVersionUID = -2077586473579019427L;

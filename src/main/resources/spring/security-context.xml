@@ -114,27 +114,15 @@ So when specifying patterns in action-based frameworks we should use only **
     	<security:concurrency-control max-sessions="1" expired-url="/login?time=1" />
     </security:session-management>
 
-<!-- Let's not use intercept-url - we use annotations instead -->
-
-	
 	<security:intercept-url pattern="/login" access="isAnonymous()"/>
 	<security:intercept-url pattern="/register" access="isAnonymous()"/>
-	
-	
  	<security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
-	
-	
-	
-	
 	<!--	Anonymous access to json endpoints. --> 
 <!-- 	<security:intercept-url pattern="/json/*" access="isAnonymous()"/> -->
-	
-	
+
 	<!--  For all other requests -->
 <!-- 	<security:intercept-url pattern="/*" access="isAnonymous()"/> -->
-	
 	<security:logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID" invalidate-session="true"/>
-	
 		 
 	<security:form-login 
 		login-page= '/login' 
