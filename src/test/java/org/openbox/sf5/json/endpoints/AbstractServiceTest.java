@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider;
 
 public abstract class AbstractServiceTest {
 	public static final String appLocation = "http://localhost:8080/SF5Spring-test/";
@@ -45,8 +46,11 @@ public abstract class AbstractServiceTest {
 		// adding universal, digest and non-preemptive authentication.
 		HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.digest("admin", "1");
 
-		return ClientBuilder.newBuilder().register(JacksonJaxbJsonProvider.class).register(JacksonFeature.class)
-				.register(MultiPartFeature.class).register(authenticationFeature)
+		return ClientBuilder.newBuilder().register(JacksonJaxbJsonProvider.class)
+
+				.register(JacksonJaxbXMLProvider.class)
+
+				.register(JacksonFeature.class).register(MultiPartFeature.class).register(authenticationFeature)
 
 				// .register(new LoggingFilter())
 
@@ -58,6 +62,9 @@ public abstract class AbstractServiceTest {
 				this.testUserPassword);
 
 		return ClientBuilder.newBuilder().register(JacksonJaxbJsonProvider.class).register(JacksonFeature.class)
+
+				.register(JacksonJaxbXMLProvider.class)
+
 				.register(MultiPartFeature.class).register(authenticationFeature)
 
 				// .register(new LoggingFilter())
@@ -96,18 +103,4 @@ public abstract class AbstractServiceTest {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
-	// public void addAdminCredentials(Invocation.Builder invocationBuilder) {
-	// invocationBuilder.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_DIGEST_USERNAME,
-	// "admin")
-	// .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_DIGEST_PASSWORD,
-	// "1");
-	//
-	// }
-	//
-	// public void addAdminCredentials(WebTarget target) {
-	// target.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_DIGEST_USERNAME,
-	// "admin")
-	// .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_DIGEST_PASSWORD,
-	// "1");
-	// }
 }

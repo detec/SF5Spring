@@ -48,6 +48,34 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
+		Satellites satellite = response.readEntity(Satellites.class);
+		assertThat(satellite).isNotNull();
+
+	}
+
+	@Test
+	public void shouldgetSatelliteByIdXML() {
+
+		// WebTarget target = null;
+		Response response = null;
+
+		// Client client = createClient();
+		//
+		// target =
+		// client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("id").path("1");
+
+		// response =
+		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+
+		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("id").path("1")
+				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+
+		response = invocationBuilder.get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		Satellites satellite = response.readEntity(Satellites.class);
+		assertThat(satellite).isNotNull();
+
 	}
 
 	@Test
