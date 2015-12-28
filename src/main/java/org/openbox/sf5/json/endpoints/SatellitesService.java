@@ -1,6 +1,5 @@
 package org.openbox.sf5.json.endpoints;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
@@ -41,24 +40,34 @@ public class SatellitesService {
 	}
 
 	@RequestMapping(value = "all", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
-	public ResponseEntity<GenericXMLListWrapper<Satellites>> getAllSatellitesXML() throws NoSuchFieldException, SecurityException, NoSuchMethodException {
+	public ResponseEntity<GenericXMLListWrapper<Satellites>> getAllSatellitesXML()
+			throws NoSuchFieldException, SecurityException, NoSuchMethodException {
 		List<Satellites> satList = listService.ObjectsList(Satellites.class);
 		if (satList.isEmpty()) {
 			return new ResponseEntity<GenericXMLListWrapper<Satellites>>(HttpStatus.NO_CONTENT);//
 		}
+
+		// we should replace XmlElementWrapper name
+		// Method method = wrapper.getClass().getMethod("getWrappedList");
+
+		return returnGenericWrapperResponseBySatList(satList);
+	}
+
+	private ResponseEntity<GenericXMLListWrapper<Satellites>> returnGenericWrapperResponseBySatList(
+			List<Satellites> satList) {
+
 		GenericXMLListWrapper<Satellites> wrapper = new GenericXMLListWrapper<Satellites>();
 		wrapper.setWrappedList(satList);
 
 		// http://stackoverflow.com/questions/14268981/modify-a-class-definitions-annotation-string-parameter-at-runtime
-
-		// here we should change annotation.
-		// Additionally we get like [com.sun.istack.internal.SAXException2: class
-		// nor any of its super class is known to this context. javax.xml.bind.JAXBException: class Employee nor any of its super class is known to this context.]
 		// http://stackoverflow.com/questions/16545868/exception-converting-object-to-xml-using-jaxb
 
 		// We should replace stub for satellites in root element
 		final XmlRootElement classAnnotation = wrapper.getClass().getAnnotation(XmlRootElement.class);
-		ChangeAnnotation.changeAnnotationValue(classAnnotation, "name", "satellites");  // this seems to work
+		ChangeAnnotation.changeAnnotationValue(classAnnotation, "name", "satellites"); // this
+																						// seems
+																						// to
+																						// work
 
 		// we should also change annotation of @XmlSeeAlso
 		final XmlSeeAlso classSeeAlsoAnnotation = wrapper.getClass().getAnnotation(XmlSeeAlso.class);
@@ -66,19 +75,6 @@ public class SatellitesService {
 		Class[] clazzArray = new Class[1];
 		clazzArray[0] = Satellites.class;
 		ChangeAnnotation.changeAnnotationValue(classSeeAlsoAnnotation, "value", clazzArray);
-
-		// we should replace XmlElementWrapper name
-		Method method = wrapper.getClass().getMethod("getWrappedList");
-
-//		final XmlElementWrapper listAnnotationWrapper = method.getAnnotation(XmlElementWrapper.class);
-//		if (listAnnotationWrapper != null) {
-//			// for generic field it was null
-//		ChangeAnnotation.changeAnnotationValue(listAnnotationWrapper, "name", "satellite");
-//		}
-
-
-		// !!! JaxbContext should be set up
-		// http://docs.spring.io/spring-ws/sites/1.5/reference/html/oxm.html
 
 		return new ResponseEntity<GenericXMLListWrapper<Satellites>>(wrapper, HttpStatus.OK);
 	}
@@ -93,16 +89,29 @@ public class SatellitesService {
 		return new ResponseEntity<Satellites>(sat, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET)
+	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<Satellites>> getSatellitesByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue) {
 
 		List<Satellites> satList = jsonizer.getSatellitesByArbitraryFilter(fieldName, typeValue);
 		if (satList.isEmpty()) {
-			return new ResponseEntity<List<Satellites>>(HttpStatus.NO_CONTENT);//
+			return new ResponseEntity<List<Satellites>>(HttpStatus.NO_CONTENT);
 		}
 
 		return new ResponseEntity<List<Satellites>>(satList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+	public ResponseEntity<GenericXMLListWrapper<Satellites>> getSatellitesByArbitraryFilterXML(
+			@PathVariable("type") String fieldName, @PathVariable("typeValue") String typeValue) {
+		List<Satellites> satList = jsonizer.getSatellitesByArbitraryFilter(fieldName, typeValue);
+
+		if (satList.isEmpty()) {
+			return new ResponseEntity<GenericXMLListWrapper<Satellites>>(HttpStatus.NO_CONTENT);//
+		}
+
+		return returnGenericWrapperResponseBySatList(satList);
+
 	}
 
 	@Autowired
