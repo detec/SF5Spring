@@ -2,8 +2,12 @@ package org.openbox.sf5.json.endpoints;
 
 import java.util.List;
 
+import javax.ws.rs.core.MediaType;
+
+import org.openbox.sf5.common.JsonObjectFiller;
 import org.openbox.sf5.json.service.TranspondersJsonizer;
 import org.openbox.sf5.model.Transponders;
+import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +51,17 @@ public class TranspondersService {
 		return new ResponseEntity<List<Transponders>>(transList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "filter/id/{transponderId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+	public ResponseEntity<GenericXMLListWrapper<Transponders>> getTranspondersByArbitraryFilterXML(
+			@PathVariable("type") String fieldName, @PathVariable("typeValue") String typeValue) {
+		List<Transponders> transList = transpondersJsonizer.getTranspondersByArbitraryFilter(fieldName, typeValue);
+		if (transList.isEmpty()) {
+			return new ResponseEntity<GenericXMLListWrapper<Transponders>>(HttpStatus.NO_CONTENT);
+		}
+		return JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);
+	}
+
+	@RequestMapping(value = "filter/id/{transponderId}", method = RequestMethod.GET)
 	public ResponseEntity<Transponders> getTransponderById(@PathVariable("transponderId") long tpId) {
 		Transponders trans = objectController.select(Transponders.class, tpId);
 		if (trans == null) {
@@ -69,6 +83,18 @@ public class TranspondersService {
 		return new ResponseEntity<List<Transponders>>(transList, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/{filter}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+	public ResponseEntity<GenericXMLListWrapper<Transponders>> getTranspondersBySatelliteIdXML(
+			@PathVariable("filter") String ignore, @MatrixVariable(required = true, value = "satId") long satId) {
+
+		List<Transponders> transList = transpondersJsonizer.getTranspondersBySatelliteId(satId);
+		if (transList.isEmpty()) {
+			return new ResponseEntity<GenericXMLListWrapper<Transponders>>(HttpStatus.NO_CONTENT);
+		}
+
+		return JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);
+	}
+
 	@RequestMapping(value = "all", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Transponders>> getTransponders() {
 		List<Transponders> transList = listService.ObjectsList(Transponders.class);
@@ -76,6 +102,17 @@ public class TranspondersService {
 			return new ResponseEntity<List<Transponders>>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<Transponders>>(transList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "all", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+	public ResponseEntity<GenericXMLListWrapper<Transponders>> getTranspondersXML() {
+		List<Transponders> transList = listService.ObjectsList(Transponders.class);
+		if (transList.isEmpty()) {
+			return new ResponseEntity<GenericXMLListWrapper<Transponders>>(HttpStatus.NO_CONTENT);
+		}
+
+		return JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);
+
 	}
 
 	public ObjectsController getObjectController() {

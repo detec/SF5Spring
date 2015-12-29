@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.openbox.sf5.model.Satellites;
+import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 
 @RunWith(JUnit4.class)
 public class SatellitesServiceIT extends AbstractServiceTest {
@@ -56,16 +57,7 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 	@Test
 	public void shouldgetSatelliteByIdXML() {
 
-		// WebTarget target = null;
 		Response response = null;
-
-		// Client client = createClient();
-		//
-		// target =
-		// client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("id").path("1");
-
-		// response =
-		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 
 		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("id").path("1")
 				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
@@ -93,6 +85,27 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		List<Satellites> satList = invocationBuilder.get(genList);
 
 		assertThat(satList).isNotNull();
+		assertThat(satList.size()).isGreaterThan(0);
+	}
+
+	@Test
+	public void shouldgetAllSatellitesXML() {
+
+		Response response = null;
+
+		Invocation.Builder invocationBuilder = serviceTarget.path("all").request(MediaType.APPLICATION_XML)
+				.accept(MediaType.APPLICATION_XML);
+		response = invocationBuilder.get();
+
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		GenericXMLListWrapper<Satellites> satWrapper = response.readEntity(GenericXMLListWrapper.class);
+
+		List<Satellites> satList = satWrapper.getWrappedList();
+
+		assertThat(satList).isNotNull();
+		assertThat(satList.size()).isGreaterThan(0);
+
 	}
 
 	@Test
@@ -101,7 +114,8 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		// WebTarget target = null;
 
 		Response response = null;
-
+		GenericType<List<Satellites>> genList = new GenericType<List<Satellites>>() {
+		};
 		// Client client = createClient();
 
 		// target = client.target(appLocation + "satellites/filter/Name/13E");
@@ -117,6 +131,29 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		response = invocationBuilder.get();
 
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		List<Satellites> satList = invocationBuilder.get(genList);
+
+		assertThat(satList).isNotNull();
+		assertThat(satList.size()).isGreaterThan(0);
+	}
+
+	@Test
+	public void getSatellitesByArbitraryFilterXML() {
+
+		Response response = null;
+		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("Name").path("13E")
+				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+		response = invocationBuilder.get();
+
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		GenericXMLListWrapper<Satellites> satWrapper = response.readEntity(GenericXMLListWrapper.class);
+
+		List<Satellites> satList = satWrapper.getWrappedList();
+
+		assertThat(satList).isNotNull();
+		assertThat(satList.size()).isGreaterThan(0);
+
 	}
 
 }

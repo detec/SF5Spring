@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.openbox.sf5.model.Transponders;
+import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 
 @RunWith(JUnit4.class)
 public class TranspondersServiceIT extends AbstractServiceTest {
@@ -59,6 +60,32 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 	}
 
 	@Test
+	public void shouldGetTranspondersByArbitraryFilterXML() {
+
+		Response response = null;
+		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("Speed").path("27500")
+				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+
+		response = invocationBuilder.get();
+
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		// GenericType<List<Transponders>> genList = new
+		// GenericType<List<Transponders>>() {
+		// };
+		//
+		// List<Transponders> newTransList = response.readEntity(genList);
+
+		GenericXMLListWrapper<Transponders> transWrapper = response.readEntity(GenericXMLListWrapper.class);
+
+		List<Transponders> newTransList = transWrapper.getWrappedList();
+
+		assertThat(newTransList).isNotNull();
+		assertThat(newTransList.size()).isGreaterThan(0);
+
+	}
+
+	@Test
 	public void shouldGetTransponderById() {
 		Response response = null;
 
@@ -70,6 +97,20 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		Transponders trans = response.readEntity(Transponders.class);
 		assertThat(trans).isNotNull();
 
+	}
+
+	@Test
+	public void shouldGetTransponderByIdXML() {
+
+		Response response = null;
+
+		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("id").path("1")
+				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+		response = invocationBuilder.get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		Transponders trans = response.readEntity(Transponders.class);
+		assertThat(trans).isNotNull();
 	}
 
 	@Test
@@ -92,6 +133,25 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 	}
 
 	@Test
+	public void shouldGetTranspondersBySatelliteIdXML() {
+
+		Response response = null;
+
+		Invocation.Builder invocationBuilder = serviceTarget.path("filter").matrixParam("satId", "1")
+				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+		response = invocationBuilder.get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		GenericXMLListWrapper<Transponders> transWrapper = response.readEntity(GenericXMLListWrapper.class);
+
+		List<Transponders> newTransList = transWrapper.getWrappedList();
+
+		assertThat(newTransList).isNotNull();
+		assertThat(newTransList.size()).isGreaterThan(0);
+
+	}
+
+	@Test
 	public void shouldGetAllTransponders() {
 
 		Response response = null;
@@ -105,6 +165,24 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		};
 
 		List<Transponders> newTransList = response.readEntity(genList);
+
+		assertThat(newTransList).isNotNull();
+		assertThat(newTransList.size()).isGreaterThan(0);
+	}
+
+	@Test
+	public void shouldGetAllTranspondersXML() {
+
+		Response response = null;
+
+		Invocation.Builder invocationBuilder = serviceTarget.path("all").request(MediaType.APPLICATION_XML)
+				.accept(MediaType.APPLICATION_XML);
+		response = invocationBuilder.get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		GenericXMLListWrapper<Transponders> transWrapper = response.readEntity(GenericXMLListWrapper.class);
+
+		List<Transponders> newTransList = transWrapper.getWrappedList();
 
 		assertThat(newTransList).isNotNull();
 		assertThat(newTransList.size()).isGreaterThan(0);

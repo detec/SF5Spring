@@ -3,12 +3,10 @@ package org.openbox.sf5.json.endpoints;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 
+import org.openbox.sf5.common.JsonObjectFiller;
 import org.openbox.sf5.json.service.SatellitesJsonizer;
 import org.openbox.sf5.model.Satellites;
-import org.openbox.sf5.model.listwrappers.ChangeAnnotation;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
@@ -50,34 +48,43 @@ public class SatellitesService {
 		// we should replace XmlElementWrapper name
 		// Method method = wrapper.getClass().getMethod("getWrappedList");
 
-		return returnGenericWrapperResponseBySatList(satList);
+		return JsonObjectFiller.returnGenericWrapperResponseBySatList(satList, Satellites.class);
 	}
 
-	private ResponseEntity<GenericXMLListWrapper<Satellites>> returnGenericWrapperResponseBySatList(
-			List<Satellites> satList) {
-
-		GenericXMLListWrapper<Satellites> wrapper = new GenericXMLListWrapper<Satellites>();
-		wrapper.setWrappedList(satList);
-
-		// http://stackoverflow.com/questions/14268981/modify-a-class-definitions-annotation-string-parameter-at-runtime
-		// http://stackoverflow.com/questions/16545868/exception-converting-object-to-xml-using-jaxb
-
-		// We should replace stub for satellites in root element
-		final XmlRootElement classAnnotation = wrapper.getClass().getAnnotation(XmlRootElement.class);
-		ChangeAnnotation.changeAnnotationValue(classAnnotation, "name", "satellites"); // this
-																						// seems
-																						// to
-																						// work
-
-		// we should also change annotation of @XmlSeeAlso
-		final XmlSeeAlso classSeeAlsoAnnotation = wrapper.getClass().getAnnotation(XmlSeeAlso.class);
-		// Player[] thePlayers = new Player[playerCount + 1];
-		Class[] clazzArray = new Class[1];
-		clazzArray[0] = Satellites.class;
-		ChangeAnnotation.changeAnnotationValue(classSeeAlsoAnnotation, "value", clazzArray);
-
-		return new ResponseEntity<GenericXMLListWrapper<Satellites>>(wrapper, HttpStatus.OK);
-	}
+	// private ResponseEntity<GenericXMLListWrapper<Satellites>>
+	// returnGenericWrapperResponseBySatList(
+	// List<Satellites> satList) {
+	//
+	// GenericXMLListWrapper<Satellites> wrapper = new
+	// GenericXMLListWrapper<Satellites>();
+	// wrapper.setWrappedList(satList);
+	//
+	// //
+	// http://stackoverflow.com/questions/14268981/modify-a-class-definitions-annotation-string-parameter-at-runtime
+	// //
+	// http://stackoverflow.com/questions/16545868/exception-converting-object-to-xml-using-jaxb
+	//
+	// // We should replace stub for satellites in root element
+	// final XmlRootElement classAnnotation =
+	// wrapper.getClass().getAnnotation(XmlRootElement.class);
+	// ChangeAnnotation.changeAnnotationValue(classAnnotation, "name",
+	// "satellites"); // this
+	// // seems
+	// // to
+	// // work
+	//
+	// // we should also change annotation of @XmlSeeAlso
+	// final XmlSeeAlso classSeeAlsoAnnotation =
+	// wrapper.getClass().getAnnotation(XmlSeeAlso.class);
+	// // Player[] thePlayers = new Player[playerCount + 1];
+	// Class[] clazzArray = new Class[1];
+	// clazzArray[0] = Satellites.class;
+	// ChangeAnnotation.changeAnnotationValue(classSeeAlsoAnnotation, "value",
+	// clazzArray);
+	//
+	// return new ResponseEntity<GenericXMLListWrapper<Satellites>>(wrapper,
+	// HttpStatus.OK);
+	// }
 
 	@RequestMapping(value = "filter/id/{satelliteId}", method = RequestMethod.GET)
 	public ResponseEntity<Satellites> getSatelliteById(@PathVariable("satelliteId") long satId) {
@@ -110,7 +117,7 @@ public class SatellitesService {
 			return new ResponseEntity<GenericXMLListWrapper<Satellites>>(HttpStatus.NO_CONTENT);//
 		}
 
-		return returnGenericWrapperResponseBySatList(satList);
+		return JsonObjectFiller.returnGenericWrapperResponseBySatList(satList, Satellites.class);
 
 	}
 

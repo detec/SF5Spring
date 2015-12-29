@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RestController
 @EnableWebMvc
-@RequestMapping(value = "/jaxrs/users/", headers = "Accept=*/*", produces = "application/json")
+@RequestMapping(value = "/jaxrs/users/")
 public class UsersService {
 
 	// https://docs.spring.io/spring-security/site/docs/3.0.x/reference/el-access.html
@@ -24,7 +24,7 @@ public class UsersService {
 	// @PreAuthorize("hasRole('ROLE_ADMIN') or (#login == principal and
 	// principal.enabled)")
 	@PreAuthorize("hasRole('ROLE_ADMIN') or (#login  == authentication.name)")
-	@RequestMapping(value = "filter/username/{login}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "filter/username/{login}", method = RequestMethod.GET)
 	public ResponseEntity<Users> getUserByLogin(@PathVariable("login") String login) {
 		Users retUser = usersJsonizer.getUserByLogin(login);
 		if (retUser == null) {
@@ -54,7 +54,7 @@ public class UsersService {
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "exists/username/{login}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "exists/username/{login}", method = RequestMethod.GET)
 	public ResponseEntity<Boolean> ifSuchLoginExists(@PathVariable("login") String login) {
 		Boolean result = usersJsonizer.checkIfUsernameExists(login);
 		if (!result) {

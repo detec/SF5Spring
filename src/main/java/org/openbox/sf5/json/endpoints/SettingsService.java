@@ -3,14 +3,17 @@ package org.openbox.sf5.json.endpoints;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.MediaType;
+
+import org.openbox.sf5.common.JsonObjectFiller;
 import org.openbox.sf5.common.SF5SecurityContext;
 import org.openbox.sf5.json.service.SettingsJsonizer;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.Users;
+import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,6 +81,23 @@ public class SettingsService {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping(value = "all", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+	public ResponseEntity<GenericXMLListWrapper<Settings>> getSettingsByUserLoginXML() {
+
+		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
+		if (currentUser == null) {
+			return new ResponseEntity<GenericXMLListWrapper<Settings>>(HttpStatus.UNAUTHORIZED);
+		}
+
+		List<Settings> settList = settingsJsonizer.getSettingsByUser(currentUser);
+		if (settList.isEmpty()) {
+			return new ResponseEntity<GenericXMLListWrapper<Settings>>(HttpStatus.NO_CONTENT);
+		}
+
+		return JsonObjectFiller.returnGenericWrapperResponseBySatList(settList, Settings.class);
+	}
+
 	// http://community.hpe.com/t5/Software-Developers/A-Comprehensive-Example-of-a-Spring-MVC-Application-Part-3/ba-p/6135449
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -100,7 +120,26 @@ public class SettingsService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "filter/id/{settingId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+	public ResponseEntity<GenericXMLListWrapper<Settings>> getSettingsByArbitraryFilterXML(
+			@PathVariable("type") String fieldName, @PathVariable("typeValue") String typeValue) {
+
+		List<Settings> settList = new ArrayList<>();
+		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
+		if (currentUser == null) {
+			return new ResponseEntity<GenericXMLListWrapper<Settings>>(HttpStatus.UNAUTHORIZED);
+		}
+
+		settList = settingsJsonizer.getSettingsByArbitraryFilter(fieldName, typeValue, currentUser);
+		if (settList.isEmpty()) {
+			return new ResponseEntity<GenericXMLListWrapper<Settings>>(HttpStatus.NO_CONTENT);
+		}
+
+		return JsonObjectFiller.returnGenericWrapperResponseBySatList(settList, Settings.class);
+	}
+
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping(value = "filter/id/{settingId}", method = RequestMethod.GET)
 	public ResponseEntity<Settings> getSettingById(@PathVariable("settingId") long settingId) {
 
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();

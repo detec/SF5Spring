@@ -48,6 +48,19 @@ public class BUserServiceIT extends AbstractServiceTest {
 	}
 
 	@Test
+	public void loginShouldNotBeFoundXML() {
+		Response response = null;
+
+		Invocation.Builder invocationBuilder = serviceTarget.path("exists").path("username").path("loginxxf")
+				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+
+		response = invocationBuilder.get();
+
+		// there is no such login.
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+	}
+
+	@Test
 	public void shouldCheckCreateTestLogin() {
 		Response response = null;
 

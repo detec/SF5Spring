@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
@@ -27,6 +26,7 @@ import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.SettingsConversion;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.Users;
+import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 
 @RunWith(JUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -45,6 +45,18 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		return testUser;
 
+	}
+
+	private Users getTestUserXML() {
+		Invocation.Builder invocationBuilder = commonTarget.path("users").path("filter").path("username")
+				.path(this.testUsername).request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+
+		Response response = invocationBuilder.get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		Users testUser = response.readEntity(Users.class);
+
+		return testUser;
 	}
 
 	@Before
@@ -133,7 +145,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 	}
 
 	// getting all user settings with authentication
-	private List<Settings> getUserSettings(Client client) {
+	private List<Settings> getUserSettings() {
 
 		List<Settings> settList = new ArrayList<Settings>();
 
@@ -150,9 +162,39 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 	}
 
+	private List<Settings> getUserSettingsXML() {
+
+		List<Settings> settList = new ArrayList<Settings>();
+
+		// WebTarget target = serviceTarget.path("all");
+		//
+		// Builder response =
+		// target.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML).b;
+		//
+		// GenericXMLListWrapper<Transponders> settingWrapper =
+		// response.readEntity(GenericXMLListWrapper.class);
+
+		Response response = null;
+
+		Invocation.Builder invocationBuilder = serviceTarget.path("all").request(MediaType.APPLICATION_XML)
+				.accept(MediaType.APPLICATION_XML);
+		response = invocationBuilder.get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		GenericXMLListWrapper<Settings> settingWrapper = response.readEntity(GenericXMLListWrapper.class);
+
+		List<Settings> settingList = settingWrapper.getWrappedList();
+
+		assertThat(settingList).isNotNull();
+		assertThat(settingList.size()).isGreaterThan(0);
+
+		return settingList;
+
+	}
+
 	@Test
 	public void shouldGetUserSettings() {
-		getUserSettings(client);
+		getUserSettings();
 	}
 
 	@Test
