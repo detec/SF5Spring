@@ -1,10 +1,6 @@
 package org.openbox.sf5.application;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -18,6 +14,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.MediaType;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -32,6 +29,7 @@ import org.openbox.sf5.converters.UserEditor;
 import org.openbox.sf5.converters.VersionOfTheDVBEditor;
 import org.openbox.sf5.model.CarrierFrequency;
 import org.openbox.sf5.model.DVBStandards;
+import org.openbox.sf5.model.Sat;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.SettingsConversion;
 import org.openbox.sf5.model.SettingsConversionPresentation;
@@ -42,10 +40,7 @@ import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -59,7 +54,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_USER')")
@@ -620,56 +614,65 @@ public class SettingsForm implements Serializable {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "exportToXML", value = "/editsetting", method = RequestMethod.POST)
-	@ResponseBody
-	public HttpEntity<String> exportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
+	@RequestMapping(params = "exportToXML", value = "/editsetting", method = RequestMethod.POST, produces = MediaType.APPLICATION_XML)
+	// @ResponseBody
+	public ResponseEntity<Sat> exportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
 		return universalexportToXML(pSetting);
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "exportToXML", value = "/settings/add", method = RequestMethod.POST)
-	@ResponseBody
-	public HttpEntity<String> newExportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
+	@RequestMapping(params = "exportToXML", value = "/settings/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_XML)
+	// @ResponseBody
+	public ResponseEntity<Sat> newExportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
 		return universalexportToXML(pSetting);
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@ResponseBody
-	public HttpEntity<String> universalexportToXML(SettingsForm pSetting) {
-		dataSettingsConversion = pSetting.dataSettingsConversion;
+	// @PreAuthorize("hasRole('ROLE_USER')")
+	// @ResponseBody
+	// public HttpEntity<String> universalexportToXML(SettingsForm pSetting) {
+	// dataSettingsConversion = pSetting.dataSettingsConversion;
+	//
+	// HttpHeaders header = new HttpHeaders();
+	// header.setContentType(MediaType.TEXT_HTML);
+	//
+	// byte[] bytesBuffer = new byte[32768];
+	//
+	// if (!check32Rows()) {
+	// ResponseEntity<String> resp = new ResponseEntity<String>(
+	// new String("Table Transponders must contain exactly 32 rows!"), header,
+	// HttpStatus.OK);
+	// return resp;
+	// }
+	//
+	// String filePath = XMLExporter.exportSettingToXML(dataSettingsConversion);
+	//
+	// if (filePath == "") {
+	// return new ResponseEntity<String>("Error reading export XML file on
+	// server!", header, HttpStatus.OK);
+	// }
+	//
+	// header.setContentType(new MediaType("application", "xml"));
+	//
+	// try {
+	//
+	// bytesBuffer = Files.readAllBytes(Paths.get(filePath));
+	//
+	// // clean temporary file
+	// Files.deleteIfExists(Paths.get(filePath));
+	//
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	//
+	// return new ResponseEntity<String>(new String(bytesBuffer,
+	// Charset.forName("UTF8")), header, HttpStatus.OK);
+	//
+	// }
 
-		HttpHeaders header = new HttpHeaders();
-		header.setContentType(MediaType.TEXT_HTML);
+	public ResponseEntity<Sat> universalexportToXML(SettingsForm pSetting) {
 
-		byte[] bytesBuffer = new byte[32768];
-
-		if (!check32Rows()) {
-			ResponseEntity<String> resp = new ResponseEntity<String>(
-					new String("Table Transponders must contain exactly 32 rows!"), header, HttpStatus.OK);
-			return resp;
-		}
-
-		String filePath = XMLExporter.exportSettingToXML(dataSettingsConversion);
-
-		if (filePath == "") {
-			return new ResponseEntity<String>("Error reading export XML file on server!", header, HttpStatus.OK);
-		}
-
-		header.setContentType(new MediaType("application", "xml"));
-
-		try {
-
-			bytesBuffer = Files.readAllBytes(Paths.get(filePath));
-
-			// clean temporary file
-			Files.deleteIfExists(Paths.get(filePath));
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return new ResponseEntity<String>(new String(bytesBuffer, Charset.forName("UTF8")), header, HttpStatus.OK);
-
+		Sat result = XMLExporter.exportSettingsConversionPresentationToSF5Format(pSetting.dataSettingsConversion);
+		return new ResponseEntity<Sat>(result, HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
