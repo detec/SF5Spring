@@ -2,6 +2,7 @@ package org.openbox.sf5.json.endpoints;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -204,6 +205,8 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		Settings settingRead = response.readEntity(Settings.class);
 		assertThat(settingRead).isNotNull();
 
+		assertTrue(settingRead instanceof Settings);
+
 	}
 
 	// getting all user settings with authentication
@@ -226,8 +229,6 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 	private List<Settings> getUserSettingsXML() {
 
-		List<Settings> settList = new ArrayList<Settings>();
-
 		// WebTarget target = serviceTarget.path("all");
 		//
 		// Builder response =
@@ -245,10 +246,15 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		GenericXMLListWrapper<Settings> settingWrapper = response.readEntity(GenericXMLListWrapper.class);
 
-		List<Settings> settingList = settingWrapper.getWrappedList();
+		List<Settings> settingList = mapper.convertValue(settingWrapper.getWrappedList(),
+				new TypeReference<List<Settings>>() {
+				});
 
 		assertThat(settingList).isNotNull();
 		assertThat(settingList.size()).isGreaterThan(0);
+
+		Settings settingRead = settingList.get(0);
+		assertTrue(settingRead instanceof Settings);
 
 		return settingList;
 
@@ -292,10 +298,15 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		GenericXMLListWrapper<Settings> settingWrapper = response.readEntity(GenericXMLListWrapper.class);
 
-		List<Settings> settingList = settingWrapper.getWrappedList();
+		List<Settings> settingList = mapper.convertValue(settingWrapper.getWrappedList(),
+				new TypeReference<List<Settings>>() {
+				});
 
 		assertThat(settingList).isNotNull();
 		assertThat(settingList.size()).isGreaterThan(0);
+
+		Settings settingRead = settingList.get(0);
+		assertTrue(settingRead instanceof Settings);
 
 	}
 }

@@ -27,7 +27,7 @@ public class AdminCheck {
 			List<Usersauthorities> rolesList = new ArrayList<>();
 
 			Users admin = new Users("admin", "1", true, rolesList);
-			objectsController.saveOrUpdate(admin);
+			// objectsController.saveOrUpdate(admin);
 
 			fillTables(admin, rolesList);
 			objectsController.saveOrUpdate(admin);

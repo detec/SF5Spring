@@ -19,6 +19,7 @@ import org.openbox.sf5.model.SettingsConversion;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.TypesOfFEC;
 import org.openbox.sf5.model.Users;
+import org.openbox.sf5.model.Usersauthorities;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -104,6 +105,16 @@ public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 		user.setenabled(true);
 		user.setPassword("1");
 		user.setusername("testuser");
+
+		List<Usersauthorities> rolesList = new ArrayList<Usersauthorities>();
+
+		Usersauthorities checkRoleUser = new Usersauthorities(user.getusername(), "ROLE_USER", user, 2);
+
+		if (!rolesList.contains(checkRoleUser)) {
+			rolesList.add(checkRoleUser);
+		}
+		user.setauthorities(rolesList);
+
 		return user;
 	}
 

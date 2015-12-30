@@ -23,6 +23,7 @@ import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.SettingsConversion;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.Users;
+import org.openbox.sf5.model.Usersauthorities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -118,6 +119,17 @@ public class IntersectionsTests extends AbstractJsonizerTest {
 		Users usr = new Users();
 		usr.setusername("login");
 		usr.setPassword("empty");
+
+		List<Usersauthorities> rolesList = new ArrayList<Usersauthorities>();
+
+		Usersauthorities checkRoleUser = new Usersauthorities(usr.getusername(), "ROLE_USER", usr, 2);
+
+		if (!rolesList.contains(checkRoleUser)) {
+			rolesList.add(checkRoleUser);
+		}
+
+		usr.setauthorities(rolesList);
+
 		objectController.saveOrUpdate(usr);
 
 		Settings setting = new Settings();

@@ -13,6 +13,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -84,9 +87,9 @@ public class Users extends AbstractDbEntity implements Serializable {
 	@Cascade({ CascadeType.ALL })
 	@OrderColumn(name = "LineNumber")
 	@JsonManagedReference
-	// @Valid
-	// @NotNull
-	// @Size(min = 1)
+	@Valid
+	@NotNull
+	@Size(min = 1)
 	public List<Usersauthorities> authorities;
 
 	public List<Usersauthorities> getauthorities() {
