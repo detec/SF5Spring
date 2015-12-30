@@ -2,6 +2,7 @@ package org.openbox.sf5.json.endpoints;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -14,11 +15,17 @@ import javax.ws.rs.core.Response.Status;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-@RunWith(JUnit4.class)
+import com.fasterxml.jackson.core.type.TypeReference;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "file:src/main/resources/spring/root-context.xml" })
+@WebAppConfiguration
 public class SatellitesServiceIT extends AbstractServiceTest {
 
 	private String servicePath = "satellites";
@@ -68,6 +75,8 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		Satellites satellite = response.readEntity(Satellites.class);
 		assertThat(satellite).isNotNull();
 
+		assertTrue(satellite instanceof Satellites);
+
 	}
 
 	@Test
@@ -101,11 +110,18 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 
 		GenericXMLListWrapper<Satellites> satWrapper = response.readEntity(GenericXMLListWrapper.class);
 
-		List<Satellites> satList = satWrapper.getWrappedList();
+		// List<Satellites> satList = satWrapper.getWrappedList();
+		List<Satellites> satList = mapper.convertValue(satWrapper.getWrappedList(),
+				new TypeReference<List<Satellites>>() {
+				});
 
 		assertThat(satList).isNotNull();
 		assertThat(satList.size()).isGreaterThan(0);
 
+		// http://stackoverflow.com/questions/15430715/casting-linkedhashmap-to-complex-object
+
+		Satellites satellite = satList.get(0);
+		assertTrue(satellite instanceof Satellites);
 	}
 
 	@Test
@@ -149,10 +165,15 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		GenericXMLListWrapper<Satellites> satWrapper = response.readEntity(GenericXMLListWrapper.class);
 
-		List<Satellites> satList = satWrapper.getWrappedList();
+		List<Satellites> satList = mapper.convertValue(satWrapper.getWrappedList(),
+				new TypeReference<List<Satellites>>() {
+				});
 
 		assertThat(satList).isNotNull();
 		assertThat(satList.size()).isGreaterThan(0);
+
+		Satellites satellite = satList.get(0);
+		assertTrue(satellite instanceof Satellites);
 
 	}
 

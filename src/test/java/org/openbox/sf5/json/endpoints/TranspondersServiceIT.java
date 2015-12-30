@@ -2,6 +2,7 @@ package org.openbox.sf5.json.endpoints;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -14,11 +15,17 @@ import javax.ws.rs.core.Response.Status;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-@RunWith(JUnit4.class)
+import com.fasterxml.jackson.core.type.TypeReference;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "file:src/main/resources/spring/root-context.xml" })
+@WebAppConfiguration
 public class TranspondersServiceIT extends AbstractServiceTest {
 
 	private static final String servicePath = "transponders";
@@ -78,7 +85,9 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		GenericXMLListWrapper<Transponders> transWrapper = response.readEntity(GenericXMLListWrapper.class);
 
-		List<Transponders> newTransList = transWrapper.getWrappedList();
+		List<Transponders> newTransList = mapper.convertValue(transWrapper.getWrappedList(),
+				new TypeReference<List<Transponders>>() {
+				});
 
 		assertThat(newTransList).isNotNull();
 		assertThat(newTransList.size()).isGreaterThan(0);
@@ -144,10 +153,15 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		GenericXMLListWrapper<Transponders> transWrapper = response.readEntity(GenericXMLListWrapper.class);
 
-		List<Transponders> newTransList = transWrapper.getWrappedList();
+		List<Transponders> newTransList = mapper.convertValue(transWrapper.getWrappedList(),
+				new TypeReference<List<Transponders>>() {
+				});
 
 		assertThat(newTransList).isNotNull();
 		assertThat(newTransList.size()).isGreaterThan(0);
+
+		Transponders transponder = newTransList.get(0);
+		assertTrue(transponder instanceof Transponders);
 
 	}
 
@@ -182,10 +196,15 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		GenericXMLListWrapper<Transponders> transWrapper = response.readEntity(GenericXMLListWrapper.class);
 
-		List<Transponders> newTransList = transWrapper.getWrappedList();
+		List<Transponders> newTransList = mapper.convertValue(transWrapper.getWrappedList(),
+				new TypeReference<List<Transponders>>() {
+				});
 
 		assertThat(newTransList).isNotNull();
 		assertThat(newTransList.size()).isGreaterThan(0);
+
+		Transponders transponder = newTransList.get(0);
+		assertTrue(transponder instanceof Transponders);
 	}
 
 }

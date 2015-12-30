@@ -25,7 +25,8 @@
 <context:component-scan base-package="org.openbox.sf5.dao" /> <!-- Probably this is for autowiring -->
 <context:component-scan base-package="org.openbox.sf5.service" />
 <context:component-scan base-package="org.openbox.sf5.common" />
-<context:component-scan base-package="org.openbox.sf5.json.service" />
+<context:component-scan base-package="org.openbox.sf5.json" />
+
 
 <!-- Configurer that replaces ${...} placeholders with values from a properties file -->
 <!-- application.properties are for Eclipse - file contains dev properties -->
@@ -81,4 +82,12 @@ Must register a static PropertySourcesPlaceholderConfigurer bean in either XML o
 	
 <bean id="adminCheck" class="org.openbox.sf5.service.AdminCheck" init-method="initialize"></bean>
    
+   
+<!-- Trying to enable pretty printing 
+!! It is used in message-converters
+-->
+<bean id="jacksonObjectMapper" 
+	class="org.openbox.sf5.json.service.CustomObjectMapper">
+	
+</bean>   
 </beans>    

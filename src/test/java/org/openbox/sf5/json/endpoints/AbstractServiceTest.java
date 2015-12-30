@@ -11,11 +11,9 @@ import javax.ws.rs.client.WebTarget;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.openbox.sf5.json.service.CustomObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider;
 
@@ -28,9 +26,12 @@ public abstract class AbstractServiceTest {
 	// @Value("${jaxrs.path}")
 	public static String jsonPath;
 
+	@Autowired
+	public CustomObjectMapper mapper;
+
 	public Client client;
 
-	public ObjectMapper mapper = new ObjectMapper();
+	// public ObjectMapper mapper = new ObjectMapper();
 
 	public WebTarget commonTarget;
 
@@ -96,11 +97,13 @@ public abstract class AbstractServiceTest {
 		commonTarget = client.target(appLocation).path(jsonPath);
 	}
 
-	public void configureMapper() {
-		mapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
-		mapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
-		mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-	}
+	// public void configureMapper() {
+	// mapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
+	// mapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING,
+	// true);
+	// mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+	// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+	// false);
+	// }
 
 }

@@ -21,10 +21,12 @@ import org.openbox.sf5.model.TypesOfFEC;
 import org.openbox.sf5.model.Users;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @ContextConfiguration(locations = { "file:src/main/resources/spring/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 
 	@Before

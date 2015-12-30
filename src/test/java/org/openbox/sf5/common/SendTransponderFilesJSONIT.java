@@ -32,8 +32,6 @@ public class SendTransponderFilesJSONIT extends AbstractServiceTest {
 	public void shouldSendFileJsonEndpoint() throws URISyntaxException, IOException {
 		Stream<Path> transponderFilesPathes = IntersectionsTests.getTransponderFilesStreamPath();
 
-		// configureMapper();
-
 		transponderFilesPathes.forEach(t -> {
 
 			FileDataBodyPart filePart = new FileDataBodyPart("file", t.toFile());
@@ -43,17 +41,11 @@ public class SendTransponderFilesJSONIT extends AbstractServiceTest {
 					.bodyPart(filePart);
 
 			Invocation.Builder invocationBuilder = serviceTarget.path("upload").request(MediaType.APPLICATION_JSON);
-			// Response responsePost =
-			// invocationBuilder.post(Entity.entity(setting,
-			// MediaType.APPLICATION_JSON));
 
 			Response responsePost = invocationBuilder.post(Entity.entity(multipart, multipart.getMediaType()));
 			Boolean result = responsePost.readEntity(Boolean.class);
 			assertThat(result.booleanValue()).isTrue();
 
-			// Response lambdaResponse =
-			// target.request().post(Entity.entity(multipart,
-			// multipart.getMediaType()));
 		});
 	}
 
