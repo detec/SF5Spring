@@ -9,4 +9,9 @@
       <attribute name="provider-id" value="jaxrs-no-op-library-provider"/>
     </node>
   </facet>
+  <facet id="jpt.jaxb">
+    <node name="classgen">
+      <attribute name="package" value="org.openbox.sf5.model"/>
+    </node>
+  </facet>
 </root>

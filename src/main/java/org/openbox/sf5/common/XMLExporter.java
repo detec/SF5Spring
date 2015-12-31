@@ -29,8 +29,7 @@ import org.w3c.dom.Node;
 
 public class XMLExporter {
 
-	public static Sat exportSettingsConversionPresentationToSF5Format(
-			List<SettingsConversion> dataSettingsConversion) {
+	public static Sat exportSettingsConversionPresentationToSF5Format(List<SettingsConversion> dataSettingsConversion) {
 
 		// Generating sat/tp structure
 		generateSatTp(dataSettingsConversion);
@@ -75,8 +74,8 @@ public class XMLExporter {
 					Integer.valueOf(Polarization.getXMLpresentation(e.getTransponder().getPolarization())).intValue());
 			newTp.setSymbol((int) e.getTransponder().getSpeed());
 
-//			int indexOfE = dataSettingsConversion.indexOf(e);
-//			int currentLineNumber = indexOfE + 1;
+			// int indexOfE = dataSettingsConversion.indexOf(e);
+			// int currentLineNumber = indexOfE + 1;
 
 			// check if satid exists
 			if (root.getSatid().size() < e.getSatindex()) {
@@ -86,6 +85,7 @@ public class XMLExporter {
 
 			// add new Tp to Satid
 			Satid currentSatid = root.getSatid().get((int) e.getSatindex() - 1);
+			currentSatid.setIndex(String.valueOf(e.getSatindex()));
 			currentSatid.getTp().add(newTp);
 		});
 
