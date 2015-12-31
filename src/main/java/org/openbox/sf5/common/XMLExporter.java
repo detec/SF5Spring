@@ -29,6 +29,9 @@ import org.w3c.dom.Node;
 
 public class XMLExporter {
 
+	// xjc -d f:\My\Java\SF5Spring\src\main\java\org\openbox\sf5\model -encoding
+	// UTF-8 f:\My\Java\SF5Spring\src\main\resources\xsd\sf5_format.xsd
+
 	public static Sat exportSettingsConversionPresentationToSF5Format(List<SettingsConversion> dataSettingsConversion) {
 
 		// Generating sat/tp structure
