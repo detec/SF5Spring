@@ -32,6 +32,9 @@ public class XMLExporter {
 	// xjc -d f:\My\Java\SF5Spring\src\main\java\org\openbox\sf5\model -encoding
 	// UTF-8 f:\My\Java\SF5Spring\src\main\resources\xsd\sf5_format.xsd
 
+	// https://github.com/FasterXML/jackson-module-jaxb-annotations/issues/51
+	// Jackson JAXB problem is discussed there
+
 	public static Sat exportSettingsConversionPresentationToSF5Format(List<SettingsConversion> dataSettingsConversion) {
 
 		// Generating sat/tp structure

@@ -8,8 +8,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXB;
-
 import org.hibernate.criterion.Criterion;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +15,8 @@ import org.junit.runner.RunWith;
 import org.openbox.sf5.json.service.AbstractJsonizerTest;
 import org.openbox.sf5.model.Sat;
 import org.openbox.sf5.model.Settings;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -24,7 +24,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @ContextConfiguration(locations = { "file:src/main/resources/spring/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-public class VerifyXMLExporterTests  extends AbstractJsonizerTest {
+public class VerifyXMLExporterTests extends AbstractJsonizerTest {
+
+	@Autowired
+	public Jaxb2Marshaller springMarshaller;
 
 	@Before
 	public void setUp() {
@@ -37,7 +40,7 @@ public class VerifyXMLExporterTests  extends AbstractJsonizerTest {
 		Criterion criterion = criterionService.getCriterionByClassFieldAndStringValue(Settings.class, "Name",
 				"Intersections test");
 
-		List<Settings> settList =  listService.ObjectsCriterionList(Settings.class, criterion);
+		List<Settings> settList = listService.ObjectsCriterionList(Settings.class, criterion);
 
 		assertEquals(1, settList.size());
 
@@ -45,10 +48,11 @@ public class VerifyXMLExporterTests  extends AbstractJsonizerTest {
 
 		Sat sat = XMLExporter.exportSettingsConversionPresentationToSF5Format(setting.getConversion());
 
-//		StringBuffer outputBuffer = new StringBuffer();
-//		JAXB.marshal(sat, outputBuffer);
+		// StringBuffer outputBuffer = new StringBuffer();
+		// JAXB.marshal(sat, outputBuffer);
 		String result = "";
-		JAXB.marshal(sat, result);
+		// JAXB.marshal(sat, result);
+		// springMarshaller.marshal(sat, result);
 
 		// http://winterbe.com/posts/2015/03/25/java8-examples-string-number-math-files/
 		ArrayList<String> lines = new ArrayList<String>();
