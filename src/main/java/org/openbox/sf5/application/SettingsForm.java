@@ -671,7 +671,14 @@ public class SettingsForm implements Serializable {
 
 	public ResponseEntity<Sat> universalexportToXML(SettingsForm pSetting) {
 
-		Sat result = XMLExporter.exportSettingsConversionPresentationToSF5Format(pSetting.dataSettingsConversion);
+		List<SettingsConversion> scList = new ArrayList<SettingsConversion>();
+		List<SettingsConversionPresentation> DSCList = pSetting.dataSettingsConversion;
+		DSCList.stream().forEach(t -> {
+			SettingsConversion sc = t;
+			scList.add(sc);
+		});
+
+		Sat result = XMLExporter.exportSettingsConversionPresentationToSF5Format(scList);
 		return new ResponseEntity<Sat>(result, HttpStatus.OK);
 	}
 
@@ -684,7 +691,7 @@ public class SettingsForm implements Serializable {
 
 		renumerateLines();
 
-		XMLExporter.generateSatTp(dataSettingsConversion);
+		XMLExporter.generateSatTpPresentation(dataSettingsConversion);
 
 		model.addAttribute("bean", this);
 		model.addAttribute("sessiondate", new Date(session.getLastAccessedTime()));

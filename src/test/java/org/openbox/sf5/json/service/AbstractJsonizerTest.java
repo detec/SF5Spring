@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.openbox.sf5.dao.DAO;
 import org.openbox.sf5.dao.DAOList;
 import org.openbox.sf5.model.AbstractDbEntity;
+import org.openbox.sf5.service.CriterionService;
 import org.openbox.sf5.service.ObjectService;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
@@ -31,6 +32,9 @@ public abstract class AbstractJsonizerTest {
 
 	@Autowired
 	public SessionFactory sessionFactory;
+
+	@Autowired
+	public CriterionService criterionService;
 
 	public void setUpAbstract() {
 

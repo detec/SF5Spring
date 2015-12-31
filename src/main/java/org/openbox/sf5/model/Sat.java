@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlValue;
 
 /**
  * <p>
@@ -98,7 +99,7 @@ public class Sat {
 		if (satid == null) {
 			satid = new ArrayList<Sat.Satid>();
 		}
-		return this.satid;
+		return satid;
 	}
 
 	/**
@@ -143,8 +144,33 @@ public class Sat {
 	public static class Satid {
 
 		protected List<Sat.Satid.Tp> tp;
+
+		@XmlValue
+		protected String value;
+
 		@XmlAttribute(name = "index", required = true)
 		protected String index;
+
+		/**
+		 * Gets the value of the value property.
+		 *
+		 * @return possible object is {@link String }
+		 *
+		 */
+		public String getValue() {
+			return value;
+		}
+
+		/**
+		 * Sets the value of the value property.
+		 *
+		 * @param value
+		 *            allowed object is {@link String }
+		 *
+		 */
+		public void setValue(String value) {
+			this.value = value;
+		}
 
 		/**
 		 * Gets the value of the tp property.
@@ -173,7 +199,7 @@ public class Sat {
 			if (tp == null) {
 				tp = new ArrayList<Sat.Satid.Tp>();
 			}
-			return this.tp;
+			return tp;
 		}
 
 		/**
@@ -194,7 +220,7 @@ public class Sat {
 		 *
 		 */
 		public void setIndex(String value) {
-			this.index = value;
+			index = value;
 		}
 
 		/**
@@ -251,7 +277,7 @@ public class Sat {
 			 *
 			 */
 			public void setLnbFreq(String value) {
-				this.lnbFreq = value;
+				lnbFreq = value;
 			}
 
 			/**
@@ -267,7 +293,7 @@ public class Sat {
 			 *
 			 */
 			public void setFreq(int value) {
-				this.freq = value;
+				freq = value;
 			}
 
 			/**
@@ -283,7 +309,7 @@ public class Sat {
 			 *
 			 */
 			public void setSymbol(int value) {
-				this.symbol = value;
+				symbol = value;
 			}
 
 			/**
@@ -299,7 +325,7 @@ public class Sat {
 			 *
 			 */
 			public void setPolar(int value) {
-				this.polar = value;
+				polar = value;
 			}
 
 			/**
@@ -320,7 +346,7 @@ public class Sat {
 			 *
 			 */
 			public void setIndex(String value) {
-				this.index = value;
+				index = value;
 			}
 
 		}

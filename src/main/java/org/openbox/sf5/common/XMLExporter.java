@@ -18,6 +18,7 @@ import org.openbox.sf5.model.Polarization;
 import org.openbox.sf5.model.Sat;
 import org.openbox.sf5.model.Sat.Satid;
 import org.openbox.sf5.model.Sat.Satid.Tp;
+import org.openbox.sf5.model.SettingsConversion;
 import org.openbox.sf5.model.SettingsConversionPresentation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,7 +30,7 @@ import org.w3c.dom.Node;
 public class XMLExporter {
 
 	public static Sat exportSettingsConversionPresentationToSF5Format(
-			List<SettingsConversionPresentation> dataSettingsConversion) {
+			List<SettingsConversion> dataSettingsConversion) {
 
 		// Generating sat/tp structure
 		generateSatTp(dataSettingsConversion);
@@ -74,8 +75,8 @@ public class XMLExporter {
 					Integer.valueOf(Polarization.getXMLpresentation(e.getTransponder().getPolarization())).intValue());
 			newTp.setSymbol((int) e.getTransponder().getSpeed());
 
-			int indexOfE = dataSettingsConversion.indexOf(e);
-			int currentLineNumber = indexOfE + 1;
+//			int indexOfE = dataSettingsConversion.indexOf(e);
+//			int currentLineNumber = indexOfE + 1;
 
 			// check if satid exists
 			if (root.getSatid().size() < e.getSatindex()) {
@@ -88,9 +89,6 @@ public class XMLExporter {
 			currentSatid.getTp().add(newTp);
 		});
 
-		// JAXB.marshal(root, outputBuffer);
-		// return outputBuffer.toString();
-
 		return root;
 
 	}
@@ -98,7 +96,7 @@ public class XMLExporter {
 	public static String exportSettingToXML(List<SettingsConversionPresentation> dataSettingsConversion) {
 
 		// Generating sat/tp structure
-		generateSatTp(dataSettingsConversion);
+		generateSatTpPresentation(dataSettingsConversion);
 
 		String absolutePath = "";
 		try {
@@ -174,11 +172,26 @@ public class XMLExporter {
 		return tpId;
 	}
 
-	public static void generateSatTp(List<SettingsConversionPresentation> dataSettingsConversion) {
+	public static void generateSatTp(List<SettingsConversion> dataSettingsConversion) {
 		// Generating sat/tp structure
 		long sat = 1;
 		long currentCount = 0;
-		for (SettingsConversionPresentation e : dataSettingsConversion) {
+		for (SettingsConversion e : dataSettingsConversion) {
+			currentCount++;
+			e.setSatindex(sat);
+			e.setTpindex(currentCount);
+			if (currentCount == 4) {
+				currentCount = 0;
+				sat++;
+			}
+		}
+	}
+
+	public static void generateSatTpPresentation(List<SettingsConversionPresentation> dataSettingsConversion) {
+		// Generating sat/tp structure
+		long sat = 1;
+		long currentCount = 0;
+		for (SettingsConversion e : dataSettingsConversion) {
 			currentCount++;
 			e.setSatindex(sat);
 			e.setTpindex(currentCount);
