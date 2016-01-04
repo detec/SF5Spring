@@ -5,6 +5,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +33,8 @@ import org.openbox.sf5.model.SettingsConversion;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -151,7 +159,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 	}
 
 	@Test
-	public void shouldCreateAndGetSettingByIdXML() {
+	public void shouldCreateAndGetSettingByIdXML() throws IOException, URISyntaxException {
 		Response response = null;
 
 		// here we should create a setting.
@@ -207,6 +215,36 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		assertTrue(settingRead instanceof Settings);
 
+		// getting device specific output
+		invocationBuilder = serviceTarget.path("filter").path("id").path(Long.toString(setting.getId())).path("sf5")
+
+				.request(MediaType.APPLICATION_XML);
+
+		response = invocationBuilder.get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		String deviceSettings = response.readEntity(String.class);
+
+		assertThat(deviceSettings).isNotNull();
+
+		// write test files
+		// ArrayList<String> lines = new ArrayList<String>();
+		// lines.add(deviceSettings);
+		// Files.write(Paths.get("f:\\temp\\sf5IToutput.xml"), lines);
+
+		URL responseFile = ClassLoader.getSystemResource("xml/sf5IToutput.xml");
+		assertThat(responseFile).isNotNull();
+
+		URI uri = responseFile.toURI();
+		assertThat(uri).isNotNull();
+
+		String content = new String(Files.readAllBytes(Paths.get(uri)), Charset.forName("UTF-8"));
+		content = content.replace("\r\n\r\n", "\r\n"); // it adds
+														// superfluous
+														// \r\n
+
+		content = content.replace("\r\n", ""); // it seems to be without crlf
+
+		assertEquals(deviceSettings, content);
 	}
 
 	// getting all user settings with authentication
@@ -309,4 +347,8 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		assertTrue(settingRead instanceof Settings);
 
 	}
+
+	@Autowired
+	public Jaxb2Marshaller springMarshaller;
+
 }
