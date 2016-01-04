@@ -1,6 +1,7 @@
 package org.openbox.sf5.application;
 
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.MediaType;
+import javax.xml.transform.stream.StreamResult;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -42,6 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -615,15 +618,13 @@ public class SettingsForm implements Serializable {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "exportToXML", value = "/editsetting", method = RequestMethod.POST, produces = MediaType.APPLICATION_XML)
-	// @ResponseBody
-	public ResponseEntity<Sat> exportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
+	public ResponseEntity<String> exportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
 		return universalexportToXML(pSetting);
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(params = "exportToXML", value = "/settings/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_XML)
-	// @ResponseBody
-	public ResponseEntity<Sat> newExportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
+	public ResponseEntity<String> newExportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
 		return universalexportToXML(pSetting);
 	}
 
@@ -669,7 +670,7 @@ public class SettingsForm implements Serializable {
 	//
 	// }
 
-	public ResponseEntity<Sat> universalexportToXML(SettingsForm pSetting) {
+	public ResponseEntity<String> universalexportToXML(SettingsForm pSetting) {
 
 		List<SettingsConversion> scList = new ArrayList<SettingsConversion>();
 		List<SettingsConversionPresentation> DSCList = pSetting.dataSettingsConversion;
@@ -678,8 +679,21 @@ public class SettingsForm implements Serializable {
 			scList.add(sc);
 		});
 
-		Sat result = XMLExporter.exportSettingsConversionPresentationToSF5Format(scList);
-		return new ResponseEntity<Sat>(result, HttpStatus.OK);
+		Sat sat = XMLExporter.exportSettingsConversionPresentationToSF5Format(scList);
+
+		// haven't found easy way to use custom marshaller for specific class.
+		// return new ResponseEntity<Sat>(result, HttpStatus.OK);
+
+		StringWriter sw = new StringWriter();
+
+		// Sat sat =
+		// XMLExporter.exportSettingsConversionPresentationToSF5Format(conversionLines);
+
+		// There is no easy way of using different marshallers
+		// marshalling sat
+		springMarshaller.marshal(sat, new StreamResult(sw));
+
+		return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -838,5 +852,8 @@ public class SettingsForm implements Serializable {
 
 	@Autowired
 	private Intersections intersections;
+
+	@Autowired
+	public Jaxb2Marshaller springMarshaller;
 
 }
