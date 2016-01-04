@@ -111,7 +111,12 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		GenericXMLListWrapper<Satellites> satWrapper = response.readEntity(GenericXMLListWrapper.class);
 
 		// List<Satellites> satList = satWrapper.getWrappedList();
-		List<Satellites> satList = mapper.convertValue(satWrapper.getWrappedList(),
+		// List<Satellites> satList =
+		// mapper.convertValue(satWrapper.getWrappedList(),
+		// new TypeReference<List<Satellites>>() {
+		// });
+
+		List<Satellites> satList = xmlMapper.convertValue(satWrapper.getWrappedList(),
 				new TypeReference<List<Satellites>>() {
 				});
 
@@ -165,7 +170,7 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		GenericXMLListWrapper<Satellites> satWrapper = response.readEntity(GenericXMLListWrapper.class);
 
-		List<Satellites> satList = mapper.convertValue(satWrapper.getWrappedList(),
+		List<Satellites> satList = xmlMapper.convertValue(satWrapper.getWrappedList(),
 				new TypeReference<List<Satellites>>() {
 				});
 

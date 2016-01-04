@@ -91,6 +91,11 @@ Must register a static PropertySourcesPlaceholderConfigurer bean in either XML o
 	
 </bean>   
 
+<bean id="jacksonXMLMapper" class="com.fasterxml.jackson.dataformat.xml.XmlMapper">
+
+</bean>
+
+
 <!-- For converting to SF5 XML format -->
 <bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller"> 
 	<property name="classesToBeBound">

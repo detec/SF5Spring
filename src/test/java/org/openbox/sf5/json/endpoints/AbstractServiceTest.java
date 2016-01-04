@@ -14,6 +14,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.openbox.sf5.json.service.CustomObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider;
 
@@ -28,6 +29,9 @@ public abstract class AbstractServiceTest {
 
 	@Autowired
 	public CustomObjectMapper mapper;
+
+	@Autowired
+	public XmlMapper xmlMapper;
 
 	public Client client;
 
