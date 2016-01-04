@@ -18,8 +18,10 @@ th, td {
 }
 </style>
 
-<!-- http://stackoverflow.com/questions/2521606/spring-mvc-absolute-url-problem -->
-<base href="${pageContext.request.contextPath}"><base>
+<!-- http://stackoverflow.com/questions/2521606/spring-mvc-absolute-url-problem 
+This causes problem
+-->
+<%-- <base href="${pageContext.request.contextPath}"><base> --%>
 </head>
 <body>
 <h2>Openbox SF5 settings editor</h2>
@@ -67,8 +69,7 @@ th, td {
  <i>There are currently no settings in the list.</i> 
 </c:if>
 <a href="${addUrl}">Add</a>
-<!-- <a href="/transponders">Transponders</a>
-<a href="upload">Import transponders from file</a> -->
+
 <c:url var="transpondersUrl" value="/transponders" />
 <c:url var="uploadUrl" value="/upload" />
 <a href="${transpondersUrl}">Transponders</a>

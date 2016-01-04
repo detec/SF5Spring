@@ -126,8 +126,7 @@
  </c:if>
 </form:form>
 
-<!-- <a href="settings">Settings</a>
-<a href="transponders">Transponders</a> -->
+
 
 <c:url var="transpondersUrl" value="/transponders" />
 <c:url var="settingsUrl" value="/settings/" />
