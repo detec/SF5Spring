@@ -1,20 +1,26 @@
 package org.openbox.sf5.json.endpoints;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
+import javax.xml.transform.stream.StreamResult;
 
 import org.openbox.sf5.common.JsonObjectFiller;
 import org.openbox.sf5.common.SF5SecurityContext;
+import org.openbox.sf5.common.XMLExporter;
 import org.openbox.sf5.json.service.SettingsJsonizer;
+import org.openbox.sf5.model.Sat;
 import org.openbox.sf5.model.Settings;
+import org.openbox.sf5.model.SettingsConversion;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -156,6 +162,32 @@ public class SettingsService {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping(value = "filter/id/{settingId}/sf5", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+	public ResponseEntity<String> getSettingByIdSF5(@PathVariable("settingId") long settingId) {
+
+		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
+		if (currentUser == null) {
+			return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+		}
+
+		Settings setting = settingsJsonizer.getSettingById(settingId, currentUser);
+		if (setting == null) {
+			return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+		}
+
+		StringWriter sw = new StringWriter();
+
+		List<SettingsConversion> conversionLines = setting.getConversion();
+		Sat sat = XMLExporter.exportSettingsConversionPresentationToSF5Format(conversionLines);
+
+		// There is no easy way of using different marshallers
+		// marshalling sat
+		springMarshaller.marshal(sat, new StreamResult(sw));
+
+		return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
+	}
+
 	@Autowired
 	private SF5SecurityContext securityContext;
 
@@ -169,5 +201,8 @@ public class SettingsService {
 	public void setSettingsJsonizer(SettingsJsonizer settingsJsonizer) {
 		this.settingsJsonizer = settingsJsonizer;
 	}
+
+	@Autowired
+	public Jaxb2Marshaller springMarshaller;
 
 }

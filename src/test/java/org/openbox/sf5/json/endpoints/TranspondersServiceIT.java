@@ -85,7 +85,7 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		GenericXMLListWrapper<Transponders> transWrapper = response.readEntity(GenericXMLListWrapper.class);
 
-		List<Transponders> newTransList = mapper.convertValue(transWrapper.getWrappedList(),
+		List<Transponders> newTransList = xmlMapper.convertValue(transWrapper.getWrappedList(),
 				new TypeReference<List<Transponders>>() {
 				});
 
@@ -153,7 +153,7 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		GenericXMLListWrapper<Transponders> transWrapper = response.readEntity(GenericXMLListWrapper.class);
 
-		List<Transponders> newTransList = mapper.convertValue(transWrapper.getWrappedList(),
+		List<Transponders> newTransList = xmlMapper.convertValue(transWrapper.getWrappedList(),
 				new TypeReference<List<Transponders>>() {
 				});
 
@@ -196,7 +196,7 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		GenericXMLListWrapper<Transponders> transWrapper = response.readEntity(GenericXMLListWrapper.class);
 
-		List<Transponders> newTransList = mapper.convertValue(transWrapper.getWrappedList(),
+		List<Transponders> newTransList = xmlMapper.convertValue(transWrapper.getWrappedList(),
 				new TypeReference<List<Transponders>>() {
 				});
 
