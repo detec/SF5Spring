@@ -24,7 +24,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RestController
 @EnableWebMvc
-@RequestMapping("/jaxrs/transponders/")
+@RequestMapping("${jaxrs.path}/transponders/")
 public class TranspondersService {
 
 	@RequestMapping(value = "upload", method = RequestMethod.POST, headers = "content-type=multipart/form-data")

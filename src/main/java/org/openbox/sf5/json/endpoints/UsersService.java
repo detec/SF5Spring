@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RestController
 @EnableWebMvc
-@RequestMapping(value = "/jaxrs/users/")
+@RequestMapping(value = "${jaxrs.path}/users/")
 public class UsersService {
 
 	// https://docs.spring.io/spring-security/site/docs/3.0.x/reference/el-access.html
