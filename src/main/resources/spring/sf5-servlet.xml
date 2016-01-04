@@ -103,6 +103,8 @@ http://stackoverflow.com/questions/32957367/cannot-respond-with-xml-in-spring
              class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
              <property name="objectMapper" ref="jacksonObjectMapper" />
 		</bean>
+		<bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter">
+		</bean>
 	</mvc:message-converters>
 
 <!-- https://diterius.wordpress.com/2013/09/11/spring/ -->

@@ -11,7 +11,6 @@ import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.openbox.sf5.service.ObjectsController;
 import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -126,8 +125,8 @@ public class SatellitesService {
 
 	// http://www.mkyong.com/spring3/spring-value-default-value/
 
-	@Value("${jaxrs.path​}")
-	private static String jaxRSPath;
+	// @Value("${jaxrs.path​}")
+	// private static String jaxRSPath;
 
 	@Autowired
 	private ObjectsListService listService;
