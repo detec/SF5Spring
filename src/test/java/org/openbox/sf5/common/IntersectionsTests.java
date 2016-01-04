@@ -153,6 +153,7 @@ public class IntersectionsTests extends AbstractJsonizerTest {
 		// if something is wrong - test will fail.
 		int rows = intersections.checkIntersection(scList, setting);
 
+		setting.setConversion(scList);
 		objectController.saveOrUpdate(setting);
 	}
 

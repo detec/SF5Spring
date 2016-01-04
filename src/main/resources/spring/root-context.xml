@@ -90,4 +90,15 @@ Must register a static PropertySourcesPlaceholderConfigurer bean in either XML o
 	class="org.openbox.sf5.json.service.CustomObjectMapper">
 	
 </bean>   
+
+<!-- For converting to SF5 XML format -->
+<bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller"> 
+	<property name="classesToBeBound">
+		<list>
+        <value>org.openbox.sf5.model.Sat</value>
+ 
+        </list>
+    </property>
+	
+</bean>   
 </beans>    
