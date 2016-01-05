@@ -26,6 +26,16 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RequestMapping(value = "${jaxrs.path}/satellites/", produces = { "application/xml", "application/json" })
 public class SatellitesService {
 
+	@RequestMapping(value = "jdx", method = RequestMethod.GET)
+	public ResponseEntity<List<Satellites>> getAllSatellitesJDX() {
+		List<Satellites> satList = listService.ObjectsList(Satellites.class);
+		if (satList.isEmpty()) {
+			return new ResponseEntity<List<Satellites>>(HttpStatus.NO_CONTENT);//
+		}
+
+		return new ResponseEntity<List<Satellites>>(satList, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<Satellites>> getAllSatellites() {
 		List<Satellites> satList = listService.ObjectsList(Satellites.class);
