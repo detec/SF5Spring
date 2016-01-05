@@ -402,6 +402,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<artifactId>jackson-jaxrs-xml-provider</artifactId>
 		<version>${jackson.version}</version>
 	</dependency>
+	<!-- This is only needed for Spring -->
 	<dependency>
 		<groupId>com.fasterxml.jackson.dataformat</groupId>
 		<artifactId>jackson-dataformat-xml</artifactId>
