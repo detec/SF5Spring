@@ -2,7 +2,6 @@ package org.openbox.sf5.common;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,37 +39,18 @@ public class XMLExporter {
 		// Generating sat/tp structure
 		generateSatTp(dataSettingsConversion);
 
-		StringWriter outputBuffer = new StringWriter();
 		Sat root = new Sat();
 
 		// lambdas do not see variables
 		List<Sat> stubSatList = new ArrayList<Sat>();
 		stubSatList.add(root);
 
-		long oldsatindex = 0;
-		// Element satId = null;
 
-		// for (SettingsConversionPresentation e : dataSettingsConversion) {
-		// long currentSatIndex = e.getSatindex();
-		// Satid satId;
-		// if (currentSatIndex != oldsatindex) {
-		// oldsatindex = currentSatIndex;
-		//
-		// satId = new Sat.Satid();
-		//
-		// satId.setIndex(String.valueOf(currentSatIndex));
-		// root.getSatid().add(satId);
-		// }
-		//
-		// // satId.appendChild(getTransponderNode(doc, e));
-		//
-		// }
 
 		// we should iterate through lines and add elements from the deepest to
 		// top.
 
 		dataSettingsConversion.stream().forEach(e -> {
-			Sat lambdaSat = stubSatList.get(0);
 
 			Tp newTp = new Sat.Satid.Tp();
 			newTp.setFreq((int) e.getTransponder().getFrequency());
