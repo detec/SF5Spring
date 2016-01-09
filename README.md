@@ -92,7 +92,7 @@ There is an option to utilize tomcat7-maven-plugin in pom.xml. Default administr
 - JUnit 4.12;
 - JDBC (for Spring Security only);
 - Jersey 2 client;
-- Maven 3.3 with plugins compiler, surefire, resources, war, tomcat7, cargo.
+- Maven 3.3 with plugins compiler, surefire, resources, war, tomcat7, cargo;
 - Apache Tomcat 8;
 - Java 8.
 
