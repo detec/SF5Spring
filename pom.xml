@@ -36,12 +36,13 @@ declared explicitly so Spring config files can be placed next to their correspon
 	
 	<defaultGoal>install</defaultGoal>
 		<testResources>
-		  <testResource>
-		    <directory>${project.basedir}/src/test/java</directory>
-		  </testResource>
-		  <testResource>
-		    <directory>${project.basedir}/src/test/resources</directory>
-		  </testResource>
+			<testResource>
+		    	<directory>${project.basedir}/src/test/java</directory>
+		  	</testResource>
+		  	<testResource>
+		    	<directory>${project.basedir}/src/test/resources</directory>
+		    	<filtering>true</filtering>
+		   	</testResource>
 		</testResources>    
     
   <pluginManagement>  
