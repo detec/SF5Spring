@@ -66,8 +66,8 @@ public class SettingsService {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("SettingId", Long.toString(setting.getId()));
-		headers.setLocation(
-				ucBuilder.path(jaxRSPath).path("usersettings/filter/id/{id}").buildAndExpand(setting.getId()).toUri());
+		headers.setLocation(ucBuilder.path("/" + jaxRSPath + "/").path("usersettings/filter/id/{id}")
+				.buildAndExpand(setting.getId()).toUri());
 		return new ResponseEntity<Long>(new Long(setting.getId()), headers, HttpStatus.CREATED);
 	}
 

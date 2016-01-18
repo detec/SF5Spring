@@ -18,8 +18,11 @@ import org.openbox.sf5.json.endpoints.SatellitesService;
 import org.openbox.sf5.json.endpoints.SettingsService;
 import org.openbox.sf5.json.endpoints.TranspondersService;
 import org.openbox.sf5.json.endpoints.UsersService;
+import org.openbox.sf5.model.Satellites;
+import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.Transponders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.util.UriComponentsBuilder;
 
 // http://java.globinch.com/category/enterprise-java/web-services/jax-ws/
@@ -43,6 +46,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class OpenboxSF5 implements Serializable {
 
 	@WebMethod
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public long createUser(@WebParam(name = "inputUser") org.openbox.sf5.model.Users user) throws WSException {
 		ResponseEntity<Long> RSResponse = usersService.createUser(user);
 
@@ -76,6 +80,7 @@ public class OpenboxSF5 implements Serializable {
 	}
 
 	@WebMethod
+	@PreAuthorize("hasRole('ROLE_ADMIN') or (#login  == authentication.name)")
 	public org.openbox.sf5.model.Users getUserByLogin(@WebParam(name = "inputLogin") String login) throws WSException {
 
 		ResponseEntity<org.openbox.sf5.model.Users> RSResponse = usersService.getUserByLogin(login);
@@ -133,6 +138,7 @@ public class OpenboxSF5 implements Serializable {
 	}
 
 	@WebMethod
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public long createSetting(org.openbox.sf5.model.Settings setting, @WebParam(name = "inputLogin") String login,
 			UriComponentsBuilder ucBuilder) throws WSException {
 		ResponseEntity<Long> RSResponse = settingsService.createSetting(setting, ucBuilder);
@@ -146,95 +152,81 @@ public class OpenboxSF5 implements Serializable {
 		// return Long.parseLong(newIdString);
 		return Id;
 	}
-	//
-	// @WebMethod
-	// public List<org.openbox.sf5.model.Settings>
-	// getSettingsByUserLogin(@WebParam(name = "inputLogin") String login)
-	// throws WSException {
-	// Response RSResponse = settingsService.getSettingsByUserLogin(login);
-	// CheckIfThereIsErrorInResponse(RSResponse);
-	//
-	// List<org.openbox.sf5.model.Settings> settList =
-	// (List<org.openbox.sf5.model.Settings>) RSResponse.getEntity();
-	//
-	// return settList;
-	// }
-	//
-	// @WebMethod
-	// public List<org.openbox.sf5.model.Settings> getSettingsByArbitraryFilter(
-	// @WebParam(name = "inputFieldName") String fieldName, @WebParam(name =
-	// "inputFieldValue") String typeValue,
-	// @WebParam(name = "inputLogin") String login) throws WSException {
-	//
-	// Response RSResponse =
-	// settingsService.getSettingsByArbitraryFilter(fieldName, typeValue,
-	// login);
-	// CheckIfThereIsErrorInResponse(RSResponse);
-	//
-	// List<org.openbox.sf5.model.Settings> settList =
-	// (List<org.openbox.sf5.model.Settings>) RSResponse.getEntity();
-	//
-	// return settList;
-	// }
-	//
-	// @WebMethod
-	// public org.openbox.sf5.model.Settings getSettingById(@WebParam(name =
-	// "inputSettingId") long settingId,
-	// @WebParam(name = "inputLogin") String login) throws WSException {
-	//
-	// Response RSResponse = settingsService.getSettingById(settingId, login);
-	// CheckIfThereIsErrorInResponse(RSResponse);
-	//
-	// org.openbox.sf5.model.Settings setting = (org.openbox.sf5.model.Settings)
-	// RSResponse.getEntity();
-	//
-	// return setting;
-	// }
-	//
-	// @WebMethod
-	// public List<org.openbox.sf5.model.Satellites> getAllSatellites() throws
-	// WSException {
-	// Response RSResponse = satellitesService.getAllSatellites();
-	// CheckIfThereIsErrorInResponse(RSResponse);
-	//
-	// List<org.openbox.sf5.model.Satellites> satList =
-	// (List<org.openbox.sf5.model.Satellites>) RSResponse
-	// .getEntity();
-	//
-	// return satList;
-	//
-	// }
-	//
-	// @WebMethod
-	// public List<org.openbox.sf5.model.Satellites>
-	// getSatellitesByArbitraryFilter(
-	// @WebParam(name = "inputFieldName") String fieldName, @WebParam(name =
-	// "inputFieldValue") String typeValue)
-	// throws WSException {
-	//
-	// Response RSResponse =
-	// satellitesService.getSatellitesByArbitraryFilter(fieldName, typeValue);
-	// CheckIfThereIsErrorInResponse(RSResponse);
-	//
-	// List<org.openbox.sf5.model.Satellites> satList =
-	// (List<org.openbox.sf5.model.Satellites>) RSResponse
-	// .getEntity();
-	//
-	// return satList;
-	// }
-	//
-	// @WebMethod
-	// public org.openbox.sf5.model.Satellites getSatelliteById(@WebParam(name =
-	// "inputSatelliteId") long satId)
-	// throws WSException {
-	//
-	// Response RSResponse = satellitesService.getSatelliteById(satId);
-	// CheckIfThereIsErrorInResponse(RSResponse);
-	// org.openbox.sf5.model.Satellites satellite =
-	// (org.openbox.sf5.model.Satellites) RSResponse.getEntity();
-	//
-	// return satellite;
-	// }
+
+	@WebMethod
+	@PreAuthorize("hasRole('ROLE_USER')")
+	public List<org.openbox.sf5.model.Settings> getSettingsByUserLogin(@WebParam(name = "inputLogin") String login)
+			throws WSException {
+		ResponseEntity<List<Settings>> RSResponse = settingsService.getSettingsByUserLogin();
+		CheckIfThereIsErrorInResponse(RSResponse);
+
+		List<org.openbox.sf5.model.Settings> settList = RSResponse.getBody();
+
+		return settList;
+	}
+
+	@WebMethod
+	@PreAuthorize("hasRole('ROLE_USER')")
+	public List<org.openbox.sf5.model.Settings> getSettingsByArbitraryFilter(
+			@WebParam(name = "inputFieldName") String fieldName, @WebParam(name = "inputFieldValue") String typeValue,
+			@WebParam(name = "inputLogin") String login) throws WSException {
+
+		ResponseEntity<List<Settings>> RSResponse = settingsService.getSettingsByArbitraryFilter(fieldName, typeValue);
+		CheckIfThereIsErrorInResponse(RSResponse);
+
+		List<org.openbox.sf5.model.Settings> settList = RSResponse.getBody();
+
+		return settList;
+	}
+
+	@WebMethod
+	@PreAuthorize("hasRole('ROLE_USER')")
+	public org.openbox.sf5.model.Settings getSettingById(@WebParam(name = "inputSettingId") long settingId,
+			@WebParam(name = "inputLogin") String login) throws WSException {
+
+		ResponseEntity<Settings> RSResponse = settingsService.getSettingById(settingId);
+		CheckIfThereIsErrorInResponse(RSResponse);
+
+		org.openbox.sf5.model.Settings setting = RSResponse.getBody();
+
+		return setting;
+	}
+
+	@WebMethod
+	public List<org.openbox.sf5.model.Satellites> getAllSatellites() throws WSException {
+		ResponseEntity<List<Satellites>> RSResponse = satellitesService.getAllSatellites();
+		CheckIfThereIsErrorInResponse(RSResponse);
+
+		List<org.openbox.sf5.model.Satellites> satList = RSResponse.getBody();
+
+		return satList;
+
+	}
+
+	@WebMethod
+	public List<org.openbox.sf5.model.Satellites> getSatellitesByArbitraryFilter(
+			@WebParam(name = "inputFieldName") String fieldName, @WebParam(name = "inputFieldValue") String typeValue)
+					throws WSException {
+
+		ResponseEntity<List<Satellites>> RSResponse = satellitesService.getSatellitesByArbitraryFilter(fieldName,
+				typeValue);
+		CheckIfThereIsErrorInResponse(RSResponse);
+
+		List<org.openbox.sf5.model.Satellites> satList = RSResponse.getBody();
+
+		return satList;
+	}
+
+	@WebMethod
+	public org.openbox.sf5.model.Satellites getSatelliteById(@WebParam(name = "inputSatelliteId") long satId)
+			throws WSException {
+
+		ResponseEntity<Satellites> RSResponse = satellitesService.getSatelliteById(satId);
+		CheckIfThereIsErrorInResponse(RSResponse);
+		org.openbox.sf5.model.Satellites satellite = RSResponse.getBody();
+
+		return satellite;
+	}
 
 	@Inject
 	private UsersService usersService;
