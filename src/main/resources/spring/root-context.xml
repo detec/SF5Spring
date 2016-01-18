@@ -46,7 +46,7 @@ Seems not to work
 <!-- http://www.mkyong.com/spring3/spring-value-default-value/ 
 Must register a static PropertySourcesPlaceholderConfigurer bean in either XML or annotation, so that Spring @Value know how to interpret ${}
 -->
-<!-- <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
     <property name="ignoreUnresolvablePlaceholders" value="false" />
     <property name="localOverride" value="false" />
     <property name="ignoreResourceNotFound" value="true" />
@@ -55,7 +55,7 @@ Must register a static PropertySourcesPlaceholderConfigurer bean in either XML o
             <value>classpath:application.properties</value>
         </list>
     </property>
-</bean> -->
+</bean>
 	
 	
 <bean id="dataSource"

@@ -18,7 +18,9 @@ import org.openbox.sf5.json.endpoints.SatellitesService;
 import org.openbox.sf5.json.endpoints.SettingsService;
 import org.openbox.sf5.json.endpoints.TranspondersService;
 import org.openbox.sf5.json.endpoints.UsersService;
+import org.openbox.sf5.model.Transponders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.UriComponentsBuilder;
 
 // http://java.globinch.com/category/enterprise-java/web-services/jax-ws/
 // About Ws-annotations
@@ -56,103 +58,94 @@ public class OpenboxSF5 implements Serializable {
 		return newId;
 	}
 
-	// @WebMethod
-	// public long ifSuchLoginExists(@WebParam(name = "inputLogin") String
-	// login) throws WSException {
-	// Response RSResponse = usersService.ifSuchLoginExists(login);
-	// boolean isError = CheckIfThereIsErrorInResponse(RSResponse);
-	// // if (isError) {
-	// // return 0;
-	// // }
-	// String newIdString = (String) RSResponse.getEntity();
-	//
-	// return Long.parseLong(newIdString);
-	//
-	// }
-	//
-	// @WebMethod
-	// public org.openbox.sf5.model.Users getUserByLogin(@WebParam(name =
-	// "inputLogin") String login) throws WSException {
-	// Response RSResponse = usersService.getUserByLogin(login);
-	// CheckIfThereIsErrorInResponse(RSResponse);
-	//
-	// org.openbox.sf5.model.Users user = (org.openbox.sf5.model.Users)
-	// RSResponse.getEntity();
-	//
-	// return user;
-	// }
-	//
-	// public List<org.openbox.sf5.model.Transponders>
-	// getTranspondersByArbitraryFilter(
-	// @WebParam(name = "inputFieldName") String fieldName, @WebParam(name =
-	// "inputFieldValue") String typeValue)
-	// throws WSException {
-	//
-	// Response RSResponse =
-	// transpondersService.getTranspondersByArbitraryFilter(fieldName,
-	// typeValue);
-	// CheckIfThereIsErrorInResponse(RSResponse);
-	// List<org.openbox.sf5.model.Transponders> transList =
-	// (List<org.openbox.sf5.model.Transponders>) RSResponse
-	// .getEntity();
-	//
-	// return transList;
-	// }
-	//
-	// @WebMethod
-	// public org.openbox.sf5.model.Transponders
-	// getTransponderById(@WebParam(name = "inputTransponderId") long tpId)
-	// throws WSException {
-	// Response RSResponse = transpondersService.getTransponderById(tpId);
-	// CheckIfThereIsErrorInResponse(RSResponse);
-	//
-	// org.openbox.sf5.model.Transponders trans =
-	// (org.openbox.sf5.model.Transponders) RSResponse.getEntity();
-	// return trans;
-	// }
-	//
-	// @WebMethod
-	// public List<org.openbox.sf5.model.Transponders>
-	// getTranspondersBySatelliteId(
-	// @WebParam(name = "inputSatId") long satId) throws WSException {
-	// Response RSResponse =
-	// transpondersService.getTranspondersBySatelliteId(satId);
-	// CheckIfThereIsErrorInResponse(RSResponse);
-	//
-	// List<org.openbox.sf5.model.Transponders> transList =
-	// (List<org.openbox.sf5.model.Transponders>) RSResponse
-	// .getEntity();
-	//
-	// return transList;
-	//
-	// }
-	//
-	// @WebMethod
-	// public List<org.openbox.sf5.model.Transponders> getTransponders() throws
-	// WSException {
-	// Response RSResponse = transpondersService.getTransponders();
-	// CheckIfThereIsErrorInResponse(RSResponse);
-	//
-	// List<org.openbox.sf5.model.Transponders> transList =
-	// (List<org.openbox.sf5.model.Transponders>) RSResponse
-	// .getEntity();
-	//
-	// return transList;
-	// }
-	//
-	// @WebMethod
-	// public long createSetting(org.openbox.sf5.model.Settings setting,
-	// @WebParam(name = "inputLogin") String login)
-	// throws WSException {
-	// Response RSResponse = settingsService.createSetting(setting, login);
-	// boolean isError = CheckIfThereIsErrorInResponse(RSResponse);
-	// if (isError) {
-	// return 0;
-	// }
-	// String newIdString = (String) RSResponse.getEntity();
-	//
-	// return Long.parseLong(newIdString);
-	// }
+	@WebMethod
+	public boolean ifSuchLoginExists(@WebParam(name = "inputLogin") String login) throws WSException {
+
+		ResponseEntity<Boolean> RSResponse = usersService.ifSuchLoginExists(login);
+		boolean isError = CheckIfThereIsErrorInResponse(RSResponse);
+		// if (isError) {
+		// return 0;
+		// }
+
+		// String newIdString = (String) RSResponse.getEntity();
+		// Long newId = RSResponse.getBody();
+
+		// return Long.parseLong(newIdString);
+
+		return RSResponse.getBody();
+	}
+
+	@WebMethod
+	public org.openbox.sf5.model.Users getUserByLogin(@WebParam(name = "inputLogin") String login) throws WSException {
+
+		ResponseEntity<org.openbox.sf5.model.Users> RSResponse = usersService.getUserByLogin(login);
+
+		CheckIfThereIsErrorInResponse(RSResponse);
+
+		org.openbox.sf5.model.Users user = RSResponse.getBody();
+
+		return user;
+	}
+
+	@WebMethod
+	public List<org.openbox.sf5.model.Transponders> getTranspondersByArbitraryFilter(
+			@WebParam(name = "inputFieldName") String fieldName, @WebParam(name = "inputFieldValue") String typeValue)
+					throws WSException {
+
+		ResponseEntity<List<Transponders>> RSResponse = transpondersService.getTranspondersByArbitraryFilter(fieldName,
+				typeValue);
+		CheckIfThereIsErrorInResponse(RSResponse);
+		List<org.openbox.sf5.model.Transponders> transList = RSResponse.getBody();
+
+		return transList;
+	}
+
+	@WebMethod
+	public org.openbox.sf5.model.Transponders getTransponderById(@WebParam(name = "inputTransponderId") long tpId)
+			throws WSException {
+		ResponseEntity<Transponders> RSResponse = transpondersService.getTransponderById(tpId);
+		CheckIfThereIsErrorInResponse(RSResponse);
+
+		org.openbox.sf5.model.Transponders trans = RSResponse.getBody();
+		return trans;
+	}
+
+	@WebMethod
+	public List<org.openbox.sf5.model.Transponders> getTranspondersBySatelliteId(
+			@WebParam(name = "inputSatId") long satId) throws WSException {
+		ResponseEntity<List<Transponders>> RSResponse = transpondersService.getTranspondersBySatelliteId("", satId);
+		CheckIfThereIsErrorInResponse(RSResponse);
+
+		List<org.openbox.sf5.model.Transponders> transList = RSResponse.getBody();
+
+		return transList;
+
+	}
+
+	@WebMethod
+	public List<org.openbox.sf5.model.Transponders> getTransponders() throws WSException {
+		ResponseEntity<List<Transponders>> RSResponse = transpondersService.getTransponders();
+		CheckIfThereIsErrorInResponse(RSResponse);
+
+		List<org.openbox.sf5.model.Transponders> transList = RSResponse.getBody();
+
+		return transList;
+	}
+
+	@WebMethod
+	public long createSetting(org.openbox.sf5.model.Settings setting, @WebParam(name = "inputLogin") String login,
+			UriComponentsBuilder ucBuilder) throws WSException {
+		ResponseEntity<Long> RSResponse = settingsService.createSetting(setting, ucBuilder);
+		boolean isError = CheckIfThereIsErrorInResponse(RSResponse);
+		if (isError) {
+			return 0;
+		}
+		// String newIdString = (String) RSResponse.getBody();
+		Long Id = RSResponse.getBody();
+
+		// return Long.parseLong(newIdString);
+		return Id;
+	}
 	//
 	// @WebMethod
 	// public List<org.openbox.sf5.model.Settings>

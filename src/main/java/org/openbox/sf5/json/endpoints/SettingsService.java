@@ -17,6 +17,7 @@ import org.openbox.sf5.model.SettingsConversion;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,28 +47,28 @@ public class SettingsService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public ResponseEntity<Void> createSetting(@RequestBody Settings setting, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Long> createSetting(@RequestBody Settings setting, UriComponentsBuilder ucBuilder) {
 
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 
 		if (currentUser == null) {
-			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Long>(HttpStatus.UNAUTHORIZED);
 		}
 
 		if (!currentUser.equals(setting.getUser())) {
 			// authenticated user and setting user do not coincide.
-			return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<Long>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		HttpStatus statusResult = settingsJsonizer.saveNewSetting(setting);
 		if (statusResult.equals(HttpStatus.CONFLICT)) {
-			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			return new ResponseEntity<Long>(HttpStatus.CONFLICT);
 		}
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("SettingId", Long.toString(setting.getId()));
 		headers.setLocation(
-				ucBuilder.path("/json/usersettings/filter/id/{id}").buildAndExpand(setting.getId()).toUri());
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+				ucBuilder.path(jaxRSPath).path("usersettings/filter/id/{id}").buildAndExpand(setting.getId()).toUri());
+		return new ResponseEntity<Long>(new Long(setting.getId()), headers, HttpStatus.CREATED);
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -204,5 +205,8 @@ public class SettingsService {
 
 	@Autowired
 	public Jaxb2Marshaller springMarshaller;
+
+	@Value("${jaxrs.path}")
+	private String jaxRSPath;
 
 }
