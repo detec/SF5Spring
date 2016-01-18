@@ -108,7 +108,7 @@ So when specifying patterns in action-based frameworks we should use only **
  </security:http>
  
 <!-- Exception for JAX-WS --> 
-<security:http pattern="/${jaxws.path}/**" name="JAXWSDigetsAuthentication" create-session="stateless" entry-point-ref="digestEntryPoint" >
+<security:http pattern="/${jaxws.path}/**" name="JAXWSDigetsAuthentication" create-session="stateless" entry-point-ref="digestEntryPoint" security="none">
     	<!-- We do not need sessions in stateless REST API -->
     	<security:csrf disabled="true"/>
     	<security:custom-filter ref="digestFilter" before="FORM_LOGIN_FILTER" />
