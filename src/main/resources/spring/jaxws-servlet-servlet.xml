@@ -17,7 +17,7 @@
 
 <context:property-placeholder location="classpath:application.properties" system-properties-mode="OVERRIDE"/>
 
-    <wss:binding url="/${jaxws.path}/">
+    <wss:binding url="/${jaxws.path}">
         <wss:service>
             <ws:service bean="#myserviceWs"/>
         </wss:service>

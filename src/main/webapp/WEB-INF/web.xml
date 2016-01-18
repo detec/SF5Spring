@@ -76,15 +76,15 @@
    	<servlet-class>
          com.sun.xml.ws.transport.http.servlet.WSSpringServlet
    	</servlet-class>
-   	<init-param>
+<!--    	<init-param>
     	<param-name>contextConfigLocation</param-name>
       	<param-value>/WEB-INF/wscontext.xml</param-value>
-    </init-param>
+    </init-param> -->
 	</servlet>
 
 	<servlet-mapping>
     	<servlet-name>jaxws-servlet</servlet-name>
-        <url-pattern>/${jaxws.path}/</url-pattern>
+        <url-pattern>/jaxws</url-pattern>
     </servlet-mapping>
 
   
