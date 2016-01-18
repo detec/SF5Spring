@@ -150,8 +150,31 @@ declared explicitly so Spring config files can be placed next to their correspon
         <password>admin</password>
         <warFile>${project.build.directory}/${rp.build.warname}.war</warFile>
         </configuration>
-      </plugin>
-   
+      	</plugin>
+ 		<plugin>
+        	<groupId>org.jvnet.jax-ws-commons</groupId>
+            <artifactId>jaxws-maven-plugin</artifactId>
+            <version>2.3</version>
+            <executions>
+            	<execution>
+                	<id>generate-client</id>
+                    <phase>generate-sources</phase>
+                    <goals>
+                    	<goal>wsimport</goal>
+                    </goals>
+                    <configuration>
+                         <wsdlUrls>
+                          	 <wsdlUrl>http://localhost:8080/${rp.build.warname}/OpenboxSF5Service?wsdl</wsdlUrl>
+                          </wsdlUrls>
+			        <verbose>true</verbose>
+                    <sourceDestDir>${basedir}/src/test/java</sourceDestDir>
+                    <target>2.2</target>
+
+                    </configuration>
+                </execution>
+                  
+            </executions>
+          </plugin>
       
     </plugins>
     </pluginManagement>
@@ -505,5 +528,24 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<version>3.2</version>
 		<scope>provided</scope>
 	</dependency>
+	<!-- http://examples.javacodegeeks.com/enterprise-java/jws/jax-ws-spring-integration-example/ -->
+	<dependency>
+		<groupId>org.jvnet.jax-ws-commons.spring</groupId>
+		<artifactId>jaxws-spring</artifactId>
+		<version>1.9</version>
+	</dependency>
+	<!-- Necessary for schema generation in Tomcat -->
+	<dependency>
+		<groupId>com.sun.xml.bind</groupId>
+		<artifactId>jaxb-core</artifactId>
+		<version>2.2.11</version>
+	</dependency>
+	<dependency>
+		<groupId>com.sun.xml.bind</groupId>
+		<artifactId>jaxb-impl</artifactId>
+		<version>2.2.11</version>
+	</dependency>
+	
+	
 </dependencies>
 </project>

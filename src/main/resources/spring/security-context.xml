@@ -13,7 +13,8 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/security 
  		http://www.springframework.org/schema/security/spring-security-4.0.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd">
  
  <!-- ========================= RESOURCE DEFINITIONS ========================= -->
 
@@ -106,6 +107,13 @@ So when specifying patterns in action-based frameworks we should use only **
         
  </security:http>
  
+<!-- Exception for JAX-WS --> 
+<security:http pattern="/${jaxws.path}/**" name="JAXWSDigetsAuthentication" create-session="stateless" entry-point-ref="digestEntryPoint" >
+    	<!-- We do not need sessions in stateless REST API -->
+    	<security:csrf disabled="true"/>
+    	<security:custom-filter ref="digestFilter" before="FORM_LOGIN_FILTER" />
+    	 
+ </security:http>
  
 <!-- <security:http auto-config="true" use-expressions="true" disable-url-rewriting="true"> -->
 <security:http name="LoginFormAuthentication">
@@ -115,6 +123,10 @@ So when specifying patterns in action-based frameworks we should use only **
     </security:session-management>
 
 	<security:intercept-url pattern="/login" access="isAnonymous()"/>
+	
+	<!-- JAX-WS -->
+<!-- 	<security:intercept-url pattern="OpenboxSF5Service*" access="isAnonymous()"/> -->
+	
 	<security:intercept-url pattern="/register" access="isAnonymous()"/>
  	<security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
 	<!--	Anonymous access to json endpoints. --> 

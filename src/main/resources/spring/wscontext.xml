@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:ws="http://jax-ws.dev.java.net/spring/core"
+       xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+       http://jax-ws.dev.java.net/spring/core 
+       http://jax-ws.java.net/spring/core.xsd
+       http://jax-ws.dev.java.net/spring/servlet 
+       http://jax-ws.java.net/spring/servlet.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- http://examples.javacodegeeks.com/enterprise-java/jws/jax-ws-spring-integration-example/ -->
+
+<context:property-placeholder location="classpath:application.properties" system-properties-mode="OVERRIDE"/>
+
+    <wss:binding url="/${jaxws.path}/">
+        <wss:service>
+            <ws:service bean="#myserviceWs"/>
+        </wss:service>
+    </wss:binding>
+
+    <!-- Web service bean -->
+    <bean id="myserviceWs" class="org.openbox.sf5.jaxws.OpenboxSF5">
+<!--     	<property name="myBObject" ref="MyBObject" /> -->
+    </bean>
+
+
+</beans>

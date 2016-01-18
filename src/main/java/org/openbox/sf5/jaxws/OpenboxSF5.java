@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -21,6 +20,7 @@ import org.openbox.sf5.json.endpoints.UsersService;
 import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.Transponders;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -228,16 +228,16 @@ public class OpenboxSF5 implements Serializable {
 		return satellite;
 	}
 
-	@Inject
+	@Autowired
 	private UsersService usersService;
 
-	@Inject
+	@Autowired
 	private TranspondersService transpondersService;
 
-	@Inject
+	@Autowired
 	private SettingsService settingsService;
 
-	@Inject
+	@Autowired
 	private SatellitesService satellitesService;
 
 	private final Logger LOG = Logger.getLogger(getClass().getName());
