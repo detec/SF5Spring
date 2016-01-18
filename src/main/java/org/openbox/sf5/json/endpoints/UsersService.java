@@ -37,21 +37,29 @@ public class UsersService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public ResponseEntity<Void> createUser(@RequestBody Users user) {
+	public ResponseEntity<Long> createUser(@RequestBody Users user) {
 		// check if such user exists.
 		Boolean result = usersJsonizer.checkIfUsernameExists(user.getusername());
 		if (result) {
-			return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+			// return new ResponseEntity<Long>(HttpStatus.ACCEPTED);
+			throw new IllegalArgumentException("Not created! Username already exists.");
+		}
+		HttpStatus statusResult = null;
+
+		try {
+			statusResult = usersJsonizer.saveNewUser(user);
 		}
 
-		HttpStatus statusResult = usersJsonizer.saveNewUser(user);
-		if (statusResult.equals(HttpStatus.CONFLICT)) {
-			return new ResponseEntity<Void>(statusResult);
+		catch (Exception e) {
+			throw new IllegalStateException("Error when saving user to database", e);
 		}
+		// if (statusResult.equals(HttpStatus.CONFLICT)) {
+		// return new ResponseEntity<Long>(statusResult);
+		// }
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("UserId", Long.toString(user.getId()));
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+		return new ResponseEntity<Long>(new Long(user.getId()), headers, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "exists/username/{login}", method = RequestMethod.GET)
