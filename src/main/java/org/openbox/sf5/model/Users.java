@@ -16,6 +16,9 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -25,6 +28,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "Users")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement
 public class Users extends AbstractDbEntity implements Serializable {
 
 	private static final long serialVersionUID = -6789497093756301793L;

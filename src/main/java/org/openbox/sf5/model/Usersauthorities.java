@@ -11,12 +11,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "Usersauthorities")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement
 public class Usersauthorities extends AbstractDbEntity implements Serializable {
 
 	private static final long serialVersionUID = 108703010218830663L;

@@ -17,16 +17,22 @@
 
 <context:property-placeholder location="classpath:application.properties" system-properties-mode="OVERRIDE"/>
 
-    <wss:binding url="/${jaxws.path}">
+    <wss:binding 
+    
+		url = "/jaxws/OpenboxSF5Service"
+    
+    >
+    
+    <!--     url="/${jaxws.path}/" -->
         <wss:service>
-            <ws:service bean="#myserviceWs"/>
+            <ws:service bean="#OpenboxSF5" impl="org.openbox.sf5.jaxws.OpenboxSF5"/>
         </wss:service>
     </wss:binding>
 
     <!-- Web service bean -->
-    <bean id="myserviceWs" class="org.openbox.sf5.jaxws.OpenboxSF5">
-<!--     	<property name="myBObject" ref="MyBObject" /> -->
-    </bean>
+<!--     <bean id="myserviceWs" class="org.openbox.sf5.jaxws.OpenboxSF5">
+
+    </bean> -->
 
 
 </beans>

@@ -1,13 +1,10 @@
 package org.openbox.sf5.jaxws;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -23,14 +20,16 @@ import org.openbox.sf5.model.Transponders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import org.springframework.web.util.UriComponentsBuilder;
 
 // http://java.globinch.com/category/enterprise-java/web-services/jax-ws/
+
+// http://www.mkyong.com/webservices/jax-ws/jax-ws-spring-integration-example/
 // About Ws-annotations
 
-@Named
-@ApplicationScoped
-@WebService(name = "IOpenboxSF5", targetNamespace = "http://wsmodel.sf5.openbox.org/") // model
+@WebService(name = "OpenboxSF5", targetNamespace = "http://wsmodel.sf5.openbox.org/") // model
 																						// -
 																						// to
 																						// generate
@@ -43,8 +42,18 @@ import org.springframework.web.util.UriComponentsBuilder;
 																						// package
 // @SOAPBinding(style = Style.RPC) // to make definition shorter but it makes
 // endpoint '' problem
-public class OpenboxSF5 implements Serializable {
+// http://stackoverflow.com/questions/18513333/spring-mvc-app-with-soap-web-service-using-wsspringservlet
+// https://bthurley.wordpress.com/2014/04/27/web-services-with-jax-ws-jaxb-and-spring/
+@Component("OpenboxSF5")
+public class OpenboxSF5 extends SpringBeanAutowiringSupport implements IOpenboxSF5 {
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.openbox.sf5.jaxws.IOpenboxSF5#createUser(org.openbox.sf5.model.Users)
+	 */
+	@Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public long createUser(@WebParam(name = "inputUser") org.openbox.sf5.model.Users user) throws WSException {
@@ -62,6 +71,13 @@ public class OpenboxSF5 implements Serializable {
 		return newId;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.openbox.sf5.jaxws.IOpenboxSF5#ifSuchLoginExists(java.lang.String)
+	 */
+	@Override
 	@WebMethod
 	public boolean ifSuchLoginExists(@WebParam(name = "inputLogin") String login) throws WSException {
 
@@ -79,6 +95,12 @@ public class OpenboxSF5 implements Serializable {
 		return RSResponse.getBody();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getUserByLogin(java.lang.String)
+	 */
+	@Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_ADMIN') or (#login  == authentication.name)")
 	public org.openbox.sf5.model.Users getUserByLogin(@WebParam(name = "inputLogin") String login) throws WSException {
@@ -92,6 +114,14 @@ public class OpenboxSF5 implements Serializable {
 		return user;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.openbox.sf5.jaxws.IOpenboxSF5#getTranspondersByArbitraryFilter(java.
+	 * lang.String, java.lang.String)
+	 */
+	@Override
 	@WebMethod
 	public List<org.openbox.sf5.model.Transponders> getTranspondersByArbitraryFilter(
 			@WebParam(name = "inputFieldName") String fieldName, @WebParam(name = "inputFieldValue") String typeValue)
@@ -105,6 +135,12 @@ public class OpenboxSF5 implements Serializable {
 		return transList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getTransponderById(long)
+	 */
+	@Override
 	@WebMethod
 	public org.openbox.sf5.model.Transponders getTransponderById(@WebParam(name = "inputTransponderId") long tpId)
 			throws WSException {
@@ -115,6 +151,12 @@ public class OpenboxSF5 implements Serializable {
 		return trans;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getTranspondersBySatelliteId(long)
+	 */
+	@Override
 	@WebMethod
 	public List<org.openbox.sf5.model.Transponders> getTranspondersBySatelliteId(
 			@WebParam(name = "inputSatId") long satId) throws WSException {
@@ -127,6 +169,12 @@ public class OpenboxSF5 implements Serializable {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getTransponders()
+	 */
+	@Override
 	@WebMethod
 	public List<org.openbox.sf5.model.Transponders> getTransponders() throws WSException {
 		ResponseEntity<List<Transponders>> RSResponse = transpondersService.getTransponders();
@@ -137,6 +185,15 @@ public class OpenboxSF5 implements Serializable {
 		return transList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.openbox.sf5.jaxws.IOpenboxSF5#createSetting(org.openbox.sf5.model.
+	 * Settings, java.lang.String,
+	 * org.springframework.web.util.UriComponentsBuilder)
+	 */
+	@Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public long createSetting(org.openbox.sf5.model.Settings setting, @WebParam(name = "inputLogin") String login,
@@ -153,6 +210,13 @@ public class OpenboxSF5 implements Serializable {
 		return Id;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getSettingsByUserLogin(java.lang.
+	 * String)
+	 */
+	@Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public List<org.openbox.sf5.model.Settings> getSettingsByUserLogin(@WebParam(name = "inputLogin") String login)
@@ -165,6 +229,14 @@ public class OpenboxSF5 implements Serializable {
 		return settList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.openbox.sf5.jaxws.IOpenboxSF5#getSettingsByArbitraryFilter(java.lang.
+	 * String, java.lang.String, java.lang.String)
+	 */
+	@Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public List<org.openbox.sf5.model.Settings> getSettingsByArbitraryFilter(
@@ -179,6 +251,13 @@ public class OpenboxSF5 implements Serializable {
 		return settList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getSettingById(long,
+	 * java.lang.String)
+	 */
+	@Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public org.openbox.sf5.model.Settings getSettingById(@WebParam(name = "inputSettingId") long settingId,
@@ -192,6 +271,12 @@ public class OpenboxSF5 implements Serializable {
 		return setting;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getAllSatellites()
+	 */
+	@Override
 	@WebMethod
 	public List<org.openbox.sf5.model.Satellites> getAllSatellites() throws WSException {
 		ResponseEntity<List<Satellites>> RSResponse = satellitesService.getAllSatellites();
@@ -203,6 +288,14 @@ public class OpenboxSF5 implements Serializable {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.openbox.sf5.jaxws.IOpenboxSF5#getSatellitesByArbitraryFilter(java.
+	 * lang.String, java.lang.String)
+	 */
+	@Override
 	@WebMethod
 	public List<org.openbox.sf5.model.Satellites> getSatellitesByArbitraryFilter(
 			@WebParam(name = "inputFieldName") String fieldName, @WebParam(name = "inputFieldValue") String typeValue)
@@ -217,6 +310,12 @@ public class OpenboxSF5 implements Serializable {
 		return satList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getSatelliteById(long)
+	 */
+	@Override
 	@WebMethod
 	public org.openbox.sf5.model.Satellites getSatelliteById(@WebParam(name = "inputSatelliteId") long satId)
 			throws WSException {
@@ -294,7 +393,5 @@ public class OpenboxSF5 implements Serializable {
 	public OpenboxSF5() {
 
 	}
-
-	private static final long serialVersionUID = -3436633533409493578L;
 
 }

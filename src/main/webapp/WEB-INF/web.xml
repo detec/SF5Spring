@@ -44,6 +44,27 @@
     	<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
 	</listener>
   
+  
+   	<servlet>
+   		<servlet-name>spring-ws</servlet-name>
+   		<servlet-class>
+        	com.sun.xml.ws.transport.http.servlet.WSSpringServlet
+   		</servlet-class>
+   		<init-param>
+    		<param-name>contextConfigLocation</param-name>
+      		<param-value>/WEB-INF/spring-ws-servlet.xml</param-value>
+    	</init-param>
+    	<load-on-startup>2</load-on-startup>
+    	<enabled>true</enabled>
+	</servlet>
+
+	<servlet-mapping>
+    	<servlet-name>spring-ws</servlet-name>
+        <url-pattern>/jaxws/*</url-pattern>
+    </servlet-mapping>
+  
+  
+  
   <servlet>
     <servlet-name>sf5</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -51,13 +72,8 @@
       <param-name>contextConfigLocation</param-name>
       <param-value>/WEB-INF/sf5-servlet.xml</param-value>
     </init-param>
-<!-- This parameter says not to use servlet-based config file     
 
-<init-param>
-      <param-name>contextAttribute</param-name>
-      <param-value>org.springframework.web.context.WebApplicationContext.ROOT</param-value>
-    </init-param> -->
-    <load-on-startup>1</load-on-startup>
+    <load-on-startup>2</load-on-startup>
     <enabled>true</enabled>
     <multipart-config>
       <max-file-size>1000000</max-file-size>
@@ -65,28 +81,18 @@
       <file-size-threshold>10000</file-size-threshold>
     </multipart-config>
   </servlet>
+  
   <servlet-mapping>
     <servlet-name>sf5</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
   
 
-   	<servlet>
-   	<servlet-name>spring-ws</servlet-name>
-   	<servlet-class>
-         com.sun.xml.ws.transport.http.servlet.WSSpringServlet
-   	</servlet-class>
-<!--    	<init-param>
-    	<param-name>contextConfigLocation</param-name>
-      	<param-value>/WEB-INF/wscontext.xml</param-value>
-    </init-param> -->
-	</servlet>
+<!-- This parameter says not to use servlet-based config file     
 
-	<servlet-mapping>
-    	<servlet-name>spring-ws</servlet-name>
-        <url-pattern>/jaxws/</url-pattern>
-    </servlet-mapping>
-
-  
+<init-param>
+      <param-name>contextAttribute</param-name>
+      <param-value>org.springframework.web.context.WebApplicationContext.ROOT</param-value>
+    </init-param> -->  
   
 </web-app>

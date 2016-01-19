@@ -26,6 +26,7 @@
 <context:component-scan base-package="org.openbox.sf5.service" />
 <context:component-scan base-package="org.openbox.sf5.common" />
 <context:component-scan base-package="org.openbox.sf5.json" />
+<context:component-scan base-package="org.openbox.sf5.jaxws" />
 
 
 <!-- Configurer that replaces ${...} placeholders with values from a properties file -->
@@ -106,4 +107,10 @@ Must register a static PropertySourcesPlaceholderConfigurer bean in either XML o
     </property>
 	
 </bean>   
+
+	<!-- https://bthurley.wordpress.com/2014/04/27/web-services-with-jax-ws-jaxb-and-spring/ -->
+    <!-- Define the jaxws endpoint -->
+    <import resource="spring-ws-servlet.xml"/>
+
+
 </beans>    
