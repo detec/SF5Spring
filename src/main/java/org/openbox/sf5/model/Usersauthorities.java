@@ -69,6 +69,7 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 		this.username = username;
 	}
 
+	@JsonProperty("LineNumber")
 	public long getLineNumber() {
 		return LineNumber;
 	}

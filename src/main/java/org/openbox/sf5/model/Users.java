@@ -68,6 +68,7 @@ public class Users extends AbstractDbEntity implements Serializable {
 	@JsonProperty("Password")
 	private String Password;
 
+	@JsonProperty("Password")
 	public String getPassword() {
 		return Password;
 	}
