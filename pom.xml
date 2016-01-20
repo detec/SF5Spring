@@ -60,7 +60,7 @@ declared explicitly so Spring config files can be placed next to their correspon
 		   	</testResource>
 		</testResources>    
     
-  <pluginManagement>  
+<!--   <pluginManagement>   -->
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -154,8 +154,8 @@ declared explicitly so Spring config files can be placed next to their correspon
         </configuration>
       </plugin>
       
-      <plugin>
-        <groupId>org.apache.tomcat.maven</groupId>
+	<plugin>
+    	<groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.2</version>
         <configuration>
@@ -165,22 +165,23 @@ declared explicitly so Spring config files can be placed next to their correspon
         <password>admin</password>
         <warFile>${project.build.directory}/${rp.build.warname}.war</warFile>
         </configuration>
-      	</plugin>
- 		<plugin>
-        	<groupId>org.jvnet.jax-ws-commons</groupId>
-            <artifactId>jaxws-maven-plugin</artifactId>
-            <version>2.3</version>
-            <executions>
-            	<execution>
-                	<id>generate-client</id>
-                    <phase>generate-sources</phase>
-                    <goals>
-                    	<goal>wsimport</goal>
-                    </goals>
-                    <configuration>
-                         <wsdlUrls>
-                          	 <wsdlUrl>http://localhost:8080/${rp.build.warname}/OpenboxSF5Service?wsdl</wsdlUrl>
-                          </wsdlUrls>
+	</plugin>
+ 		
+<!--  	<plugin>
+    	<groupId>org.jvnet.jax-ws-commons</groupId>
+        <artifactId>jaxws-maven-plugin</artifactId>
+        <version>2.3</version>
+        <executions>
+         	<execution>
+              	<id>generate-client</id>
+                <phase>generate-sources</phase>
+                <goals>
+                 	<goal>wsimport</goal>
+                </goals>
+                <configuration>
+        	    	<wsdlUrls>
+            	   		<wsdlUrl>http://localhost:8080/${rp.build.warname}/jaxws/OpenboxSF5Service?wsdl</wsdlUrl>
+                    </wsdlUrls>
 			        <verbose>true</verbose>
                     <sourceDestDir>${basedir}/src/test/java</sourceDestDir>
                     <target>2.2</target>
@@ -189,12 +190,45 @@ declared explicitly so Spring config files can be placed next to their correspon
                 </execution>
                   
             </executions>
-          </plugin>
-      
-    </plugins>
-    </pluginManagement>
-    
-  </build>
+          </plugin> -->
+     
+    </plugins> 
+<!--     </pluginManagement> -->
+        	<pluginManagement>
+    		<plugins>
+      			<plugin>
+    				<groupId>org.eclipse.m2e</groupId>
+    				<artifactId>lifecycle-mapping</artifactId>
+    				<version>1.0.0</version>
+    				<configuration>
+    					<lifecycleMappingMetadata>
+    						<pluginExecutions>
+    							<pluginExecution>
+    								<pluginExecutionFilter>
+    									<groupId>
+    										org.jvnet.jax-ws-commons
+    									</groupId>
+    									<artifactId>
+    										jaxws-maven-plugin
+    									</artifactId>
+    									<versionRange>
+    										[2.3,)
+    									</versionRange>
+    									<goals>
+    										<goal>wsimport</goal>
+    									</goals>
+    								</pluginExecutionFilter>
+    								<action>
+    									<ignore></ignore>
+    								</action>
+    							</pluginExecution>
+    						</pluginExecutions>
+    					</lifecycleMappingMetadata>
+    				</configuration>
+    			</plugin>
+    		</plugins>
+    	</pluginManagement>
+	</build>
   
 <!-- Different profiles properties
 http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcesplaceholderconfigurer-with-custom-classpathres
@@ -233,7 +267,6 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
                                              
                     	</properties>
                 	</configuration>
-<!--                 	<deployer> -->
                 		<deployables>
                 		<deployable>
                 		 	<properties>
@@ -241,7 +274,6 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
               				</properties>
                 		</deployable>
                 		</deployables>
-<!--                 	</deployer>                	 -->
                 </configuration>
 
                 
@@ -408,6 +440,14 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<groupId>org.hibernate</groupId>
 		<artifactId>hibernate-core</artifactId>
 		<version>${hibernate.version}</version>
+		<!-- http://stackoverflow.com/questions/17360000/provider-for-javax-xml-parsers-documentbuilderfactory-cannot-be-found -->
+		<exclusions>
+        <exclusion>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+        </exclusion>
+    </exclusions>
+		
 	</dependency>
 	<dependency>
     	<groupId>org.reflections</groupId>
@@ -548,6 +588,12 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<groupId>org.jvnet.jax-ws-commons.spring</groupId>
 		<artifactId>jaxws-spring</artifactId>
 		<version>1.9</version>
+		<exclusions>
+			<exclusion>
+            	<groupId>com.sun.xml.ws</groupId>
+            	<artifactId>jaxws-rt</artifactId>
+        	</exclusion>
+        </exclusions>
 	</dependency>
 	<!-- Necessary for schema generation in Tomcat -->
 	<dependency>

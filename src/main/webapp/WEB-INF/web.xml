@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
-
-<display-name>SF5Spring</display-name>
-	
-	<!-- Filters -->
-	<filter>
-    	<display-name>springMultipartFilter</display-name>
-    	<filter-name>springMultipartFilter</filter-name>
-    	<filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
-	</filter>
-  	<filter-mapping>
-    	<filter-name>springMultipartFilter</filter-name>
-    	<servlet-name>sf5</servlet-name>
-    	<url-pattern>/*</url-pattern>
-	</filter-mapping>
+  <display-name>SF5Spring</display-name>
+  <filter>
+    <display-name>springMultipartFilter</display-name>
+    <filter-name>springMultipartFilter</filter-name>
+    <filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>springMultipartFilter</filter-name>
+    <servlet-name>sf5</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
   <filter>
     <filter-name>springSecurityFilterChain</filter-name>
     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -26,45 +23,35 @@
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  
-	<context-param>
-    	<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/springWebMultipartContext.xml, /WEB-INF/root-context.xml, /WEB-INF/security-context.xml</param-value>
-  	</context-param>
-  	
-	
-	<!-- Listeners -->
-	<listener>
-    	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	<listener>
-    	<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-	</listener>
-	<listener>
-    	<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
-	</listener>
-  
-  
-   	<servlet>
-   		<servlet-name>spring-ws</servlet-name>
-   		<servlet-class>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/springWebMultipartContext.xml, /WEB-INF/root-context.xml, /WEB-INF/security-context.xml</param-value>
+  </context-param>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>spring-ws</servlet-name>
+    <servlet-class>
         	com.sun.xml.ws.transport.http.servlet.WSSpringServlet
    		</servlet-class>
-   		<init-param>
-    		<param-name>contextConfigLocation</param-name>
-      		<param-value>/WEB-INF/spring-ws-servlet.xml</param-value>
-    	</init-param>
-    	<load-on-startup>2</load-on-startup>
-    	<enabled>true</enabled>
-	</servlet>
-
-	<servlet-mapping>
-    	<servlet-name>spring-ws</servlet-name>
-        <url-pattern>/jaxws/*</url-pattern>
-    </servlet-mapping>
-  
-  
-  
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/spring-ws-servlet.xml</param-value>
+    </init-param>
+    <load-on-startup>2</load-on-startup>
+    <enabled>true</enabled>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>spring-ws</servlet-name>
+    <url-pattern>/jaxws/*</url-pattern>
+  </servlet-mapping>
   <servlet>
     <servlet-name>sf5</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -72,7 +59,6 @@
       <param-name>contextConfigLocation</param-name>
       <param-value>/WEB-INF/sf5-servlet.xml</param-value>
     </init-param>
-
     <load-on-startup>2</load-on-startup>
     <enabled>true</enabled>
     <multipart-config>
@@ -81,18 +67,8 @@
       <file-size-threshold>10000</file-size-threshold>
     </multipart-config>
   </servlet>
-  
   <servlet-mapping>
     <servlet-name>sf5</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
-  
-
-<!-- This parameter says not to use servlet-based config file     
-
-<init-param>
-      <param-name>contextAttribute</param-name>
-      <param-value>org.springframework.web.context.WebApplicationContext.ROOT</param-value>
-    </init-param> -->  
-  
 </web-app>
