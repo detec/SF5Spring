@@ -25,7 +25,7 @@
     
     <!--     url="/${jaxws.path}/" -->
         <wss:service>
-            <ws:service bean="#OpenboxSF5" impl="org.openbox.sf5.jaxws.OpenboxSF5"/>
+            <ws:service bean="#OpenboxSF5" impl="org.openbox.sf5.jaxws.OpenboxSF5Impl"/>
         </wss:service>
     </wss:binding>
 

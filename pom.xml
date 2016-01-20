@@ -100,8 +100,8 @@ declared explicitly so Spring config files can be placed next to their correspon
 				<include>**/*IT.java</include>
 			</includes>
             </configuration>
-        </execution>
-      	</executions>
+    	</execution>
+	</executions>
 		
 	</plugin>
 				  
@@ -159,11 +159,12 @@ declared explicitly so Spring config files can be placed next to their correspon
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.2</version>
         <configuration>
-        <url>http://localhost:8080/manager/text</url>
-        <server>TomcatServer</server>
-        <username>admin</username>
-        <password>admin</password>
-        <warFile>${project.build.directory}/${rp.build.warname}.war</warFile>
+        	<url>http://localhost:8080/manager/text</url>
+        	<server>TomcatServer</server>
+        	<username>admin</username>
+        	<password>admin</password>
+        	<update>true</update>
+        	<warFile>${project.build.directory}/${rp.build.warname}.war</warFile>
         </configuration>
 	</plugin>
  		
@@ -194,7 +195,7 @@ declared explicitly so Spring config files can be placed next to their correspon
      
     </plugins> 
 <!--     </pluginManagement> -->
-        	<pluginManagement>
+  <!--     	<pluginManagement>
     		<plugins>
       			<plugin>
     				<groupId>org.eclipse.m2e</groupId>
@@ -227,7 +228,7 @@ declared explicitly so Spring config files can be placed next to their correspon
     				</configuration>
     			</plugin>
     		</plugins>
-    	</pluginManagement>
+    	</pluginManagement> -->
 	</build>
   
 <!-- Different profiles properties
@@ -316,7 +317,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
         </activation>
 		<properties>
   			<db.jdbcUrl>jdbc:h2:tcp://localhost/~/sf5springdev</db.jdbcUrl> 
-  			<rp.build.warname>SF5Spring-dev</rp.build.warname>
+  			<rp.build.warname>SF5Spring-test</rp.build.warname>
   			<property.placeholder>dev</property.placeholder>
   		</properties>
 	</profile>

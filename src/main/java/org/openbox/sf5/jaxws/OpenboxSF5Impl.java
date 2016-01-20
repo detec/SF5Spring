@@ -45,7 +45,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 // http://stackoverflow.com/questions/18513333/spring-mvc-app-with-soap-web-service-using-wsspringservlet
 // https://bthurley.wordpress.com/2014/04/27/web-services-with-jax-ws-jaxb-and-spring/
 @Component("OpenboxSF5")
-public class OpenboxSF5 extends SpringBeanAutowiringSupport implements IOpenboxSF5 {
+public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpenboxSF5 {
 
 	/*
 	 * (non-Javadoc)
@@ -390,7 +390,7 @@ public class OpenboxSF5 extends SpringBeanAutowiringSupport implements IOpenboxS
 		return isError;
 	}
 
-	public OpenboxSF5() {
+	public OpenboxSF5Impl() {
 
 	}
 

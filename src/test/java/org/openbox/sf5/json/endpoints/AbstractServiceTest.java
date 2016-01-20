@@ -3,6 +3,8 @@ package org.openbox.sf5.json.endpoints;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -19,7 +21,7 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider;
 
 public abstract class AbstractServiceTest {
-	public static final String appLocation = "http://localhost:8080/SF5Spring-test/";
+	public static final String appLocation = "http://localhost:8080";
 
 	// public static final String jsonPath = "json";
 
@@ -44,6 +46,10 @@ public abstract class AbstractServiceTest {
 	public String testUsername = "ITUser";
 
 	public String testUserPassword = "Test123";
+
+	public Properties property = new Properties();
+
+	public Logger LOGGER = Logger.getLogger(getClass().getName());
 
 	public Client createAdminClient() {
 
@@ -77,28 +83,33 @@ public abstract class AbstractServiceTest {
 				.build();
 	}
 
-	private void readJAXRSPath() {
-		Properties property = new Properties();
+	public void loadProperties() {
 
+		// using try with resources
 		try (InputStream in = getClass().getResourceAsStream("/application.properties")) {
 			property.load(in);
 			AbstractServiceTest.jsonPath = property.getProperty("jaxrs.path");
-		} catch (IOException e) {
 
+		} catch (IOException e) {
 			e.printStackTrace();
+
+			// put exception into log.
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+
 		}
+
 	}
 
 	public void setUpAbstractTestUser() {
 		client = createTestUserClient();
-		readJAXRSPath();
-		commonTarget = client.target(appLocation).path(jsonPath);
+		loadProperties();
+		commonTarget = client.target(appLocation).path(property.getProperty("context.path")).path(jsonPath);
 	}
 
 	public void setUpAbstractAdmin() {
 		client = createAdminClient();
-		readJAXRSPath();
-		commonTarget = client.target(appLocation).path(jsonPath);
+		loadProperties();
+		commonTarget = client.target(appLocation).path(property.getProperty("context.path")).path(jsonPath);
 	}
 
 	// public void configureMapper() {
