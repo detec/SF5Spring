@@ -6,7 +6,11 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -20,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="{http://wsmodel.sf5.openbox.org/}abstractDbEntity">
  *       &lt;sequence>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="username" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="username" type="{http://www.w3.org/2001/XMLSchema}ID" minOccurs="0"/>
  *         &lt;element name="Password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="enabled" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="authorities" type="{http://wsmodel.sf5.openbox.org/}usersauthorities" maxOccurs="unbounded" minOccurs="0"/>
@@ -45,6 +49,9 @@ public class Users
 {
 
     protected long id;
+    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+    @XmlID
+    @XmlSchemaType(name = "ID")
     protected String username;
     @XmlElement(name = "Password")
     protected String password;

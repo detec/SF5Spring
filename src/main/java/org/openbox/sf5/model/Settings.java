@@ -18,11 +18,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.openbox.sf5.converters.TimestampAdapter;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name = "Settings")
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Settings extends AbstractDbEntity implements Serializable {
 
 	private static final long serialVersionUID = 7055744176770843683L;
@@ -41,6 +47,7 @@ public class Settings extends AbstractDbEntity implements Serializable {
 	@Column(name = "Name", unique = false, nullable = false, length = 50)
 	@NotEmpty
 	@JsonProperty("Name")
+	@XmlID
 	private String Name;
 
 	public void setName(String Name) {
@@ -69,6 +76,7 @@ public class Settings extends AbstractDbEntity implements Serializable {
 
 	@Column(name = "TheLastEntry", unique = false, nullable = true)
 	@JsonProperty("TheLastEntry")
+	@XmlJavaTypeAdapter(TimestampAdapter.class)
 	private Timestamp TheLastEntry;
 
 	public Timestamp getTheLastEntry() {

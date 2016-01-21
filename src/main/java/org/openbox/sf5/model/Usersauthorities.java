@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -34,6 +35,7 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "parent_id", unique = false, nullable = false)
 	@JsonBackReference
+	@XmlIDREF
 	private Users parent_id;
 
 	@Column(name = "username", unique = false, nullable = false)

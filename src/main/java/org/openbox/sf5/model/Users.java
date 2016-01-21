@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.Cascade;
@@ -49,6 +50,7 @@ public class Users extends AbstractDbEntity implements Serializable {
 	}
 
 	@Column(name = "username", unique = false, nullable = false, length = 50)
+	@XmlID
 	private String username;
 
 	public void setusername(String username) {

@@ -28,9 +28,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "abstractDbEntity")
 @XmlSeeAlso({
-    SettingsSatellites.class,
     Satellites.class,
     Settings.class,
+    SettingsSatellites.class,
     Usersauthorities.class,
     Users.class,
     Transponders.class,

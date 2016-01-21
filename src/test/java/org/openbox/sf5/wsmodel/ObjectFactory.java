@@ -39,7 +39,6 @@ public class ObjectFactory {
     private final static QName _GetUserByLogin_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "getUserByLogin");
     private final static QName _GetTransponderByIdResponse_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "getTransponderByIdResponse");
     private final static QName _GetUserByLoginResponse_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "getUserByLoginResponse");
-    private final static QName _SettingsSatellites_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "settingsSatellites");
     private final static QName _CreateSetting_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "createSetting");
     private final static QName _Transponders_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "transponders");
     private final static QName _GetTranspondersBySatelliteIdResponse_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "getTranspondersBySatelliteIdResponse");
@@ -54,6 +53,7 @@ public class ObjectFactory {
     private final static QName _CreateUserResponse_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "createUserResponse");
     private final static QName _GetSatelliteById_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "getSatelliteById");
     private final static QName _GetSatelliteByIdResponse_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "getSatelliteByIdResponse");
+    private final static QName _SatellitesTable_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "SatellitesTable");
     private final static QName _GetSettingsByArbitraryFilterResponse_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "getSettingsByArbitraryFilterResponse");
     private final static QName _GetTranspondersBySatelliteId_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "getTranspondersBySatelliteId");
     private final static QName _Usersauthorities_QNAME = new QName("http://wsmodel.sf5.openbox.org/", "usersauthorities");
@@ -114,14 +114,6 @@ public class ObjectFactory {
      */
     public GetUserByLoginResponse createGetUserByLoginResponse() {
         return new GetUserByLoginResponse();
-    }
-
-    /**
-     * Create an instance of {@link SettingsSatellites }
-     * 
-     */
-    public SettingsSatellites createSettingsSatellites() {
-        return new SettingsSatellites();
     }
 
     /**
@@ -245,6 +237,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SettingsSatellites }
+     * 
+     */
+    public SettingsSatellites createSettingsSatellites() {
+        return new SettingsSatellites();
+    }
+
+    /**
      * Create an instance of {@link GetTranspondersBySatelliteId }
      * 
      */
@@ -354,14 +354,6 @@ public class ObjectFactory {
      */
     public SettingsConversion createSettingsConversion() {
         return new SettingsConversion();
-    }
-
-    /**
-     * Create an instance of {@link Timestamp }
-     * 
-     */
-    public Timestamp createTimestamp() {
-        return new Timestamp();
     }
 
     /**
@@ -508,15 +500,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SettingsSatellites }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://wsmodel.sf5.openbox.org/", name = "settingsSatellites")
-    public JAXBElement<SettingsSatellites> createSettingsSatellites(SettingsSatellites value) {
-        return new JAXBElement<SettingsSatellites>(_SettingsSatellites_QNAME, SettingsSatellites.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CreateSetting }{@code >}}
      * 
      */
@@ -640,6 +623,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://wsmodel.sf5.openbox.org/", name = "getSatelliteByIdResponse")
     public JAXBElement<GetSatelliteByIdResponse> createGetSatelliteByIdResponse(GetSatelliteByIdResponse value) {
         return new JAXBElement<GetSatelliteByIdResponse>(_GetSatelliteByIdResponse_QNAME, GetSatelliteByIdResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SettingsSatellites }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://wsmodel.sf5.openbox.org/", name = "SatellitesTable")
+    public JAXBElement<SettingsSatellites> createSatellitesTable(SettingsSatellites value) {
+        return new JAXBElement<SettingsSatellites>(_SatellitesTable_QNAME, SettingsSatellites.class, null, value);
     }
 
     /**

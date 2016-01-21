@@ -2,6 +2,8 @@
 
 <xs:element name="CheckVerifyFault" type="tns:WSException"/>
 
+<xs:element name="SatellitesTable" type="tns:settingsSatellites"/>
+
 <xs:element name="createSetting" type="tns:createSetting"/>
 
 <xs:element name="createSettingResponse" type="tns:createSettingResponse"/>
@@ -64,8 +66,6 @@
 
 <xs:element name="settingsConversion" type="tns:settingsConversion"/>
 
-<xs:element name="settingsSatellites" type="tns:settingsSatellites"/>
-
 <xs:element name="transponders" type="tns:transponders"/>
 
 <xs:element name="users" type="tns:users"/>
@@ -84,6 +84,7 @@
 <xs:complexContent>
 <xs:extension base="tns:abstractDbEntity">
 <xs:sequence>
+<xs:element name="TheLastEntry" type="xs:string" minOccurs="0"/>
 <xs:element name="conversion" type="tns:settingsConversion" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
 <xs:element name="id" type="xs:long"/>
 <xs:element name="name" type="xs:string" minOccurs="0"/>
@@ -150,9 +151,9 @@
 <xs:extension base="tns:abstractDbEntity">
 <xs:sequence>
 <xs:element name="id" type="xs:long"/>
-<xs:element name="lineNumber" type="xs:long"/>
-<xs:element name="satellite" type="tns:satellites" minOccurs="0"/>
 <xs:element name="parent_id" type="tns:settings" minOccurs="0"/>
+<xs:element name="LineNumber" type="xs:long"/>
+<xs:element name="Satellite" type="tns:satellites" minOccurs="0"/>
 </xs:sequence>
 </xs:extension>
 </xs:complexContent>

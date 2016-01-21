@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -16,7 +18,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "SettingsSatellites")
-@XmlRootElement
+@XmlRootElement(name = "SatellitesTable")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class SettingsSatellites extends AbstractDbEntity implements Serializable {
 
 	private static final long serialVersionUID = -2945693668519991789L;

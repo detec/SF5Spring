@@ -4,6 +4,8 @@ package org.openbox.sf5.wsmodel;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlIDREF;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -18,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="{http://wsmodel.sf5.openbox.org/}abstractDbEntity">
  *       &lt;sequence>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="parent_id" type="{http://wsmodel.sf5.openbox.org/}users" minOccurs="0"/>
+ *         &lt;element name="parent_id" type="{http://www.w3.org/2001/XMLSchema}IDREF" minOccurs="0"/>
  *         &lt;element name="username" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="authority" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -44,7 +46,9 @@ public class Usersauthorities
 
     protected long id;
     @XmlElement(name = "parent_id")
-    protected Users parentId;
+    @XmlIDREF
+    @XmlSchemaType(name = "IDREF")
+    protected Object parentId;
     protected String username;
     @XmlElement(name = "LineNumber")
     protected long lineNumber;
@@ -71,10 +75,10 @@ public class Usersauthorities
      * 
      * @return
      *     possible object is
-     *     {@link Users }
+     *     {@link Object }
      *     
      */
-    public Users getParentId() {
+    public Object getParentId() {
         return parentId;
     }
 
@@ -83,10 +87,10 @@ public class Usersauthorities
      * 
      * @param value
      *     allowed object is
-     *     {@link Users }
+     *     {@link Object }
      *     
      */
-    public void setParentId(Users value) {
+    public void setParentId(Object value) {
         this.parentId = value;
     }
 

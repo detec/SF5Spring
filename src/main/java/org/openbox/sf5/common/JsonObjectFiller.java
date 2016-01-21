@@ -192,4 +192,14 @@ public class JsonObjectFiller {
 		return new ResponseEntity<GenericXMLListWrapper<T>>(wrapper, HttpStatus.OK);
 	}
 
+	public static SimpleDateFormat getJsonDateFormatter() {
+		// SimpleDateFormat formatter = new
+		// SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+		// formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+		formatter.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
+
+		return formatter;
+	}
+
 }

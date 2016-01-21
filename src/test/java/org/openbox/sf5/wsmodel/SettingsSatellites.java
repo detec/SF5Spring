@@ -18,9 +18,9 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="{http://wsmodel.sf5.openbox.org/}abstractDbEntity">
  *       &lt;sequence>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="lineNumber" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="satellite" type="{http://wsmodel.sf5.openbox.org/}satellites" minOccurs="0"/>
  *         &lt;element name="parent_id" type="{http://wsmodel.sf5.openbox.org/}settings" minOccurs="0"/>
+ *         &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="Satellite" type="{http://wsmodel.sf5.openbox.org/}satellites" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -32,19 +32,21 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "settingsSatellites", propOrder = {
     "id",
+    "parentId",
     "lineNumber",
-    "satellite",
-    "parentId"
+    "satellite"
 })
 public class SettingsSatellites
     extends AbstractDbEntity
 {
 
     protected long id;
-    protected long lineNumber;
-    protected Satellites satellite;
     @XmlElement(name = "parent_id")
     protected Settings parentId;
+    @XmlElement(name = "LineNumber")
+    protected long lineNumber;
+    @XmlElement(name = "Satellite")
+    protected Satellites satellite;
 
     /**
      * Gets the value of the id property.
@@ -60,6 +62,30 @@ public class SettingsSatellites
      */
     public void setId(long value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the parentId property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Settings }
+     *     
+     */
+    public Settings getParentId() {
+        return parentId;
+    }
+
+    /**
+     * Sets the value of the parentId property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Settings }
+     *     
+     */
+    public void setParentId(Settings value) {
+        this.parentId = value;
     }
 
     /**
@@ -100,30 +126,6 @@ public class SettingsSatellites
      */
     public void setSatellite(Satellites value) {
         this.satellite = value;
-    }
-
-    /**
-     * Gets the value of the parentId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Settings }
-     *     
-     */
-    public Settings getParentId() {
-        return parentId;
-    }
-
-    /**
-     * Sets the value of the parentId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Settings }
-     *     
-     */
-    public void setParentId(Settings value) {
-        this.parentId = value;
     }
 
 }

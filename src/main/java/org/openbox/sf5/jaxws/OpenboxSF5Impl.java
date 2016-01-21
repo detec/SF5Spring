@@ -388,8 +388,21 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 		// }
 
 		if (isError) {
-			String errorMessage = (String) rSResponse.getBody();
-			throw new WSException(errorMessage, statusCode);
+			// String errorMessage = (String) rSResponse.getBody();
+			// throw new WSException(errorMessage, statusCode);
+
+			Object errorObject = rSResponse.getBody();
+			if (errorObject instanceof Boolean) {
+				throw new WSException("Entity not found", statusCode);
+			}
+
+			else if (errorObject instanceof String) {
+				throw new WSException((String) errorObject, statusCode);
+			}
+
+			else if (errorObject instanceof Long) {
+				throw new WSException("Error code returned: " + errorObject.toString(), statusCode);
+			}
 		}
 
 		return isError;
