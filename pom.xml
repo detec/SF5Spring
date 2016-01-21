@@ -159,12 +159,17 @@ declared explicitly so Spring config files can be placed next to their correspon
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.2</version>
         <configuration>
-        	<url>http://localhost:8080/manager/text</url>
+<!--         	<url>http://localhost:8080/manager/text</url> -->
         	<server>TomcatServer</server>
         	<username>admin</username>
         	<password>admin</password>
         	<update>true</update>
-        	<warFile>${project.build.directory}/${rp.build.warname}.war</warFile>
+        	<!-- If you are using project.build.finalName to change the name of your WAR file, you can use that value when you configure the context path as well.
+        	https://tomcat.apache.org/maven-plugin-trunk/tomcat7-maven-plugin/usage.html
+        	 -->
+        	<path>/${rp.build.warname}</path>
+        	
+<!--         	<warFile>${project.build.directory}/${rp.build.warname}.war</warFile> -->
         </configuration>
 	</plugin>
  		
@@ -668,6 +673,11 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<groupId>org.glassfish.external</groupId>
 		<artifactId>management-api</artifactId>
 		<version>3.2.1-b002</version>
+	</dependency>
+	<dependency>
+		<groupId>org.jvnet.staxex</groupId>
+		<artifactId>stax-ex</artifactId>
+		<version>1.7.7</version>
 	</dependency>
 	
 	

@@ -37,7 +37,8 @@ public class UsersService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public ResponseEntity<Long> createUser(@RequestBody Users user) {
+	public ResponseEntity<Long> createUser(@RequestBody Users user)
+			throws IllegalArgumentException, IllegalStateException {
 		// check if such user exists.
 		Boolean result = usersJsonizer.checkIfUsernameExists(user.getusername());
 		if (result) {
