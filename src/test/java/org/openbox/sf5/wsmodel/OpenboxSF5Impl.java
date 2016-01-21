@@ -19,11 +19,11 @@ import javax.xml.ws.ResponseWrapper;
  * Generated source version: 2.2
  * 
  */
-@WebService(name = "OpenboxSF5", targetNamespace = "http://wsmodel.sf5.openbox.org/")
+@WebService(name = "OpenboxSF5Impl", targetNamespace = "http://wsmodel.sf5.openbox.org/")
 @XmlSeeAlso({
     ObjectFactory.class
 })
-public interface OpenboxSF5 {
+public interface OpenboxSF5Impl {
 
 
     /**
@@ -37,8 +37,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "createUser", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.CreateUser")
     @ResponseWrapper(localName = "createUserResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.CreateUserResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/createUserRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/createUserResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/createUser/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/createUserRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/createUserResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/createUser/Fault/WSException")
     })
     public long createUser(
         @WebParam(name = "inputUser", targetNamespace = "")
@@ -58,8 +58,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getSettingById", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetSettingById")
     @ResponseWrapper(localName = "getSettingByIdResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetSettingByIdResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSettingByIdRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSettingByIdResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSettingById/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSettingByIdRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSettingByIdResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSettingById/Fault/WSException")
     })
     public Settings getSettingById(
         @WebParam(name = "inputSettingId", targetNamespace = "")
@@ -80,8 +80,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getUserByLogin", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetUserByLogin")
     @ResponseWrapper(localName = "getUserByLoginResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetUserByLoginResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getUserByLoginRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getUserByLoginResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getUserByLogin/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getUserByLoginRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getUserByLoginResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getUserByLogin/Fault/WSException")
     })
     public Users getUserByLogin(
         @WebParam(name = "inputLogin", targetNamespace = "")
@@ -100,8 +100,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getSatelliteById", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetSatelliteById")
     @ResponseWrapper(localName = "getSatelliteByIdResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetSatelliteByIdResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSatelliteByIdRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSatelliteByIdResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSatelliteById/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSatelliteByIdRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSatelliteByIdResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSatelliteById/Fault/WSException")
     })
     public Satellites getSatelliteById(
         @WebParam(name = "inputSatelliteId", targetNamespace = "")
@@ -122,8 +122,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "createSetting", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.CreateSetting")
     @ResponseWrapper(localName = "createSettingResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.CreateSettingResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/createSettingRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/createSettingResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/createSetting/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/createSettingRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/createSettingResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/createSetting/Fault/WSException")
     })
     public long createSetting(
         @WebParam(name = "arg0", targetNamespace = "")
@@ -145,8 +145,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getTransponders", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetTransponders")
     @ResponseWrapper(localName = "getTranspondersResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetTranspondersResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getTranspondersRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getTranspondersResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getTransponders/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getTranspondersRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getTranspondersResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getTransponders/Fault/WSException")
     })
     public List<Transponders> getTransponders()
         throws WSException_Exception
@@ -162,8 +162,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getAllSatellites", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetAllSatellites")
     @ResponseWrapper(localName = "getAllSatellitesResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetAllSatellitesResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getAllSatellitesRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getAllSatellitesResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getAllSatellites/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getAllSatellitesRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getAllSatellitesResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getAllSatellites/Fault/WSException")
     })
     public List<Satellites> getAllSatellites()
         throws WSException_Exception
@@ -180,8 +180,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "ifSuchLoginExists", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.IfSuchLoginExists")
     @ResponseWrapper(localName = "ifSuchLoginExistsResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.IfSuchLoginExistsResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/ifSuchLoginExistsRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/ifSuchLoginExistsResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/ifSuchLoginExists/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/ifSuchLoginExistsRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/ifSuchLoginExistsResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/ifSuchLoginExists/Fault/WSException")
     })
     public boolean ifSuchLoginExists(
         @WebParam(name = "inputLogin", targetNamespace = "")
@@ -201,8 +201,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getTranspondersByArbitraryFilter", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetTranspondersByArbitraryFilter")
     @ResponseWrapper(localName = "getTranspondersByArbitraryFilterResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetTranspondersByArbitraryFilterResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getTranspondersByArbitraryFilterRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getTranspondersByArbitraryFilterResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getTranspondersByArbitraryFilter/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getTranspondersByArbitraryFilterRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getTranspondersByArbitraryFilterResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getTranspondersByArbitraryFilter/Fault/WSException")
     })
     public List<Transponders> getTranspondersByArbitraryFilter(
         @WebParam(name = "inputFieldName", targetNamespace = "")
@@ -223,8 +223,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getTransponderById", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetTransponderById")
     @ResponseWrapper(localName = "getTransponderByIdResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetTransponderByIdResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getTransponderByIdRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getTransponderByIdResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getTransponderById/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getTransponderByIdRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getTransponderByIdResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getTransponderById/Fault/WSException")
     })
     public Transponders getTransponderById(
         @WebParam(name = "inputTransponderId", targetNamespace = "")
@@ -243,8 +243,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getTranspondersBySatelliteId", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetTranspondersBySatelliteId")
     @ResponseWrapper(localName = "getTranspondersBySatelliteIdResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetTranspondersBySatelliteIdResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getTranspondersBySatelliteIdRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getTranspondersBySatelliteIdResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getTranspondersBySatelliteId/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getTranspondersBySatelliteIdRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getTranspondersBySatelliteIdResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getTranspondersBySatelliteId/Fault/WSException")
     })
     public List<Transponders> getTranspondersBySatelliteId(
         @WebParam(name = "inputSatId", targetNamespace = "")
@@ -263,8 +263,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getSettingsByUserLogin", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetSettingsByUserLogin")
     @ResponseWrapper(localName = "getSettingsByUserLoginResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetSettingsByUserLoginResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSettingsByUserLoginRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSettingsByUserLoginResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSettingsByUserLogin/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSettingsByUserLoginRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSettingsByUserLoginResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSettingsByUserLogin/Fault/WSException")
     })
     public List<Settings> getSettingsByUserLogin(
         @WebParam(name = "inputLogin", targetNamespace = "")
@@ -285,8 +285,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getSettingsByArbitraryFilter", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetSettingsByArbitraryFilter")
     @ResponseWrapper(localName = "getSettingsByArbitraryFilterResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetSettingsByArbitraryFilterResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSettingsByArbitraryFilterRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSettingsByArbitraryFilterResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSettingsByArbitraryFilter/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSettingsByArbitraryFilterRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSettingsByArbitraryFilterResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSettingsByArbitraryFilter/Fault/WSException")
     })
     public List<Settings> getSettingsByArbitraryFilter(
         @WebParam(name = "inputFieldName", targetNamespace = "")
@@ -310,8 +310,8 @@ public interface OpenboxSF5 {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getSatellitesByArbitraryFilter", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetSatellitesByArbitraryFilter")
     @ResponseWrapper(localName = "getSatellitesByArbitraryFilterResponse", targetNamespace = "http://wsmodel.sf5.openbox.org/", className = "org.openbox.sf5.wsmodel.GetSatellitesByArbitraryFilterResponse")
-    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSatellitesByArbitraryFilterRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSatellitesByArbitraryFilterResponse", fault = {
-        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5/getSatellitesByArbitraryFilter/Fault/WSException")
+    @Action(input = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSatellitesByArbitraryFilterRequest", output = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSatellitesByArbitraryFilterResponse", fault = {
+        @FaultAction(className = WSException_Exception.class, value = "http://wsmodel.sf5.openbox.org/OpenboxSF5Impl/getSatellitesByArbitraryFilter/Fault/WSException")
     })
     public List<Satellites> getSatellitesByArbitraryFilter(
         @WebParam(name = "inputFieldName", targetNamespace = "")

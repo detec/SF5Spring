@@ -1,0 +1,413 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.2.10 svn-revision#919b322c92f13ad085a933e8dd6dd35d4947364b. --><xs:schema xmlns:tns="http://wsmodel.sf5.openbox.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://wsmodel.sf5.openbox.org/">
+
+<xs:element name="CheckVerifyFault" type="tns:WSException"/>
+
+<xs:element name="createSetting" type="tns:createSetting"/>
+
+<xs:element name="createSettingResponse" type="tns:createSettingResponse"/>
+
+<xs:element name="createUser" type="tns:createUser"/>
+
+<xs:element name="createUserResponse" type="tns:createUserResponse"/>
+
+<xs:element name="getAllSatellites" type="tns:getAllSatellites"/>
+
+<xs:element name="getAllSatellitesResponse" type="tns:getAllSatellitesResponse"/>
+
+<xs:element name="getSatelliteById" type="tns:getSatelliteById"/>
+
+<xs:element name="getSatelliteByIdResponse" type="tns:getSatelliteByIdResponse"/>
+
+<xs:element name="getSatellitesByArbitraryFilter" type="tns:getSatellitesByArbitraryFilter"/>
+
+<xs:element name="getSatellitesByArbitraryFilterResponse" type="tns:getSatellitesByArbitraryFilterResponse"/>
+
+<xs:element name="getSettingById" type="tns:getSettingById"/>
+
+<xs:element name="getSettingByIdResponse" type="tns:getSettingByIdResponse"/>
+
+<xs:element name="getSettingsByArbitraryFilter" type="tns:getSettingsByArbitraryFilter"/>
+
+<xs:element name="getSettingsByArbitraryFilterResponse" type="tns:getSettingsByArbitraryFilterResponse"/>
+
+<xs:element name="getSettingsByUserLogin" type="tns:getSettingsByUserLogin"/>
+
+<xs:element name="getSettingsByUserLoginResponse" type="tns:getSettingsByUserLoginResponse"/>
+
+<xs:element name="getTransponderById" type="tns:getTransponderById"/>
+
+<xs:element name="getTransponderByIdResponse" type="tns:getTransponderByIdResponse"/>
+
+<xs:element name="getTransponders" type="tns:getTransponders"/>
+
+<xs:element name="getTranspondersByArbitraryFilter" type="tns:getTranspondersByArbitraryFilter"/>
+
+<xs:element name="getTranspondersByArbitraryFilterResponse" type="tns:getTranspondersByArbitraryFilterResponse"/>
+
+<xs:element name="getTranspondersBySatelliteId" type="tns:getTranspondersBySatelliteId"/>
+
+<xs:element name="getTranspondersBySatelliteIdResponse" type="tns:getTranspondersBySatelliteIdResponse"/>
+
+<xs:element name="getTranspondersResponse" type="tns:getTranspondersResponse"/>
+
+<xs:element name="getUserByLogin" type="tns:getUserByLogin"/>
+
+<xs:element name="getUserByLoginResponse" type="tns:getUserByLoginResponse"/>
+
+<xs:element name="ifSuchLoginExists" type="tns:ifSuchLoginExists"/>
+
+<xs:element name="ifSuchLoginExistsResponse" type="tns:ifSuchLoginExistsResponse"/>
+
+<xs:element name="satellite" type="tns:satellites"/>
+
+<xs:element name="settings" type="tns:settings"/>
+
+<xs:element name="settingsConversion" type="tns:settingsConversion"/>
+
+<xs:element name="settingsSatellites" type="tns:settingsSatellites"/>
+
+<xs:element name="transponders" type="tns:transponders"/>
+
+<xs:element name="users" type="tns:users"/>
+
+<xs:element name="usersauthorities" type="tns:usersauthorities"/>
+
+<xs:complexType name="createSetting">
+<xs:sequence>
+<xs:element name="arg0" type="tns:settings" minOccurs="0"/>
+<xs:element name="inputLogin" type="xs:string" minOccurs="0"/>
+<xs:element name="arg2" type="tns:uriComponentsBuilder" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="settings">
+<xs:complexContent>
+<xs:extension base="tns:abstractDbEntity">
+<xs:sequence>
+<xs:element name="conversion" type="tns:settingsConversion" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="id" type="xs:long"/>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="satellites" type="tns:settingsSatellites" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="theLastEntry" type="tns:timestamp" minOccurs="0"/>
+<xs:element name="user" type="tns:users" minOccurs="0"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="abstractDbEntity" abstract="true">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="settingsConversion">
+<xs:complexContent>
+<xs:extension base="tns:abstractDbEntity">
+<xs:sequence>
+<xs:element name="id" type="xs:long"/>
+<xs:element name="lineNumber" type="xs:long"/>
+<xs:element name="note" type="xs:string" minOccurs="0"/>
+<xs:element name="satindex" type="xs:long"/>
+<xs:element name="theLineOfIntersection" type="xs:long"/>
+<xs:element name="tpindex" type="xs:long"/>
+<xs:element name="transponder" type="tns:transponders" minOccurs="0"/>
+<xs:element name="parent_id" type="tns:settings" minOccurs="0"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="transponders">
+<xs:complexContent>
+<xs:extension base="tns:abstractDbEntity">
+<xs:sequence>
+<xs:element name="carrier" type="tns:carrierFrequency" minOccurs="0"/>
+<xs:element name="FEC" type="tns:typesOfFEC" minOccurs="0"/>
+<xs:element name="frequency" type="xs:long"/>
+<xs:element name="id" type="xs:long"/>
+<xs:element name="polarization" type="tns:polarization" minOccurs="0"/>
+<xs:element name="rangeOfDVB" type="tns:rangesOfDVB" minOccurs="0"/>
+<xs:element name="satellite" type="tns:satellites" minOccurs="0"/>
+<xs:element name="speed" type="xs:long"/>
+<xs:element name="versionOfTheDVB" type="tns:dvbStandards" minOccurs="0"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="satellites">
+<xs:complexContent>
+<xs:extension base="tns:abstractDbEntity">
+<xs:sequence>
+<xs:element name="id" type="xs:long"/>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="settingsSatellites">
+<xs:complexContent>
+<xs:extension base="tns:abstractDbEntity">
+<xs:sequence>
+<xs:element name="id" type="xs:long"/>
+<xs:element name="lineNumber" type="xs:long"/>
+<xs:element name="satellite" type="tns:satellites" minOccurs="0"/>
+<xs:element name="parent_id" type="tns:settings" minOccurs="0"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="timestamp">
+<xs:sequence>
+<xs:element name="nanos" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="users">
+<xs:complexContent>
+<xs:extension base="tns:abstractDbEntity">
+<xs:sequence>
+<xs:element name="id" type="xs:long"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="Password" type="xs:string" minOccurs="0"/>
+<xs:element name="enabled" type="xs:boolean"/>
+<xs:element name="authorities" type="tns:usersauthorities" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="usersauthorities">
+<xs:complexContent>
+<xs:extension base="tns:abstractDbEntity">
+<xs:sequence>
+<xs:element name="id" type="xs:long"/>
+<xs:element name="parent_id" type="tns:users" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="LineNumber" type="xs:long"/>
+<xs:element name="authority" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="uriComponentsBuilder">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="createSettingResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:long"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="WSException">
+<xs:sequence>
+<xs:element name="errorCode" type="xs:int"/>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getTransponders">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="getTranspondersResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:transponders" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getSettingsByArbitraryFilter">
+<xs:sequence>
+<xs:element name="inputFieldName" type="xs:string" minOccurs="0"/>
+<xs:element name="inputFieldValue" type="xs:string" minOccurs="0"/>
+<xs:element name="inputLogin" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getSettingsByArbitraryFilterResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:settings" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getTranspondersByArbitraryFilter">
+<xs:sequence>
+<xs:element name="inputFieldName" type="xs:string" minOccurs="0"/>
+<xs:element name="inputFieldValue" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getTranspondersByArbitraryFilterResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:transponders" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getSettingsByUserLogin">
+<xs:sequence>
+<xs:element name="inputLogin" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getSettingsByUserLoginResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:settings" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="createUser">
+<xs:sequence>
+<xs:element name="inputUser" type="tns:users" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="createUserResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:long"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ifSuchLoginExists">
+<xs:sequence>
+<xs:element name="inputLogin" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ifSuchLoginExistsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getAllSatellites">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="getAllSatellitesResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:satellites" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getTransponderById">
+<xs:sequence>
+<xs:element name="inputTransponderId" type="xs:long"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getTransponderByIdResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:transponders" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getSatellitesByArbitraryFilter">
+<xs:sequence>
+<xs:element name="inputFieldName" type="xs:string" minOccurs="0"/>
+<xs:element name="inputFieldValue" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getSatellitesByArbitraryFilterResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:satellites" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getSatelliteById">
+<xs:sequence>
+<xs:element name="inputSatelliteId" type="xs:long"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getSatelliteByIdResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:satellites" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getSettingById">
+<xs:sequence>
+<xs:element name="inputSettingId" type="xs:long"/>
+<xs:element name="inputLogin" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getSettingByIdResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:settings" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUserByLogin">
+<xs:sequence>
+<xs:element name="inputLogin" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUserByLoginResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:users" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getTranspondersBySatelliteId">
+<xs:sequence>
+<xs:element name="inputSatId" type="xs:long"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getTranspondersBySatelliteIdResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:transponders" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="carrierFrequency">
+<xs:restriction base="xs:string">
+<xs:enumeration value="Lower"/>
+<xs:enumeration value="Top"/>
+<xs:enumeration value="CRange"/>
+<xs:enumeration value="TopPie"/>
+</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="typesOfFEC">
+<xs:restriction base="xs:string">
+<xs:enumeration value="_12"/>
+<xs:enumeration value="_23"/>
+<xs:enumeration value="_34"/>
+<xs:enumeration value="_56"/>
+<xs:enumeration value="_78"/>
+<xs:enumeration value="_89"/>
+<xs:enumeration value="_91"/>
+<xs:enumeration value="_35"/>
+</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="polarization">
+<xs:restriction base="xs:string">
+<xs:enumeration value="H"/>
+<xs:enumeration value="L"/>
+<xs:enumeration value="R"/>
+<xs:enumeration value="V"/>
+</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="rangesOfDVB">
+<xs:restriction base="xs:string">
+<xs:enumeration value="Ku"/>
+<xs:enumeration value="C"/>
+</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="dvbStandards">
+<xs:restriction base="xs:string">
+<xs:enumeration value="DVBS"/>
+<xs:enumeration value="DVBS2"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>

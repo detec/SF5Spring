@@ -61,7 +61,7 @@ public class OpenboxSF5Service extends Service {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return returns IOpenboxSF5
 	 */
 	@WebEndpoint(name = "IOpenboxSF5Port")
@@ -70,7 +70,7 @@ public class OpenboxSF5Service extends Service {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param features
 	 *            A list of {@link javax.xml.ws.WebServiceFeature} to configure
 	 *            on the proxy. Supported features not in the
@@ -80,7 +80,7 @@ public class OpenboxSF5Service extends Service {
 	 */
 	@WebEndpoint(name = "IOpenboxSF5Port")
 	public IOpenboxSF5 getIOpenboxSF5Port(WebServiceFeature... features) {
-		return super.getPort(new QName("http://wsmodel.sf5.openbox.org/", "IOpenboxSF5Port"), IOpenboxSF5.class,
+		return super.getPort(new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5Port"), IOpenboxSF5.class,
 				features);
 	}
 

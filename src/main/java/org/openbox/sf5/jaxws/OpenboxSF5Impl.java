@@ -29,23 +29,28 @@ import org.springframework.web.util.UriComponentsBuilder;
 // http://www.mkyong.com/webservices/jax-ws/jax-ws-spring-integration-example/
 // About Ws-annotations
 
-@WebService(name = "OpenboxSF5", targetNamespace = "http://wsmodel.sf5.openbox.org/") // model
-																						// -
-																						// to
-																						// generate
-																						// test
-																						// stub
-																						// classes
-																						// into
-																						// logically
-																						// nice
-																						// package
+@WebService(name = "OpenboxSF5",
+
+targetNamespace = "http://wsmodel.sf5.openbox.org/") // model
+														// -
+														// to
+														// generate
+														// test
+														// stub
+														// classes
+														// into
+														// logically
+														// nice
+														// package
 // @SOAPBinding(style = Style.RPC) // to make definition shorter but it makes
 // endpoint '' problem
 // http://stackoverflow.com/questions/18513333/spring-mvc-app-with-soap-web-service-using-wsspringservlet
 // https://bthurley.wordpress.com/2014/04/27/web-services-with-jax-ws-jaxb-and-spring/
 @Component("OpenboxSF5")
-public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpenboxSF5 {
+public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
+// implements IOpenboxSF5
+
+{
 
 	/*
 	 * (non-Javadoc)
@@ -53,7 +58,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 * @see
 	 * org.openbox.sf5.jaxws.IOpenboxSF5#createUser(org.openbox.sf5.model.Users)
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public long createUser(@WebParam(name = "inputUser") org.openbox.sf5.model.Users user) throws WSException {
@@ -77,7 +82,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 * @see
 	 * org.openbox.sf5.jaxws.IOpenboxSF5#ifSuchLoginExists(java.lang.String)
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	public boolean ifSuchLoginExists(@WebParam(name = "inputLogin") String login) throws WSException {
 
@@ -100,7 +105,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 *
 	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getUserByLogin(java.lang.String)
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_ADMIN') or (#login  == authentication.name)")
 	public org.openbox.sf5.model.Users getUserByLogin(@WebParam(name = "inputLogin") String login) throws WSException {
@@ -121,7 +126,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 * org.openbox.sf5.jaxws.IOpenboxSF5#getTranspondersByArbitraryFilter(java.
 	 * lang.String, java.lang.String)
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	public List<org.openbox.sf5.model.Transponders> getTranspondersByArbitraryFilter(
 			@WebParam(name = "inputFieldName") String fieldName, @WebParam(name = "inputFieldValue") String typeValue)
@@ -140,7 +145,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 *
 	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getTransponderById(long)
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	public org.openbox.sf5.model.Transponders getTransponderById(@WebParam(name = "inputTransponderId") long tpId)
 			throws WSException {
@@ -156,7 +161,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 *
 	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getTranspondersBySatelliteId(long)
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	public List<org.openbox.sf5.model.Transponders> getTranspondersBySatelliteId(
 			@WebParam(name = "inputSatId") long satId) throws WSException {
@@ -174,7 +179,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 *
 	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getTransponders()
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	public List<org.openbox.sf5.model.Transponders> getTransponders() throws WSException {
 		ResponseEntity<List<Transponders>> RSResponse = transpondersService.getTransponders();
@@ -193,7 +198,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 * Settings, java.lang.String,
 	 * org.springframework.web.util.UriComponentsBuilder)
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public long createSetting(org.openbox.sf5.model.Settings setting, @WebParam(name = "inputLogin") String login,
@@ -216,7 +221,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getSettingsByUserLogin(java.lang.
 	 * String)
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public List<org.openbox.sf5.model.Settings> getSettingsByUserLogin(@WebParam(name = "inputLogin") String login)
@@ -236,7 +241,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 * org.openbox.sf5.jaxws.IOpenboxSF5#getSettingsByArbitraryFilter(java.lang.
 	 * String, java.lang.String, java.lang.String)
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public List<org.openbox.sf5.model.Settings> getSettingsByArbitraryFilter(
@@ -257,7 +262,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getSettingById(long,
 	 * java.lang.String)
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public org.openbox.sf5.model.Settings getSettingById(@WebParam(name = "inputSettingId") long settingId,
@@ -276,7 +281,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 *
 	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getAllSatellites()
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	public List<org.openbox.sf5.model.Satellites> getAllSatellites() throws WSException {
 		ResponseEntity<List<Satellites>> RSResponse = satellitesService.getAllSatellites();
@@ -295,7 +300,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 * org.openbox.sf5.jaxws.IOpenboxSF5#getSatellitesByArbitraryFilter(java.
 	 * lang.String, java.lang.String)
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	public List<org.openbox.sf5.model.Satellites> getSatellitesByArbitraryFilter(
 			@WebParam(name = "inputFieldName") String fieldName, @WebParam(name = "inputFieldValue") String typeValue)
@@ -315,7 +320,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport implements IOpen
 	 *
 	 * @see org.openbox.sf5.jaxws.IOpenboxSF5#getSatelliteById(long)
 	 */
-	@Override
+	// @Override
 	@WebMethod
 	public org.openbox.sf5.model.Satellites getSatelliteById(@WebParam(name = "inputSatelliteId") long satId)
 			throws WSException {

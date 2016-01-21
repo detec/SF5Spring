@@ -173,7 +173,7 @@ declared explicitly so Spring config files can be placed next to their correspon
         </configuration>
 	</plugin>
  		
-<!--  	<plugin>
+ <!-- 	<plugin>
     	<groupId>org.jvnet.jax-ws-commons</groupId>
         <artifactId>jaxws-maven-plugin</artifactId>
         <version>2.3</version>
