@@ -5,14 +5,15 @@ import java.net.PasswordAuthentication;
 
 // https://numberformat.wordpress.com/2013/01/31/generating-and-using-web-service-clients-using-wsimport-and-jax-ws/
 
-public class DigestAuthenticator extends Authenticator {
+public class BasicAuthenticator extends Authenticator {
 	private final String user;
 
 	private final String password;
 
-	public DigestAuthenticator(String user, String password) {
+	public BasicAuthenticator(String user, String password) {
 		this.user = user;
 		this.password = password;
+
 	}
 
 	@Override

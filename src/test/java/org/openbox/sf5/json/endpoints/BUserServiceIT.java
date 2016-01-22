@@ -24,7 +24,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@ContextConfiguration(locations = { "file:src/main/resources/spring/root-context.xml" })
+@ContextConfiguration(locations = { "file:src/main/resources/spring/autowired-beans.xml" })
 @WebAppConfiguration
 public class BUserServiceIT extends AbstractServiceTest {
 

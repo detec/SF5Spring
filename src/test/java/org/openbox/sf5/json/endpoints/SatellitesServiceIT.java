@@ -24,7 +24,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "file:src/main/resources/spring/root-context.xml" })
+@ContextConfiguration(locations = { "file:src/main/resources/spring/autowired-beans.xml" })
 @WebAppConfiguration
 public class SatellitesServiceIT extends AbstractServiceTest {
 

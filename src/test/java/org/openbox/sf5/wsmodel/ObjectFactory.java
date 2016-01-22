@@ -357,14 +357,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UriComponentsBuilder }
-     * 
-     */
-    public UriComponentsBuilder createUriComponentsBuilder() {
-        return new UriComponentsBuilder();
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetSettingByIdResponse }{@code >}}
      * 
      */

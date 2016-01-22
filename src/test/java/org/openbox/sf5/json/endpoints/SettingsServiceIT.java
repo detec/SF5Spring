@@ -43,7 +43,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@ContextConfiguration(locations = { "file:src/main/resources/spring/root-context.xml" })
+@ContextConfiguration(locations = { "file:src/main/resources/spring/autowired-beans.xml" })
 @WebAppConfiguration
 public class SettingsServiceIT extends AbstractServiceTest {
 

@@ -1,4 +1,4 @@
-package org.openbox.sf5.json;
+package org.openbox.sf5.json.exceptions;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,4 +24,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
 	}
 
+	@ExceptionHandler(value = { NotAuthenticatedException.class })
+	protected ResponseEntity<Object> handleNotAuthenticatedException(RuntimeException ex, WebRequest request) {
+		String bodyOfResponse = ex.getMessage();
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
+
+	}
+
+	@ExceptionHandler(value = { UsersDoNotCoincideException.class })
+	protected ResponseEntity<Object> handleDifferentUser(RuntimeException ex, WebRequest request) {
+		String bodyOfResponse = ex.getMessage();
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE, request);
+	}
 }

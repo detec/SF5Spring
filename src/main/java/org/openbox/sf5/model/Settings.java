@@ -54,6 +54,7 @@ public class Settings extends AbstractDbEntity implements Serializable {
 		this.Name = Name;
 	}
 
+	@JsonProperty("Name")
 	public String getName() {
 		return Name;
 	}
@@ -79,6 +80,7 @@ public class Settings extends AbstractDbEntity implements Serializable {
 	@XmlJavaTypeAdapter(TimestampAdapter.class)
 	private Timestamp TheLastEntry;
 
+	@JsonProperty("TheLastEntry")
 	public Timestamp getTheLastEntry() {
 		return TheLastEntry;
 	}
@@ -93,6 +95,7 @@ public class Settings extends AbstractDbEntity implements Serializable {
 	@JsonProperty("User")
 	private Users User;
 
+	@JsonProperty("User")
 	public Users getUser() {
 		return User;
 	}
@@ -108,6 +111,7 @@ public class Settings extends AbstractDbEntity implements Serializable {
 	@JsonManagedReference
 	private List<SettingsConversion> Conversion = new ArrayList<SettingsConversion>();
 
+	@JsonProperty("Conversion")
 	public List<SettingsConversion> getConversion() {
 		return Conversion;
 	}
@@ -122,6 +126,7 @@ public class Settings extends AbstractDbEntity implements Serializable {
 	@JsonProperty("Satellites")
 	private List<SettingsSatellites> Satellites;
 
+	@JsonProperty("Satellites")
 	public List<SettingsSatellites> getSatellites() {
 		return Satellites;
 	}

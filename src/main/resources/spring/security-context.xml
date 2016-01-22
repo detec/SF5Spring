@@ -107,12 +107,34 @@ So when specifying patterns in action-based frameworks we should use only **
         
  </security:http>
  
+ 
+<!-- http://stackoverflow.com/questions/2952196/learning-ant-path-style
+Ant-style path patterns matching in spring-framework
+•? matches one character
+•* matches zero or more characters
+•** matches zero or more 'directories' in a path
+
+
+ --> 
+<!-- 		entry-point-ref="digestEntryPoint"  
+
+Since JAX-WS RI doesn't support digest authentication, we will use basic.
+--> 
 <!-- Exception for JAX-WS --> 
-<security:http pattern="/${jaxws.path}/**" name="JAXWSDigetsAuthentication" create-session="stateless" entry-point-ref="digestEntryPoint" use-expressions="true">
+<security:http pattern="/${jaxws.path}/**" name="JAXWSBasicAuthentication" create-session="stateless" 
+		
+		use-expressions="true"
+		request-matcher="ant">
+		
+		<security:http-basic />
+		
     	<!-- We do not need sessions in stateless REST API -->
     	<security:csrf disabled="true"/>
-    	<security:custom-filter ref="digestFilter" before="FORM_LOGIN_FILTER" />
-    	<security:anonymous enabled="true"/>
+<!--     	<security:custom-filter ref="digestFilter" before="FORM_LOGIN_FILTER" /> -->
+    	
+    	<!-- In order to activate digest authenticator at client -->
+<!--     	<security:intercept-url pattern="*OpenboxSF5Service?wsdl" access="hasRole('ROLE_USER')"/> -->
+<!--     	<security:anonymous enabled="true"/> -->
     	 
  </security:http>
  

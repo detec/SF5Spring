@@ -14,6 +14,8 @@ import org.openbox.sf5.json.endpoints.SatellitesService;
 import org.openbox.sf5.json.endpoints.SettingsService;
 import org.openbox.sf5.json.endpoints.TranspondersService;
 import org.openbox.sf5.json.endpoints.UsersService;
+import org.openbox.sf5.json.exceptions.NotAuthenticatedException;
+import org.openbox.sf5.json.exceptions.UsersDoNotCoincideException;
 import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.Transponders;
@@ -62,7 +64,12 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public long createUser(@WebParam(name = "inputUser") org.openbox.sf5.model.Users user) throws WSException {
-		ResponseEntity<Long> RSResponse = usersService.createUser(user);
+		ResponseEntity<Long> RSResponse = null;
+		try {
+			RSResponse = usersService.createUser(user);
+		} catch (Exception e) {
+			throw new WSException("Error saving new user to database", e, RSResponse.getStatusCode().value());
+		}
 
 		// RSResponse.
 		boolean isError = CheckIfThereIsErrorInResponse(RSResponse);
@@ -107,7 +114,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	 */
 	// @Override
 	@WebMethod
-	@PreAuthorize("hasRole('ROLE_ADMIN') or (#login  == authentication.name)")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or (#login == authentication.name)")
 	public org.openbox.sf5.model.Users getUserByLogin(@WebParam(name = "inputLogin") String login) throws WSException {
 
 		ResponseEntity<org.openbox.sf5.model.Users> RSResponse = usersService.getUserByLogin(login);
@@ -201,9 +208,16 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	// @Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public long createSetting(org.openbox.sf5.model.Settings setting, @WebParam(name = "inputLogin") String login,
-			UriComponentsBuilder ucBuilder) throws WSException {
-		ResponseEntity<Long> RSResponse = settingsService.createSetting(setting, ucBuilder);
+	public long createSetting(@WebParam(name = "inputSetting") org.openbox.sf5.model.Settings setting)
+			throws WSException {
+		ResponseEntity<Long> RSResponse = null;
+		try {
+			RSResponse = settingsService.createSetting(setting, ucBuilder);
+		} catch (NotAuthenticatedException e) {
+			throw new WSException("Failed to authenticate!", e);
+		} catch (UsersDoNotCoincideException e) {
+			throw new WSException("Users do not coincide!!", e);
+		}
 		boolean isError = CheckIfThereIsErrorInResponse(RSResponse);
 		if (isError) {
 			return 0;
@@ -226,7 +240,12 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public List<org.openbox.sf5.model.Settings> getSettingsByUserLogin(@WebParam(name = "inputLogin") String login)
 			throws WSException {
-		ResponseEntity<List<Settings>> RSResponse = settingsService.getSettingsByUserLogin();
+		ResponseEntity<List<Settings>> RSResponse = null;
+		try {
+			RSResponse = settingsService.getSettingsByUserLogin();
+		} catch (NotAuthenticatedException e) {
+			throw new WSException("Failed to authenticate!", e);
+		}
 		CheckIfThereIsErrorInResponse(RSResponse);
 
 		List<org.openbox.sf5.model.Settings> settList = RSResponse.getBody();
@@ -245,10 +264,15 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public List<org.openbox.sf5.model.Settings> getSettingsByArbitraryFilter(
-			@WebParam(name = "inputFieldName") String fieldName, @WebParam(name = "inputFieldValue") String typeValue,
-			@WebParam(name = "inputLogin") String login) throws WSException {
+			@WebParam(name = "inputFieldName") String fieldName, @WebParam(name = "inputFieldValue") String typeValue)
+					throws WSException {
 
-		ResponseEntity<List<Settings>> RSResponse = settingsService.getSettingsByArbitraryFilter(fieldName, typeValue);
+		ResponseEntity<List<Settings>> RSResponse = null;
+		try {
+			RSResponse = settingsService.getSettingsByArbitraryFilter(fieldName, typeValue);
+		} catch (NotAuthenticatedException e) {
+			throw new WSException("Failed to authenticate!", e);
+		}
 		CheckIfThereIsErrorInResponse(RSResponse);
 
 		List<org.openbox.sf5.model.Settings> settList = RSResponse.getBody();
@@ -265,10 +289,15 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	// @Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public org.openbox.sf5.model.Settings getSettingById(@WebParam(name = "inputSettingId") long settingId,
-			@WebParam(name = "inputLogin") String login) throws WSException {
+	public org.openbox.sf5.model.Settings getSettingById(@WebParam(name = "inputSettingId") long settingId)
+			throws WSException {
 
-		ResponseEntity<Settings> RSResponse = settingsService.getSettingById(settingId);
+		ResponseEntity<Settings> RSResponse = null;
+		try {
+			RSResponse = settingsService.getSettingById(settingId);
+		} catch (NotAuthenticatedException e) {
+			throw new WSException("Failed to get setting by id!", e);
+		}
 		CheckIfThereIsErrorInResponse(RSResponse);
 
 		org.openbox.sf5.model.Settings setting = RSResponse.getBody();
@@ -411,5 +440,8 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	public OpenboxSF5Impl() {
 
 	}
+
+	@Autowired
+	UriComponentsBuilder ucBuilder;
 
 }

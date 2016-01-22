@@ -9,16 +9,20 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
 import org.openbox.sf5.json.common.BuildTestSetting;
 import org.openbox.sf5.wsmodel.Settings;
 import org.openbox.sf5.wsmodel.Transponders;
 import org.openbox.sf5.wsmodel.Users;
 import org.openbox.sf5.wsmodel.WSException_Exception;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-@RunWith(JUnit4.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@ContextConfiguration(locations = { "file:src/main/resources/spring/autowired-beans.xml" })
+@WebAppConfiguration
 public class SettingsServiceIT extends AbstractWSTest {
 
 	@Test
@@ -39,7 +43,7 @@ public class SettingsServiceIT extends AbstractWSTest {
 
 		long newSettID = 0;
 		try {
-			newSettID = SF5Port.createSetting(setting, testUsername, null);
+			newSettID = SF5Port.createSetting(setting);
 		} catch (WSException_Exception e) {
 			e.printStackTrace();
 		}
@@ -48,7 +52,7 @@ public class SettingsServiceIT extends AbstractWSTest {
 
 		Settings settingRead = null;
 		try {
-			settingRead = SF5Port.getSettingById(newSettID, testUsername);
+			settingRead = SF5Port.getSettingById(newSettID);
 		} catch (WSException_Exception e) {
 			e.printStackTrace();
 		}

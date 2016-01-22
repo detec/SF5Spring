@@ -18,7 +18,6 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="inputFieldName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="inputFieldValue" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="inputLogin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -30,14 +29,12 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "getSettingsByArbitraryFilter", propOrder = {
     "inputFieldName",
-    "inputFieldValue",
-    "inputLogin"
+    "inputFieldValue"
 })
 public class GetSettingsByArbitraryFilter {
 
     protected String inputFieldName;
     protected String inputFieldValue;
-    protected String inputLogin;
 
     /**
      * Gets the value of the inputFieldName property.
@@ -85,30 +82,6 @@ public class GetSettingsByArbitraryFilter {
      */
     public void setInputFieldValue(String value) {
         this.inputFieldValue = value;
-    }
-
-    /**
-     * Gets the value of the inputLogin property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getInputLogin() {
-        return inputLogin;
-    }
-
-    /**
-     * Sets the value of the inputLogin property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setInputLogin(String value) {
-        this.inputLogin = value;
     }
 
 }

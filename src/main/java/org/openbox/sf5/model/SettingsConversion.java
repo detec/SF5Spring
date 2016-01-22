@@ -63,6 +63,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	@JsonProperty("Transponder")
 	private Transponders Transponder;
 
+	@JsonProperty("Transponder")
 	public Transponders getTransponder() {
 		return Transponder;
 	}
@@ -75,6 +76,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	@JsonProperty("Satindex")
 	private long Satindex;
 
+	@JsonProperty("Satindex")
 	public long getSatindex() {
 		return Satindex;
 	}
@@ -87,6 +89,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	@JsonProperty("Tpindex")
 	private long Tpindex;
 
+	@JsonProperty("Tpindex")
 	public long getTpindex() {
 		return Tpindex;
 	}
@@ -99,6 +102,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	@JsonProperty("Note")
 	private String Note;
 
+	@JsonProperty("Note")
 	public String getNote() {
 		return Note;
 	}
@@ -111,6 +115,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	@JsonProperty("TheLineOfIntersection")
 	private long TheLineOfIntersection;
 
+	@JsonProperty("TheLineOfIntersection")
 	public long getTheLineOfIntersection() {
 		return TheLineOfIntersection;
 	}
@@ -127,6 +132,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 		this.parent_id = parent_id;
 	}
 
+	@JsonProperty("LineNumber")
 	public long getLineNumber() {
 		return LineNumber;
 	}

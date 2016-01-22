@@ -133,8 +133,15 @@ public class Users extends AbstractDbEntity implements Serializable {
 			return false;
 		}
 		Users otherUsers = (Users) other;
-		if (otherUsers.username.equals(username) && otherUsers.Password.equals(Password)
-				&& otherUsers.enabled == enabled && otherUsers.authorities.equals(authorities)) {
+		if
+
+		// (otherUsers.username.equals(username) &&
+		// otherUsers.Password.equals(Password)
+		// && otherUsers.enabled == enabled &&
+		// otherUsers.authorities.equals(authorities))
+
+		// let's compare only by username
+		(otherUsers.username.equals(username)) {
 			return true;
 		} else {
 			return false;

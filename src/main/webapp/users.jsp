@@ -20,7 +20,7 @@ th, td {
 </head>
 <body>
 <h2>Openbox SF5 settings editor</h2>
-<h3>Users list</h3>
+<h3>Users</h3>
  <c:if test="${not empty viewMsg}" >
 	<div style="color:#408080;"> ${viewMsg}</div>
 </c:if>
