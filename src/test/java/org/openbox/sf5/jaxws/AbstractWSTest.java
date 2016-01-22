@@ -25,9 +25,9 @@ public abstract class AbstractWSTest {
 
 	public static final String appLocation = "http://localhost:8080/";
 
-	public String testUsername = "ITUserWS";
+	public final String testUsername = "ITUserWS";
 
-	public String testUserPassword = "Test123";
+	public final String testUserPassword = "Test123";
 
 	public Logger LOGGER = Logger.getLogger(getClass().getName());
 
@@ -59,12 +59,15 @@ public abstract class AbstractWSTest {
 
 		SF5Port = SF5Service.getOpenboxSF5Port();
 
-		BasicAuthenticator auth = new BasicAuthenticator(this.testUsername, this.testUserPassword);
+		BasicAuthenticator auth = new BasicAuthenticator(testUsername, testUserPassword);
 		Authenticator.setDefault(auth);
 
 		BindingProvider bp = (BindingProvider) SF5Port;
 		bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, "username");
 		bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, "password");
+
+//		bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, testUsername);
+//		bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, testUserPassword);
 
 	}
 

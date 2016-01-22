@@ -57,7 +57,9 @@ public class BUsersServiceIT extends AbstractWSTest {
 		Usersauthorities checkRoleUser = new Usersauthorities();
 		checkRoleUser.setAuthority("ROLE_USER");
 		checkRoleUser.setParentId(testUser);
-		checkRoleUser.setUsername(testUserPassword);
+		checkRoleUser.setUsername(testUsername);
+		checkRoleUser.setLineNumber(1);
+
 		rolesList.add(checkRoleUser);
 		testUser.getAuthorities().addAll(rolesList);
 
@@ -79,6 +81,20 @@ public class BUsersServiceIT extends AbstractWSTest {
 			assertTrue(e instanceof WSException_Exception);
 		}
 
+	}
+
+	@Test
+	public void shouldGetUserAsItself() throws Exception {
+		this.setUpAbstract();
+
+		Users testUser = null;
+		try {
+			testUser = SF5Port.getUserByLogin(testUsername);
+		} catch (WSException_Exception e) {
+
+			e.printStackTrace();
+		}
+		assertThat(testUser).isNotNull();
 	}
 
 	@Before

@@ -38,8 +38,27 @@ It is in root context
 	<property name="nonceValiditySeconds" value="60"/>
 </bean>
 
-<bean id="expressionHandler" class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"/>
+<bean id="expressionHandler" 
+	class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"/>
 
+
+<!-- http://docs.spring.io/spring-security/site/docs/4.0.3.RELEASE/reference/htmlsingle/#basic-processing-filter -->
+
+<bean id="basicAuthenticationEntryPoint"
+	class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
+	<property name="realmName" value="SF-5 Realm"/>
+</bean>
+
+
+<!-- http://docs.spring.io/spring-security/site/migrate/current/3-to-4/html5/migrate-3-to-4-xml.html -->
+<bean id="basicAuthenticationFilter"
+	class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
+<!-- 	<property name="authenticationManager" ref="authenticationManager"/>
+	<property name="authenticationEntryPoint" ref="basicAuthenticationEntryPoint"/> -->
+		<constructor-arg ref="authenticationManager"/>
+		<constructor-arg ref="basicAuthenticationEntryPoint"/>
+	<property name="credentialsCharset" value="UTF-8"/>
+</bean>
 
 <!-- http://docs.spring.io/spring-security/site/docs/4.0.3.RELEASE/reference/htmlsingle/#el-access -->
 
@@ -122,7 +141,7 @@ Since JAX-WS RI doesn't support digest authentication, we will use basic.
 --> 
 <!-- Exception for JAX-WS --> 
 <security:http pattern="/${jaxws.path}/**" name="JAXWSBasicAuthentication" create-session="stateless" 
-		
+		entry-point-ref="basicAuthenticationEntryPoint"
 		use-expressions="true"
 		request-matcher="ant">
 		

@@ -115,6 +115,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	// @Override
 	@WebMethod
 	@PreAuthorize("hasRole('ROLE_ADMIN') or (#login == authentication.name)")
+	// @PreAuthorize("hasRole('USER')")
 	public org.openbox.sf5.model.Users getUserByLogin(@WebParam(name = "inputLogin") String login) throws WSException {
 
 		ResponseEntity<org.openbox.sf5.model.Users> RSResponse = usersService.getUserByLogin(login);
@@ -216,7 +217,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 		} catch (NotAuthenticatedException e) {
 			throw new WSException("Failed to authenticate!", e);
 		} catch (UsersDoNotCoincideException e) {
-			throw new WSException("Users do not coincide!!", e);
+			throw new WSException(e.getMessage(), e);
 		}
 		boolean isError = CheckIfThereIsErrorInResponse(RSResponse);
 		if (isError) {
