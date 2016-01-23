@@ -68,7 +68,7 @@ public class BUserServiceIT extends AbstractServiceTest {
 	public void shouldCheckCreateTestLogin() {
 		Response response = null;
 
-		Invocation.Builder invocationBuilder = serviceTarget.path("exists").path("username").path(this.testUsername)
+		Invocation.Builder invocationBuilder = serviceTarget.path("exists").path("username").path(testUsername)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
 
@@ -78,16 +78,43 @@ public class BUserServiceIT extends AbstractServiceTest {
 
 		// here we create user
 		List<Usersauthorities> rolesList = new ArrayList<>();
-		Users testUser = new Users(this.testUsername, this.testUserPassword, true, rolesList);
+		Users testUser = new Users(testUsername, testUserPassword, true, rolesList);
 
 		// ROLE_USER
-		Usersauthorities checkRoleUser = new Usersauthorities(this.testUsername, "ROLE_USER", testUser, 1);
+		Usersauthorities checkRoleUser = new Usersauthorities(testUsername, "ROLE_USER", testUser, 1);
 		rolesList.add(checkRoleUser);
 		testUser.authorities = rolesList;
 
 		invocationBuilder = serviceTarget.path("create").request(MediaType.APPLICATION_JSON);
 		Response responsePost = invocationBuilder.post(Entity.entity(testUser, MediaType.APPLICATION_JSON));
 		assertEquals(Status.CREATED.getStatusCode(), responsePost.getStatus());
+	}
+
+	@Test
+	public void shouldCheckCreateAnotherTestLoginXML() {
+		Response response = null;
+
+		Invocation.Builder invocationBuilder = serviceTarget.path("exists").path("username").path(testUsername)
+				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+		response = invocationBuilder.get();
+
+		if (response.getStatus() == Status.ACCEPTED.getStatusCode()) {
+			return;
+		}
+
+		// here we create user
+		List<Usersauthorities> rolesList = new ArrayList<>();
+		Users testUser = new Users("fake", "123", true, rolesList);
+
+		// ROLE_USER
+		Usersauthorities checkRoleUser = new Usersauthorities("fake", "ROLE_USER", testUser, 1);
+		rolesList.add(checkRoleUser);
+		testUser.authorities = rolesList;
+
+		invocationBuilder = serviceTarget.path("create").request(MediaType.APPLICATION_XML);
+		Response responsePost = invocationBuilder.post(Entity.entity(testUser, MediaType.APPLICATION_XML));
+		assertEquals(Status.CREATED.getStatusCode(), responsePost.getStatus());
+
 	}
 
 }

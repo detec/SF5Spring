@@ -95,7 +95,9 @@ public class UserListController {
 			UsersList = listService.ObjectsList(Users.class);
 
 			model.addAttribute("users", UsersList);
-			return "users";
+			// return "users";
+			String returnAddress = "redirect:/users";
+			return returnAddress;
 		}
 
 		// first we must remove user's settings

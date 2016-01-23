@@ -70,8 +70,10 @@ th, td {
 
 <c:url var="transpondersUrl" value="/transponders" />
 <c:url var="settingsUrl" value="/settings/" />
+<c:url var="usersUrl" value="/users/" />
 <a href="${settingsUrl}">Settings</a>
 <a href="${transpondersUrl}">Transponders</a>
+<a href="${usersUrl}">Users</a>
 
  
  <form:form method="POST" action="logout">

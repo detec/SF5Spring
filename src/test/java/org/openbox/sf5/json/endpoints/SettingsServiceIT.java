@@ -51,7 +51,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 	private Users getTestUser() {
 		Invocation.Builder invocationBuilder = commonTarget.path("users").path("filter").path("username")
-				.path(this.testUsername).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+				.path(testUsername).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 
 		Response response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -64,7 +64,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 	private Users getTestUserXML() {
 		Invocation.Builder invocationBuilder = commonTarget.path("users").path("filter").path("username")
-				.path(this.testUsername).request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+				.path(testUsername).request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
 
 		Response response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());

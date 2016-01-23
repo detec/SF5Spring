@@ -30,7 +30,7 @@ public class BuildTestSetting {
 		List<SettingsConversion> scList = new ArrayList<>();
 
 		// filter up to 32 transponders
-		newTransList.stream().filter(t -> newTransList.indexOf(t) <= 31).forEach(t -> {
+		newTransList.stream().filter(t -> newTransList.indexOf(t) <= 32).forEach(t -> {
 			int currentIndex = newTransList.indexOf(t);
 			int currentNumber = currentIndex + 1;
 			int satIndex = (int) Math.ceil((double) currentNumber / 4);
@@ -71,7 +71,7 @@ public class BuildTestSetting {
 		List<org.openbox.sf5.wsmodel.SettingsConversion> scList = new ArrayList<>();
 
 		// filter up to 32 transponders
-		newTransList.stream().filter(t -> newTransList.indexOf(t) <= 31).forEach(t -> {
+		newTransList.stream().filter(t -> newTransList.indexOf(t) <= 32).forEach(t -> {
 			int currentIndex = newTransList.indexOf(t);
 			int currentNumber = currentIndex + 1;
 			int satIndex = (int) Math.ceil((double) currentNumber / 4);

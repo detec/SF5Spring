@@ -80,8 +80,14 @@ public class SettingsService {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("SettingId", Long.toString(setting.getId()));
+		// it can be called out of JAX-WS
+		try {
 		headers.setLocation(ucBuilder.path("/" + jaxRSPath + "/").path("usersettings/filter/id/{id}")
 				.buildAndExpand(setting.getId()).toUri());
+		}
+		catch (Exception e) {
+
+		}
 		return new ResponseEntity<Long>(new Long(setting.getId()), headers, HttpStatus.CREATED);
 	}
 
