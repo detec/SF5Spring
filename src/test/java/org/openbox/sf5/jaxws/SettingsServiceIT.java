@@ -26,7 +26,7 @@ import org.openbox.sf5.wsmodel.WSException_Exception;
 public class SettingsServiceIT extends AbstractWSTest {
 
 	@Test
-	public void shouldCreateAndGetSettingById() {
+	public void shouldCreateAndGetSettingById() throws WSException_Exception {
 		Users adminUser = getTestUser();
 
 		assertThat(adminUser).isNotNull();
