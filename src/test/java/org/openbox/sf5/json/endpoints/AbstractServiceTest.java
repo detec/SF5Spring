@@ -14,7 +14,6 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.openbox.sf5.json.service.CustomObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
@@ -29,10 +28,10 @@ public abstract class AbstractServiceTest {
 	// @Value("${jaxrs.path}")
 	public static String jsonPath;
 
-	@Autowired
+	// @Autowired
 	public CustomObjectMapper mapper;
 
-	@Autowired
+	// @Autowired
 	public XmlMapper xmlMapper;
 
 	public Client client;
@@ -57,6 +56,10 @@ public abstract class AbstractServiceTest {
 		// adding universal, digest and non-preemptive authentication.
 		HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.digest("admin", "1");
 
+		mapper = new CustomObjectMapper();
+
+		xmlMapper = new XmlMapper();
+
 		return ClientBuilder.newBuilder().register(JacksonJaxbJsonProvider.class)
 
 				.register(JacksonJaxbXMLProvider.class)
@@ -71,6 +74,10 @@ public abstract class AbstractServiceTest {
 	public Client createTestUserClient() {
 		HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.digest(this.testUsername,
 				this.testUserPassword);
+
+		mapper = new CustomObjectMapper();
+
+		xmlMapper = new XmlMapper();
 
 		return ClientBuilder.newBuilder().register(JacksonJaxbJsonProvider.class).register(JacksonFeature.class)
 
@@ -111,14 +118,5 @@ public abstract class AbstractServiceTest {
 		loadProperties();
 		commonTarget = client.target(appLocation).path(property.getProperty("context.path")).path(jsonPath);
 	}
-
-	// public void configureMapper() {
-	// mapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
-	// mapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING,
-	// true);
-	// mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
-	// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-	// false);
-	// }
 
 }

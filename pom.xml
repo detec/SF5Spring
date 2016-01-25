@@ -262,7 +262,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
                      <container>
                          <containerId>tomcat8x</containerId>
 						      <zipUrlInstaller>
-						        <url>http://apache.ip-connect.vn.ua/tomcat/tomcat-8/v8.0.29/bin/apache-tomcat-8.0.29.zip</url>
+						        <url>http://apache.ip-connect.vn.ua/tomcat/tomcat-8/v8.0.30/bin/apache-tomcat-8.0.30-windows-x64.zip</url>
 						      </zipUrlInstaller>
                      </container>
                      <configuration>

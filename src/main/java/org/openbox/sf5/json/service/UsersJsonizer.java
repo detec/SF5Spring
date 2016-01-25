@@ -42,7 +42,7 @@ public class UsersJsonizer {
 		return returnUser;
 	}
 
-	// returns false if there is no such user.
+	// returns false if there is no such user. Otherwise - false.
 	public Boolean checkIfUsernameExists(String typeValue) {
 		Boolean result = false;
 		Criterion criterion = criterionService.getCriterionByClassFieldAndStringValue(Users.class, "username",
@@ -52,11 +52,12 @@ public class UsersJsonizer {
 			return result;
 		}
 		List<Users> userList = listService.ObjectsCriterionList(Users.class, criterion);
-		if (userList.size() == 0) {
-			return result;
-		} else {
-			result = true;
-		}
+		// if (userList.size() == 0) {
+		// return result;
+		// } else {
+		// result = true;
+		// }
+		result = (userList.size() == 0) ? false : true;
 
 		return result;
 	}

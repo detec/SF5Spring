@@ -15,17 +15,16 @@ import javax.ws.rs.core.Response.Status;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "file:src/main/resources/spring/autowired-beans.xml" })
-@WebAppConfiguration
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = { "file:src/main/resources/spring/autowired-beans.xml" })
+//@WebAppConfiguration
+@RunWith(JUnit4.class)
 public class TranspondersServiceIT extends AbstractServiceTest {
 
 	private static final String servicePath = "transponders";

@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.SettingsConversion;
@@ -35,16 +36,15 @@ import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@ContextConfiguration(locations = { "file:src/main/resources/spring/autowired-beans.xml" })
-@WebAppConfiguration
+// @RunWith(SpringJUnit4ClassRunner.class)
+// @ContextConfiguration(locations = {
+// "file:src/main/resources/spring/autowired-beans.xml" })
+// @WebAppConfiguration
+@RunWith(JUnit4.class)
 public class SettingsServiceIT extends AbstractServiceTest {
 
 	private static final String servicePath = "usersettings";

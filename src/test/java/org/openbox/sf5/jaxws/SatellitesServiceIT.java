@@ -8,19 +8,19 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
 import org.openbox.sf5.wsmodel.Satellites;
 import org.openbox.sf5.wsmodel.WSException_Exception;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 // https://github.com/javaee-samples/javaee7-samples/blob/master/jaxws/jaxws-client/src/test/java/org/javaee7/jaxws/client/EBookStoreClientSampleTest.java
 
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(JUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@ContextConfiguration(locations = { "file:src/main/resources/spring/autowired-beans.xml" })
-@WebAppConfiguration
+// @ContextConfiguration(locations = {
+// "file:src/main/resources/spring/autowired-beans.xml" })
+// @WebAppConfiguration
 public class SatellitesServiceIT extends AbstractWSTest {
 
 	@Before

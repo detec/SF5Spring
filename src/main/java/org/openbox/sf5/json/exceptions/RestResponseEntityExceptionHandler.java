@@ -15,18 +15,21 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	@ExceptionHandler(value = { IllegalArgumentException.class })
 	protected ResponseEntity<Object> handleIdException(RuntimeException ex, WebRequest request) {
 		String bodyOfResponse = ex.getMessage();
+		// 202
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.ACCEPTED, request);
 	}
 
 	@ExceptionHandler(value = { IllegalStateException.class })
 	protected ResponseEntity<Object> handleServerException(RuntimeException ex, WebRequest request) {
 		String bodyOfResponse = ex.getMessage();
+		// 409
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
 	}
 
 	@ExceptionHandler(value = { NotAuthenticatedException.class })
 	protected ResponseEntity<Object> handleNotAuthenticatedException(RuntimeException ex, WebRequest request) {
 		String bodyOfResponse = ex.getMessage();
+		// 403
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
 
 	}
@@ -34,6 +37,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	@ExceptionHandler(value = { UsersDoNotCoincideException.class })
 	protected ResponseEntity<Object> handleDifferentUser(RuntimeException ex, WebRequest request) {
 		String bodyOfResponse = ex.getMessage();
+		// 406
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE, request);
 	}
 }

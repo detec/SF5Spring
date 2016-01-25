@@ -26,9 +26,16 @@ public class UsersService {
 	@PreAuthorize("hasRole('ROLE_ADMIN') or (#login  == authentication.name)")
 	@RequestMapping(value = "filter/username/{login}", method = RequestMethod.GET)
 	public ResponseEntity<Users> getUserByLogin(@PathVariable("login") String login) {
-		Users retUser = usersJsonizer.getUserByLogin(login);
+		Users retUser = null;
+		try {
+			retUser = usersJsonizer.getUserByLogin(login);
+		} catch (Exception e) {
+			throw new IllegalStateException("Error getting user from database!", e);
+		}
+
 		if (retUser == null) {
-			return new ResponseEntity<Users>(HttpStatus.NO_CONTENT);
+			// return new ResponseEntity<Users>(HttpStatus.NO_CONTENT);
+			throw new IllegalArgumentException("No user found in database for login: " + login);
 		}
 
 		return new ResponseEntity<Users>(retUser, HttpStatus.OK);

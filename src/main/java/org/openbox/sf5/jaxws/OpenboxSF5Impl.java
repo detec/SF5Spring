@@ -72,7 +72,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 		}
 
 		// RSResponse.
-		boolean isError = CheckIfThereIsErrorInResponse(RSResponse);
+		// boolean isError = CheckIfThereIsErrorInResponse(RSResponse);
 		// if (isError) {
 		// return 0;
 		// }
@@ -94,7 +94,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	public boolean ifSuchLoginExists(@WebParam(name = "inputLogin") String login) throws WSException {
 
 		ResponseEntity<Boolean> RSResponse = usersService.ifSuchLoginExists(login);
-		boolean isError = CheckIfThereIsErrorInResponse(RSResponse);
+		// boolean isError = CheckIfThereIsErrorInResponse(RSResponse);
 		// if (isError) {
 		// return 0;
 		// }
@@ -120,7 +120,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 
 		ResponseEntity<org.openbox.sf5.model.Users> RSResponse = usersService.getUserByLogin(login);
 
-		CheckIfThereIsErrorInResponse(RSResponse);
+		// CheckIfThereIsErrorInResponse(RSResponse);
 
 		org.openbox.sf5.model.Users user = RSResponse.getBody();
 
@@ -219,10 +219,10 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 		} catch (UsersDoNotCoincideException e) {
 			throw new WSException(e.getMessage(), e);
 		}
-		boolean isError = CheckIfThereIsErrorInResponse(RSResponse);
-		if (isError) {
-			return 0;
-		}
+		// boolean isError = CheckIfThereIsErrorInResponse(RSResponse);
+		// if (isError) {
+		// return 0;
+		// }
 		// String newIdString = (String) RSResponse.getBody();
 		Long Id = RSResponse.getBody();
 
@@ -247,7 +247,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 		} catch (NotAuthenticatedException e) {
 			throw new WSException("Failed to authenticate!", e);
 		}
-		CheckIfThereIsErrorInResponse(RSResponse);
+		// CheckIfThereIsErrorInResponse(RSResponse);
 
 		List<org.openbox.sf5.model.Settings> settList = RSResponse.getBody();
 
@@ -418,8 +418,6 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 		// }
 
 		if (isError) {
-			// String errorMessage = (String) rSResponse.getBody();
-			// throw new WSException(errorMessage, statusCode);
 
 			Object errorObject = rSResponse.getBody();
 			if (errorObject instanceof Boolean) {
