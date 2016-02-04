@@ -445,7 +445,13 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
   	<dependency>
 		<groupId>com.h2database</groupId>
 		<artifactId>h2</artifactId>
-		<version>1.4.190</version>
+		<version>1.4.191</version>
+	</dependency>
+	<dependency>
+		<groupId>org.postgresql</groupId>
+		<artifactId>postgresql</artifactId>
+		<version>9.4.1207.jre7</version>
+		<scope>provided</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.hibernate</groupId>
@@ -458,7 +464,8 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
             <artifactId>xml-apis</artifactId>
         </exclusion>
     </exclusions>
-		
+
+		<scope>provided</scope>
 	</dependency>
 	<dependency>
     	<groupId>org.reflections</groupId>

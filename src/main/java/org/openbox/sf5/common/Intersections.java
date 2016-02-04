@@ -12,6 +12,10 @@ import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.H2Dialect;
+import org.hibernate.dialect.ProgressDialect;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.jdbc.ReturningWork;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.SettingsConversion;
@@ -32,6 +36,8 @@ public class Intersections {
 		this.sessionFactory = sessionFactory;
 	}
 
+	List<Integer> arrayLines = new ArrayList<Integer>();
+
 	public int checkIntersection(List<SettingsConversion> dataSettingsConversion, Settings Object) throws SQLException {
 
 		ReturningWork<ResultSet> rowsReturningWork = new ReturningWork<ResultSet>() {
@@ -40,32 +46,61 @@ public class Intersections {
 			public ResultSet execute(Connection connection) throws SQLException {
 				PreparedStatement preparedStatement = null;
 				ResultSet resultSet = null;
+
+				// syntax changed due to H2 and Postgre limitations.
+
+				// http://stackoverflow.com/questions/1571928/retrieve-auto-detected-hibernate-dialect
+				Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
+
+				// String tempTableDrop = dialect.getDropTemporaryTableString();
+
+				// drop tables
 				try {
-
-					// syntax changed due to H2 limitations.
-
-					// drop tables
-					preparedStatement = connection.prepareStatement(getDropTempTables());
+					preparedStatement = connection.prepareStatement(getDropTempTables(dialect));
 					preparedStatement.execute();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 
+				try {
 					// fill temp tables
-					preparedStatement = connection.prepareStatement(fillTempTables());
+					preparedStatement = connection.prepareStatement(fillTempTables(dialect));
 					preparedStatement.setLong(1, Object.getId());
 					preparedStatement.execute();
 
 					preparedStatement = connection.prepareStatement(getIntersectionQuery());
-
+					// preparedStatement.setLong(1, Object.getId());
 					resultSet = preparedStatement.executeQuery();
 
 					// 11.08.2015, trying to remove locks
 					// this removes lock from sys and temp tables.
-					connection.commit();
+					// 01.02.2016, commented as it gives error with EJB
+					// IJ031020: You cannot commit with autocommit set
+					if (!connection.getAutoCommit()) {
+						connection.commit();
+					}
 					// 11.08.2015
+
+					while (resultSet.next()) {
+						int rowIndex = new BigDecimal(
+								// 11.08.2015, there seems to be a bug in
+								// defining rows.
+								resultSet.getLong("LineNumber")).intValueExact();
+
+						arrayLines.add(new Integer(rowIndex));
+
+						SettingsConversion sc = dataSettingsConversion.get(rowIndex);
+
+						long IntersectionValue = resultSet.getLong("TheLineOfIntersection");
+
+						sc.setTheLineOfIntersection(IntersectionValue + 1);
+					}
 
 					return resultSet;
 				} catch (SQLException e) {
 					throw e;
 				}
+
 			}
 		};
 
@@ -74,26 +109,27 @@ public class Intersections {
 		ResultSet rs = null;
 		rs = session.doReturningWork(rowsReturningWork);
 
-		List<Integer> arrayLines = new ArrayList<Integer>();
-		while (rs.next()) {
-
-			int rowIndex = new BigDecimal(
-					// 11.08.2015, there seems to be a bug in defining rows.
-					rs.getLong("LineNumber")).intValueExact();
-
-			arrayLines.add(new Integer(rowIndex));
-
-			SettingsConversion sc = dataSettingsConversion.get(rowIndex);
-
-			long IntersectionValue = rs.getLong("TheLineOfIntersection");
-
-			System.out.println("table index " + rowIndex + " query row " + rs.getRow());
-
-			sc.setTheLineOfIntersection(IntersectionValue + 1);
-
-		}
-
-		rs.close();
+		// List<Integer> arrayLines = new ArrayList<Integer>();
+		// while (rs.next()) {
+		//
+		// int rowIndex = new BigDecimal(
+		// // 11.08.2015, there seems to be a bug in defining rows.
+		// rs.getLong("LineNumber")).intValueExact();
+		//
+		// arrayLines.add(new Integer(rowIndex));
+		//
+		// SettingsConversion sc = dataSettingsConversion.get(rowIndex);
+		//
+		// long IntersectionValue = rs.getLong("TheLineOfIntersection");
+		//
+		// System.out.println("table index " + rowIndex + " query row " +
+		// rs.getRow());
+		//
+		// sc.setTheLineOfIntersection(IntersectionValue + 1);
+		//
+		// }
+		//
+		// rs.close();
 		session.close();
 
 		// remove duplicates
@@ -106,20 +142,37 @@ public class Intersections {
 
 	}
 
-	public static String getDropTempTables() {
-		return "\n" + "DROP TABLE  CONVERSIONTABLE IF EXISTS; \n" + "DROP TABLE  ManyFrequencies IF EXISTS; \n"
-				+ "DROP TABLE  IntersectionTable IF EXISTS; \n";
+	public static String getDropTempTables(Dialect dialect) {
+		String returnString = "";
+		if (dialect instanceof H2Dialect) {
+			returnString = "\n" + "DROP TABLE  CONVERSIONTABLE IF EXISTS; \n"
+					+ "DROP TABLE  ManyFrequencies IF EXISTS; \n" + "DROP TABLE  IntersectionTable IF EXISTS; \n";
+		}
+
+		else if (dialect instanceof ProgressDialect) {
+			returnString = "\n" + "DROP TABLE IF EXISTS CONVERSIONTABLE; \n"
+					+ "DROP TABLE  IF EXISTS ManyFrequencies;  \n" + "DROP TABLE  IF EXISTS IntersectionTable; \n";
+		}
+		return returnString;
 
 	}
 
-	public static String fillTempTables() {
-		return "\n" + "CREATE MEMORY TEMPORARY TABLE CONVERSIONTABLE  AS ( \n" + "SELECT \n" + "LineNumber \n"
+	public static String fillTempTables(Dialect dialect) {
+		// Adjusting to different ddatabase dialects.
+
+		// return "\n" + "CREATE MEMORY TEMPORARY TABLE CONVERSIONTABLE AS ( \n"
+		// + "SELECT \n" + "LineNumber \n"
+		// return
+
+		// http://stackoverflow.com/questions/1915074/understanding-the-in-javas-format-strings
+		String tempTableCreate = dialect.getCreateTableString();
+		String fromatString = "\n" + "%1$s CONVERSIONTABLE  AS ( \n" + "SELECT \n" + "LineNumber \n"
 
 				+ ", tp.frequency \n"
 
 				+ ", 0 as TheLineOfIntersection \n"
 
-		// + " into #ConversionTable \n"
+				// + " into #ConversionTable \n"
 
 				+ "	FROM SettingsConversion conv \n"
 
@@ -131,7 +184,8 @@ public class Intersections {
 
 				+ " ); \n"
 
-				+ "CREATE MEMORY TEMPORARY TABLE ManyFrequencies AS (  \n"
+				// + "CREATE MEMORY TEMPORARY TABLE ManyFrequencies AS ( \n"
+				+ "%1$s ManyFrequencies AS (  \n"
 
 				+ "select \n" + "p1.LineNumber \n" + ", p1.frequency \n" + ", p1.TheLineOfIntersection \n"
 				// + "into #ManyFrequencies \n"
@@ -150,7 +204,8 @@ public class Intersections {
 
 				+ " ); \n"
 
-				+ "CREATE MEMORY TEMPORARY TABLE IntersectionTable AS (   \n"
+				// + "CREATE MEMORY TEMPORARY TABLE IntersectionTable AS ( \n"
+				+ "%1$s IntersectionTable AS (   \n"
 
 				+ "select \n" + "t1.LineNumber \n" + ", t1.frequency \n" + ", t2.LineNumber as TheLineOfIntersection \n"
 				// + "into #IntersectionTable \n"
@@ -158,6 +213,8 @@ public class Intersections {
 				+ "on t1.frequency = t2.frequency \n" + "and t1.LineNumber <> t2.LineNumber \n"
 
 				+ " ); \n";
+
+		return String.format(fromatString, tempTableCreate);
 
 	}
 
@@ -242,16 +299,18 @@ public class Intersections {
 				// + " ); \n"
 
 				+ "select distinct \n" + "conv.LineNumber \n"
-				+ ", ISNULL(inter.TheLineOfIntersection, 0) AS TheLineOfIntersection \n"
+				// + ", ISNULL(inter.TheLineOfIntersection, 0) AS
+				// TheLineOfIntersection \n"
+				+ ", COALESCE(inter.TheLineOfIntersection, 0) AS TheLineOfIntersection \n"
 
 				+ "from ConversionTable conv \n" + "inner join IntersectionTable inter \n"
 				+ "on inter.LineNumber = conv.LineNumber \n"
 
 				+ "order by \n" + "conv.LineNumber \n"
 
-		// + "DROP TABLE #ConversionTable \n"
-		// + "DROP TABLE #ManyFrequencies \n"
-		// + "DROP TABLE #IntersectionTable \n"
+				// + "DROP TABLE #ConversionTable \n"
+				// + "DROP TABLE #ManyFrequencies \n"
+				// + "DROP TABLE #IntersectionTable \n"
 				+ "";
 
 	}

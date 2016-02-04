@@ -8,20 +8,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//import org.apache.commons.lang3.text.StrBuilder;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.internal.TypeLocatorImpl;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.EnumType;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.Type;
 import org.hibernate.type.TypeResolver;
 import org.openbox.sf5.model.CarrierFrequency;
@@ -40,30 +39,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class IniReader implements Serializable {
-
-	private static final long serialVersionUID = -1699774508872380035L;
-
-	private Satellites sat;
-
-	@Autowired
-	private SessionFactory sessionFactory;
-
-	@Autowired
-	private ObjectsController objectController;
-
-	final String REGEX = "(\\d{1,3})=(\\d{5}),(H|V|L|R),(\\d{4,5}),(\\d{2}),(DVB-S|S2),(QPSK|8PSK)(\\sACM)?";
-	private static Pattern pattern;
-	private static Matcher matcher;
-
-	private boolean result = false;
-
-	public boolean isResult() {
-		return result;
-	}
-
-	public void setResult(boolean result) {
-		this.result = result;
-	}
 
 	public IniReader() {
 
@@ -260,10 +235,11 @@ public class IniReader implements Serializable {
 				sqltext = "Select id FROM Transponders where frequency = :Frequency and satellite = :satelliteId";
 
 				List<Object> transIdList = new ArrayList<>();
-				transIdList = session.createSQLQuery(sqltext).setParameter("Frequency", Frequency)
-						.setParameter("satelliteId", sat.getId())
+				transIdList = session.createSQLQuery(sqltext).addScalar("id", StandardBasicTypes.LONG)
 
-						.list();
+						.setParameter("Frequency", Frequency)
+
+						.setParameter("satelliteId", sat.getId()).list();
 
 				Transponders newTrans = new Transponders(Frequency, aPolarization, FEC, carrierEnum, Speed, DVBStandard,
 						rangeEnum, sat);
@@ -274,7 +250,7 @@ public class IniReader implements Serializable {
 
 				else {
 
-					long transId = ((BigInteger) transIdList.get(0)).longValue();
+					long transId = (long) transIdList.get(0);
 					selectedTrans = objectController.select(Transponders.class, transId);
 
 					// check if this trans changed to newly read trans
@@ -315,6 +291,30 @@ public class IniReader implements Serializable {
 		this.objectController = objectController;
 	}
 
+	private static final long serialVersionUID = -1699774508872380035L;
+
+	private Satellites sat;
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	@Autowired
+	private ObjectsController objectController;
+
+	final String REGEX = "(\\d{1,3})=(\\d{5}),(H|V|L|R),(\\d{4,5}),(\\d{2}),(DVB-S|S2),(QPSK|8PSK)(\\sACM)?";
+	private static Pattern pattern;
+	private static Matcher matcher;
+
+	private boolean result = false;
+
+	public boolean isResult() {
+		return result;
+	}
+
+	public void setResult(boolean result) {
+		this.result = result;
+	}
+
 	private String filepath;
 
 	public String getFilepath() {
@@ -324,4 +324,5 @@ public class IniReader implements Serializable {
 	public void setFilepath(String filepath) {
 		this.filepath = filepath;
 	}
+
 }
