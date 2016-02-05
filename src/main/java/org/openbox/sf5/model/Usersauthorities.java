@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -29,8 +28,8 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 	private static final long serialVersionUID = 108703010218830663L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "t_gen")
-	@SequenceGenerator(name = "t_gen", sequenceName = "T_SEQ")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	// @SequenceGenerator(name = "t_gen", sequenceName = "T_SEQ")
 	private long id;
 
 	@ManyToOne
@@ -45,7 +44,7 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 	@JsonProperty("LineNumber")
 	private long LineNumber;
 
-	@Column(name = "authority", unique = false, nullable = true, length = 50)
+	@Column(name = "authority", unique = false, nullable = false, length = 50)
 	private String authority;
 
 	public long getId() {

@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -36,8 +35,8 @@ public class Users extends AbstractDbEntity implements Serializable {
 	private static final long serialVersionUID = -6789497093756301793L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "t_gen")
-	@SequenceGenerator(name = "t_gen", sequenceName = "T_SEQ")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	// @SequenceGenerator(name = "t_gen", sequenceName = "T_SEQ")
 	private long id;
 
 	public long getId() {

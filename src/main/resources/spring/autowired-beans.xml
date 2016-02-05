@@ -6,6 +6,7 @@
 	xmlns:p="http://www.springframework.org/schema/p" 
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:jee="http://www.springframework.org/schema/jee"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -13,6 +14,8 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/security 
  		http://www.springframework.org/schema/security/spring-security-4.0.xsd
+ 		http://www.springframework.org/schema/jee 
+		http://www.springframework.org/schema/jee/spring-jee.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 		
  <!-- ========================= RESOURCE DEFINITIONS ========================= -->
@@ -42,27 +45,33 @@
 </bean>
 	
 	
-<bean id="dataSource"
+<!-- <bean id="dataSource"
 	class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-	<property name="driverClassName" value="org.h2.Driver" />
+	<property name="driverClassName" value="${db.driver}" />
 	<property name="url" value="${jdbcUrl}" />
-	<property name="username" value="sa" />
-	<property name="password" value="" />
-</bean>
+	<property name="username" value="${db.user}" />
+	<property name="password" value="{db.password}" />
+</bean> -->
 	
 
 	
 <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-    <property name="dataSource" ref="dataSource" />
+     <property name="dataSource" ref="dataSource" />
+<!-- 	<property name="jtaTransactionManager" ref="transactionManager"/> -->
     <property name="packagesToScan" value="org.openbox.sf5.model" />   
     <property name="configLocation"> 
 		<value>classpath:hibernate.cfg.xml</value> 
     </property> 
 </bean>
 
-<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"> 
+<!--  We start to use JTA-datasource -->
+<!-- <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"> 
 	<property name="sessionFactory" ref="sessionFactory"/> 
-</bean> 
+</bean>  -->
+	
+
+
+	
 	
 <bean id="adminCheck" class="org.openbox.sf5.service.AdminCheck" init-method="initialize"></bean>
    
@@ -70,14 +79,15 @@
 <!-- Trying to enable pretty printing 
 !! It is used in message-converters
 -->
-<bean id="jacksonObjectMapper" 
+<!-- <bean id="jacksonObjectMapper" 
 	class="org.openbox.sf5.json.service.CustomObjectMapper">
 	
-</bean>   
+</bean>   --> 
 
-<bean id="jacksonXMLMapper" class="com.fasterxml.jackson.dataformat.xml.XmlMapper">
+<!-- Transferred to test-autowired-beans as it is not needed on server -->
+<!-- <bean id="jacksonXMLMapper" class="com.fasterxml.jackson.dataformat.xml.XmlMapper">
 
-</bean>
+</bean> -->
 
 
 <!-- For converting to SF5 XML format -->
@@ -92,6 +102,7 @@
 </bean>   
 
 <bean class="org.springframework.web.util.UriComponentsBuilder"> </bean>
-		
+
+
 		
 </beans>  		
