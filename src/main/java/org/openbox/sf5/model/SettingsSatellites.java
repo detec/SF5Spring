@@ -3,6 +3,7 @@ package org.openbox.sf5.model;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,7 +39,7 @@ public class SettingsSatellites extends AbstractDbEntity implements Serializable
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "parent_id", unique = false, nullable = false)
+	@JoinColumn(name = "parent_id", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_Setting"))
 	@JsonBackReference
 	private Settings parent_id;
 
@@ -53,7 +54,7 @@ public class SettingsSatellites extends AbstractDbEntity implements Serializable
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "Satellite", unique = false, nullable = false)
+	@JoinColumn(name = "Satellite", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_Satellite"))
 	@JsonProperty("Satellite")
 	private Satellites Satellite;
 

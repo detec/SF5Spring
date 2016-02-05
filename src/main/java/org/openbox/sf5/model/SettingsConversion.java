@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,7 +45,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "parent_id", unique = false, nullable = false)
+	@JoinColumn(name = "parent_id", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_Setting"))
 	@JsonBackReference
 	@XmlIDREF
 	private Settings parent_id;
@@ -59,7 +60,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "Transponder", unique = false, nullable = false)
+	@JoinColumn(name = "Transponder", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_Transponder"))
 	@JsonProperty("Transponder")
 	private Transponders Transponder;
 

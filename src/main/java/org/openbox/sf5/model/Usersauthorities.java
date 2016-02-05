@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +34,7 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 	private long id;
 
 	@ManyToOne
-	@JoinColumn(name = "parent_id", unique = false, nullable = false)
+	@JoinColumn(name = "parent_id", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_User"))
 	@JsonBackReference
 	@XmlIDREF
 	private Users parent_id;

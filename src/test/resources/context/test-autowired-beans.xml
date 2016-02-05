@@ -30,8 +30,28 @@
 
 <context:property-placeholder location="classpath:application.properties" system-properties-mode="OVERRIDE"/>
 
+<tx:annotation-driven/>
 
 <!-- In tests we need only few beans -->
+
+<bean id="dataSource"
+	class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<property name="driverClassName" value="${db.driver}" />
+	<property name="url" value="${jdbcUrl}" />
+	<property name="username" value="${db.user}" />
+	<property name="password" value="{db.password}" />
+</bean>
+	
+
+	
+<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+    <property name="packagesToScan" value="org.openbox.sf5.model" />   
+    <property name="configLocation"> 
+		<value>classpath:hibernate.cfg.xml</value> 
+    </property> 
+</bean>
+
 
 <bean id="jacksonObjectMapper" 
 	class="org.openbox.sf5.json.service.CustomObjectMapper">
@@ -54,5 +74,6 @@
 	
 </bean> 
 
+<bean class="org.springframework.web.util.UriComponentsBuilder"> </bean>
 
 </beans>  
