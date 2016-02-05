@@ -553,6 +553,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
     	<groupId>com.fasterxml.jackson.core</groupId>
     	<artifactId>jackson-databind</artifactId>
     	<version>${jackson.version}</version>
+    	<scope>provided</scope>
 	</dependency>
 	<dependency>
   		<groupId>com.fasterxml.jackson.datatype</groupId>
@@ -583,6 +584,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<groupId>com.fasterxml.jackson.dataformat</groupId>
 		<artifactId>jackson-dataformat-xml</artifactId>
 		<version>${jackson.version}</version>
+		<scope>provided</scope>
 	</dependency>
 	
 	
@@ -758,7 +760,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<artifactId>stax-ex</artifactId>
 		<version>1.7.7</version>
 	</dependency> -->
-<dependency>
+<!-- <dependency>
 	<groupId>org.jboss.resteasy</groupId>
 	<artifactId>resteasy-jaxrs</artifactId>
 	<version>${resteasy.version}</version>
@@ -775,18 +777,18 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 	<artifactId>resteasy-multipart-provider</artifactId>
 	<version>${resteasy.version}</version>
 	<scope>provided</scope>
-</dependency>
+</dependency> -->
 <!-- <dependency>
 	<groupId>org.jboss.resteasy</groupId>
 	<artifactId>resteasy-jackson-provider</artifactId>
 	<version>${resteasy.version}</version>
 	<scope>provided</scope>
 </dependency> -->
-<dependency>
+<!-- <dependency>
 	<groupId>org.jboss.resteasy</groupId>
 	<artifactId>resteasy-jaxb-provider</artifactId>
 	<version>${resteasy.version}</version>
-	<!-- com.sun.istack.localization.Localizable -->
+	com.sun.istack.localization.Localizable
 		<exclusions>
         	<exclusion>
 				<groupId>javax.xml.bind</groupId>
@@ -814,7 +816,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 	<version>${resteasy.version}</version>
 	<scope>test</scope>
 </dependency>	
-	
+	 -->
 	
 </dependencies>
 </project>

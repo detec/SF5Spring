@@ -79,10 +79,10 @@
 <!-- Trying to enable pretty printing 
 !! It is used in message-converters
 -->
-<!-- <bean id="jacksonObjectMapper" 
+<bean id="jacksonObjectMapper" 
 	class="org.openbox.sf5.json.service.CustomObjectMapper">
 	
-</bean>   --> 
+</bean>   
 
 <!-- Transferred to test-autowired-beans as it is not needed on server -->
 <!-- <bean id="jacksonXMLMapper" class="com.fasterxml.jackson.dataformat.xml.XmlMapper">
