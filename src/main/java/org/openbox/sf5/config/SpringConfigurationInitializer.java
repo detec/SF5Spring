@@ -3,7 +3,6 @@ package org.openbox.sf5.config;
 import javax.servlet.Filter;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.multipart.support.MultipartFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class SpringConfigurationInitializer extends
@@ -34,9 +33,9 @@ public class SpringConfigurationInitializer extends
 	@Override
 	protected Filter[] getServletFilters() {
 
-		MultipartFilter mpf = new MultipartFilter(); // MultipartFilter support
+		// MultipartFilter mpf = new MultipartFilter(); // MultipartFilter support
 
-		return new Filter[] { new CharacterEncodingFilter(), mpf };
+		return new Filter[] { new CharacterEncodingFilter() };
 	}
 
 }
