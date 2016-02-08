@@ -33,7 +33,7 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 	private long id;
 
 	@ManyToOne
-	@JoinColumn(name = "parent_id", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_User"))
+	@JoinColumn(name = "parent_id", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_UserAuthorities"))
 	@JsonBackReference
 	@XmlIDREF
 	private Users parent_id;

@@ -141,7 +141,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "Satellite", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_Satellite"))
+	@JoinColumn(name = "Satellite", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_SatelliteTransponders"))
 	@NotNull
 	@JsonProperty("Satellite")
 	private Satellites Satellite;

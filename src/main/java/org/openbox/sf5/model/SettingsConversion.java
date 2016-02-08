@@ -45,7 +45,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "parent_id", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_Setting"))
+	@JoinColumn(name = "parent_id", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_SettingConversion"))
 	@JsonBackReference
 	@XmlIDREF
 	private Settings parent_id;

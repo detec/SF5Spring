@@ -52,7 +52,11 @@ public abstract class AbstractWSTest {
 		loadProperties();
 
 		String contextPath = property.getProperty("context.path");
-		url = new URL(appLocation + contextPath + "/" + property.getProperty("jaxws.path") + "/");
+		url = new URL(appLocation + contextPath + "/"
+		// we moved to WildFly 9+ and it mounts service to the root.
+		// + property.getProperty("jaxws.path") + "/"
+
+		);
 
 		SF5Service = new OpenboxSF5ImplService(new URL(url, "OpenboxSF5Service?wsdl"),
 				new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5ImplService"));
@@ -66,8 +70,10 @@ public abstract class AbstractWSTest {
 		bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, "username");
 		bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, "password");
 
-//		bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, testUsername);
-//		bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, testUserPassword);
+		// bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY,
+		// testUsername);
+		// bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY,
+		// testUserPassword);
 
 	}
 
@@ -75,7 +81,11 @@ public abstract class AbstractWSTest {
 		loadProperties();
 
 		String contextPath = property.getProperty("context.path");
-		url = new URL(appLocation + contextPath + "/" + property.getProperty("jaxws.path") + "/");
+		url = new URL(appLocation + contextPath + "/"
+		// we moved to WildFly 9+ and it mounts service to the root.
+		// + property.getProperty("jaxws.path") + "/"
+
+		);
 
 		URL wsdlURL = new URL(url, "OpenboxSF5Service?wsdl");
 
@@ -108,7 +118,11 @@ public abstract class AbstractWSTest {
 		loadProperties();
 
 		String contextPath = property.getProperty("context.path");
-		url = new URL(appLocation + contextPath + "/" + property.getProperty("jaxws.path") + "/");
+		url = new URL(appLocation + contextPath + "/"
+
+		// + property.getProperty("jaxws.path") + "/"
+
+		);
 
 		URL wsdlURL = new URL(url, "OpenboxSF5Service?wsdl");
 

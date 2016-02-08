@@ -10,7 +10,7 @@
   		<spring.version>4.2.4.RELEASE</spring.version>
   		<spring.security.version>4.0.3.RELEASE</spring.security.version>
 <!--   		<hibernate.version>4.3.11.Final</hibernate.version> -->
-  		<hibernate.version>4.2.5.Final</hibernate.version> <!-- Comply with JavaEE 6 -->
+  		<hibernate.version>5.0.7.Final</hibernate.version> <!-- Comply with JavaEE 6 -->
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   		<jackson.version>2.7.1</jackson.version>
   		<jersey.version>2.22.1</jersey.version>
@@ -50,9 +50,12 @@
   			 <!-- <includes>
   			 	<include>**web-inf-filter/jboss-web.xml</include>
   			 </includes> -->
+<!--   			 <includes>
+  			 	<include>**eclipse-copy-webinf/jboss-web.xml</include>
+  			 </includes>
   		<excludes>
   			<exclude>**web-inf-filter/jboss-web.xml</exclude>
-  		</excludes>
+  		</excludes> -->
   	</resource>
 </resources>
     
@@ -276,11 +279,17 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 						      <zipUrlInstaller>
 						        <url>http://apache.ip-connect.vn.ua/tomcat/tomcat-8/v8.0.30/bin/apache-tomcat-8.0.30-windows-x64.zip</url>
 						      </zipUrlInstaller> -->
-						    <containerId>jboss75x</containerId>
+<!-- 						    <containerId>jboss75x</containerId>
 						    <zipUrlInstaller>
-						    	<!-- ZIP should be in the temp folder with other pre-downloaded archives. -->
+						    	ZIP should be in the temp folder with other pre-downloaded archives.
 						    	<url>https://access.cdn.redhat.com/jboss-eap-6.4.0.zip</url>
-						    </zipUrlInstaller>
+						    </zipUrlInstaller> -->
+						    <containerId>wildfly9x</containerId>
+	                     	<zipUrlInstaller>
+<!-- 								<url>http://download.jboss.org/wildfly/10.0.0.Final/wildfly-10.0.0.Final.zip</url> -->
+								<url>http://download.jboss.org/wildfly/9.0.2.Final/wildfly-9.0.2.Final.zip</url>
+							</zipUrlInstaller>
+						    
 						    <dependencies>
                 				<dependency>
                     				<groupId>org.postgresql</groupId>
@@ -377,9 +386,9 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
            		<db.user>sf5jsf</db.user>
            		<db.password>1</db.password>
            		<db.dialect>ProgressDialect</db.dialect>
-  			<rp.build.warname>SF5Spring</rp.build.warname>
-  			<property.placeholder>prod</property.placeholder>
-  			<db.hbm2ddl>update</db.hbm2ddl>
+  				<rp.build.warname>SF5Spring</rp.build.warname>
+  				<property.placeholder>prod</property.placeholder>
+  				<db.hbm2ddl>update</db.hbm2ddl>
 		</properties>
 	</profile>
 	<profile>

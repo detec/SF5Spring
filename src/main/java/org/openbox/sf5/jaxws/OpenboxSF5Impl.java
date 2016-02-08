@@ -33,17 +33,17 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @WebService(name = "OpenboxSF5",
 
-targetNamespace = "http://wsmodel.sf5.openbox.org/") // model
-														// -
-														// to
-														// generate
-														// test
-														// stub
-														// classes
-														// into
-														// logically
-														// nice
-														// package
+		targetNamespace = "http://wsmodel.sf5.openbox.org/", serviceName = "OpenboxSF5Service") // model
+// -
+// to
+// generate
+// test
+// stub
+// classes
+// into
+// logically
+// nice
+// package
 // @SOAPBinding(style = Style.RPC) // to make definition shorter but it makes
 // endpoint '' problem
 // http://stackoverflow.com/questions/18513333/spring-mvc-app-with-soap-web-service-using-wsspringservlet
@@ -138,7 +138,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	@WebMethod
 	public List<org.openbox.sf5.model.Transponders> getTranspondersByArbitraryFilter(
 			@WebParam(name = "inputFieldName") String fieldName, @WebParam(name = "inputFieldValue") String typeValue)
-					throws WSException {
+			throws WSException {
 
 		ResponseEntity<List<Transponders>> RSResponse = transpondersService.getTranspondersByArbitraryFilter(fieldName,
 				typeValue);
@@ -266,7 +266,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public List<org.openbox.sf5.model.Settings> getSettingsByArbitraryFilter(
 			@WebParam(name = "inputFieldName") String fieldName, @WebParam(name = "inputFieldValue") String typeValue)
-					throws WSException {
+			throws WSException {
 
 		ResponseEntity<List<Settings>> RSResponse = null;
 		try {
@@ -334,7 +334,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	@WebMethod
 	public List<org.openbox.sf5.model.Satellites> getSatellitesByArbitraryFilter(
 			@WebParam(name = "inputFieldName") String fieldName, @WebParam(name = "inputFieldValue") String typeValue)
-					throws WSException {
+			throws WSException {
 
 		ResponseEntity<List<Satellites>> RSResponse = satellitesService.getSatellitesByArbitraryFilter(fieldName,
 				typeValue);
