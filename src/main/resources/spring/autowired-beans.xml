@@ -55,7 +55,8 @@
 	
 
 	
-<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+<!--  <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">  -->
+<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
      <property name="dataSource" ref="dataSource" />
 <!-- 	<property name="jtaTransactionManager" ref="transactionManager"/> -->
     <property name="packagesToScan" value="org.openbox.sf5.model" />   
@@ -103,6 +104,14 @@
 
 <bean class="org.springframework.web.util.UriComponentsBuilder"> </bean>
 
-
+<!-- <security:authentication-manager  alias="authenticationManager">
+	<security:authentication-provider>
+	<security:jdbc-user-service id="JDBCUserService"
+		data-source-ref="dataSource"
+		users-by-username-query="
+			select	username, password, enabled from users	where username =?"
+		authorities-by-username-query="select username, authority from usersauthorities where username =?" />
+	</security:authentication-provider>
+</security:authentication-manager>	 -->
 		
 </beans>  		

@@ -1,19 +1,24 @@
 package org.openbox.sf5.config;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 @Configuration
-// @ComponentScan({})
-@Import({ MvcConfiguration.class
-
-		// , SecurityConfiguration.class,
-		// WebFlowConfig.class
+@ComponentScan({ "org.openbox.sf5.*" })
+@Import({ MvcConfiguration.class, SecurityConfiguration.class
 
 })
-@ImportResource({ "classpath:/root-context.xml", "classpath:/springWebMultipartContext.xml",
-		"classpath:/security-context.xml" })
+@ImportResource({ "/WEB-INF/root-context.xml"
+
+		, "/WEB-INF/springWebMultipartContext.xml"
+
+		// , "classpath:/security-context.xml"
+
+		// , "/WEB-INF/autowired-beans.xml"
+
+})
 public class AppConfiguration {
 
 	// All taken from the great tutorial

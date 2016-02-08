@@ -1,13 +1,18 @@
 package org.openbox.sf5.config;
 
 import javax.servlet.Filter;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class SpringConfigurationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class SpringConfigurationInitializer extends
+
+		AbstractAnnotationConfigDispatcherServletInitializer
+
+// AbstractDispatcherServletInitializer
+
+{
+
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
 		return new Class[] { AppConfiguration.class };
@@ -15,7 +20,7 @@ public class SpringConfigurationInitializer extends AbstractAnnotationConfigDisp
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return null;
+		return new Class[] { MvcConfiguration.class };
 	}
 
 	@Override
@@ -30,8 +35,21 @@ public class SpringConfigurationInitializer extends AbstractAnnotationConfigDisp
 		return new Filter[] { new CharacterEncodingFilter() };
 	}
 
-	@Override
-	public void onStartup(ServletContext servletContext) throws ServletException {
-
-	}
+	// @Override
+	// public void onStartup(ServletContext servletContext) throws
+	// ServletException {
+	// // XmlWebApplicationContext appContext = new XmlWebApplicationContext();
+	// // appContext.setConfigLocation("/WEB-INF/sf5-servlet.xml");
+	// //
+	// // ServletRegistration.Dynamic registration =
+	// // servletContext.addServlet("dispatcher",
+	// // new DispatcherServlet(appContext));
+	// // registration.setLoadOnStartup(1);
+	// // registration.addMapping("/*");
+	//
+	// // XmlWebApplicationContext appContext = new XmlWebApplicationContext();
+	// // appContext.setConfigLocation("classpath:/root-context.xml");
+	//
+	// super.onStartup(servletContext);
+	// }
 }

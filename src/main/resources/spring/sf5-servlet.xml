@@ -38,7 +38,7 @@ The following security annotation forces @PreAuthorize to read digest authentica
 <security:global-method-security pre-post-annotations="enabled"/>
 
 <!-- http://spring.io/blog/2013/05/11/content-negotiation-using-spring-mvc/ -->
-<bean id="contentNegotiationManager"
+<!-- <bean id="contentNegotiationManager"
              class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
     <property name="favorPathExtension" value="false" />
     <property name="favorParameter" value="true" />
@@ -54,7 +54,7 @@ The following security annotation forces @PreAuthorize to read digest authentica
             <entry key="xml" value="application/xml" />
        </map>
     </property>
-</bean>
+</bean> -->
 
 
 <!-- 
@@ -84,42 +84,16 @@ http://stackoverflow.com/questions/32957367/cannot-respond-with-xml-in-spring
 
 <!-- activates annotation driven binding -->
 <!-- http://spring.io/blog/2013/05/11/content-negotiation-using-spring-mvc/ -->
-<mvc:annotation-driven enable-matrix-variables="true" content-negotiation-manager="contentNegotiationManager">
- 
-   <!--  <mvc:message-converters>
-        <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
-        <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
-        <bean
-             class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-             <property name="objectMapper" ref="jacksonObjectMapper" />
-		</bean>
-  
-     
-    </mvc:message-converters> -->
-    
-
+<!-- content-negotiation-manager="contentNegotiationManager" -->
+<mvc:annotation-driven enable-matrix-variables="true" >
     <mvc:message-converters  register-defaults="true">
         <bean
              class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
              <property name="objectMapper" ref="jacksonObjectMapper" />
 		</bean>
-		
-<!-- 		<bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter">
-		</bean> -->
-	</mvc:message-converters>
 
-<!-- https://diterius.wordpress.com/2013/09/11/spring/ -->
+	</mvc:message-converters>
     
-	<!-- <mvc:message-converters register-defaults="true">
-	</mvc:message-converters> -->
-    
-    
-    <!-- It is not clear why this annotation is needed. -->
-<!--     <mvc:message-converters>
-        <bean id="jsonMessageConverter" 
-              class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"  />
-    </mvc:message-converters> -->
-	    
 </mvc:annotation-driven>
 
 <!-- https://diterius.wordpress.com/2013/09/11/spring/ -->
@@ -141,7 +115,8 @@ http://stackoverflow.com/questions/32957367/cannot-respond-with-xml-in-spring
 -->
     <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
        <!-- All configuration is now done by the manager - since Spring V3.2 -->
-       <property name="contentNegotiationManager" ref="contentNegotiationManager"/>
+       <!-- We create bean in java config -->
+<!--        <property name="contentNegotiationManager" ref="contentNegotiationManager"/> -->
     </bean>
 
 	

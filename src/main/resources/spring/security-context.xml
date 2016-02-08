@@ -6,7 +6,6 @@
 	xmlns:p="http://www.springframework.org/schema/p" 
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx" 
-	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
@@ -66,10 +65,11 @@ It is in root context
 <!-- http://stackoverflow.com/questions/32552528/spring-security-4-preauthorizehasrole-not-working -->
 <!-- This should probably go to MVC config file as JUnit shows Configuration problem: Duplicate <global-method-security> detected. 
 We do not have to load MVC servlet config file
+It used in sf5-servlet.xml
 -->
-<security:global-method-security pre-post-annotations="enabled" >
+<!-- <security:global-method-security pre-post-annotations="enabled" >
 	 <security:expression-handler ref="expressionHandler"/>
-</security:global-method-security>
+</security:global-method-security> -->
 	 
 
  
@@ -190,6 +190,7 @@ Since JAX-WS RI doesn't support digest authentication, we will use basic.
 </security:http>
 
  
+<!-- Moved to autowired-beans.xml --> 
 <security:authentication-manager  alias="authenticationManager">
 	<security:authentication-provider>
 	<security:jdbc-user-service id="JDBCUserService"
