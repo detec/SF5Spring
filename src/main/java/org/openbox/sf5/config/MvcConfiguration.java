@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.Ordered;
 import org.springframework.http.MediaType;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -37,14 +36,15 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 	 * SimpleControllerHandlerAdapter(); }
 	 */
 
-	@Bean
-	public CommonsMultipartResolver multipartResolver() {
-		CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-		resolver.setDefaultEncoding("utf-8");
-		resolver.setMaxUploadSize(1000000);
-		resolver.setMaxUploadSizePerFile(1000000);
-		return resolver;
-	}
+	// It has already been defined in springWebMultiPartContext.
+	// @Bean
+	// public CommonsMultipartResolver multipartResolver() {
+	// CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+	// resolver.setDefaultEncoding("utf-8");
+	// resolver.setMaxUploadSize(1000000);
+	// resolver.setMaxUploadSizePerFile(1000000);
+	// return resolver;
+	// }
 
 	// It should replace welcome page
 	/*

@@ -1,5 +1,7 @@
 package org.openbox.sf5.application;
 
+import javax.servlet.annotation.MultipartConfig;
+
 import org.openbox.sf5.common.IniReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 10, // 10 MB
+		maxFileSize = 1024 * 1024 * 50, // 50 MB
+		maxRequestSize = 1024 * 1024 * 100)
 public class FileUploadController {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
