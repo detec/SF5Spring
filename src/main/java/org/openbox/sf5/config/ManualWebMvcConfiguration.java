@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.openbox.sf5.common.JsonObjectFiller;
 import org.openbox.sf5.json.service.CustomObjectMapper;
+import org.openbox.sf5.json.service.CustomXMLMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 @Configuration
 @ComponentScan(basePackages = { "org.openbox.sf5.application" })
@@ -32,6 +34,12 @@ public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
 	public ObjectMapper customObjectMapper() {
 		CustomObjectMapper customObjectMapper = new CustomObjectMapper();
 		return customObjectMapper;
+	}
+
+	@Bean
+	@Primary XmlMapper customXMLMapper() {
+		CustomXMLMapper xmlMapper = new CustomXMLMapper();
+		return xmlMapper;
 	}
 
 	// http://stackoverflow.com/questions/22267191/is-it-possible-to-extend-webmvcconfigurationsupport-and-use-webmvcautoconfigurat
@@ -91,6 +99,7 @@ public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
 
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		super.configureMessageConverters(converters);
 
 		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
 
@@ -99,10 +108,11 @@ public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
 				.indentOutput(true);
 
 		MappingJackson2HttpMessageConverter mc = new MappingJackson2HttpMessageConverter(builder.build());
-		// mc.setObjectMapper(customObjectMapper);
+		// mc.setObjectMapper(customObjectMapper());
 
 		MappingJackson2XmlHttpMessageConverter mcxml = new MappingJackson2XmlHttpMessageConverter(
 				Jackson2ObjectMapperBuilder.xml().build());
+		mcxml.setObjectMapper(customXMLMapper());
 
 		converters.add(mc);
 		converters.add(mcxml);

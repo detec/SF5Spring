@@ -1,4 +1,4 @@
-package org.openbox.sf5.converters;
+package org.openbox.sf5.json.exceptions;
 
 public class UserNotFoundException extends Exception {
 

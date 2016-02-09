@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
-import org.openbox.sf5.converters.UserNotFoundException;
+import org.openbox.sf5.json.exceptions.UserNotFoundException;
 import org.openbox.sf5.model.UserDto;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;

@@ -9,7 +9,6 @@
 	<properties>
   		<spring.version>4.2.4.RELEASE</spring.version>
   		<spring.security.version>4.0.3.RELEASE</spring.security.version>
-<!--   		<hibernate.version>4.3.11.Final</hibernate.version> -->
   		<hibernate.version>5.0.7.Final</hibernate.version> <!-- Comply with JavaEE 6 -->
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   		<jackson.version>2.5.4</jackson.version>
@@ -593,6 +592,12 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<groupId>com.fasterxml.jackson.dataformat</groupId>
 		<artifactId>jackson-dataformat-xml</artifactId>
 		<version>${jackson.version}</version>
+	</dependency>
+	<!-- From http://stackoverflow.com/questions/22950542/pretty-printing-xml-with-jackson-library -->
+	<dependency>
+		<groupId>org.codehaus.woodstox</groupId>
+		<artifactId>woodstox-core-asl</artifactId>
+		<version>4.4.1</version>
 	</dependency>
 	
 	

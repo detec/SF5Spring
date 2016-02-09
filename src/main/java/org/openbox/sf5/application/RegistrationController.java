@@ -2,7 +2,7 @@ package org.openbox.sf5.application;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.openbox.sf5.converters.UserNotFoundException;
+import org.openbox.sf5.json.exceptions.UserNotFoundException;
 import org.openbox.sf5.model.UserDto;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.service.IUserService;

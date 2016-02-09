@@ -1,6 +1,6 @@
 package org.openbox.sf5.service;
 
-import org.openbox.sf5.converters.UserNotFoundException;
+import org.openbox.sf5.json.exceptions.UserNotFoundException;
 import org.openbox.sf5.model.UserDto;
 import org.openbox.sf5.model.Users;
 

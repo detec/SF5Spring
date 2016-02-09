@@ -40,4 +40,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		// 406
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE, request);
 	}
+
+	@ExceptionHandler(value = { UserNotFoundException.class })
+	protected ResponseEntity<Object> handleUserNotFound(RuntimeException ex, WebRequest request) {
+		String bodyOfResponse = ex.getMessage();
+
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NO_CONTENT, request);
+
+	}
 }
