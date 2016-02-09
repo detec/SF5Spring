@@ -827,6 +827,14 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 	<scope>test</scope>
 </dependency>	
 	 -->
+<!-- It contains necessary xsd schema
+Doesn't deploy with it
+ -->	 
+<!-- <dependency>
+	<groupId>org.apache.cxf</groupId>
+	<artifactId>cxf-rt-frontend-jaxws</artifactId>
+	<version>3.1.4</version>
+</dependency> -->
 	
 </dependencies>
 </project>

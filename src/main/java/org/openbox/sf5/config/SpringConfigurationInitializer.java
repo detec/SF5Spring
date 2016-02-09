@@ -5,13 +5,7 @@ import javax.servlet.Filter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class SpringConfigurationInitializer extends
-
-		AbstractAnnotationConfigDispatcherServletInitializer
-
-// AbstractDispatcherServletInitializer
-
-{
+public class SpringConfigurationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
@@ -32,8 +26,6 @@ public class SpringConfigurationInitializer extends
 	// http://stackoverflow.com/questions/23892140/spring-jsf-integration-pure-java-config-no-web-xml
 	@Override
 	protected Filter[] getServletFilters() {
-
-		// MultipartFilter mpf = new MultipartFilter(); // MultipartFilter support
 
 		return new Filter[] { new CharacterEncodingFilter() };
 	}

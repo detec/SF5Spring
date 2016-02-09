@@ -59,7 +59,7 @@ public abstract class AbstractWSTest {
 		);
 
 		SF5Service = new OpenboxSF5ImplService(new URL(url, "OpenboxSF5Service?wsdl"),
-				new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5ImplService"));
+				new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5Service"));
 
 		SF5Port = SF5Service.getOpenboxSF5Port();
 
@@ -90,7 +90,7 @@ public abstract class AbstractWSTest {
 		URL wsdlURL = new URL(url, "OpenboxSF5Service?wsdl");
 
 		SF5Service = new OpenboxSF5ImplService(wsdlURL,
-				new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5ImplService"));
+				new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5Service"));
 
 		SF5Port = SF5Service.getOpenboxSF5Port();
 
@@ -127,7 +127,7 @@ public abstract class AbstractWSTest {
 		URL wsdlURL = new URL(url, "OpenboxSF5Service?wsdl");
 
 		SF5Service = new OpenboxSF5ImplService(wsdlURL,
-				new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5ImplService"));
+				new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5Service"));
 
 		SF5Port = SF5Service.getOpenboxSF5Port();
 	}

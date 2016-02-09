@@ -1,5 +1,6 @@
 package org.openbox.sf5.jaxws;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
@@ -23,23 +24,42 @@ import org.openbox.sf5.wsmodel.WSException_Exception;
 // @WebAppConfiguration
 public class SatellitesServiceIT extends AbstractWSTest {
 
+	public long satelliteId;
+
+	public long getSatelliteId() {
+		List<Satellites> satList = null;
+		try {
+			satList = SF5Port.getSatellitesByArbitraryFilter("Name", "13E");
+		} catch (WSException_Exception e) {
+			e.printStackTrace();
+		}
+		assertEquals(1, satList.size());
+
+		Satellites readSat = satList.get(0);
+		assertThat(readSat instanceof Satellites);
+
+		satelliteId = readSat.getId();
+
+		return satelliteId;
+	}
+
 	@Before
 	public void setUp() throws Exception {
 		setUpAbstractNoAuth();
 	}
 
-	@Test
-	public void getSatWithID1() {
-
-		Satellites returnSatellite = null;
-		try {
-			returnSatellite = SF5Port.getSatelliteById(1);
-		} catch (WSException_Exception e) {
-
-			e.printStackTrace();
-		}
-		assertEquals("4.8E", returnSatellite.getName());
-	}
+	// @Test
+	// public void getSatWithID1() {
+	//
+	// Satellites returnSatellite = null;
+	// try {
+	// returnSatellite = SF5Port.getSatelliteById(1);
+	// } catch (WSException_Exception e) {
+	//
+	// e.printStackTrace();
+	// }
+	// assertEquals("4.8E", returnSatellite.getName());
+	// }
 
 	@Test
 	public void getAllSatellites() {
@@ -55,13 +75,18 @@ public class SatellitesServiceIT extends AbstractWSTest {
 
 	@Test
 	public void getSatellitesByArbitraryFilter() {
-		List<Satellites> satList = null;
+
+		Satellites returnSatellite = null;
+
+		getSatelliteId();
+
 		try {
-			satList = SF5Port.getSatellitesByArbitraryFilter("Name", "13E");
+			returnSatellite = SF5Port.getSatelliteById(satelliteId);
 		} catch (WSException_Exception e) {
+
 			e.printStackTrace();
 		}
-		assertEquals(1, satList.size());
+		assertEquals("13E", returnSatellite.getName());
 
 	}
 

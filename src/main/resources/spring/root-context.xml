@@ -104,6 +104,6 @@ Must register a static PropertySourcesPlaceholderConfigurer bean in either XML o
     -->
 <!--     <import resource="spring-ws-servlet.xml"/> -->
 
-
+<!-- <import resource="cxf-servlet.xml"/> -->
 		
 </beans>    

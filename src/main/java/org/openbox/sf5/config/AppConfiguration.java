@@ -14,9 +14,7 @@ import org.springframework.context.annotation.ImportResource;
 
 		, "/WEB-INF/springWebMultipartContext.xml"
 
-		// , "classpath:/security-context.xml"
-
-		// , "/WEB-INF/autowired-beans.xml"
+		, "/WEB-INF/security-context.xml"
 
 })
 public class AppConfiguration {

@@ -9,6 +9,7 @@
 	xmlns:jee="http://www.springframework.org/schema/jee"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 	xmlns:security="http://www.springframework.org/schema/security"
+	 
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
@@ -16,7 +17,15 @@
  		http://www.springframework.org/schema/security/spring-security-4.0.xsd
  		http://www.springframework.org/schema/jee 
 		http://www.springframework.org/schema/jee/spring-jee.xsd
+
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+		
+		
+<!-- xmlns:jaxws="http://cxf.apache.org/jaxws"
+		http://cxf.apache.org/jaxws 
+		http://cxf.apache.org/schemas/jaxws.xsd
+
+ -->		
 		
  <!-- ========================= RESOURCE DEFINITIONS ========================= -->
     
@@ -113,5 +122,9 @@
 		authorities-by-username-query="select username, authority from usersauthorities where username =?" />
 	</security:authentication-provider>
 </security:authentication-manager>	 -->
+		
+		
+<!-- http://cxf.apache.org/docs/writing-a-service-with-spring.html -->
+<!--  <jaxws:endpoint id="OpenboxSF5" implementor="org.openbox.sf5.jaxws.OpenboxSF5Impl" address="/jaxws/OpenboxSF5Service"/>		 -->
 		
 </beans>  		
