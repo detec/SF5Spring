@@ -72,16 +72,24 @@ public abstract class AbstractServiceTest {
 	}
 
 	public Client createTestUserClient() {
-		HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.digest(this.testUsername,
-				this.testUserPassword);
+		HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.digest(testUsername,
+				testUserPassword);
 
 		mapper = new CustomObjectMapper();
 
 		xmlMapper = new XmlMapper();
+		JacksonJaxbJsonProvider jacksonProvider = new JacksonJaxbJsonProvider();
+		jacksonProvider.setMapper(mapper);
 
-		return ClientBuilder.newBuilder().register(JacksonJaxbJsonProvider.class).register(JacksonFeature.class)
+		return ClientBuilder.newBuilder()
 
-				.register(JacksonJaxbXMLProvider.class)
+				.register(JacksonJaxbJsonProvider.class)
+
+				.register(JacksonFeature.class)
+
+				. register(JacksonJaxbXMLProvider.class)
+
+				// .register(jacksonProvider)
 
 				.register(MultiPartFeature.class).register(authenticationFeature)
 
