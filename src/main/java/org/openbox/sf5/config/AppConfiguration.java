@@ -7,7 +7,12 @@ import org.springframework.context.annotation.ImportResource;
 
 @Configuration
 @ComponentScan({ "org.openbox.sf5.*" })
-@Import({ MvcConfiguration.class, SecurityConfiguration.class
+@Import({
+		// MvcConfiguration.class
+
+		ManualWebMvcConfiguration.class
+
+		, SecurityConfiguration.class
 
 })
 @ImportResource({ "/WEB-INF/root-context.xml"

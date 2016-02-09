@@ -85,7 +85,9 @@ http://stackoverflow.com/questions/32957367/cannot-respond-with-xml-in-spring
 <!-- activates annotation driven binding -->
 <!-- http://spring.io/blog/2013/05/11/content-negotiation-using-spring-mvc/ -->
 <!-- content-negotiation-manager="contentNegotiationManager" -->
-<mvc:annotation-driven enable-matrix-variables="true" >
+
+<!-- This seems stopped working after moving to Java config -->
+<!-- <mvc:annotation-driven enable-matrix-variables="true" >
     <mvc:message-converters  register-defaults="true">
         <bean
              class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
@@ -94,7 +96,7 @@ http://stackoverflow.com/questions/32957367/cannot-respond-with-xml-in-spring
 
 	</mvc:message-converters>
     
-</mvc:annotation-driven>
+</mvc:annotation-driven> -->
 
 <!-- https://diterius.wordpress.com/2013/09/11/spring/ -->
 
@@ -113,18 +115,18 @@ http://stackoverflow.com/questions/32957367/cannot-respond-with-xml-in-spring
         
         http://spring.io/blog/2013/06/03/content-negotiation-using-views/
 -->
-    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+<!--     <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"> -->
        <!-- All configuration is now done by the manager - since Spring V3.2 -->
        <!-- We create bean in java config -->
 <!--        <property name="contentNegotiationManager" ref="contentNegotiationManager"/> -->
-    </bean>
+<!--     </bean> -->
 
 	
 	<!-- Matrix params require this -->
-<bean id="requestMappingHandlerMapping" 
+<!-- <bean id="requestMappingHandlerMapping" 
 	class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
  	<property name="removeSemicolonContent" value="false" />
-</bean>	
+</bean>	 -->
 
 
 	

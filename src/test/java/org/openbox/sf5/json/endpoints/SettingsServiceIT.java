@@ -40,10 +40,6 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-// @RunWith(SpringJUnit4ClassRunner.class)
-// @ContextConfiguration(locations = {
-// "file:src/main/resources/spring/autowired-beans.xml" })
-// @WebAppConfiguration
 @RunWith(JUnit4.class)
 public class SettingsServiceIT extends AbstractServiceTest {
 
