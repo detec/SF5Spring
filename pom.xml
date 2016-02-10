@@ -358,8 +358,8 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
                				<excludes>
                   				<exclude>**/*Tests.java</exclude>
                   		    	<!-- Should exclude tests that fail in container but OK in IDE (( -->
-<!--                    				<exclude>**/jaxws/SettingsServiceIT.java</exclude> -->
-<!--                    				<exclude>**/jaxws/SettingsServiceIT.java</exclude> -->
+                   				<exclude>**/jaxws/SettingsServiceIT.java</exclude>
+
                    				<exclude>**/json/endpoints/BUserServiceIT.java</exclude>
                    				<exclude>**/json/endpoints/SettingsServiceIT.java</exclude>          			
                				</excludes>

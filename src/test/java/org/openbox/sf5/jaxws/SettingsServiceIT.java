@@ -41,20 +41,21 @@ public class SettingsServiceIT extends AbstractWSTest {
 
 		Settings setting = BuildTestSetting.buildSetting(adminUser, newTransList, "Simple");
 
-		long newSettID = 0;
+		long newSettID = 0L;
 		try {
 			newSettID = SF5Port.createSetting(setting);
+
 		} catch (WSException_Exception e) {
 			e.printStackTrace();
 		}
-		assertThat(newSettID).isGreaterThan(0);
+
+		assertThat(newSettID).isNotNull();
 		setting.setId(newSettID);
 
 		Settings settingRead = null;
 		try {
 			settingRead = SF5Port.getSettingById(newSettID);
 		} catch (WSException_Exception e) {
-			// e.printStackTrace();
 			System.out.println("Error getting setting by ID " + newSettID + e);
 		}
 		assertThat(settingRead).isNotNull();

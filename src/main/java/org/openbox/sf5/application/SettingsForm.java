@@ -617,13 +617,13 @@ public class SettingsForm implements Serializable {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "exportToXML", value = "/editsetting", method = RequestMethod.POST, produces = MediaType.APPLICATION_XML)
+	@RequestMapping(params = "exportToXML", value = "/editsetting", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN)
 	public ResponseEntity<String> exportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
 		return universalexportToXML(pSetting);
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "exportToXML", value = "/settings/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_XML)
+	@RequestMapping(params = "exportToXML", value = "/settings/add", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN)
 	public ResponseEntity<String> newExportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
 		return universalexportToXML(pSetting);
 	}
