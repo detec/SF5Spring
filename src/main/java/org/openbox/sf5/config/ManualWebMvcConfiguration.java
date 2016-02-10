@@ -1,10 +1,14 @@
 package org.openbox.sf5.config;
 
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openbox.sf5.common.JsonObjectFiller;
 import org.openbox.sf5.json.service.CustomObjectMapper;
 import org.openbox.sf5.json.service.CustomXMLMapper;
+import org.openbox.sf5.model.Sat;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -12,9 +16,12 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
+import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -29,6 +36,9 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 @ComponentScan(basePackages = { "org.openbox.sf5.application" })
 public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
 
+	@Autowired
+	private Jaxb2Marshaller springMarshaller;
+
 	@Bean
 	@Primary
 	public ObjectMapper customObjectMapper() {
@@ -37,7 +47,8 @@ public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
 	}
 
 	@Bean
-	@Primary XmlMapper customXMLMapper() {
+	@Primary
+	XmlMapper customXMLMapper() {
 		CustomXMLMapper xmlMapper = new CustomXMLMapper();
 		return xmlMapper;
 	}
@@ -99,7 +110,8 @@ public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
 
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-		super.configureMessageConverters(converters);
+		// This doesn't add any converters
+		// super.configureMessageConverters(converters);
 
 		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
 
@@ -114,8 +126,23 @@ public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
 				Jackson2ObjectMapperBuilder.xml().build());
 		mcxml.setObjectMapper(customXMLMapper());
 
+		MarshallingHttpMessageConverter jaxbc = new MarshallingHttpMessageConverter();
+		jaxbc.setMarshaller(springMarshaller);
+
+		boolean doesSupport = jaxbc.canWrite(Sat.class, MediaType.APPLICATION_XML);
+
+		// http://stackoverflow.com/questions/26982466/spring-mvc-response-body-xml-has-extra-string-tags-why
+
+		StringHttpMessageConverter stringConverter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+		List<MediaType> mediaTypesList = new ArrayList<>();
+		mediaTypesList.add(new MediaType("text", "plain", Charset.forName("UTF-8")));
+		mediaTypesList.add(new MediaType("application", "xml", Charset.forName("UTF-8")));
+		stringConverter.setSupportedMediaTypes(mediaTypesList);
+
 		converters.add(mc);
 		converters.add(mcxml);
+		converters.add(jaxbc); // this doesn't work.
+		converters.add(stringConverter);
 
 		// super.configureMessageConverters(getMessageConverters());
 

@@ -63,9 +63,8 @@ public class SettingsService {
 		if (!currentUser.equals(setting.getUser())) {
 			// authenticated user and setting user do not coincide.
 			// return new ResponseEntity<Long>(HttpStatus.NOT_ACCEPTABLE);
-			throw new UsersDoNotCoincideException("Authenticated user "
-					+ currentUser.getId() + " and the one in setting - "
-					+ setting.getUser().getId() + " do not coincide!");
+			throw new UsersDoNotCoincideException("Authenticated user " + currentUser.getId()
+					+ " and the one in setting - " + setting.getUser().getId() + " do not coincide!");
 		}
 
 		try {
@@ -82,10 +81,9 @@ public class SettingsService {
 		headers.add("SettingId", Long.toString(setting.getId()));
 		// it can be called out of JAX-WS
 		try {
-		headers.setLocation(ucBuilder.path("/" + jaxRSPath + "/").path("usersettings/filter/id/{id}")
-				.buildAndExpand(setting.getId()).toUri());
-		}
-		catch (Exception e) {
+			headers.setLocation(ucBuilder.path("/" + jaxRSPath + "/").path("usersettings/filter/id/{id}")
+					.buildAndExpand(setting.getId()).toUri());
+		} catch (Exception e) {
 
 		}
 		return new ResponseEntity<Long>(new Long(setting.getId()), headers, HttpStatus.CREATED);
@@ -157,7 +155,7 @@ public class SettingsService {
 	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Settings>> getSettingsByArbitraryFilterXML(
 			@PathVariable("type") String fieldName, @PathVariable("typeValue") String typeValue)
-					throws NotAuthenticatedException {
+			throws NotAuthenticatedException {
 
 		List<Settings> settList = new ArrayList<>();
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
@@ -197,9 +195,20 @@ public class SettingsService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "filter/id/{settingId}/sf5", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
-	public ResponseEntity<String> getSettingByIdSF5(@PathVariable("settingId") long settingId)
-			throws NotAuthenticatedException {
+	@RequestMapping(value = "filter/id/{settingId}/sf5", method = RequestMethod.GET
+
+	// , produces = MediaType.APPLICATION_XML
+			, produces = MediaType.TEXT_PLAIN // This removes <String> tags
+
+	)
+	// @ResponseBody
+	public
+
+			ResponseEntity<String>
+
+			// String
+
+			getSettingByIdSF5(@PathVariable("settingId") long settingId) throws NotAuthenticatedException {
 
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 		if (currentUser == null) {
@@ -211,6 +220,7 @@ public class SettingsService {
 		Settings setting = settingsJsonizer.getSettingById(settingId, currentUser);
 		if (setting == null) {
 			return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+			// return "";
 		}
 
 		StringWriter sw = new StringWriter();
@@ -222,7 +232,17 @@ public class SettingsService {
 		// marshalling sat
 		springMarshaller.marshal(sat, new StreamResult(sw));
 
+		// return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
 		return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
+
+		// Cannot fix <String>&lt;sat> and so on
+		// return sw.toString();
+
+		// uses Jackson, unfortunately
+		// return new ResponseEntity<Sat>(sat, HttpStatus.OK);
+
+		// http://stackoverflow.com/questions/26982466/spring-mvc-response-body-xml-has-extra-string-tags-why
+		// useful link
 	}
 
 	@Autowired

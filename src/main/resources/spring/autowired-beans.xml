@@ -113,10 +113,22 @@
     <property name="marshallerProperties">
         <map>
             <entry>
-                <key>
+            	<key>
                     <util:constant static-field="javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT" />
-               </key>
-              <value type="java.lang.Boolean">true</value>
+               	</key>
+               <value type="java.lang.Boolean">true</value>
+            </entry>
+            <entry>
+            	<key>
+            		<util:constant static-field="javax.xml.bind.Marshaller.JAXB_ENCODING"/>
+            	</key>
+            	<value type="java.lang.String">UTF-8</value>
+            </entry>
+            <entry>
+            	<key>
+            		<util:constant static-field="javax.xml.bind.Marshaller.JAXB_FRAGMENT"/>
+            	</key>
+            	<value type="java.lang.Boolean">true</value>
             </entry>
         </map>
     </property>

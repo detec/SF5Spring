@@ -31,6 +31,7 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.openbox.sf5.converters.TimestampAdapter;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -80,6 +81,8 @@ public class Settings extends AbstractDbEntity implements Serializable {
 	@Column(name = "TheLastEntry", unique = false, nullable = true)
 	@JsonProperty("TheLastEntry")
 	@XmlJavaTypeAdapter(TimestampAdapter.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "Europe/Kiev")
+	@NotNull
 	private Timestamp TheLastEntry;
 
 	@JsonProperty("TheLastEntry")

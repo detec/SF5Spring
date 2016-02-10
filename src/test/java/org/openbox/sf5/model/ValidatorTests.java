@@ -13,8 +13,6 @@ import javax.validation.ValidatorFactory;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openbox.sf5.model.Settings;
-import org.openbox.sf5.model.Transponders;
 
 public class ValidatorTests {
 
@@ -32,12 +30,13 @@ public class ValidatorTests {
 		HashMap<String, String> valuesmap = new HashMap<String, String>();
 		valuesmap.put("User", "may not be null");
 		valuesmap.put("Name", "may not be empty");
+		valuesmap.put("TheLastEntry", "may not be null");
 
 		Settings setting = new Settings();
 		setting.setName("");
 
 		Set<ConstraintViolation<Settings>> constraintViolations = validator.validate(setting);
-		assertThat(constraintViolations.size()).isEqualTo(2);
+		assertThat(constraintViolations.size()).isEqualTo(3);
 
 		Iterator<ConstraintViolation<Settings>> settingIterator = constraintViolations.iterator();
 

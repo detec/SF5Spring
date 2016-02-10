@@ -563,7 +563,8 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
     	<version>${jackson.version}</version>
     	<scope>provided</scope>
 	</dependency>
-	<dependency>
+	<!-- These jars are not compatible with 2.5.4 in WildFly 10 -->
+<!-- 	<dependency>
   		<groupId>com.fasterxml.jackson.datatype</groupId>
   		<artifactId>jackson-datatype-jdk8</artifactId>
   		<version>2.7.1</version>
@@ -574,7 +575,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
     	<artifactId>jackson-datatype-jsr310</artifactId>
     	<version>2.7.1</version>
     	<scope>test</scope>
-	</dependency>  
+	</dependency>  --> 
 	<dependency>
 		<groupId>com.fasterxml.jackson.jaxrs</groupId>
 		<artifactId>jackson-jaxrs-json-provider</artifactId>
