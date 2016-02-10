@@ -83,7 +83,8 @@ public class BUserServiceIT extends AbstractServiceTest {
 		// ROLE_USER
 		Usersauthorities checkRoleUser = new Usersauthorities(testUsername, "ROLE_USER", testUser, 1);
 		rolesList.add(checkRoleUser);
-		testUser.authorities = rolesList;
+		// testUser.authorities = rolesList;
+		testUser.setauthorities(rolesList);
 
 		invocationBuilder = serviceTarget.path("create").request(MediaType.APPLICATION_JSON);
 		Response responsePost = invocationBuilder.post(Entity.entity(testUser, MediaType.APPLICATION_JSON));
@@ -112,7 +113,8 @@ public class BUserServiceIT extends AbstractServiceTest {
 		// ROLE_USER
 		Usersauthorities checkRoleUser = new Usersauthorities("fake", "ROLE_USER", testUser, 1);
 		rolesList.add(checkRoleUser);
-		testUser.authorities = rolesList;
+		// testUser.authorities = rolesList;
+		testUser.setauthorities(rolesList);
 
 		invocationBuilder = serviceTarget.path("create").request(MediaType.APPLICATION_XML);
 		Response responsePost = invocationBuilder.post(Entity.entity(testUser, MediaType.APPLICATION_XML));

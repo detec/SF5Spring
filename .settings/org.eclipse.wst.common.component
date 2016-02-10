@@ -4,10 +4,9 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/" source-path="/src/main/resources/spring"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/" source-path="/src/main/resources/eclipse-copy-webinf"/>
         <property name="java-output-path" value="/SF5Spring/target/classes"/>
-        <property name="component.exclusion.patterns" value="WEB-INF/web.xml"/>
-        <property name="context-root" value="SF5Spring-test"/>
+        <property name="context-root" value="ROOT"/>
+        <property name="component.exclusion.patterns" value="web.xml"/>
     </wb-module>
 </project-modules>

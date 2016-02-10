@@ -30,7 +30,8 @@ This causes problem
 	<div style="color:#408080;"> ${viewMsg}</div>
 </c:if>
  <h3>Settings</h3>
-<c:url var="addUrl" value="/settings/add" />
+<!--<c:url var="addUrl" value="/settings/add" /> -->
+<c:url var="addUrl" value="/addsetting" />
 <table style="text-align:center" id="SettingsTable">
  <thead >
 

@@ -116,12 +116,19 @@
  </c:forEach> 
   </table>
  <c:if test="${!bean.selectionMode}">
+ <!-- 
  <c:if test="${bean.id == 0}">
+ 
  <input type="submit" value="OK" name="add" />
  </c:if>
  <c:if test="${bean.id != 0}">
  <input type="submit" value="OK" name="save"/>
  </c:if>
+ 
+ Let's try to save no matter it is new or existing
+   -->
+<input type="submit" value="OK" name="save"/>
+   
  <input type="submit" value="Cancel" name="cancel"/>
  </c:if>
 </form:form>

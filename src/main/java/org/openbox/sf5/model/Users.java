@@ -97,7 +97,7 @@ public class Users extends AbstractDbEntity implements Serializable {
 	@Valid
 	@NotNull
 	@Size(min = 1)
-	public List<Usersauthorities> authorities;
+	private List<Usersauthorities> authorities;
 
 	public List<Usersauthorities> getauthorities() {
 		return authorities;

@@ -123,7 +123,8 @@ public class TranspondersListClass {
 		String returnAddress = "";
 		if (idStr.equals("0")) {
 			// if it is a new unsaved settings - use add scenario
-			returnAddress = "redirect:/settings/add";
+			// returnAddress = "redirect:/settings/add";
+			returnAddress = "redirect:/addsetting";
 		} else {
 			returnAddress = "redirect:/editsetting?id=" + idStr + "&selectionmode=false";
 		}

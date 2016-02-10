@@ -250,7 +250,8 @@ public class SettingsForm implements Serializable {
 
 	// here we start to create setting
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "/settings/add", method = RequestMethod.GET)
+	// @RequestMapping(value = "/settings/add", method = RequestMethod.GET)
+	@RequestMapping(value = "/addsetting", method = RequestMethod.GET)
 	public String getAdd(Model model) {
 
 		// SettingsForm setting = null;
@@ -277,6 +278,13 @@ public class SettingsForm implements Serializable {
 
 		return "editsetting";
 
+	}
+
+	// we are redirected here from the method below.
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping(value = "/settings/editsetting", method = RequestMethod.GET)
+	public String getSettingsEditSetting(Model model) {
+		return "redirect:/editsetting"; // try to redirect to context level
 	}
 
 	public void putNewSettingsIntoSettingsObject() {
