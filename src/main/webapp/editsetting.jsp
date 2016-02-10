@@ -23,12 +23,15 @@
  <c:if test="${not empty viewErrMsg}" >
  <div style="color:Red;"> ${viewErrMsg}</div>
  </c:if>
+ <!-- 
  <c:if test="${bean.id == 0}">
  <c:url var="saveUrl" value="/settings/add" />
  </c:if>
  <c:if test="${bean.id != 0}">
  <c:url var="saveUrl" value="/editsetting"/>
  </c:if>
+ -->
+  <c:url var="saveUrl" value="/editsetting"/>
 <form:form modelAttribute="bean" method="POST" action="${saveUrl}">
  <table>
   <tr>
@@ -136,7 +139,7 @@
 
 
 <c:url var="transpondersUrl" value="/transponders" />
-<c:url var="settingsUrl" value="/settings/" />
+<c:url var="settingsUrl" value="/settings" />
 <a href="${settingsUrl}">Settings</a>
 <a href="${transpondersUrl}">Transponders</a>
 

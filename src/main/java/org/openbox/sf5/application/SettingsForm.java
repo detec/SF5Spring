@@ -153,7 +153,8 @@ public class SettingsForm implements Serializable {
 
 	// here we save setting
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "add", value = "/settings/add", method = RequestMethod.POST)
+	// @RequestMapping(params = "add", value = "/settings/add", method = RequestMethod.POST)
+	@RequestMapping(params = "add", value = "/editsetting", method = RequestMethod.POST)
 	public String add(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
 		saveSettingWithoutContext(pSetting);
@@ -362,7 +363,7 @@ public class SettingsForm implements Serializable {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "removeSCrows", value = "/settings/add", method = RequestMethod.POST)
+	@RequestMapping(params = "removeSCrows", value = "/addsetting", method = RequestMethod.POST)
 	public String newRemoveSCrows(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		return removwRow(pSetting, model);
 	}
@@ -427,13 +428,13 @@ public class SettingsForm implements Serializable {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "moveup", value = "/settings/add", method = RequestMethod.POST)
+	@RequestMapping(params = "moveup", value = "/addsetting", method = RequestMethod.POST)
 	public String newMoveUp(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		return moveUp(pSetting, model);
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "movedown", value = "/settings/add", method = RequestMethod.POST)
+	@RequestMapping(params = "movedown", value = "/addsetting", method = RequestMethod.POST)
 	public String newMoveDown(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		return moveDown(pSetting, model);
 	}
@@ -535,7 +536,7 @@ public class SettingsForm implements Serializable {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "checkIntersection", value = "/settings/add", method = RequestMethod.POST)
+	@RequestMapping(params = "checkIntersection", value = "/addsetting", method = RequestMethod.POST)
 	public String newCheckIntersection(@ModelAttribute("bean") SettingsForm pSetting, Model model) throws SQLException {
 		checkIntersection(pSetting, model);
 		return "editsetting";
@@ -591,7 +592,7 @@ public class SettingsForm implements Serializable {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "generateSatTpStructure", value = "/settings/add", method = RequestMethod.POST)
+	@RequestMapping(params = "generateSatTpStructure", value = "/addsetting", method = RequestMethod.POST)
 	public String newGenerateSatTp(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 		generateSatTpStructureUniversal(pSetting, model);
 
@@ -631,7 +632,7 @@ public class SettingsForm implements Serializable {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "exportToXML", value = "/settings/add", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN)
+	@RequestMapping(params = "exportToXML", value = "/addsetting", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN)
 	public ResponseEntity<String> newExportToXML(@ModelAttribute("bean") SettingsForm pSetting) {
 		return universalexportToXML(pSetting);
 	}
