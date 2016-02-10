@@ -140,8 +140,12 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		Response response = null;
 
-		Invocation.Builder invocationBuilder = serviceTarget.path("filter").matrixParam("satId", "1")
-				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+		SatellitesServiceIT satTest = new SatellitesServiceIT();
+		satTest.setUp();
+
+		Invocation.Builder invocationBuilder = serviceTarget.path("filter")
+				.matrixParam("satId", String.valueOf(satTest.getSatelliteId())).request(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
@@ -158,9 +162,12 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 	public void shouldGetTranspondersBySatelliteIdXML() {
 
 		Response response = null;
+		SatellitesServiceIT satTest = new SatellitesServiceIT();
+		satTest.setUp();
 
-		Invocation.Builder invocationBuilder = serviceTarget.path("filter").matrixParam("satId", "1")
-				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+		Invocation.Builder invocationBuilder = serviceTarget.path("filter")
+				.matrixParam("satId", String.valueOf(satTest.getSatelliteIdXML())).request(MediaType.APPLICATION_XML)
+				.accept(MediaType.APPLICATION_XML);
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
@@ -172,6 +179,7 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		assertThat(newTransList).isNotNull();
 		assertThat(newTransList.size()).isGreaterThan(0);
+		validateTranspondersList(newTransList);
 
 		Transponders transponder = newTransList.get(0);
 		assertTrue(transponder instanceof Transponders);

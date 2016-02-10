@@ -61,14 +61,14 @@ public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 		Sat sat = XMLExporter.exportSettingsConversionPresentationToSF5Format(conversionLines);
 
 		// http://www.concretepage.com/spring/spring-jaxb-integration-annotation-pretty-print-example-with-jaxb2marshaller
-		// FileOutputStream fos = null;
-		// try (FileOutputStream fos = new FileOutputStream("sf5output.xml");) {
+		// try (FileOutputStream fos = new
+		// FileOutputStream("sf5Jnitoutput.xml");) {
 		// springMarshaller.marshal(sat, new StreamResult(fos));
 		// }
 
 		StringWriter sw = new StringWriter();
 
-		URL responseFile = ClassLoader.getSystemResource("xml/sf5output.xml");
+		URL responseFile = ClassLoader.getSystemResource("xml/sf5Jnitoutput.xml");
 		assertThat(responseFile).isNotNull();
 
 		URI uri = responseFile.toURI();
@@ -76,13 +76,13 @@ public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 
 		String content = new String(Files.readAllBytes(Paths.get(uri)), Charset.forName("UTF-8"));
 		content = content.replace("\r\n\r\n", "\r\n"); // it adds
-														// superfluous
-														// \r\n
+		// superfluous
+		// \r\n
 
 		// marshalling sat
 		springMarshaller.marshal(sat, new StreamResult(sw));
 
-		assertEquals(sw.toString(), content);
+		assertEquals(content, sw.toString());
 
 	}
 

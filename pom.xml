@@ -119,8 +119,8 @@ declared explicitly so Spring config files can be placed next to their correspon
         <version>2.6</version>
         <configuration>
         	<warSourceDirectory>src/main/webapp</warSourceDirectory>
-          	<failOnMissingWebXml>true</failOnMissingWebXml>
-<!-- 			<packagingExcludes>WEB-INF/web.xml</packagingExcludes> -->
+          	<failOnMissingWebXml>false</failOnMissingWebXml>
+			<packagingExcludes>web.xml</packagingExcludes> <!-- In container test it says duplicate context, it still includes web.xml (( -->
         	<warName>${rp.build.warname}</warName>
 		<webResources>
 			<resource>
@@ -271,7 +271,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
              <plugin>
              <groupId>org.codehaus.cargo</groupId>
              <artifactId>cargo-maven2-plugin</artifactId>
-             <version>1.4.16</version>
+             <version>1.4.18</version>
              	<configuration>
                      <container>
 <!--                          <containerId>tomcat8x</containerId>
@@ -283,10 +283,10 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 						    	ZIP should be in the temp folder with other pre-downloaded archives.
 						    	<url>https://access.cdn.redhat.com/jboss-eap-6.4.0.zip</url>
 						    </zipUrlInstaller> -->
-						    <containerId>wildfly9x</containerId>
+						    <containerId>wildfly10x</containerId>
 	                     	<zipUrlInstaller>
-<!-- 								<url>http://download.jboss.org/wildfly/10.0.0.Final/wildfly-10.0.0.Final.zip</url> -->
-								<url>http://download.jboss.org/wildfly/9.0.2.Final/wildfly-9.0.2.Final.zip</url>
+								<url>http://download.jboss.org/wildfly/10.0.0.Final/wildfly-10.0.0.Final.zip</url>
+<!-- 								<url>http://download.jboss.org/wildfly/9.0.2.Final/wildfly-9.0.2.Final.zip</url> -->
 							</zipUrlInstaller>
 						    
 						    <dependencies>
@@ -358,8 +358,8 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
                				<excludes>
                   				<exclude>**/*Tests.java</exclude>
                   		    	<!-- Should exclude tests that fail in container but OK in IDE (( -->
-                   				<exclude>**/jaxws/SettingsServiceIT.java</exclude>
-                   				<exclude>**/jaxws/SettingsServiceIT.java</exclude>
+<!--                    				<exclude>**/jaxws/SettingsServiceIT.java</exclude> -->
+<!--                    				<exclude>**/jaxws/SettingsServiceIT.java</exclude> -->
                    				<exclude>**/json/endpoints/BUserServiceIT.java</exclude>
                    				<exclude>**/json/endpoints/SettingsServiceIT.java</exclude>          			
                				</excludes>

@@ -8,11 +8,14 @@
 	xmlns:tx="http://www.springframework.org/schema/tx" 
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/security 
  		http://www.springframework.org/schema/security/spring-security-4.0.xsd
+ 		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-4.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 		
  <!-- ========================= RESOURCE DEFINITIONS ========================= -->
@@ -71,8 +74,30 @@
  
         </list>
     </property>
-	
-</bean> 
+    <property name="marshallerProperties">
+        <map>
+            <entry>
+            	<key>
+                    <util:constant static-field="javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT" />
+               	</key>
+               <value type="java.lang.Boolean">true</value>
+            </entry>
+            <entry>
+            	<key>
+            		<util:constant static-field="javax.xml.bind.Marshaller.JAXB_ENCODING"/>
+            	</key>
+            	<value type="java.lang.String">UTF-8</value>
+            </entry>
+            <entry>
+            	<key>
+            		<util:constant static-field="javax.xml.bind.Marshaller.JAXB_FRAGMENT"/>
+            	</key>
+            	<value type="java.lang.Boolean">true</value>
+            </entry>
+        </map>
+    </property>
+    	
+</bean>
 
 <bean class="org.springframework.web.util.UriComponentsBuilder"> </bean>
 

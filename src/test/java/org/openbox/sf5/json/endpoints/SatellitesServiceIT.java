@@ -29,52 +29,37 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 
 	private String servicePath = "satellites";
 
+	private long satelliteId;
+
 	@Before
 	public void setUp() {
 		setUpAbstractTestUser();
 		serviceTarget = commonTarget.path(servicePath);
 	}
 
-	@Test
-	public void shouldgetSatelliteById() {
+	public long getSatelliteId() {
 
-		// WebTarget target = null;
 		Response response = null;
+		GenericType<List<Satellites>> genList = new GenericType<List<Satellites>>() {
+		};
 
-		// Client client = createClient();
-		//
-		// target =
-		// client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("id").path("1");
-
-		// response =
-		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
-
-		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("id").path("1")
+		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("Name").path("13E")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 
 		response = invocationBuilder.get();
+
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-		Satellites satellite = response.readEntity(Satellites.class);
-		assertThat(satellite).isNotNull();
+		List<Satellites> satList = invocationBuilder.get(genList);
 
-	}
+		assertThat(satList).isNotNull();
+		assertThat(satList.size()).isGreaterThan(0);
 
-	@Test
-	public void shouldgetSatelliteByIdXML() {
-
-		Response response = null;
-
-		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("id").path("1")
-				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
-
-		response = invocationBuilder.get();
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-		Satellites satellite = response.readEntity(Satellites.class);
-		assertThat(satellite).isNotNull();
-
+		Satellites satellite = satList.get(0);
 		assertTrue(satellite instanceof Satellites);
+		satelliteId = satellite.getId();
+
+		return satelliteId;
 
 	}
 
@@ -130,37 +115,21 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 
 	@Test
 	public void getSatellitesByArbitraryFilter() {
-
-		// WebTarget target = null;
-
 		Response response = null;
-		GenericType<List<Satellites>> genList = new GenericType<List<Satellites>>() {
-		};
-		// Client client = createClient();
+		getSatelliteId();
 
-		// target = client.target(appLocation + "satellites/filter/Name/13E");
-		// target =
-		// client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("Name").path("13E");
-
-		// response =
-		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
-
-		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("Name").path("13E")
+		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("id").path(String.valueOf(satelliteId))
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 
 		response = invocationBuilder.get();
-
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-		List<Satellites> satList = invocationBuilder.get(genList);
+		Satellites satellite = response.readEntity(Satellites.class);
+		assertThat(satellite).isNotNull();
 
-		assertThat(satList).isNotNull();
-		assertThat(satList.size()).isGreaterThan(0);
 	}
 
-	@Test
-	public void getSatellitesByArbitraryFilterXML() {
-
+	public long getSatelliteIdXML() {
 		Response response = null;
 		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("Name").path("13E")
 				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
@@ -177,6 +146,27 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		assertThat(satList.size()).isGreaterThan(0);
 
 		Satellites satellite = satList.get(0);
+		assertTrue(satellite instanceof Satellites);
+
+		satelliteId = satellite.getId();
+
+		return satelliteId;
+	}
+
+	@Test
+	public void getSatellitesByArbitraryFilterXML() {
+		Response response = null;
+		getSatelliteIdXML();
+
+		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("id").path(String.valueOf(satelliteId))
+				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+
+		response = invocationBuilder.get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		Satellites satellite = response.readEntity(Satellites.class);
+		assertThat(satellite).isNotNull();
+
 		assertTrue(satellite instanceof Satellites);
 
 	}
