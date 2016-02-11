@@ -1,16 +1,18 @@
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">    
 <html>
 <head>
 <title>Openbox SF-5 settings editor - Users list</title>
 <sec:csrfMetaTags/>
 <style>
 table, th, td {
-    border: 1px solid black;
+
      border-collapse: collapse;
 }
 th, td {
@@ -20,14 +22,26 @@ th, td {
 </head>
 <body>
 <h2>Openbox SF5 settings editor</h2>
-<h3>Users</h3>
+<table border="0">
+<tbody>
+  <tr>
+  <td> <h3>Users</h3></td>
+  <td>
+  <form:form method="POST" action="logout">
+<input type="submit" value="Logout" />
+</form:form>
+  </td>
+  </tr>
+</tbody>
+</table>
+
  <c:if test="${not empty viewMsg}" >
 	<div style="color:#408080;"> ${viewMsg}</div>
 </c:if>
  <c:if test="${not empty viewErrMsg}" >
  <div style="color:Red;"> ${viewErrMsg}</div>
  </c:if>
-<table style="text-align:center">
+<table style="text-align:center" border="1">
  <thead >
 
   <tr>
@@ -41,8 +55,8 @@ th, td {
    </thead>
    <tbody>
    <c:forEach items="${users}" var="user" >
-   <c:url var="deleteUrl" value="/users/delete?id=${user.id}" />
-   <c:url var="changeStateUrl" value="/users/change?id=${user.id}&selectionmode=false" />
+   <c:url var="deleteUrl" value="/deleteuser?id=${user.id}" />
+   <c:url var="changeStateUrl" value="/changeuser?id=${user.id}&selectionmode=false" />
     <tr>
    <td><a href="${deleteUrl}">Delete</a><a href="${changeStateUrl}">Enable/disable</a></td>
    <td><c:out value="${user.id}" /></td>
@@ -69,15 +83,12 @@ th, td {
 <a href="transponders">Transponders</a> -->	
 
 <c:url var="transpondersUrl" value="/transponders" />
-<c:url var="settingsUrl" value="/settings/" />
-<c:url var="usersUrl" value="/users/" />
+<c:url var="settingsUrl" value="/settings" />
+<c:url var="usersUrl" value="/users" />
 <a href="${settingsUrl}">Settings</a>
 <a href="${transpondersUrl}">Transponders</a>
 <a href="${usersUrl}">Users</a>
 
- 
- <form:form method="POST" action="logout">
-<input type="submit" value="Logout" />
-</form:form>
+
 </body>
 </html>

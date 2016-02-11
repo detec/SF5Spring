@@ -153,7 +153,8 @@ public class SettingsForm implements Serializable {
 
 	// here we save setting
 	@PreAuthorize("hasRole('ROLE_USER')")
-	// @RequestMapping(params = "add", value = "/settings/add", method = RequestMethod.POST)
+	// @RequestMapping(params = "add", value = "/settings/add", method =
+	// RequestMethod.POST)
 	@RequestMapping(params = "add", value = "/editsetting", method = RequestMethod.POST)
 	public String add(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
@@ -168,14 +169,14 @@ public class SettingsForm implements Serializable {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "selectfromother", value = "/settings/add", method = RequestMethod.POST)
+	@RequestMapping(params = "selectfromother", value = "/addsetting", method = RequestMethod.POST)
 	public String newSelectFromOtherSetting(@ModelAttribute("bean") SettingsForm pSetting) {
 		return prepareSelectFromOtherSetting(pSetting);
 
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "cancel", value = "/settings/add", method = RequestMethod.POST)
+	@RequestMapping(params = "cancel", value = "/addsetting", method = RequestMethod.POST)
 	public String newCancelSettingEdit() {
 		return "redirect:/settings";
 	}
@@ -197,7 +198,7 @@ public class SettingsForm implements Serializable {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(params = "selectTransponders", value = "/settings/add", method = RequestMethod.POST)
+	@RequestMapping(params = "selectTransponders", value = "/addsetting", method = RequestMethod.POST)
 	public String selectTranspondersFromNew(@ModelAttribute("bean") SettingsForm pSetting) {
 		return prepareToSelectTransponders(pSetting);
 	}
@@ -207,7 +208,8 @@ public class SettingsForm implements Serializable {
 	public String prepareSelectFromOtherSetting(@ModelAttribute("bean") SettingsForm pSetting) {
 
 		AppContext.setCurentlyEditedSetting(pSetting);
-		return "redirect:/settings/select?selectionmode=true";
+		return "redirect:/selectsetting?selectionmode=true";
+		// return "redirect:/settings?selectionmode=true";
 	}
 
 	public void renumerateLines() {
@@ -420,6 +422,9 @@ public class SettingsForm implements Serializable {
 		SettingsObject.setConversion(tpConversion);
 
 		objectsController.saveOrUpdate(SettingsObject);
+
+		// 11.02.2016, header is somehow empty
+		writeFromSettingsObjectToSettingsForm();
 
 		model.addAttribute("bean", this);
 
@@ -637,48 +642,6 @@ public class SettingsForm implements Serializable {
 		return universalexportToXML(pSetting);
 	}
 
-	// @PreAuthorize("hasRole('ROLE_USER')")
-	// @ResponseBody
-	// public HttpEntity<String> universalexportToXML(SettingsForm pSetting) {
-	// dataSettingsConversion = pSetting.dataSettingsConversion;
-	//
-	// HttpHeaders header = new HttpHeaders();
-	// header.setContentType(MediaType.TEXT_HTML);
-	//
-	// byte[] bytesBuffer = new byte[32768];
-	//
-	// if (!check32Rows()) {
-	// ResponseEntity<String> resp = new ResponseEntity<String>(
-	// new String("Table Transponders must contain exactly 32 rows!"), header,
-	// HttpStatus.OK);
-	// return resp;
-	// }
-	//
-	// String filePath = XMLExporter.exportSettingToXML(dataSettingsConversion);
-	//
-	// if (filePath == "") {
-	// return new ResponseEntity<String>("Error reading export XML file on
-	// server!", header, HttpStatus.OK);
-	// }
-	//
-	// header.setContentType(new MediaType("application", "xml"));
-	//
-	// try {
-	//
-	// bytesBuffer = Files.readAllBytes(Paths.get(filePath));
-	//
-	// // clean temporary file
-	// Files.deleteIfExists(Paths.get(filePath));
-	//
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	//
-	// return new ResponseEntity<String>(new String(bytesBuffer,
-	// Charset.forName("UTF8")), header, HttpStatus.OK);
-	//
-	// }
-
 	public ResponseEntity<String> universalexportToXML(SettingsForm pSetting) {
 
 		List<SettingsConversion> scList = new ArrayList<SettingsConversion>();
@@ -736,11 +699,12 @@ public class SettingsForm implements Serializable {
 		writeFromSettingsObjectToSettingsForm();
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "/settings/settings", method = RequestMethod.GET)
-	public String redirectToSettings() {
-		return "redirect:/settings";
-	}
+	// This method seems not to work.
+	// @PreAuthorize("hasRole('ROLE_USER')")
+	// @RequestMapping(value = "/selectsetting", method = RequestMethod.GET)
+	// public String redirectToSettings() {
+	// return "redirect:/settings";
+	// }
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
@@ -864,5 +828,47 @@ public class SettingsForm implements Serializable {
 
 	@Autowired
 	public Jaxb2Marshaller springMarshaller;
+
+	// @PreAuthorize("hasRole('ROLE_USER')")
+	// @ResponseBody
+	// public HttpEntity<String> universalexportToXML(SettingsForm pSetting) {
+	// dataSettingsConversion = pSetting.dataSettingsConversion;
+	//
+	// HttpHeaders header = new HttpHeaders();
+	// header.setContentType(MediaType.TEXT_HTML);
+	//
+	// byte[] bytesBuffer = new byte[32768];
+	//
+	// if (!check32Rows()) {
+	// ResponseEntity<String> resp = new ResponseEntity<String>(
+	// new String("Table Transponders must contain exactly 32 rows!"), header,
+	// HttpStatus.OK);
+	// return resp;
+	// }
+	//
+	// String filePath = XMLExporter.exportSettingToXML(dataSettingsConversion);
+	//
+	// if (filePath == "") {
+	// return new ResponseEntity<String>("Error reading export XML file on
+	// server!", header, HttpStatus.OK);
+	// }
+	//
+	// header.setContentType(new MediaType("application", "xml"));
+	//
+	// try {
+	//
+	// bytesBuffer = Files.readAllBytes(Paths.get(filePath));
+	//
+	// // clean temporary file
+	// Files.deleteIfExists(Paths.get(filePath));
+	//
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	//
+	// return new ResponseEntity<String>(new String(bytesBuffer,
+	// Charset.forName("UTF8")), header, HttpStatus.OK);
+	//
+	// }
 
 }

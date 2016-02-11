@@ -1,17 +1,18 @@
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">    
 <html>
 <head>
 <title>Openbox SF-5 settings editor - Browse, select transponders</title>
 <sec:csrfMetaTags/>
 <style>
 table, th, td {
-    border: 1px solid black;
-     border-collapse: collapse;
+   border-collapse: collapse;
 }
 th, td {
     padding: 5px;
@@ -20,7 +21,19 @@ th, td {
 </head>
 <body>
 <h2>Openbox SF5 settings editor</h2>
- <h3>Transponders</h3>
+<table border="0">
+<tbody>
+  <tr>
+  <td>  <h3>Transponders</h3></td>
+  <td>
+  <form:form method="POST" action="logout">
+<input type="submit" value="Logout" />
+</form:form>
+  </td>
+  </tr>
+</tbody>
+</table>
+
  <form:form method="POST" action="transponders" modelAttribute="bean" id="formFilterSatellite" >
  	<form:select path="filterSatelliteId" >
 		<form:option value="NONE" label="--- Select ---"/>
@@ -38,7 +51,7 @@ th, td {
 	<input type="submit" value="Select" name="select"/>
 	</c:if>
 	 	
- 	<table style="border: 1px solid">
+ 	<table border="1">
   	<thead>
   	<tr>
    	<c:if test="${bean.selectionMode}">
@@ -81,8 +94,6 @@ th, td {
 <br>
 <a href="settings">Settings</a>
 <a href="upload">Import transponders from file</a>
-<form:form method="POST" action="logout">
-<input type="submit" value="Logout" />
-</form:form>
+
 </body>
 </html>

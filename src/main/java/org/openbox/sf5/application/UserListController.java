@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserListController {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/users/", method = RequestMethod.GET)
+	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public String getUserList(Model model) {
 
 		UsersList = listService.ObjectsList(Users.class);
@@ -35,26 +35,27 @@ public class UserListController {
 		return "users";
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/users/settings", method = RequestMethod.GET)
-	public String redirectToSettings() {
-		return "redirect:/settings";
-	}
+	// @PreAuthorize("hasRole('ROLE_ADMIN')")
+	// @RequestMapping(value = "/users/settings", method = RequestMethod.GET)
+	// public String redirectToSettings() {
+	// return "redirect:/settings";
+	// }
+
+	// @PreAuthorize("hasRole('ROLE_ADMIN')")
+	// @RequestMapping(value = "/users/logout", method = RequestMethod.POST)
+	// public String redirectToLogout() {
+	// return "redirect:/logout";
+	// }
+
+	// @PreAuthorize("hasRole('ROLE_ADMIN')")
+	// @RequestMapping(value = "/users/transponders", method =
+	// RequestMethod.GET)
+	// public String redirectToTransponders() {
+	// return "redirect:/transponders";
+	// }
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/users/logout", method = RequestMethod.POST)
-	public String redirectToLogout() {
-		return "redirect:/logout";
-	}
-
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/users/transponders", method = RequestMethod.GET)
-	public String redirectToTransponders() {
-		return "redirect:/transponders";
-	}
-
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/users/change", method = RequestMethod.GET)
+	@RequestMapping(value = "/changeuser", method = RequestMethod.GET)
 	public String changeState(@RequestParam(value = "id", required = true) long pid, Model model) {
 		Users user = objectsController.select(Users.class, pid);
 
@@ -83,7 +84,7 @@ public class UserListController {
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/users/delete", method = RequestMethod.GET)
+	@RequestMapping(value = "/deleteuser", method = RequestMethod.GET)
 	public String deleteUser(@RequestParam(value = "id", required = true) long pid, Model model) {
 
 		Users userToDelete = objectsController.select(Users.class, pid);
@@ -95,9 +96,10 @@ public class UserListController {
 			UsersList = listService.ObjectsList(Users.class);
 
 			model.addAttribute("users", UsersList);
-			// return "users";
-			String returnAddress = "redirect:/users";
-			return returnAddress;
+			return "users";
+
+			// String returnAddress = "redirect:/users";
+			// return returnAddress;
 		}
 
 		// first we must remove user's settings

@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
 import org.openbox.sf5.model.AbstractDbEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class DAOListImpl implements DAOList, Serializable {
 
 		Session s = sessionFactory.openSession();
 		s.beginTransaction();
-		list = s.createQuery("from " + type.getName()).list();
+		list = s.createQuery("from " + type.getName() + " order by id").list();
 		s.getTransaction().commit();
 		s.close();
 		return list;
@@ -37,7 +38,11 @@ public class DAOListImpl implements DAOList, Serializable {
 	@Override
 	public <T extends AbstractDbEntity> List<T> restrictionList(Class<T> type, Criterion criterion) {
 		Session s = sessionFactory.openSession();
-		Criteria criteria = s.createCriteria(type).add(criterion);
+		Criteria criteria = s.createCriteria(type)
+
+				.add(criterion)
+
+				.addOrder(Order.desc("id"));
 		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY); // kill
 																					// duplicates
 

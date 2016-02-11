@@ -2,7 +2,6 @@ package org.openbox.sf5.application;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.openbox.sf5.json.exceptions.UserNotFoundException;
 import org.openbox.sf5.model.UserDto;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.service.IUserService;
@@ -99,7 +98,7 @@ public class RegistrationController {
 		Users registered = null;
 		try {
 			registered = userService.registerNewUserAccount(accountDto);
-		} catch (UserNotFoundException e) {
+		} catch (Exception e) {
 			return null;
 		}
 		return registered;

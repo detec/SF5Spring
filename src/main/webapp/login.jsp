@@ -8,7 +8,7 @@
 <sec:csrfMetaTags/>
 </head>
 <body>
-	<h1>Openbox SF-5 settings editor - Login</h1>
+	<h1>Openbox SF-5 settings editor </h1>
    <h2>Login</h2>
 <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
       <font color="red">

@@ -80,7 +80,7 @@ public class SettingsList {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "/settings/delete", method = RequestMethod.GET)
+	@RequestMapping(value = "/deletesetting", method = RequestMethod.GET)
 	public String deleteSetting(@RequestParam(value = "id", required = true) long id, Model model) {
 
 		objectsController.remove(Settings.class, id);
@@ -88,34 +88,12 @@ public class SettingsList {
 	}
 
 	private void readCurrentUser() {
-		// Authentication auth =
-		// SecurityContextHolder.getContext().getAuthentication();
-		//
-		// org.springframework.security.core.userdetails.User secUser = null;
-		//
-		// if (auth.getPrincipal() instanceof
-		// org.springframework.security.core.userdetails.User) {
-		// secUser = (org.springframework.security.core.userdetails.User)
-		// auth.getPrincipal();
-		// } else {
-		// return;
-		// }
-		//
-		// String username = secUser.getUsername();
-		// Criterion criterion = Restrictions.eq("username", username);
-		//
-		// List<Users> usersList = listService.ObjectsCriterionList(Users.class,
-		// criterion);
-		// if (!usersList.isEmpty()) {
-		// currentUser = usersList.get(0);
-		// }
-
 		currentUser = securityContext.getCurrentlyAuthenticatedUser();
 
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "/settings/select", method = RequestMethod.GET)
+	@RequestMapping(value = "/selectsetting", method = RequestMethod.GET)
 	public String selectSetting(@RequestParam(value = "selectionmode", required = true) boolean pSelectionMode,
 			Model model) {
 

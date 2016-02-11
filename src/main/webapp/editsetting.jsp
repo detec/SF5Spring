@@ -16,7 +16,19 @@
 <body>
  
 <h2>Openbox SF5 settings editor</h2>
- <h3>Edit setting</h3>
+<table border="0">
+<tbody>
+  <tr>
+  <td> <h3>Edit setting</h3></td>
+  <td>
+  <form:form method="POST" action="logout">
+<input type="submit" value="Logout" />
+</form:form>
+  </td>
+  </tr>
+</tbody>
+</table>
+ 
  <c:if test="${not empty viewMsg}" >
 	<div style="color:#408080;"> ${viewMsg}</div>
 </c:if>
@@ -143,8 +155,6 @@
 <a href="${settingsUrl}">Settings</a>
 <a href="${transpondersUrl}">Transponders</a>
 
- <form:form method="POST" action="logout">
-<input type="submit" value="Logout" />
-</form:form>
+
 </body>
 </html>

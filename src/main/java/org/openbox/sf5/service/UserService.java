@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.json.exceptions.UserNotFoundException;
@@ -28,7 +26,8 @@ public class UserService implements IUserService, Serializable {
 	@Autowired
 	private ObjectsListService listService;
 
-	@Transactional
+	// @Transactional // IJ031017: You cannot set autocommit during a managed
+	// transaction
 	@Override
 	public Users registerNewUserAccount(UserDto accountDto) throws UserNotFoundException {
 

@@ -1,16 +1,18 @@
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">    
 <html>
 <head>
 <title>Openbox SF-5 settings editor - Settings list</title>
 <sec:csrfMetaTags/>
 <style>
 table, th, td {
-    border: 1px solid black;
+    
      border-collapse: collapse;
 }
 th, td {
@@ -25,14 +27,29 @@ This causes problem
 </head>
 <body>
 <h2>Openbox SF5 settings editor</h2>
-<div style="font-style:italic;"> You are working under <c:out value="${username}" /></div>
+<h3>Settings</h3>
+<table border="0">
+<tbody>
+  <tr>
+  <td><div style="font-style:italic;"> You are working under <c:out value="${username}" /></div> </td>
+  <td>
+  <form:form method="POST" action="logout">
+<input type="submit" value="Logout" />
+</form:form>
+  </td>
+  </tr>
+</tbody>
+</table>
+
  <c:if test="${not empty viewMsg}" >
 	<div style="color:#408080;"> ${viewMsg}</div>
 </c:if>
- <h3>Settings</h3>
+
+
 <!--<c:url var="addUrl" value="/settings/add" /> -->
 <c:url var="addUrl" value="/addsetting" />
-<table style="text-align:center" id="SettingsTable">
+<br>
+<table style="text-align:center" id="SettingsTable" border="1">
  <thead >
 
   <tr>
@@ -46,7 +63,7 @@ This causes problem
  <tbody>
  <c:forEach items="${settings}" var="setting">
    <c:url var="editUrl" value="/editsetting?id=${setting.id}&selectionmode=false" />
-   <c:url var="deleteUrl" value="/settings/delete?id=${setting.id}" />
+   <c:url var="deleteUrl" value="/deletesetting?id=${setting.id}" />
    <c:url var="selectUrl" value="/selectedsetting?id=${setting.id}" />
    <c:url var="printUrl" value="/print?id=${setting.id}" />
   <tr>
@@ -69,6 +86,7 @@ This causes problem
 <c:if test="${empty settings}">
  <i>There are currently no settings in the list.</i> 
 </c:if>
+<br>
 <a href="${addUrl}">Add</a>
 
 <c:url var="transpondersUrl" value="/transponders" />
@@ -77,13 +95,11 @@ This causes problem
 <a href="${uploadUrl}">Import transponders from file</a>
 
 <c:if test="${hasAdminRole}">
-<c:url var="usersUrl" value="/users/" />
+<c:url var="usersUrl" value="/users" />
 <!-- <a href="/users/">User administration</a> -->
 <a href="${usersUrl}">User administration</a>
 </c:if>
-<form:form method="POST" action="logout">
-<input type="submit" value="Logout" />
-</form:form>
+
 </body>
 
 </html>
