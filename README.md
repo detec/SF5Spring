@@ -4,6 +4,10 @@ This pet project derives from my old 1C:Enterprise 8.2 (<http://1c-dn.com/>) too
 - <http://openbox.ua/instruments/sf5/>   - official page of the gadget;
 - <http://infostart.ru/public/76804/>	 - page of the initial 1C:Enterprise 8.2 project.
 
+## Openshift ##
+
+This application is hosted in Openshift cloud. Its address is <http://sf5spring-detec.rhcloud.com/>. Its database already has user logins 'admin' (password '1') and 'user' (password 'user') with one sample gadget setting saved in every profile. Anyone can register its own user and start creating Openbox SF-5 gadget settings.
+
 ## Features ##
 
 Leaving behind satellite television details, Openbox SF-5 settings editor is a representation of a typical full-cycle CRUD application. It is able to:
@@ -27,7 +31,7 @@ This implementation of Openbox SF-5 settings editor provides SQL-based user auth
 
 There are 2 authentication modes:
 
-- form-login for Spring MVC jsp pages;
+- form-login for Spring MVC JSP pages;
 - digest authentication for RESTful Spring MVC API;
 - basic authentication for JAX-WS.
 
@@ -57,11 +61,11 @@ This Openbox SF-5 settings editor implementation provides JAX-RS 2.0 API for get
 	- jaxrs/usersettings/all GET							- get all user's settings, based on credentials provided;
 	- jaxrs/usersettings/filter/{type}/{typeValue} GET 		- get user's settings, filtered by arbitrary field name and field value, based on credentials provided;
 	- jaxrs/usersettings/filter/id/{settingId} GET 			- get setting by its ID, based on credentials provided;
-	- jaxrs/usersettings/filter/id/{settingId}/sf5 GET		- get setting by its ID, based on credentials provided, in Openbox SF-5 XML format, only "application/xml" "Accept" HTTP header is supported.
+	- jaxrs/usersettings/filter/id/{settingId}/sf5 GET		- get setting by its ID, based on credentials provided, in Openbox SF-5 XML format; only "text/plain" "Accept" HTTP header is supported.
 	
 ## JAX-WS service ##
 
-The service name is OpenboxSF5Service, its WSDL can be obtained at /application_context_path/OpenboxSF5Service?wsdl . It is built on JAX-WS RI 2.2, JAX-WS Commons Spring extension and uses all capabilities of JAX-RS service, that are responsible for data exchange, except Openbox SF-5 XML format output.
+The service name is OpenboxSF5Service, its WSDL can be obtained at /application_context_path/OpenboxSF5Service?wsdl . It is built with code-first approach and utilizes WildFly 10 built-in Apache CXF library. It uses all capabilities of JAX-RS service, that are responsible for data exchange, except Openbox SF-5 XML format output.
 	
 ## Maven profiles ##
 
@@ -71,6 +75,7 @@ Different Maven profiles are required to use different database schemes and inte
 			This database url is used in Eclipse-based container deploy.
 	- test 	Profile for additional integration tests, run with Cargo Maven plugin in H2 in-memory mode;
 	- prod 	Profile for production builds, database url is jdbc:h2:tcp://localhost/~/sf5spring.
+	- openshift Profile for deployment in an OpenShift cloud.
 	
 ## Tests notice ##
 
@@ -82,23 +87,23 @@ There is an option to utilize tomcat7-maven-plugin in pom.xml. Default administr
 	
 ## System requirements ##
 
-- Apache Tomcat 8;
-- H2 database server, running at the same host with Tomcat (for profiles dev and prod);
+- configured non-XA datasource with JNDI name "java:jboss/datasources/PostgreSQLDS"; Postgre and H2 supported;
+- WildFly 10 application server;
+- Postgre 9.2+ database server, running at the same host with WildFly (for profiles dev, prod and openshift);
 - Java 8.
 
 ## Technologies ##
 
-- Spring 4 (Spring Core, Security, MVC, XML-based configuration);
-- Hibernate ORM 4.3.11;
+- Spring 4 (Spring Core, Security, MVC, XML-based and Java configuration combined);
+- Hibernate ORM 5.0.7;
 - Hibernate POJO classes and mappings were generated from my 1C:Enterprise database using my 1C:Enterprise project <https://github.com/detec/POJOClassesGenerationForHibernate>;
 - Hibernate Validator 5.2;
-- Jackson 2;
+- Jackson 2.5;
 - JUnit 4.12;
 - JDBC (for Spring Security only);
 - Jersey 2 client;
-- JAX-WS RI 2.2 and dependent libraries;
 - Maven 3.3 with plugins compiler, surefire, resources, war, tomcat7, cargo, jaxws;
-- Apache Tomcat 8;
+- WildFly 10;
 - Java 8.
 
 The project can be built either with Maven (3.3 or higher) or Eclipse (4.5 or higher).
