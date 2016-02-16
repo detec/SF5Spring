@@ -118,6 +118,9 @@ public class RegistrationController {
 		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
 	}
 
+	// It probably uses
+	// http://websystique.com/spring-security/spring-security-4-custom-login-form-annotation-example/
+
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(@RequestParam(value = "error", required = false) boolean loginError, Model model) {
 
