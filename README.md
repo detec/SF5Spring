@@ -6,7 +6,7 @@ This pet project derives from my old 1C:Enterprise 8.2 (<http://1c-dn.com/>) too
 
 ## Openshift ##
 
-This application is hosted in Openshift cloud. Its address is <http://sf5spring-detec.rhcloud.com/>. Its database already has user logins 'admin' (password '1') and 'user' (password 'user') with one sample gadget setting saved in every profile. Anyone can register its own user and start creating Openbox SF-5 gadget settings.
+This application is hosted in Openshift cloud. Its address is <http://sf5spring-detec.rhcloud.com/login>. Its database already has user logins 'admin' (password '1') and 'user' (password 'user') with one sample gadget setting saved in every profile. Anyone can register its own user and start creating Openbox SF-5 gadget settings.
 
 ## Features ##
 
