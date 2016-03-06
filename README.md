@@ -57,7 +57,7 @@ This Openbox SF-5 settings editor implementation provides RESTful API for gettin
 	- jaxrs/users/exists/username/{login} GET 			- check if such username exists, boolean value returned.
 	
 - OpenBox SF-5 settings (require digest authentication)
-	- jaxrs/usersettings/create POST						- post user setting to this endpoint to create a new setting. User authenticated and the one in setting should coincide.
+	- jaxrs/usersettings/create POST						- post user setting to this endpoint to create a new setting, user authenticated and the one in setting should coincide;
 	- jaxrs/usersettings/all GET							- get all user's settings, based on credentials provided;
 	- jaxrs/usersettings/filter/{type}/{typeValue} GET 		- get user's settings, filtered by arbitrary field name and field value, based on credentials provided;
 	- jaxrs/usersettings/filter/id/{settingId} GET 			- get setting by its ID, based on credentials provided;
