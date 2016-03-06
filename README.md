@@ -29,7 +29,7 @@ In my humble opinion, I tried to do my best of pure Spring MVC, better then well
 
 This implementation of Openbox SF-5 settings editor provides SQL-based user authentication (Spring Security 4 used) and registration, so that it can be run in a cloud. Each user can access only his/her own SF-5 settings. At the same time, a user has the right to update common catalogue with transponder data, without the need for the administrator to do this routine job. User administrator with credentials admin/1 is checked and, if necessary, created at every application startup. In JSP-mode CSRF protection is used.
 
-There are 2 authentication modes:
+There are 3 authentication modes:
 
 - form-login for Spring MVC JSP pages;
 - digest authentication for RESTful Spring MVC API;
