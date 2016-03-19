@@ -15,7 +15,8 @@ Leaving behind satellite television details, Openbox SF-5 settings editor is a r
 - import catalogue data from structured text files (refreshed transponder data from resources like <http://ru.kingofsat.net>) into relational database;
 - create and edit own entities (gadget settings) using catalogue data, store them in database and reuse when needed;
 - export gadget settings into structured XML files for exchange with vendor owned gadget application;
-- output user composed gadget settings to a print form, so that a user can have a hard copy of settings when using Openbox SF-5.
+- output user composed gadget settings to a print form, so that a user can have a hard copy of settings when using Openbox SF-5;
+- for admin user - ability to enable/disable and delete registered users, except admin oneself.
 
 When replicating this project from its 1C:Enterprise 8.2 original, I hardly tried to repeat in Spring MVC all GUI features that I had previously implemented in its original, 1C:Enterprise desktop version, to ensure good end-user experience. It includes:
 
