@@ -89,7 +89,7 @@ There is an option to utilize tomcat7-maven-plugin in pom.xml. Default administr
 
 - configured non-XA datasource with JNDI name "java:jboss/datasources/PostgreSQLDS"; Postgre and H2 supported;
 - WildFly 10 application server;
-- Postgre 9.2+ database server, running at the same host with WildFly (for profiles dev, prod and openshift);
+- Postgre 9.2+ database server (for profiles dev, prod and openshift);
 - Java 8.
 
 ## Technologies ##
