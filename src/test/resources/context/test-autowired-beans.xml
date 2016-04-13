@@ -33,9 +33,12 @@
 
 <context:property-placeholder location="classpath:application.properties" system-properties-mode="OVERRIDE"/>
 
-<tx:annotation-driven/>
 
 <!-- In tests we need only few beans -->
+<!-- http://docs.spring.io/autorepo/docs/spring/4.2.x/spring-framework-reference/html/transaction.html
+
+Difference between container and local datasource transaction managers.
+ -->
 
 <bean id="dataSource"
 	class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -47,13 +50,22 @@
 	
 
 	
-<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
     <property name="dataSource" ref="dataSource" />
-    <property name="packagesToScan" value="org.openbox.sf5.model" />   
+    <property name="packagesToScan" value="org.openbox.sf5.model" /> 
+<!--     <property name="jtaTransactionManager" ref="transactionManager"/>   -->
     <property name="configLocation"> 
 		<value>classpath:hibernate.cfg.xml</value> 
     </property> 
 </bean>
+
+<bean id="transactionManager"
+    class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory" />
+</bean>
+
+<tx:annotation-driven transaction-manager="transactionManager" />
+
 
 
 <bean id="jacksonObjectMapper" 

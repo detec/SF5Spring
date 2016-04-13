@@ -480,7 +480,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-jdbc</artifactId>
-		<version>${spring.security.version}</version>
+		<version>${spring.version}</version>
 	</dependency>
 	<dependency>
     	<groupId>org.springframework.security</groupId>

@@ -6,9 +6,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.openbox.sf5.model.AbstractDbEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Repository
+@Transactional
 public class DAOImpl implements DAO, Serializable {
 
 	@Override
@@ -19,6 +21,16 @@ public class DAOImpl implements DAO, Serializable {
 		s.getTransaction().commit();
 		s.close();
 
+		// Session s = sessionFactory.getCurrentSession();
+		// Transaction tx = s.getTransaction();
+		// if (tx == null) {
+		// s.beginTransaction();
+		// }
+		// s.merge(obj);
+		//
+		// if (tx == null) {
+		// s.getTransaction().commit();
+		// }
 	}
 
 	@Override
@@ -29,23 +41,33 @@ public class DAOImpl implements DAO, Serializable {
 		s.delete(c);
 		s.getTransaction().commit();
 		s.close();
+
+		// Session s = sessionFactory.getCurrentSession();
+		// s.delete(s.get(type, id));
 	}
 
 	@Override
 	public <T extends AbstractDbEntity> void update(T obj) {
-		Session s = sessionFactory.openSession();
-		s.beginTransaction();
-		s.update(obj);
-		s.getTransaction().commit();
-		s.close();
+		// Session s = sessionFactory.openSession();
+		// s.beginTransaction();
+		// s.update(obj);
+		// s.getTransaction().commit();
+		// s.close();
+
+		add(obj);
 	}
 
 	@Override
 	public <T extends AbstractDbEntity> T select(Class<T> type, long id) {
+
 		Session s = sessionFactory.openSession();
 		s.beginTransaction();
 		@SuppressWarnings("unchecked")
-		T obj = (T) s.get(type, id);
+		T obj = s.get(type, id);
+
+		// Session s = sessionFactory.getCurrentSession();
+		// T obj = s.get(type, id);
+
 		s.close();
 		return obj;
 	}
@@ -57,6 +79,9 @@ public class DAOImpl implements DAO, Serializable {
 		s.saveOrUpdate(obj);
 		s.getTransaction().commit();
 		s.close();
+
+		// Session s = sessionFactory.getCurrentSession();
+		// s.saveOrUpdate(obj);
 	}
 
 	@Autowired

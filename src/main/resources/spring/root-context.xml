@@ -36,7 +36,7 @@
 <!-- application.properties are for Eclipse - file contains dev properties -->
 <context:property-placeholder location="classpath:application.properties" system-properties-mode="OVERRIDE"/>
 
-<jee:jndi-lookup jndi-name="java:jboss/datasources/PostgreSQLDS" id="dataSource" />
+<!-- <jee:jndi-lookup jndi-name="java:jboss/datasources/PostgreSQLDS" id="dataSource" />
 
 
 <bean id="transactionManager" 
@@ -48,7 +48,7 @@ class="org.springframework.transaction.jta.JtaTransactionManager">
 <tx:annotation-driven/>
 
 
-<tx:jta-transaction-manager />
+<tx:jta-transaction-manager /> -->
 
 
 
