@@ -62,13 +62,13 @@ public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 
 		// http://www.concretepage.com/spring/spring-jaxb-integration-annotation-pretty-print-example-with-jaxb2marshaller
 		// try (FileOutputStream fos = new
-		// FileOutputStream("sf5Jnitoutput.xml");) {
+		// FileOutputStream("sf5Junitoutput.xml");) {
 		// springMarshaller.marshal(sat, new StreamResult(fos));
 		// }
 
 		StringWriter sw = new StringWriter();
 
-		URL responseFile = ClassLoader.getSystemResource("xml/sf5Jnitoutput.xml");
+		URL responseFile = ClassLoader.getSystemResource("xml/sf5Junitoutput.xml");
 		assertThat(responseFile).isNotNull();
 
 		URI uri = responseFile.toURI();
