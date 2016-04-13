@@ -72,10 +72,9 @@ The service name is OpenboxSF5Service, its WSDL can be obtained at /application_
 
 Different Maven profiles are required to use different database schemes and integration tests. Openbox SF-5 settings editor uses 3 maven profiles:
 
-	- dev 	Default profile, database url is jdbc:h2:tcp://localhost/~/sf5springdev. 
-			This database url is used in Eclipse-based container deploy.
+	- dev 	Default profile;
 	- test 	Profile for additional integration tests, run with Cargo Maven plugin in H2 in-memory mode;
-	- prod 	Profile for production builds, database url is jdbc:h2:tcp://localhost/~/sf5spring.
+	- prod 	Profile for production builds;
 	- openshift Profile for deployment in an OpenShift cloud.
 	
 ## Tests notice ##
