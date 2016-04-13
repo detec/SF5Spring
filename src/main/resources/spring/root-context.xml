@@ -36,74 +36,22 @@
 <!-- application.properties are for Eclipse - file contains dev properties -->
 <context:property-placeholder location="classpath:application.properties" system-properties-mode="OVERRIDE"/>
 
-
-<!-- http://softwarecave.org/2014/03/15/using-jpa-and-jta-with-spring/ -->
-
-<!-- <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-    <property name="database" value="ORACLE" />
-    <property name="showSql" value="true" />
-    <property name="generateDdl" value="true" />
-</bean> -->
-
 <jee:jndi-lookup jndi-name="java:jboss/datasources/PostgreSQLDS" id="dataSource" />
 
-<!-- 	expected-type="org.jboss.jca.adapters.jdbc.WrapperDataSource" -->
-
-<!-- 
-<bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-    <property name="jtaDataSource" ref="dataSource" />
-    <property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
-</bean>
-
--->
 
 <bean id="transactionManager" 
 class="org.springframework.transaction.jta.JtaTransactionManager"> 
 	<property name="dataSource" ref="dataSource"/>	
 </bean>
 
-<!-- <tx:annotation-driven transaction-manager="transactionManager"/> -->
-<!-- <tx:annotation-driven transaction-manager="transactionManager"/> -->
+
 <tx:annotation-driven/>
 
 
 <tx:jta-transaction-manager />
 
 
-<!-- jtaTransactionManager -->
 
-<!-- Trying to load placeholders. 
-Seems not to work
--->	
-<!-- <bean id="appProperties"
-    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
- 
-    <property name="location" value="classpath:application.properties" />
- 
-</bean> -->
-
-<!-- http://www.mkyong.com/spring3/spring-value-default-value/ 
-Must register a static PropertySourcesPlaceholderConfigurer bean in either XML or annotation, so that Spring @Value know how to interpret ${}
--->
-
-	<!-- JDNI name for EntityManagerFactory is defined in src/main/resources/META-INF/persistence.xml -->
-<!-- 	<jee:jndi-lookup jndi-name="java:jboss/SF5Spring/persistence" id="entityManagerFactory"
-                     expected-type="javax.persistence.EntityManagerFactory" />
-
-	<bean id="entityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
-   		<property name="entityManagerFactory" ref="entityManagerFactory"/>
-	</bean>
- -->
-
-    <import resource="autowired-beans.xml"/>
-
-	<!-- https://bthurley.wordpress.com/2014/04/27/web-services-with-jax-ws-jaxb-and-spring/ -->
-    <!-- Define the jaxws endpoint 
-    We switched to WildFly
-    
-    -->
-<!--     <import resource="spring-ws-servlet.xml"/> -->
-
-<!-- <import resource="cxf-servlet.xml"/> -->
+<import resource="autowired-beans.xml"/>
 		
 </beans>    
