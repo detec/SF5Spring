@@ -171,30 +171,6 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	public Transponders() {
 	}
 
-	@Override
-	public boolean equals(Object other) {
-		if (other == null) {
-			return false;
-		}
-		if (other == this) {
-			return true;
-		}
-
-		if (!(other instanceof Transponders)) {
-			return false;
-		}
-		Transponders otherTransponders = (Transponders) other;
-		if (otherTransponders.Frequency == Frequency && otherTransponders.Polarization.equals(Polarization)
-				&& otherTransponders.FEC.equals(FEC) && otherTransponders.Carrier.equals(Carrier)
-				&& otherTransponders.Speed == Speed && otherTransponders.VersionOfTheDVB.equals(VersionOfTheDVB)
-				&& otherTransponders.RangeOfDVB.equals(RangeOfDVB) && otherTransponders.Satellite.equals(Satellite)) {
-			return true;
-		} else {
-			return false;
-		}
-
-	}
-
 	protected void setObjectFieldsFrom(Transponders origObj) throws IllegalAccessException {
 		Field fields[];
 		Class curClass = origObj.getClass();

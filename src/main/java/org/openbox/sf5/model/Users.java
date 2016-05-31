@@ -36,7 +36,6 @@ public class Users extends AbstractDbEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	// @SequenceGenerator(name = "t_gen", sequenceName = "T_SEQ")
 	private long id;
 
 	public long getId() {
@@ -117,35 +116,6 @@ public class Users extends AbstractDbEntity implements Serializable {
 	}
 
 	public Users() {
-	}
-
-	@Override
-	public boolean equals(Object other) {
-		if (other == null) {
-			return false;
-		}
-		if (other == this) {
-			return true;
-		}
-
-		if (!(other instanceof Users)) {
-			return false;
-		}
-		Users otherUsers = (Users) other;
-		if
-
-		// (otherUsers.username.equals(username) &&
-		// otherUsers.Password.equals(Password)
-		// && otherUsers.enabled == enabled &&
-		// otherUsers.authorities.equals(authorities))
-
-		// let's compare only by username
-		(otherUsers.username.equals(username)) {
-			return true;
-		} else {
-			return false;
-		}
-
 	}
 
 }

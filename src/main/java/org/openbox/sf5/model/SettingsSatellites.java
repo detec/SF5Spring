@@ -93,26 +93,4 @@ public class SettingsSatellites extends AbstractDbEntity implements Serializable
 	public SettingsSatellites() {
 	}
 
-	@Override
-	public boolean equals(Object other) {
-		if (other == null) {
-			return false;
-		}
-		if (other == this) {
-			return true;
-		}
-
-		if (!(other instanceof SettingsSatellites)) {
-			return false;
-		}
-		SettingsSatellites otherSettingsSatellites = (SettingsSatellites) other;
-		if (otherSettingsSatellites.parent_id.equals(parent_id)
-				&& otherSettingsSatellites.Satellite.equals(Satellite)) {
-			return true;
-		} else {
-			return false;
-		}
-
-	}
-
 }

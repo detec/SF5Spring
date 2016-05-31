@@ -65,6 +65,10 @@ public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 		// FileOutputStream("sf5Junitoutput.xml");) {
 		// springMarshaller.marshal(sat, new StreamResult(fos));
 		// }
+		//
+		// catch (Exception e) {
+		// e.printStackTrace();
+		// }
 
 		StringWriter sw = new StringWriter();
 
@@ -76,8 +80,6 @@ public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 
 		String content = new String(Files.readAllBytes(Paths.get(uri)), Charset.forName("UTF-8"));
 		content = content.replace("\r\n\r\n", "\r\n"); // it adds
-		// superfluous
-		// \r\n
 
 		// marshalling sat
 		springMarshaller.marshal(sat, new StreamResult(sw));

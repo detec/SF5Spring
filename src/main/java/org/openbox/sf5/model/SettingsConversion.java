@@ -157,31 +157,6 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	public SettingsConversion() {
 	}
 
-	@Override
-	public boolean equals(Object other) {
-		if (other == null) {
-			return false;
-		}
-		if (other == this) {
-			return true;
-		}
-
-		if (!(other instanceof SettingsConversion)) {
-			return false;
-		}
-		SettingsConversion otherSettingsConversion = (SettingsConversion) other;
-		if (otherSettingsConversion.parent_id.equals(parent_id)
-				&& otherSettingsConversion.Transponder.equals(Transponder)
-				&& otherSettingsConversion.Satindex == Satindex && otherSettingsConversion.Tpindex == Tpindex
-				&& otherSettingsConversion.Note.equals(Note)
-				&& otherSettingsConversion.TheLineOfIntersection == TheLineOfIntersection) {
-			return true;
-		} else {
-			return false;
-		}
-
-	}
-
 	@SuppressWarnings("unchecked")
 	protected void setObjectFieldsFrom(SettingsConversion origObj) throws IllegalAccessException {
 		Field fields[];

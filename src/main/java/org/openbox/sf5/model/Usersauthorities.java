@@ -29,7 +29,6 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	// @SequenceGenerator(name = "t_gen", sequenceName = "T_SEQ")
 	private long id;
 
 	@ManyToOne
@@ -93,32 +92,11 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 		this.username = username;
 		this.authority = authority;
 		this.parent_id = parent_id;
-		LineNumber = pLine;
+		this.LineNumber = pLine;
 
 	}
 
 	public Usersauthorities() {
-	}
-
-	@Override
-	public boolean equals(Object other) {
-		if (other == null) {
-			return false;
-		}
-		if (other == this) {
-			return true;
-		}
-
-		if (!(other instanceof Usersauthorities)) {
-			return false;
-		}
-		Usersauthorities otherUsersauthorities = (Usersauthorities) other;
-		if (otherUsersauthorities.username.equals(username) && otherUsersauthorities.authority.equals(authority)) {
-			return true;
-		} else {
-			return false;
-		}
-
 	}
 
 }
