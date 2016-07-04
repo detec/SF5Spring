@@ -164,47 +164,47 @@
         </tp>
         <tp index="2">
             <LnbFreq>10600</LnbFreq>
+            <Freq>12188</Freq>
+            <Symbol>30000</Symbol>
+            <Polar>1</Polar>
+        </tp>
+        <tp index="3">
+            <LnbFreq>10600</LnbFreq>
             <Freq>12207</Freq>
             <Symbol>30000</Symbol>
             <Polar>0</Polar>
         </tp>
-        <tp index="3">
+        <tp index="4">
             <LnbFreq>10600</LnbFreq>
             <Freq>12226</Freq>
             <Symbol>25540</Symbol>
             <Polar>1</Polar>
         </tp>
-        <tp index="4">
+    </satid>
+    <satid index="8">
+        <tp index="1">
             <LnbFreq>10600</LnbFreq>
             <Freq>12245</Freq>
             <Symbol>27500</Symbol>
             <Polar>0</Polar>
         </tp>
-    </satid>
-    <satid index="8">
-        <tp index="1">
+        <tp index="2">
             <LnbFreq>10600</LnbFreq>
             <Freq>12265</Freq>
             <Symbol>27500</Symbol>
             <Polar>1</Polar>
         </tp>
-        <tp index="2">
+        <tp index="3">
             <LnbFreq>10600</LnbFreq>
             <Freq>12284</Freq>
             <Symbol>27500</Symbol>
             <Polar>0</Polar>
         </tp>
-        <tp index="3">
+        <tp index="4">
             <LnbFreq>10600</LnbFreq>
             <Freq>12303</Freq>
             <Symbol>25547</Symbol>
             <Polar>1</Polar>
-        </tp>
-        <tp index="4">
-            <LnbFreq>10600</LnbFreq>
-            <Freq>12322</Freq>
-            <Symbol>27500</Symbol>
-            <Polar>0</Polar>
         </tp>
     </satid>
 </sat>
