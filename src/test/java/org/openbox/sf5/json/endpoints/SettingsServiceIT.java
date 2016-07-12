@@ -108,7 +108,13 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		// //
 		// http://howtodoinjava.com/2015/08/07/jersey-restful-client-examples/#post
-		invocationBuilder = serviceTarget.path("create").request(MediaType.APPLICATION_JSON);
+		invocationBuilder = serviceTarget
+
+				// .path("create")
+
+				.path("/")
+
+				.request(MediaType.APPLICATION_JSON);
 		Response responsePost = invocationBuilder.post(Entity.entity(setting, MediaType.APPLICATION_JSON));
 		assertEquals(Status.CREATED.getStatusCode(), responsePost.getStatus());
 
@@ -124,7 +130,11 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		setting.setId(id);
 
 		// Here we test getting setting by id.
-		invocationBuilder = serviceTarget.path("filter").path("id").path(Long.toString(setting.getId()))
+		invocationBuilder = serviceTarget
+
+				// .path("filter").path("id")
+
+				.path(Long.toString(setting.getId()))
 
 				.request(MediaType.APPLICATION_JSON);
 
@@ -183,7 +193,12 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		fillTranspondersToSetting(newTransList, setting);
 
-		invocationBuilder = serviceTarget.path("create").request(MediaType.APPLICATION_XML);
+		invocationBuilder = serviceTarget
+
+				// .path("create")
+				.path("/")
+
+				.request(MediaType.APPLICATION_XML);
 		Response responsePost = invocationBuilder.post(Entity.entity(setting, MediaType.APPLICATION_XML));
 		assertEquals(Status.CREATED.getStatusCode(), responsePost.getStatus());
 
@@ -199,7 +214,11 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		setting.setId(id);
 
 		// Here we test getting setting by id.
-		invocationBuilder = serviceTarget.path("filter").path("id").path(Long.toString(setting.getId()))
+		invocationBuilder = serviceTarget
+
+				// .path("filter").path("id")
+
+				.path(Long.toString(setting.getId()))
 
 				.request(MediaType.APPLICATION_XML);
 
@@ -212,7 +231,11 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		assertTrue(settingRead instanceof Settings);
 
 		// getting device specific output
-		invocationBuilder = serviceTarget.path("filter").path("id").path(Long.toString(setting.getId())).path("sf5")
+		invocationBuilder = serviceTarget
+
+				// .path("filter").path("id")
+
+				.path(Long.toString(setting.getId())).path("sf5")
 
 				.request(MediaType.TEXT_PLAIN);
 
@@ -246,12 +269,15 @@ public class SettingsServiceIT extends AbstractServiceTest {
 	// getting all user settings with authentication
 	private List<Settings> getUserSettings() {
 
-		List<Settings> settList = new ArrayList<Settings>();
+		List<Settings> settList = new ArrayList<>();
 
 		GenericType<List<Settings>> genList = new GenericType<List<Settings>>() {
 		};
 
-		WebTarget target = serviceTarget.path("all");
+		WebTarget target = serviceTarget
+
+				// .path("all")
+				.path("/");
 
 		settList = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get(genList);
 
@@ -273,8 +299,13 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		Response response = null;
 
-		Invocation.Builder invocationBuilder = serviceTarget.path("all").request(MediaType.APPLICATION_XML)
-				.accept(MediaType.APPLICATION_XML);
+		Invocation.Builder invocationBuilder = serviceTarget
+
+				// .path("all")
+
+				.path("/")
+
+				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 

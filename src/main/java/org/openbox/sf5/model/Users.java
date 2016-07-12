@@ -47,6 +47,48 @@ public class Users extends AbstractDbEntity implements Serializable {
 		this.id = id;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((Password == null) ? 0 : Password.hashCode());
+		result = prime * result + (enabled ? 1231 : 1237);
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Users other = (Users) obj;
+		if (Password == null) {
+			if (other.Password != null) {
+				return false;
+			}
+		} else if (!Password.equals(other.Password)) {
+			return false;
+		}
+		if (enabled != other.enabled) {
+			return false;
+		}
+		if (username == null) {
+			if (other.username != null) {
+				return false;
+			}
+		} else if (!username.equals(other.username)) {
+			return false;
+		}
+		return true;
+	}
+
 	@Column(name = "username", unique = false, nullable = false, length = 50)
 	@XmlID
 	private String username;
