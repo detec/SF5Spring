@@ -27,7 +27,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 @RunWith(JUnit4.class)
 public class SatellitesServiceIT extends AbstractServiceTest {
 
-	private String servicePath = "satellites";
+	private String servicePath = "satellites/";
 
 	private long satelliteId;
 
@@ -69,8 +69,11 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		Response response = null;
 		GenericType<List<Satellites>> genList = new GenericType<List<Satellites>>() {
 		};
-		Invocation.Builder invocationBuilder = serviceTarget.path("all").request(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON);
+		Invocation.Builder invocationBuilder = serviceTarget
+
+				// .path("")
+
+				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
 
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -86,8 +89,11 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 
 		Response response = null;
 
-		Invocation.Builder invocationBuilder = serviceTarget.path("all").request(MediaType.APPLICATION_XML)
-				.accept(MediaType.APPLICATION_XML);
+		Invocation.Builder invocationBuilder = serviceTarget
+
+				// .path("all")
+
+				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
 		response = invocationBuilder.get();
 
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -118,8 +124,12 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		Response response = null;
 		getSatelliteId();
 
-		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("id").path(String.valueOf(satelliteId))
-				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+		Invocation.Builder invocationBuilder = serviceTarget
+
+				// .path("filter").path("id")
+
+				.path(String.valueOf(satelliteId)).request(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON);
 
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -158,8 +168,11 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		Response response = null;
 		getSatelliteIdXML();
 
-		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("id").path(String.valueOf(satelliteId))
-				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+		Invocation.Builder invocationBuilder = serviceTarget
+
+				// .path("filter").path("id")
+
+				.path(String.valueOf(satelliteId)).request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
 
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());

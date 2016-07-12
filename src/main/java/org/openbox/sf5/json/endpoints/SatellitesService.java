@@ -26,32 +26,32 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RequestMapping(value = "${jaxrs.path}/satellites/", produces = { "application/xml", "application/json" })
 public class SatellitesService {
 
-	@RequestMapping(value = "jdx", method = RequestMethod.GET)
-	public ResponseEntity<List<Satellites>> getAllSatellitesJDX() {
-		List<Satellites> satList = listService.ObjectsList(Satellites.class);
-		if (satList.isEmpty()) {
-			return new ResponseEntity<List<Satellites>>(HttpStatus.NO_CONTENT);//
-		}
+	// @RequestMapping(value = "jdx", method = RequestMethod.GET)
+	// public ResponseEntity<List<Satellites>> getAllSatellitesJDX() {
+	// List<Satellites> satList = listService.ObjectsList(Satellites.class);
+	// if (satList.isEmpty()) {
+	// return new ResponseEntity<>(HttpStatus.NO_CONTENT);//
+	// }
+	//
+	// return new ResponseEntity<>(satList, HttpStatus.OK);
+	// }
 
-		return new ResponseEntity<List<Satellites>>(satList, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<Satellites>> getAllSatellites() {
 		List<Satellites> satList = listService.ObjectsList(Satellites.class);
 		if (satList.isEmpty()) {
-			return new ResponseEntity<List<Satellites>>(HttpStatus.NO_CONTENT);//
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 
-		return new ResponseEntity<List<Satellites>>(satList, HttpStatus.OK);
+		return new ResponseEntity<>(satList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "all", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Satellites>> getAllSatellitesXML()
 			throws NoSuchFieldException, SecurityException, NoSuchMethodException {
 		List<Satellites> satList = listService.ObjectsList(Satellites.class);
 		if (satList.isEmpty()) {
-			return new ResponseEntity<GenericXMLListWrapper<Satellites>>(HttpStatus.NO_CONTENT);//
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);//
 		}
 
 		// we should replace XmlElementWrapper name
@@ -60,49 +60,14 @@ public class SatellitesService {
 		return JsonObjectFiller.returnGenericWrapperResponseBySatList(satList, Satellites.class);
 	}
 
-	// private ResponseEntity<GenericXMLListWrapper<Satellites>>
-	// returnGenericWrapperResponseBySatList(
-	// List<Satellites> satList) {
-	//
-	// GenericXMLListWrapper<Satellites> wrapper = new
-	// GenericXMLListWrapper<Satellites>();
-	// wrapper.setWrappedList(satList);
-	//
-	// //
-	// http://stackoverflow.com/questions/14268981/modify-a-class-definitions-annotation-string-parameter-at-runtime
-	// //
-	// http://stackoverflow.com/questions/16545868/exception-converting-object-to-xml-using-jaxb
-	//
-	// // We should replace stub for satellites in root element
-	// final XmlRootElement classAnnotation =
-	// wrapper.getClass().getAnnotation(XmlRootElement.class);
-	// ChangeAnnotation.changeAnnotationValue(classAnnotation, "name",
-	// "satellites"); // this
-	// // seems
-	// // to
-	// // work
-	//
-	// // we should also change annotation of @XmlSeeAlso
-	// final XmlSeeAlso classSeeAlsoAnnotation =
-	// wrapper.getClass().getAnnotation(XmlSeeAlso.class);
-	// // Player[] thePlayers = new Player[playerCount + 1];
-	// Class[] clazzArray = new Class[1];
-	// clazzArray[0] = Satellites.class;
-	// ChangeAnnotation.changeAnnotationValue(classSeeAlsoAnnotation, "value",
-	// clazzArray);
-	//
-	// return new ResponseEntity<GenericXMLListWrapper<Satellites>>(wrapper,
-	// HttpStatus.OK);
-	// }
-
-	@RequestMapping(value = "filter/id/{satelliteId}", method = RequestMethod.GET)
+	@RequestMapping(value = "{satelliteId}", method = RequestMethod.GET)
 	public ResponseEntity<Satellites> getSatelliteById(@PathVariable("satelliteId") long satId) {
 		Satellites sat = objectController.select(Satellites.class, satId);
 		if (sat == null) {
-			return new ResponseEntity<Satellites>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 
-		return new ResponseEntity<Satellites>(sat, HttpStatus.OK);
+		return new ResponseEntity<>(sat, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
@@ -111,10 +76,10 @@ public class SatellitesService {
 
 		List<Satellites> satList = jsonizer.getSatellitesByArbitraryFilter(fieldName, typeValue);
 		if (satList.isEmpty()) {
-			return new ResponseEntity<List<Satellites>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 
-		return new ResponseEntity<List<Satellites>>(satList, HttpStatus.OK);
+		return new ResponseEntity<>(satList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
@@ -123,7 +88,7 @@ public class SatellitesService {
 		List<Satellites> satList = jsonizer.getSatellitesByArbitraryFilter(fieldName, typeValue);
 
 		if (satList.isEmpty()) {
-			return new ResponseEntity<GenericXMLListWrapper<Satellites>>(HttpStatus.NO_CONTENT);//
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);//
 		}
 
 		return JsonObjectFiller.returnGenericWrapperResponseBySatList(satList, Satellites.class);
