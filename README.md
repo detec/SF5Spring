@@ -41,28 +41,28 @@ There are 3 authentication modes:
 This Openbox SF-5 settings editor implementation provides RESTful API for getting entities from database with the help of Spring MVC 4. For most endpoints Jackson 2 is used, however, for SF-5 XML format, where exact XML structure is required, Spring's Jaxb2Marshaller is used. Output format is resolved by client's "Accept" HTTP header, "application/json" or "application/xml". Here is the list of supported endpoints, relative to application context path:
 
 - Satellites
-	- jaxrs/satellites/all GET							- get all satellites;
-	- jaxrs/satellites/filter/id/{satelliteId} GET 		- get satellite by its ID;
+	- jaxrs/satellites/ GET								- get all satellites;
+	- jaxrs/satellites/{satelliteId} GET 				- get satellite by its ID;
 	- jaxrs/satellites/filter/{type}/{typeValue} GET 	- get satellites, filtered by arbitrary field name and field value.
 	
 - Transponders
 	- jaxrs/transponders/filter/{type}/{typeValue} GET 	- get transponders, filtered by arbitrary field name and field value;
 	- jaxrs/transponders/filter/id/{transponderId} GET 	- get transponder by its ID;
 	- jaxrs/transponders/filter;satId={satId} GET 		- get all transponders from specified satellite;
-	- jaxrs/transponders/all GET 						- get all transponders;
-	- jaxrs/transponders/upload POST						- upload .ini file with transponders for further import. Content-type should be multipart/form-data.
+	- jaxrs/transponders/ GET 							- get all transponders;
+	- jaxrs/transponders/upload POST					- upload .ini file with transponders for further import. Content-type should be multipart/form-data.
 	
 - Users (most endpoints require digest authentication)
 	- jaxrs/users/filter/username/{login} GET 			- get user by its login, for ADMIN role or user authenticated;
-	- jaxrs/users/create POST 							- create new user, only for ADMIN role, new user ID is returned in "UserId" HTTP header; 
+	- jaxrs/users/ POST 								- create new user, only for ADMIN role, new user ID is returned in "UserId" HTTP header; 
 	- jaxrs/users/exists/username/{login} GET 			- check if such username exists, boolean value returned.
 	
 - OpenBox SF-5 settings (require digest authentication)
-	- jaxrs/usersettings/create POST						- post user setting to this endpoint to create a new setting, user authenticated and the one in setting should coincide;
-	- jaxrs/usersettings/all GET							- get all user's settings, based on credentials provided;
+	- jaxrs/usersettings/ POST								- post user setting to this endpoint to create a new setting, user authenticated and the one in setting should coincide;
+	- jaxrs/usersettings/ GET								- get all user's settings, based on credentials provided;
 	- jaxrs/usersettings/filter/{type}/{typeValue} GET 		- get user's settings, filtered by arbitrary field name and field value, based on credentials provided;
-	- jaxrs/usersettings/filter/id/{settingId} GET 			- get setting by its ID, based on credentials provided;
-	- jaxrs/usersettings/filter/id/{settingId}/sf5 GET		- get setting by its ID, based on credentials provided, in Openbox SF-5 XML format; only "text/plain" "Accept" HTTP header is supported.
+	- jaxrs/usersettings/{settingId} GET 					- get setting by its ID, based on credentials provided;
+	- jaxrs/usersettings/{settingId}/sf5 GET				- get setting by its ID, based on credentials provided, in Openbox SF-5 XML format; only "text/plain" "Accept" HTTP header is supported.
 	
 ## JAX-WS service ##
 
