@@ -38,12 +38,12 @@ public class UsersService {
 			throw new IllegalArgumentException("No user found in database for login: " + login);
 		}
 
-		return new ResponseEntity<Users>(retUser, HttpStatus.OK);
+		return new ResponseEntity<>(retUser, HttpStatus.OK);
 
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "create", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Long> createUser(@RequestBody Users user)
 			throws IllegalArgumentException, IllegalStateException {
 		// check if such user exists.
@@ -61,23 +61,20 @@ public class UsersService {
 		catch (Exception e) {
 			throw new IllegalStateException("Error when saving user to database", e);
 		}
-		// if (statusResult.equals(HttpStatus.CONFLICT)) {
-		// return new ResponseEntity<Long>(statusResult);
-		// }
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("UserId", Long.toString(user.getId()));
-		return new ResponseEntity<Long>(new Long(user.getId()), headers, HttpStatus.CREATED);
+		return new ResponseEntity<>(new Long(user.getId()), headers, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "exists/username/{login}", method = RequestMethod.GET)
 	public ResponseEntity<Boolean> ifSuchLoginExists(@PathVariable("login") String login) {
 		Boolean result = usersJsonizer.checkIfUsernameExists(login);
 		if (!result) {
-			return new ResponseEntity<Boolean>(result, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
 		}
 
-		return new ResponseEntity<Boolean>(result, HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
 	}
 
 	public UsersJsonizer getUsersJsonizer() {

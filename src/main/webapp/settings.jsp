@@ -96,7 +96,6 @@ This causes problem
 
 <c:if test="${hasAdminRole}">
 <c:url var="usersUrl" value="/users" />
-<!-- <a href="/users/">User administration</a> -->
 <a href="${usersUrl}">User administration</a>
 </c:if>
 
