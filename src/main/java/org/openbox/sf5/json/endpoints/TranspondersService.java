@@ -35,10 +35,10 @@ public class TranspondersService {
 
 			result = transpondersJsonizer.uploadTransponders(file);
 		} else {
-			return new ResponseEntity<Boolean>(result, HttpStatus.NOT_IMPLEMENTED);
+			return new ResponseEntity<>(result, HttpStatus.NOT_IMPLEMENTED);
 		}
 
-		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = "application/json")
@@ -46,9 +46,9 @@ public class TranspondersService {
 			@PathVariable("typeValue") String typeValue) {
 		List<Transponders> transList = transpondersJsonizer.getTranspondersByArbitraryFilter(fieldName, typeValue);
 		if (transList.isEmpty()) {
-			return new ResponseEntity<List<Transponders>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<Transponders>>(transList, HttpStatus.OK);
+		return new ResponseEntity<>(transList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
@@ -56,7 +56,7 @@ public class TranspondersService {
 			@PathVariable("type") String fieldName, @PathVariable("typeValue") String typeValue) {
 		List<Transponders> transList = transpondersJsonizer.getTranspondersByArbitraryFilter(fieldName, typeValue);
 		if (transList.isEmpty()) {
-			return new ResponseEntity<GenericXMLListWrapper<Transponders>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		return JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);
 	}
@@ -65,10 +65,10 @@ public class TranspondersService {
 	public ResponseEntity<Transponders> getTransponderById(@PathVariable("transponderId") long tpId) {
 		Transponders trans = objectController.select(Transponders.class, tpId);
 		if (trans == null) {
-			return new ResponseEntity<Transponders>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 
-		return new ResponseEntity<Transponders>(trans, HttpStatus.OK);
+		return new ResponseEntity<>(trans, HttpStatus.OK);
 
 	}
 
@@ -78,9 +78,9 @@ public class TranspondersService {
 
 		List<Transponders> transList = transpondersJsonizer.getTranspondersBySatelliteId(satId);
 		if (transList.isEmpty()) {
-			return new ResponseEntity<List<Transponders>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<Transponders>>(transList, HttpStatus.OK);
+		return new ResponseEntity<>(transList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{filter}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
@@ -89,26 +89,26 @@ public class TranspondersService {
 
 		List<Transponders> transList = transpondersJsonizer.getTranspondersBySatelliteId(satId);
 		if (transList.isEmpty()) {
-			return new ResponseEntity<GenericXMLListWrapper<Transponders>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 
 		return JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);
 	}
 
-	@RequestMapping(value = "all", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Transponders>> getTransponders() {
 		List<Transponders> transList = listService.ObjectsList(Transponders.class);
 		if (transList.isEmpty()) {
-			return new ResponseEntity<List<Transponders>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<Transponders>>(transList, HttpStatus.OK);
+		return new ResponseEntity<>(transList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "all", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Transponders>> getTranspondersXML() {
 		List<Transponders> transList = listService.ObjectsList(Transponders.class);
 		if (transList.isEmpty()) {
-			return new ResponseEntity<GenericXMLListWrapper<Transponders>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 
 		return JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);

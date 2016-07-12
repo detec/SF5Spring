@@ -47,16 +47,7 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 	@Test
 	public void shouldGetTranspondersByArbitraryFilter() {
 
-		// WebTarget target = null;
 		Response response = null;
-		// Client client = createClient();
-		// target = client.target(appLocation +
-		// "transponders/filter/Speed/27500");
-		// target =
-		// client.target(appLocation).path(jsonPath).path(servicePath).path("filter").path("Speed").path("27500");
-
-		// response =
-		// target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 
 		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("Speed").path("27500")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
@@ -77,8 +68,12 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		Transponders readTrans = newTransList.get(0);
 		transponderId = readTrans.getId();
 
-		invocationBuilder = serviceTarget.path("filter").path("id").path(String.valueOf(transponderId))
-				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+		invocationBuilder = serviceTarget
+
+				.path("filter").path("id")
+
+				.path(String.valueOf(transponderId)).request(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON);
 
 		response = invocationBuilder.get();
 
@@ -121,8 +116,12 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		Transponders readTrans = newTransList.get(0);
 		transponderId = readTrans.getId();
 
-		invocationBuilder = serviceTarget.path("filter").path("id").path(String.valueOf(transponderId))
-				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+		invocationBuilder = serviceTarget
+
+				.path("filter").path("id")
+
+				.path(String.valueOf(transponderId)).request(MediaType.APPLICATION_XML)
+				.accept(MediaType.APPLICATION_XML);
 		response = invocationBuilder.get();
 
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -191,8 +190,11 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		Response response = null;
 
-		Invocation.Builder invocationBuilder = serviceTarget.path("all").request(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON);
+		Invocation.Builder invocationBuilder = serviceTarget
+
+				.path("/")
+
+				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
@@ -210,8 +212,11 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		Response response = null;
 
-		Invocation.Builder invocationBuilder = serviceTarget.path("all").request(MediaType.APPLICATION_XML)
-				.accept(MediaType.APPLICATION_XML);
+		Invocation.Builder invocationBuilder = serviceTarget
+
+				.path("/")
+
+				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
