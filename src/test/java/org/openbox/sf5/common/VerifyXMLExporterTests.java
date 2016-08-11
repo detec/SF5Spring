@@ -49,7 +49,7 @@ public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 		Criterion criterion = criterionService.getCriterionByClassFieldAndStringValue(Settings.class, "Name",
 				"Intersections test");
 
-		List<Settings> settList = listService.ObjectsCriterionList(Settings.class, criterion);
+		List<Settings> settList = objectController.restrictionList(Settings.class, criterion);
 
 		assertEquals(1, settList.size());
 

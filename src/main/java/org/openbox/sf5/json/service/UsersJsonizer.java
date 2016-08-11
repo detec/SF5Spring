@@ -6,7 +6,6 @@ import org.hibernate.criterion.Criterion;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.service.CriterionService;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,7 @@ public class UsersJsonizer {
 			return returnUser;
 		}
 
-		List<Users> userList = listService.ObjectsCriterionList(Users.class, criterion);
+		List<Users> userList = objectsController.restrictionList(Users.class, criterion);
 		if (userList.size() == 0) {
 			return returnUser;
 		}
@@ -51,7 +50,7 @@ public class UsersJsonizer {
 		if (criterion == null) {
 			return result;
 		}
-		List<Users> userList = listService.ObjectsCriterionList(Users.class, criterion);
+		List<Users> userList = objectsController.restrictionList(Users.class, criterion);
 		// if (userList.size() == 0) {
 		// return result;
 		// } else {
@@ -61,17 +60,6 @@ public class UsersJsonizer {
 
 		return result;
 	}
-
-	public ObjectsListService getListService() {
-		return listService;
-	}
-
-	public void setListService(ObjectsListService listService) {
-		this.listService = listService;
-	}
-
-	@Autowired
-	private ObjectsListService listService;
 
 	@Autowired
 	private CriterionService criterionService;

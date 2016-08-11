@@ -32,19 +32,9 @@ public class TableFillerTests extends AbstractJsonizerTest {
 	@Transactional
 	public void shouldFillTablesByTableFiller() {
 
-		executeTableFiller();
-
 		// there should be 2 records in THEDVBRANGEVALUES
-		List<TheDVBRangeValues> rangesList = listService.ObjectsList(TheDVBRangeValues.class);
+		List<TheDVBRangeValues> rangesList = objectController.list(TheDVBRangeValues.class);
 		assertThat(rangesList.size()).isEqualTo(2);
-	}
-
-	public void executeTableFiller() {
-		TableFiller tf = new TableFiller();
-		tf.setSessionFactory(sessionFactory);
-		tf.setObjectController(objectController);
-		tf.init();
-
 	}
 
 }

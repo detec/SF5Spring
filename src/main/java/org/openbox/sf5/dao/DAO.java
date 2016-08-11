@@ -1,5 +1,6 @@
 package org.openbox.sf5.dao;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.openbox.sf5.model.AbstractDbEntity;
 
@@ -15,8 +16,10 @@ public interface DAO {
 
 	public <T extends AbstractDbEntity> void saveOrUpdate(T obj);
 
+	public void setSessionFactory(SessionFactory sessionFactory);
+
 	public SessionFactory getSessionFactory();
 
-	public void setSessionFactory(SessionFactory sessionFactory);
+	public Session openSession();
 
 }

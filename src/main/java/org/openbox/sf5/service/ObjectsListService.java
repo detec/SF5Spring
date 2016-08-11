@@ -16,11 +16,11 @@ public class ObjectsListService implements Serializable {
 	@Autowired
 	private DAOList dao;
 
-	public <T extends AbstractDbEntity> List<T> ObjectsList(Class<T> type) {
+	public <T extends AbstractDbEntity> List<T> list(Class<T> type) {
 		return dao.list(type);
 	}
 
-	public <T extends AbstractDbEntity> List<T> ObjectsCriterionList(Class<T> type, Criterion criterion) {
+	public <T extends AbstractDbEntity> List<T> restrictionList(Class<T> type, Criterion criterion) {
 		return dao.restrictionList(type, criterion);
 	}
 

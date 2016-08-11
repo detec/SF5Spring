@@ -10,7 +10,6 @@ import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.service.CriterionService;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +30,7 @@ public class TranspondersJsonizer {
 	}
 
 	public List<Transponders> getTranspondersByArbitraryFilter(String fieldName, String typeValue) {
-		List<Transponders> transList = new ArrayList<Transponders>();
+		List<Transponders> transList = new ArrayList<>();
 
 		Criterion criterion = criterionService.getCriterionByClassFieldAndStringValue(Transponders.class, fieldName,
 				typeValue);
@@ -40,14 +39,14 @@ public class TranspondersJsonizer {
 			return transList;
 		}
 
-		transList = listService.ObjectsCriterionList(Transponders.class, criterion);
+		transList = objectsController.restrictionList(Transponders.class, criterion);
 
 		return transList;
 
 	}
 
 	public List<Transponders> getTranspondersBySatelliteId(long satId) {
-		List<Transponders> transList = new ArrayList<Transponders>();
+		List<Transponders> transList = new ArrayList<>();
 
 		Satellites filterSatellite = objectsController.select(Satellites.class, satId);
 		if (filterSatellite == null) {
@@ -55,7 +54,7 @@ public class TranspondersJsonizer {
 		}
 		Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
 
-		transList = listService.ObjectsCriterionList(Transponders.class, criterion);
+		transList = objectsController.restrictionList(Transponders.class, criterion);
 
 		return transList;
 
@@ -63,9 +62,6 @@ public class TranspondersJsonizer {
 
 	@Autowired
 	private IniReader iniReader;
-
-	@Autowired
-	private ObjectsListService listService;
 
 	@Autowired
 	private ObjectsController objectsController;
@@ -79,14 +75,6 @@ public class TranspondersJsonizer {
 
 	public void setCriterionService(CriterionService criterionService) {
 		this.criterionService = criterionService;
-	}
-
-	public ObjectsListService getListService() {
-		return listService;
-	}
-
-	public void setListService(ObjectsListService listService) {
-		this.listService = listService;
 	}
 
 	public ObjectsController getObjectsController() {

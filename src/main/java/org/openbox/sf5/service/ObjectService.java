@@ -1,5 +1,7 @@
 package org.openbox.sf5.service;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.openbox.sf5.dao.DAO;
 import org.openbox.sf5.model.AbstractDbEntity;
 
@@ -18,4 +20,8 @@ public interface ObjectService {
 	public DAO getDAO();
 
 	public void setDAO(DAO dAO);
+
+	public SessionFactory getSessionFactory();
+
+	public Session openSession();
 }

@@ -7,7 +7,7 @@ import org.hibernate.criterion.Criterion;
 import org.openbox.sf5.common.JsonObjectFiller;
 import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.service.CriterionService;
-import org.openbox.sf5.service.ObjectsListService;
+import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class SatellitesJsonizer implements Serializable {
 
 	public String getSatellitesList() {
-		List<Satellites> satList = listService.ObjectsList(Satellites.class);
+		List<Satellites> satList = objectsController.list(Satellites.class);
 		String result = JsonObjectFiller.getJsonFromObjectsList(satList);
 
 		return result;
@@ -25,7 +25,7 @@ public class SatellitesJsonizer implements Serializable {
 
 		Criterion criterion = criterionService.getCriterionByClassFieldAndStringValue(Satellites.class, fieldName,
 				typeValue);
-		List<Satellites> satList = listService.ObjectsCriterionList(Satellites.class, criterion);
+		List<Satellites> satList = objectsController.restrictionList(Satellites.class, criterion);
 
 		return satList;
 	}
@@ -39,15 +39,7 @@ public class SatellitesJsonizer implements Serializable {
 	}
 
 	@Autowired
-	private ObjectsListService listService;
-
-	public ObjectsListService getListService() {
-		return listService;
-	}
-
-	public void setListService(ObjectsListService listService) {
-		this.listService = listService;
-	}
+	private ObjectsController objectsController;
 
 	private static final long serialVersionUID = 3401682206534536724L;
 

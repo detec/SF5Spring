@@ -3,25 +3,26 @@ package org.openbox.sf5.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-//@Component // NFO: Overriding bean definition for bean
+@Component // NFO: Overriding bean definition for bean
 public class AdminCheck {
-
-	@Autowired
-	private ObjectsListService listService;
 
 	@Autowired
 	private ObjectsController objectsController;
 
+	@PostConstruct
 	public void initialize() {
 
 		Criterion criterea = Restrictions.eq("username", "admin");
-		List<Users> adminsList = listService.ObjectsCriterionList(Users.class, criterea);
+		List<Users> adminsList = objectsController.restrictionList(Users.class, criterea);
 
 		if (adminsList.isEmpty()) {
 			List<Usersauthorities> rolesList = new ArrayList<>();
@@ -46,7 +47,7 @@ public class AdminCheck {
 	}
 
 	public void fillTables(Users adminUser, List<Usersauthorities> rolesList) {
-		List<String> textRoles = new ArrayList<String>();
+		List<String> textRoles = new ArrayList<>();
 		textRoles.add("ROLE_ADMIN");
 		textRoles.add("ROLE_USER");
 

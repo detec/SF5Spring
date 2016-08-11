@@ -9,7 +9,6 @@ import org.openbox.sf5.json.service.SatellitesJsonizer;
 import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,19 +25,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RequestMapping(value = "${jaxrs.path}/satellites/", produces = { "application/xml", "application/json" })
 public class SatellitesService {
 
-	// @RequestMapping(value = "jdx", method = RequestMethod.GET)
-	// public ResponseEntity<List<Satellites>> getAllSatellitesJDX() {
-	// List<Satellites> satList = listService.ObjectsList(Satellites.class);
-	// if (satList.isEmpty()) {
-	// return new ResponseEntity<>(HttpStatus.NO_CONTENT);//
-	// }
-	//
-	// return new ResponseEntity<>(satList, HttpStatus.OK);
-	// }
-
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<Satellites>> getAllSatellites() {
-		List<Satellites> satList = listService.ObjectsList(Satellites.class);
+		List<Satellites> satList = objectController.list(Satellites.class);
 		if (satList.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
@@ -49,7 +38,7 @@ public class SatellitesService {
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Satellites>> getAllSatellitesXML()
 			throws NoSuchFieldException, SecurityException, NoSuchMethodException {
-		List<Satellites> satList = listService.ObjectsList(Satellites.class);
+		List<Satellites> satList = objectController.list(Satellites.class);
 		if (satList.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);//
 		}
@@ -100,12 +89,6 @@ public class SatellitesService {
 
 	// http://www.mkyong.com/spring3/spring-value-default-value/
 
-	// @Value("${jaxrs.path​}")
-	// private static String jaxRSPath;
-
-	@Autowired
-	private ObjectsListService listService;
-
 	@Autowired
 	private SatellitesJsonizer jsonizer;
 
@@ -115,14 +98,6 @@ public class SatellitesService {
 
 	public void setObjectController(ObjectsController objectController) {
 		this.objectController = objectController;
-	}
-
-	public ObjectsListService getListService() {
-		return listService;
-	}
-
-	public void setListService(ObjectsListService listService) {
-		this.listService = listService;
 	}
 
 	public SatellitesJsonizer getJsonizer() {

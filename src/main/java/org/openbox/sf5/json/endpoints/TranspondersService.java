@@ -9,7 +9,6 @@ import org.openbox.sf5.json.service.TranspondersJsonizer;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -97,7 +96,7 @@ public class TranspondersService {
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Transponders>> getTransponders() {
-		List<Transponders> transList = listService.ObjectsList(Transponders.class);
+		List<Transponders> transList = objectController.list(Transponders.class);
 		if (transList.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
@@ -106,7 +105,7 @@ public class TranspondersService {
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Transponders>> getTranspondersXML() {
-		List<Transponders> transList = listService.ObjectsList(Transponders.class);
+		List<Transponders> transList = objectController.list(Transponders.class);
 		if (transList.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
@@ -123,14 +122,6 @@ public class TranspondersService {
 		this.objectController = objectController;
 	}
 
-	public ObjectsListService getListService() {
-		return listService;
-	}
-
-	public void setListService(ObjectsListService listService) {
-		this.listService = listService;
-	}
-
 	public TranspondersJsonizer getTranspondersJsonizer() {
 		return transpondersJsonizer;
 	}
@@ -145,6 +136,4 @@ public class TranspondersService {
 	@Autowired
 	private ObjectsController objectController;
 
-	@Autowired
-	private ObjectsListService listService;
 }

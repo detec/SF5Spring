@@ -1,7 +1,11 @@
 package org.openbox.sf5.service;
 
 import java.io.Serializable;
+import java.util.List;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
 import org.openbox.sf5.model.AbstractDbEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,34 +16,53 @@ public class ObjectsController implements Serializable {
 	private static final long serialVersionUID = 1419450577630607967L;
 
 	@Autowired
-	ObjectService Service;
+	private ObjectService service;
+
+	@Autowired
+	private ObjectsListService listService;
 
 	public <T extends AbstractDbEntity> void add(T obj) {
-		Service.add(obj);
+		service.add(obj);
 	}
 
 	public <T extends AbstractDbEntity> void update(T obj) {
-		Service.update(obj);
+		service.update(obj);
 	}
 
 	public <T extends AbstractDbEntity> void remove(Class<T> type, long id) {
-		Service.remove(type, id);
+		service.remove(type, id);
 	}
 
 	public <T extends AbstractDbEntity> void saveOrUpdate(T obj) {
-		Service.saveOrUpdate(obj);
+		service.saveOrUpdate(obj);
 	}
 
 	public <T extends AbstractDbEntity> T select(Class<T> type, long id) {
-		return Service.select(type, id);
+		return service.select(type, id);
 	}
 
 	public ObjectService getService() {
-		return Service;
+		return service;
 	}
 
 	public void setService(ObjectService service) {
-		Service = service;
+		this.service = service;
+	}
+
+	public <T extends AbstractDbEntity> List<T> list(Class<T> type) {
+		return listService.list(type);
+	}
+
+	public <T extends AbstractDbEntity> List<T> restrictionList(Class<T> type, Criterion criterion) {
+		return listService.restrictionList(type, criterion);
+	}
+
+	public SessionFactory getSessionFactory() {
+		return service.getSessionFactory();
+	}
+
+	public Session openSession() {
+		return service.openSession();
 	}
 
 }

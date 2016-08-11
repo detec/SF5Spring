@@ -13,7 +13,6 @@ import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,7 +37,7 @@ public class SettingsList {
 	// we cannot use such mapping with custom form.
 	// @RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String getSettings(Model model) {
-		List<Settings> settingsList = new ArrayList<Settings>();
+		List<Settings> settingsList = new ArrayList<>();
 
 		readCurrentUser();
 
@@ -49,7 +48,7 @@ public class SettingsList {
 		// Retrieve all settings
 		Criterion criterion = Restrictions.eq("User", currentUser);
 
-		settingsList = listService.ObjectsCriterionList(Settings.class, criterion);
+		settingsList = objectsController.restrictionList(Settings.class, criterion);
 
 		// Attach settings to the Model
 		model.addAttribute("settings", settingsList);
@@ -134,9 +133,6 @@ public class SettingsList {
 	public void setCurrentUser(Users currentUser) {
 		this.currentUser = currentUser;
 	}
-
-	@Autowired
-	private ObjectsListService listService;
 
 	@Autowired
 	private ObjectsController objectsController;

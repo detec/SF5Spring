@@ -7,7 +7,7 @@
   <name>Openbox SF5 settings editor - Spring </name>
   
 	<properties>
-  		<spring.version>4.2.6.RELEASE</spring.version>
+  		<spring.version>4.2.7.RELEASE</spring.version>
   		<spring.security.version>4.1.1.RELEASE</spring.security.version>
   		<hibernate.version>5.0.7.Final</hibernate.version> <!-- Comply with JavaEE 6 -->
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -568,6 +568,12 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
     </exclusions>
 
 		<scope>provided</scope>
+	</dependency>
+		<dependency>
+    	<groupId>org.hibernate</groupId>
+    	<artifactId>hibernate-entitymanager</artifactId>
+    	<version>${hibernate.version}</version>
+    	<scope>provided</scope>
 	</dependency>
 	
 	<!-- 

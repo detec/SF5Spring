@@ -2,6 +2,8 @@ package org.openbox.sf5.service;
 
 import java.io.Serializable;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.openbox.sf5.dao.DAO;
 import org.openbox.sf5.model.AbstractDbEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,4 +51,14 @@ public class ObjectServiceImpl implements ObjectService, Serializable {
 	}
 
 	private static final long serialVersionUID = 1759635167959034759L;
+
+	@Override
+	public SessionFactory getSessionFactory() {
+		return DAO.getSessionFactory();
+	}
+
+	@Override
+	public Session openSession() {
+		return DAO.openSession();
+	}
 }

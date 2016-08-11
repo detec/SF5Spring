@@ -23,9 +23,6 @@ public class UserService implements IUserService, Serializable {
 	@Autowired
 	private ObjectsController objectsController;
 
-	@Autowired
-	private ObjectsListService listService;
-
 	// @Transactional // IJ031017: You cannot set autocommit during a managed
 	// transaction
 	@Override
@@ -38,7 +35,7 @@ public class UserService implements IUserService, Serializable {
 		Users newUser = new Users();
 		newUser.setusername(accountDto.getUsername());
 		newUser.setPassword(accountDto.getPassword());
-		List<Usersauthorities> listAuthorities = new ArrayList<Usersauthorities>();
+		List<Usersauthorities> listAuthorities = new ArrayList<>();
 
 		Usersauthorities newLine = new Usersauthorities(accountDto.getUsername(), "ROLE_USER", newUser, 1);
 		listAuthorities.add(newLine);
@@ -53,7 +50,7 @@ public class UserService implements IUserService, Serializable {
 	public boolean userExists(String username) {
 
 		Criterion criterion = Restrictions.eq("username", username);
-		List<Users> rec = listService.ObjectsCriterionList(Users.class, criterion);
+		List<Users> rec = objectsController.restrictionList(Users.class, criterion);
 		if (rec.isEmpty()) {
 			return false;
 		} else {
@@ -68,14 +65,6 @@ public class UserService implements IUserService, Serializable {
 
 	public void setObjectsController(ObjectsController objectsController) {
 		this.objectsController = objectsController;
-	}
-
-	public ObjectsListService getListService() {
-		return listService;
-	}
-
-	public void setListService(ObjectsListService listService) {
-		this.listService = listService;
 	}
 
 	public static boolean hasAdminRole(Users currentUser) {

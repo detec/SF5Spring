@@ -16,7 +16,6 @@ import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -59,10 +58,10 @@ public class TranspondersListClass {
 
 		if (filterSatellite != null) {
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
-			TranspondersList = listService.ObjectsCriterionList(Transponders.class, criterion);
+			TranspondersList = objectsController.restrictionList(Transponders.class, criterion);
 		} else {
 
-			TranspondersList = listService.ObjectsList(Transponders.class);
+			TranspondersList = objectsController.list(Transponders.class);
 
 		}
 
@@ -86,11 +85,11 @@ public class TranspondersListClass {
 			filterSatellite = objectsController.select(Satellites.class, bean.filterSatelliteId.longValue());
 
 			Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
-			TranspondersList = listService.ObjectsCriterionList(Transponders.class, criterion);
+			TranspondersList = objectsController.restrictionList(Transponders.class, criterion);
 		}
 
 		else {
-			TranspondersList = listService.ObjectsList(Transponders.class);
+			TranspondersList = objectsController.list(Transponders.class);
 		}
 
 		SelectionMode = bean.SelectionMode;
@@ -109,7 +108,7 @@ public class TranspondersListClass {
 
 		AppContext.getSelectedTransponders().clear();
 
-		List<Transponders> transList = new ArrayList<Transponders>();
+		List<Transponders> transList = new ArrayList<>();
 
 		wrapper.getTclist().stream().filter(t -> t.isChecked()).forEach(t -> {
 			t.setObjectsController(objectsController); // or we get NPE
@@ -143,9 +142,9 @@ public class TranspondersListClass {
 	@ModelAttribute("satellites")
 	public HashMap<Long, String> getSatellites() {
 
-		HashMap<Long, String> satMap = new HashMap<Long, String>();
+		HashMap<Long, String> satMap = new HashMap<>();
 
-		listService.ObjectsList(Satellites.class).stream().forEach(t -> satMap.put(new Long(t.getId()), t.getName()));
+		objectsController.list(Satellites.class).stream().forEach(t -> satMap.put(new Long(t.getId()), t.getName()));
 
 		return satMap;
 
@@ -170,9 +169,6 @@ public class TranspondersListClass {
 
 	@Autowired
 	private ObjectsController objectsController;
-
-	@Autowired
-	private ObjectsListService listService;
 
 	@Autowired
 	private SF5ApplicationContext AppContext;
@@ -209,8 +205,8 @@ public class TranspondersListClass {
 
 	private Satellites filterSatellite;
 
-	private List<Transponders> TranspondersList = new ArrayList<Transponders>();
+	private List<Transponders> TranspondersList = new ArrayList<>();
 
-	private List<TransponderChoice> TransponderChoiceList = new ArrayList<TransponderChoice>();
+	private List<TransponderChoice> TransponderChoiceList = new ArrayList<>();
 
 }

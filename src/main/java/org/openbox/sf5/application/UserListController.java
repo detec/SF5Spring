@@ -8,7 +8,6 @@ import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListService;
 import org.openbox.sf5.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -28,7 +27,7 @@ public class UserListController {
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public String getUserList(Model model) {
 
-		UsersList = listService.ObjectsList(Users.class);
+		UsersList = objectsController.list(Users.class);
 
 		model.addAttribute("users", UsersList);
 
@@ -63,7 +62,7 @@ public class UserListController {
 
 		if (UserService.hasAdminRole(user)) {
 			model.addAttribute("viewErrMsg", "It is forbidden to change state of admin user!");
-			UsersList = listService.ObjectsList(Users.class);
+			UsersList = objectsController.list(Users.class);
 
 			model.addAttribute("users", UsersList);
 			return "users";
@@ -76,7 +75,7 @@ public class UserListController {
 		objectsController.saveOrUpdate(user);
 
 		model.addAttribute("viewMsg", "Successfully " + state + " user " + username + "!");
-		UsersList = listService.ObjectsList(Users.class);
+		UsersList = objectsController.list(Users.class);
 
 		model.addAttribute("users", UsersList);
 		return "users";
@@ -93,7 +92,7 @@ public class UserListController {
 
 		if (UserService.hasAdminRole(userToDelete)) {
 			model.addAttribute("viewErrMsg", "It is forbidden to remove admin user!");
-			UsersList = listService.ObjectsList(Users.class);
+			UsersList = objectsController.list(Users.class);
 
 			model.addAttribute("users", UsersList);
 			return "users";
@@ -104,7 +103,7 @@ public class UserListController {
 
 		// first we must remove user's settings
 		Criterion criterion = Restrictions.eq("User", userToDelete);
-		List<Settings> userSettings = listService.ObjectsCriterionList(Settings.class, criterion);
+		List<Settings> userSettings = objectsController.restrictionList(Settings.class, criterion);
 
 		userSettings.stream().forEach(t -> objectsController.remove(Settings.class, t.getId()));
 
@@ -112,7 +111,7 @@ public class UserListController {
 		objectsController.remove(Users.class, pid);
 		// return "redirect:/users/";
 		model.addAttribute("viewMsg", "Successfully deleted user " + username + "!");
-		UsersList = listService.ObjectsList(Users.class);
+		UsersList = objectsController.list(Users.class);
 
 		model.addAttribute("users", UsersList);
 		return "users";
@@ -128,10 +127,7 @@ public class UserListController {
 	}
 
 	@Autowired
-	private ObjectsListService listService;
-
-	@Autowired
 	private ObjectsController objectsController;
 
-	private List<Users> UsersList = new ArrayList<Users>();
+	private List<Users> UsersList = new ArrayList<>();
 }

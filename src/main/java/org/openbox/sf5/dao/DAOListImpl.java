@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,8 +25,11 @@ public class DAOListImpl implements DAOList, Serializable {
 
 	private static final long serialVersionUID = 9132749811478277495L;
 
-	@Autowired
+	// @Autowired
 	private SessionFactory sessionFactory;
+
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -31,7 +38,7 @@ public class DAOListImpl implements DAOList, Serializable {
 
 		List<T> list = new ArrayList<>();
 
-		Session s = sessionFactory.openSession();
+		Session s = getSessionFactory().openSession();
 		s.beginTransaction();
 		list = s.createQuery("from " + type.getName() + " order by id").list();
 		s.getTransaction().commit();
@@ -46,7 +53,7 @@ public class DAOListImpl implements DAOList, Serializable {
 	@Override
 	@Transactional(readOnly = true)
 	public <T extends AbstractDbEntity> List<T> restrictionList(Class<T> type, Criterion criterion) {
-		Session s = sessionFactory.openSession();
+		Session s = getSessionFactory().openSession();
 		// Session s = sessionFactory.getCurrentSession();
 
 		Criteria criteria = s.createCriteria(type)
@@ -66,12 +73,39 @@ public class DAOListImpl implements DAOList, Serializable {
 
 	@Override
 	public SessionFactory getSessionFactory() {
+		if (sessionFactory == null) {
+			// Session session = entityManager.unwrap(Session.class);
+			// sessionFactory = session.getSessionFactory();
+
+			sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
+
+		}
 		return sessionFactory;
+
 	}
 
 	@Override
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
+	}
+
+	public DAOListImpl() {
+
+	}
+
+	public DAOListImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private EntityManager entityManager;
+
+	protected EntityManager getEntityManager() {
+		return entityManager;
+	}
+
+	@PersistenceContext
+	public void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
 	}
 
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.model.Users;
-import org.openbox.sf5.service.ObjectsListService;
+import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,14 +14,14 @@ import org.springframework.stereotype.Component;
 public class UserEditor extends PropertyEditorSupport {
 
 	@Autowired
-	private ObjectsListService listService;
+	private ObjectsController objectsController;
 
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
 
 		Criterion criterion = Restrictions.eq("username", text);
 
-		List<Users> usersList = listService.ObjectsCriterionList(Users.class, criterion);
+		List<Users> usersList = objectsController.restrictionList(Users.class, criterion);
 		if (!usersList.isEmpty()) {
 			setValue(usersList.get(0));
 		}

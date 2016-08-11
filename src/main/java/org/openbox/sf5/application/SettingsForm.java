@@ -39,7 +39,6 @@ import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.TypesOfFEC;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
@@ -120,7 +119,7 @@ public class SettingsForm implements Serializable {
 
 		dataSettingsConversion = pSetting.dataSettingsConversion;
 
-		List<SettingsConversion> tempSCList = new ArrayList<SettingsConversion>();
+		List<SettingsConversion> tempSCList = new ArrayList<>();
 		dataSettingsConversion.stream().forEach(t -> {
 			t.setparent_id(SettingsObject);
 			tempSCList.add(t);
@@ -136,7 +135,7 @@ public class SettingsForm implements Serializable {
 
 		String username = secUser.getUsername();
 		Criterion criterion = Restrictions.eq("username", username);
-		List<Users> usersList = listService.ObjectsCriterionList(Users.class, criterion);
+		List<Users> usersList = objectsController.restrictionList(Users.class, criterion);
 		if (!usersList.isEmpty()) {
 			User = usersList.get(0);
 		}
@@ -384,7 +383,7 @@ public class SettingsForm implements Serializable {
 				.filter(t -> (t.isChecked() && t.getId() == 0)).collect(Collectors.toList());
 		dataSettingsConversion.removeAll(firstList);
 
-		List<SettingsConversionPresentation> toRemove = new ArrayList<SettingsConversionPresentation>();
+		List<SettingsConversionPresentation> toRemove = new ArrayList<>();
 		Map<Long, SettingsConversionPresentation> tpMap = new HashMap<>();
 
 		for (SettingsConversionPresentation e : dataSettingsConversion) {
@@ -401,7 +400,7 @@ public class SettingsForm implements Serializable {
 
 		List<SettingsConversion> tpConversion = SettingsObject.getConversion();
 
-		ArrayList<SettingsConversion> deleteArray = new ArrayList<SettingsConversion>();
+		ArrayList<SettingsConversion> deleteArray = new ArrayList<>();
 
 		// define elements to be deleted
 		for (SettingsConversion e : tpConversion) {
@@ -452,7 +451,7 @@ public class SettingsForm implements Serializable {
 
 		readToThisBean(pSetting);
 
-		List<SettingsConversionPresentation> selectedRows = new ArrayList<SettingsConversionPresentation>();
+		List<SettingsConversionPresentation> selectedRows = new ArrayList<>();
 		selectedRows = dataSettingsConversion.stream().filter(t -> t.isChecked()).collect(Collectors.toList());
 		selectedRows.stream().forEach(t -> {
 			int currentIndex = dataSettingsConversion.indexOf(t);
@@ -495,7 +494,7 @@ public class SettingsForm implements Serializable {
 
 		readToThisBean(pSetting);
 
-		List<SettingsConversionPresentation> selectedRows = new ArrayList<SettingsConversionPresentation>();
+		List<SettingsConversionPresentation> selectedRows = new ArrayList<>();
 		selectedRows = dataSettingsConversion.stream().filter(t -> t.isChecked()).collect(Collectors.toList());
 
 		// if we have 2 elements, they do not move
@@ -531,7 +530,7 @@ public class SettingsForm implements Serializable {
 	public String selectSCProws(@ModelAttribute("bean") SettingsForm pSetting) {
 		dataSettingsConversion = pSetting.dataSettingsConversion;
 
-		List<SettingsConversionPresentation> selectedRows = new ArrayList<SettingsConversionPresentation>();
+		List<SettingsConversionPresentation> selectedRows = new ArrayList<>();
 		selectedRows = dataSettingsConversion.stream().filter(t -> t.isChecked()).collect(Collectors.toList());
 
 		AppContext.setSelectedSettingsConversionPresentations(selectedRows);
@@ -561,7 +560,7 @@ public class SettingsForm implements Serializable {
 
 		saveSettingWithoutContext(pSetting);
 
-		List<SettingsConversion> scList = new ArrayList<SettingsConversion>();
+		List<SettingsConversion> scList = new ArrayList<>();
 		dataSettingsConversion.stream().forEach(t -> {
 			SettingsConversion sc = t;
 			scList.add(sc);
@@ -644,7 +643,7 @@ public class SettingsForm implements Serializable {
 
 	public ResponseEntity<String> universalexportToXML(SettingsForm pSetting) {
 
-		List<SettingsConversion> scList = new ArrayList<SettingsConversion>();
+		List<SettingsConversion> scList = new ArrayList<>();
 		List<SettingsConversionPresentation> DSCList = pSetting.dataSettingsConversion;
 		DSCList.stream().forEach(t -> {
 			SettingsConversion sc = t;
@@ -665,7 +664,7 @@ public class SettingsForm implements Serializable {
 		// marshalling sat
 		springMarshaller.marshal(sat, new StreamResult(sw));
 
-		return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
+		return new ResponseEntity<>(sw.toString(), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -804,13 +803,10 @@ public class SettingsForm implements Serializable {
 
 	private String Name;
 
-	private List<SettingsConversionPresentation> dataSettingsConversion = new ArrayList<SettingsConversionPresentation>();
+	private List<SettingsConversionPresentation> dataSettingsConversion = new ArrayList<>();
 
 	@Autowired
 	private ObjectsController objectsController;
-
-	@Autowired
-	private ObjectsListService listService;
 
 	private static final long serialVersionUID = 3787216569270743476L;
 

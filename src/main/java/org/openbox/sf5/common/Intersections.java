@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.H2Dialect;
 import org.hibernate.dialect.ProgressDialect;
@@ -19,6 +18,7 @@ import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.jdbc.ReturningWork;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.SettingsConversion;
+import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,17 +26,9 @@ import org.springframework.stereotype.Service;
 public class Intersections {
 
 	@Autowired
-	private SessionFactory sessionFactory;
+	private ObjectsController objectController;
 
-	public SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
-
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
-	List<Integer> arrayLines = new ArrayList<Integer>();
+	List<Integer> arrayLines = new ArrayList<>();
 
 	public int checkIntersection(List<SettingsConversion> dataSettingsConversion, Settings Object) throws SQLException {
 
@@ -50,7 +42,7 @@ public class Intersections {
 				// syntax changed due to H2 and Postgre limitations.
 
 				// http://stackoverflow.com/questions/1571928/retrieve-auto-detected-hibernate-dialect
-				Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
+				Dialect dialect = ((SessionFactoryImplementor) objectController.getSessionFactory()).getDialect();
 
 				// String tempTableDrop = dialect.getDropTemporaryTableString();
 
@@ -104,7 +96,7 @@ public class Intersections {
 			}
 		};
 
-		Session session = sessionFactory.openSession();
+		Session session = objectController.openSession();
 
 		ResultSet rs = null;
 		rs = session.doReturningWork(rowsReturningWork);

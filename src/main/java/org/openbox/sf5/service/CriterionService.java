@@ -74,7 +74,7 @@ public class CriterionService implements Serializable {
 		Criterion userCriterion = null;
 
 		criterion = Restrictions.eq("username", login);
-		List<Users> usersList = listService.ObjectsCriterionList(Users.class, criterion);
+		List<Users> usersList = objectController.restrictionList(Users.class, criterion);
 
 		if (usersList.size() == 0) {
 			return criterion;
@@ -106,16 +106,5 @@ public class CriterionService implements Serializable {
 
 	@Autowired
 	private ObjectsController objectController;
-
-	@Autowired
-	private ObjectsListService listService;
-
-	public ObjectsListService getListService() {
-		return listService;
-	}
-
-	public void setListService(ObjectsListService listService) {
-		this.listService = listService;
-	}
 
 }

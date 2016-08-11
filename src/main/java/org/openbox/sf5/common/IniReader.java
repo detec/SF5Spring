@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.internal.TypeLocatorImpl;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.EnumType;
@@ -98,7 +97,7 @@ public class IniReader implements Serializable {
 
 		String hql = "select id from Satellites where name = :name";
 
-		Session session = sessionFactory.openSession();
+		Session session = objectController.openSession();
 
 		Query query = session.createQuery(hql);
 		query.setParameter("name", satName);
@@ -192,7 +191,7 @@ public class IniReader implements Serializable {
 
 				String sqltext = "SELECT RangeOfDVB FROM TheDVBRangeValues where :Frequency between LowerThreshold and UpperThreshold";
 
-				Session session = sessionFactory.openSession();
+				Session session = objectController.openSession();
 
 				List<TheDVBRangeValues> range = session.createSQLQuery(sqltext).addScalar("RangeOfDVB", myEnumType)
 						.setParameter("Frequency", Frequency)
@@ -275,14 +274,6 @@ public class IniReader implements Serializable {
 		}
 	}
 
-	public SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
-
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
 	public ObjectsController getObjectController() {
 		return objectController;
 	}
@@ -294,9 +285,6 @@ public class IniReader implements Serializable {
 	private static final long serialVersionUID = -1699774508872380035L;
 
 	private Satellites sat;
-
-	@Autowired
-	private SessionFactory sessionFactory;
 
 	@Autowired
 	private ObjectsController objectController;

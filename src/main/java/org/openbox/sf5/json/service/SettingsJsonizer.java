@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -13,7 +12,6 @@ import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.service.CriterionService;
 import org.openbox.sf5.service.ObjectsController;
-import org.openbox.sf5.service.ObjectsListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -53,7 +51,7 @@ public class SettingsJsonizer {
 			return settList;
 		}
 
-		Session session = sessionFactory.openSession();
+		Session session = objectsController.openSession();
 		Criteria criteria = session.createCriteria(Settings.class).add(userCriterion).add(arbitraryCriterion);
 		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
@@ -69,7 +67,7 @@ public class SettingsJsonizer {
 		List<Settings> settList = new ArrayList<>();
 
 		Criterion userCriterion = Restrictions.eq("User", user);
-		settList = listService.ObjectsCriterionList(Settings.class, userCriterion);
+		settList = objectsController.restrictionList(Settings.class, userCriterion);
 
 		return settList;
 
@@ -83,7 +81,7 @@ public class SettingsJsonizer {
 			return settList;
 		}
 
-		settList = listService.ObjectsCriterionList(Settings.class, userCriterion);
+		settList = objectsController.restrictionList(Settings.class, userCriterion);
 
 		return settList;
 	}
@@ -101,7 +99,7 @@ public class SettingsJsonizer {
 
 		Criterion settingIdCriterion = Restrictions.eq("id", settingId);
 
-		Session session = sessionFactory.openSession();
+		Session session = objectsController.openSession();
 		@SuppressWarnings("unchecked")
 		List<Settings> records = session.createCriteria(Settings.class).add(userCriterion).add(settingIdCriterion)
 				.list();
@@ -118,13 +116,7 @@ public class SettingsJsonizer {
 	}
 
 	@Autowired
-	private ObjectsListService listService;
-
-	@Autowired
 	private CriterionService criterionService;
-
-	@Autowired
-	private SessionFactory sessionFactory;
 
 	@Autowired
 	private ObjectsController objectsController;
@@ -145,19 +137,4 @@ public class SettingsJsonizer {
 		this.criterionService = criterionService;
 	}
 
-	public SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
-
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
-	public ObjectsListService getListService() {
-		return listService;
-	}
-
-	public void setListService(ObjectsListService listService) {
-		this.listService = listService;
-	}
 }

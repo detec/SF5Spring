@@ -5,7 +5,7 @@ import java.util.List;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.model.Users;
-import org.openbox.sf5.service.ObjectsListService;
+import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,7 +36,7 @@ public class SF5SecurityContext {
 		String username = secUser.getUsername();
 		Criterion criterion = Restrictions.eq("username", username);
 
-		List<Users> usersList = listService.ObjectsCriterionList(Users.class, criterion);
+		List<Users> usersList = objectsController.restrictionList(Users.class, criterion);
 		if (!usersList.isEmpty()) {
 			returnUser = usersList.get(0);
 		}
@@ -45,6 +45,6 @@ public class SF5SecurityContext {
 	}
 
 	@Autowired
-	private ObjectsListService listService;
+	private ObjectsController objectsController;
 
 }
