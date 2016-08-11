@@ -112,6 +112,9 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	// Default error handler for other unforeseen exceptions.
 	@ExceptionHandler({ Exception.class })
 	public ResponseEntity<ApiError> handleAll(Exception ex, WebRequest request) {
+
+		LOG.log(Level.SEVERE, "Caught an unexpected error: " + ex.getMessage(), ex);
+
 		return constructSerializedException(ex, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
