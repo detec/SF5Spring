@@ -123,6 +123,12 @@
 	</property>
 	<property name="persistenceUnitName" value="emf"/>
 	<property name="dataSource" ref="dataSource" />
+	
+	<property name="jpaDialect">
+		<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect">
+			<property name="prepareConnection" value="false" />
+		</bean>
+	</property>
 </bean>
 
 		
