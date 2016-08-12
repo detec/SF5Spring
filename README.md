@@ -47,8 +47,8 @@ This Openbox SF-5 settings editor implementation provides RESTful API for gettin
 	
 - Transponders
 	- jaxrs/transponders/filter/{type}/{typeValue} GET 	- get transponders, filtered by arbitrary field name and field value;
-	- jaxrs/transponders/filter/id/{transponderId} GET 	- get transponder by its ID;
-	- jaxrs/transponders/filter;satId={satId} GET 		- get all transponders from specified satellite;
+	- jaxrs/transponders/{transponderId} GET 			- get transponder by its ID;
+	- jaxrs/transponders/satId/{satId} GET 				- get all transponders from specified satellite;
 	- jaxrs/transponders/ GET 							- get all transponders;
 	- jaxrs/transponders/upload POST					- upload .ini file with transponders for further import. Content-type should be multipart/form-data.
 	
