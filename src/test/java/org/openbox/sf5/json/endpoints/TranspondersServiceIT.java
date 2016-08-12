@@ -70,7 +70,7 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		invocationBuilder = serviceTarget
 
-				.path("filter").path("id")
+				// .path("filter").path("id")
 
 				.path(String.valueOf(transponderId)).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON);
@@ -118,7 +118,7 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		invocationBuilder = serviceTarget
 
-				.path("filter").path("id")
+				// .path("filter").path("id")
 
 				.path(String.valueOf(transponderId)).request(MediaType.APPLICATION_XML)
 				.accept(MediaType.APPLICATION_XML);
@@ -142,9 +142,15 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		SatellitesServiceIT satTest = new SatellitesServiceIT();
 		satTest.setUp();
 
-		Invocation.Builder invocationBuilder = serviceTarget.path("filter")
-				.matrixParam("satId", String.valueOf(satTest.getSatelliteId())).request(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON);
+		Invocation.Builder invocationBuilder = serviceTarget
+
+				// .path("filter")
+
+				.path("satId")
+
+				.path(String.valueOf(satTest.getSatelliteId()))
+
+				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
@@ -164,9 +170,15 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		SatellitesServiceIT satTest = new SatellitesServiceIT();
 		satTest.setUp();
 
-		Invocation.Builder invocationBuilder = serviceTarget.path("filter")
-				.matrixParam("satId", String.valueOf(satTest.getSatelliteIdXML())).request(MediaType.APPLICATION_XML)
-				.accept(MediaType.APPLICATION_XML);
+		Invocation.Builder invocationBuilder = serviceTarget
+
+				// .path("filter")
+
+				.path("satId")
+
+				.path(String.valueOf(satTest.getSatelliteId()))
+
+				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 

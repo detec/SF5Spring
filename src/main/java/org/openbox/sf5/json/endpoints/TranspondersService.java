@@ -27,7 +27,7 @@ public class TranspondersService {
 
 	private static final String filterTypePattern = "filter/{type}/{typeValue}";
 
-	private static final String filterSatIdPattern = "satId";
+	private static final String filterSatIdPattern = "satId/{satId}";
 
 	@RequestMapping(value = "upload", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
 	public ResponseEntity<Boolean> uploadTransponders(@RequestParam("file") MultipartFile file) {
