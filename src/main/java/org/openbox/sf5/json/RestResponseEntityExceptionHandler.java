@@ -2,8 +2,6 @@ package org.openbox.sf5.json;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.openbox.sf5.json.exceptions.ApiError;
 import org.openbox.sf5.json.exceptions.ItemNotFoundException;
@@ -12,9 +10,11 @@ import org.openbox.sf5.json.exceptions.UsersDoNotCoincideException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -23,11 +23,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice(basePackages = { "org.openbox.sf5.json.endpoints", "org.openbox.sf5.json" })
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-	private Logger LOG;
-
-	public RestResponseEntityExceptionHandler() {
-		LOG = Logger.getLogger(getClass().getSimpleName());
-	}
+	// private Logger LOG;
+	//
+	// public RestResponseEntityExceptionHandler() {
+	// LOG = Logger.getLogger(getClass().getSimpleName());
+	// }
 
 	// In Spring 4.2.6 only with Exception argument method is found and called.
 	// Partially taken from
@@ -52,7 +52,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
 	protected ResponseEntity<ApiError> constructSerializedException(Exception ex, HttpStatus status) {
 		ApiError apiError = new ApiError(status, ex);
-		LOG.log(Level.INFO, "Exception caught : " + ex.getClass().getSimpleName());
+		logger.info("Exception caught : " + ex.getClass().getSimpleName());
 		return new ResponseEntity<>(apiError, status);
 	}
 
@@ -60,7 +60,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			String customMessage) {
 
 		ApiError apiError = new ApiError(status, ex, customMessage);
-		LOG.log(Level.INFO, "Exception caught : " + ex.getClass().getSimpleName());
+		logger.info("Exception caught : " + ex.getClass().getSimpleName());
 		return new ResponseEntity<>(apiError, status);
 	}
 
@@ -113,7 +113,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	@ExceptionHandler({ Exception.class })
 	public ResponseEntity<ApiError> handleAll(Exception ex, WebRequest request) {
 
-		LOG.log(Level.SEVERE, "Caught an unexpected error: " + ex.getMessage(), ex);
+		logger.warn("Caught an unexpected error: " + ex.getMessage(), ex);
 
 		return constructSerializedException(ex, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -128,4 +128,20 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	//
 	// }
 
+	// http://stackoverflow.com/questions/17326976/spring-rest-using-jackson-400-bad-request-logging
+	// @ExceptionHandler
+	// @ResponseStatus(HttpStatus.BAD_REQUEST)
+	// public void handle(HttpMessageNotReadableException e) {
+	// logger.warn("Returning HTTP 400 Bad Request", e);
+	// }
+
+	@Override
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		logger.warn("Returning HTTP 400 Bad Request", ex);
+		return handleExceptionInternal(ex, ex.getMessage(), headers, HttpStatus.ACCEPTED, request);
+
+	}
 }
