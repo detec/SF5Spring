@@ -19,5 +19,12 @@
         <priority value ="WARN" />
         <appender-ref ref="console" />
     </root>
+    
+    <!-- This will help when debugging "400 Bad Request" errors -->
+	<category name="org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod" additivity="false">
+  	<priority value="trace"/>
+  	<appender-ref ref="console"/>
+	</category>
+    
 
 </log4j:configuration>

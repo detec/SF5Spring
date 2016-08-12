@@ -60,7 +60,7 @@ public class TranspondersService {
 		return JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);
 	}
 
-	@RequestMapping(value = "filter/id/{transponderId}", method = RequestMethod.GET)
+	@RequestMapping(value = "{transponderId}", method = RequestMethod.GET)
 	public ResponseEntity<Transponders> getTransponderById(@PathVariable("transponderId") long tpId) {
 		Transponders trans = objectController.select(Transponders.class, tpId);
 		if (trans == null) {
@@ -71,8 +71,8 @@ public class TranspondersService {
 
 	}
 
-	@RequestMapping(value = "/{filter}", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<Transponders>> getTranspondersBySatelliteId(@PathVariable("filter") String ignore,
+	@RequestMapping(value = "/filter", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<Transponders>> getTranspondersBySatelliteId(
 			@MatrixVariable(required = true, value = "satId") long satId) {
 
 		List<Transponders> transList = transpondersJsonizer.getTranspondersBySatelliteId(satId);
@@ -82,9 +82,9 @@ public class TranspondersService {
 		return new ResponseEntity<>(transList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{filter}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+	@RequestMapping(value = "/filter", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Transponders>> getTranspondersBySatelliteIdXML(
-			@PathVariable("filter") String ignore, @MatrixVariable(required = true, value = "satId") long satId) {
+			@MatrixVariable(required = true, value = "satId") long satId) {
 
 		List<Transponders> transList = transpondersJsonizer.getTranspondersBySatelliteId(satId);
 		if (transList.isEmpty()) {
