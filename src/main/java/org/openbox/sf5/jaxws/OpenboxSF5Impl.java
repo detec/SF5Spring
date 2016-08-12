@@ -173,7 +173,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	@WebMethod
 	public List<org.openbox.sf5.model.Transponders> getTranspondersBySatelliteId(
 			@WebParam(name = "inputSatId") long satId) throws WSException {
-		ResponseEntity<List<Transponders>> RSResponse = transpondersService.getTranspondersBySatelliteId("", satId);
+		ResponseEntity<List<Transponders>> RSResponse = transpondersService.getTranspondersBySatelliteId(satId);
 		CheckIfThereIsErrorInResponse(RSResponse);
 
 		List<org.openbox.sf5.model.Transponders> transList = RSResponse.getBody();
@@ -390,7 +390,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	// find if there is an error code and throw error
 	private <T> boolean CheckIfThereIsErrorInResponse(ResponseEntity<T> rSResponse) throws WSException {
 
-		List<Integer> normalStatusCodes = new ArrayList<Integer>();
+		List<Integer> normalStatusCodes = new ArrayList<>();
 		normalStatusCodes.add(new Integer(200));
 		normalStatusCodes.add(new Integer(201));
 		normalStatusCodes.add(new Integer(202));

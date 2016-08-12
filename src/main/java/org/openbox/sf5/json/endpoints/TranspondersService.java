@@ -12,7 +12,6 @@ import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +24,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @RequestMapping("${jaxrs.path}/transponders/")
 public class TranspondersService {
+
+	private static final String filterTypePattern = "filter/{type}/{typeValue}";
+
+	private static final String filterSatIdPattern = "satId";
 
 	@RequestMapping(value = "upload", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
 	public ResponseEntity<Boolean> uploadTransponders(@RequestParam("file") MultipartFile file) {
@@ -40,7 +43,7 @@ public class TranspondersService {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = filterTypePattern, method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Transponders>> getTranspondersByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue) {
 		List<Transponders> transList = transpondersJsonizer.getTranspondersByArbitraryFilter(fieldName, typeValue);
@@ -50,7 +53,7 @@ public class TranspondersService {
 		return new ResponseEntity<>(transList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+	@RequestMapping(value = filterTypePattern, method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Transponders>> getTranspondersByArbitraryFilterXML(
 			@PathVariable("type") String fieldName, @PathVariable("typeValue") String typeValue) {
 		List<Transponders> transList = transpondersJsonizer.getTranspondersByArbitraryFilter(fieldName, typeValue);
@@ -71,9 +74,8 @@ public class TranspondersService {
 
 	}
 
-	@RequestMapping(value = "/filter", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<Transponders>> getTranspondersBySatelliteId(
-			@MatrixVariable(required = true, value = "satId") long satId) {
+	@RequestMapping(value = filterSatIdPattern, method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<Transponders>> getTranspondersBySatelliteId(@PathVariable("satId") long satId) {
 
 		List<Transponders> transList = transpondersJsonizer.getTranspondersBySatelliteId(satId);
 		if (transList.isEmpty()) {
@@ -82,9 +84,9 @@ public class TranspondersService {
 		return new ResponseEntity<>(transList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/filter", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+	@RequestMapping(value = filterSatIdPattern, method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Transponders>> getTranspondersBySatelliteIdXML(
-			@MatrixVariable(required = true, value = "satId") long satId) {
+			@PathVariable(value = "satId") long satId) {
 
 		List<Transponders> transList = transpondersJsonizer.getTranspondersBySatelliteId(satId);
 		if (transList.isEmpty()) {
