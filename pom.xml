@@ -19,44 +19,20 @@
         <log4j.version>1.2.17</log4j.version>
 	</properties>
   	 
-<!--   	 <repositories>	
-  		<repository>
-    	<id>com.springsource.repository.bundles.release</id>
-    	<name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
-    	<url>http://repository.springsource.com/maven/bundles/release</url>
-		</repository>
-  	</repositories> -->
-  	
-<!--   	<repositories>	
-	<repository>
-    	<id>codelds</id>
-    	<url>https://code.lds.org/nexus/content/groups/main-repo</url>
-    </repository>
-</repositories> -->
+
   	 
-  <build>
-<!--     <sourceDirectory>src</sourceDirectory> -->
+<build>
+
 <resources>
 	<resource>
     	<directory>src/main/java</directory> <!-- This excludes webapp resources from copying to classes! -->
         <excludes>
           <exclude>**/*.java</exclude>
-          <!-- exclude default, unchanged hibernate.cfg.xml -->
-<!--           <exclude>**/hibernate.cfg.xml</exclude> -->
         </excludes>
       </resource>
 	<resource>
     	<directory>src/main/resources</directory>
     	<filtering>true</filtering>
-  			 <!-- <includes>
-  			 	<include>**web-inf-filter/jboss-web.xml</include>
-  			 </includes> -->
-<!--   			 <includes>
-  			 	<include>**eclipse-copy-webinf/jboss-web.xml</include>
-  			 </includes>
-  		<excludes>
-  			<exclude>**web-inf-filter/jboss-web.xml</exclude>
-  		</excludes> -->
   	</resource>
 </resources>
     
@@ -124,6 +100,11 @@ declared explicitly so Spring config files can be placed next to their correspon
           	<failOnMissingWebXml>false</failOnMissingWebXml>
 			<packagingExcludes>web.xml</packagingExcludes> <!-- In container test it says duplicate context, it still includes web.xml (( -->
         	<warName>${rp.build.warname}</warName>
+           	<archive>
+        		<manifestEntries>
+        			<Dependencies>org.hibernate</Dependencies>
+        		</manifestEntries>
+        	</archive> 
 		<webResources>
 <!-- 			<resource>
                 <filtering>true</filtering> THIS IS IMPORTANT! It tells maven to replace your variables with the properties values
@@ -179,6 +160,7 @@ declared explicitly so Spring config files can be placed next to their correspon
         	https://tomcat.apache.org/maven-plugin-trunk/tomcat7-maven-plugin/usage.html
         	 -->
         	<path>/${rp.build.warname}</path>
+
         	
 <!--         	<warFile>${project.build.directory}/${rp.build.warname}.war</warFile> -->
         </configuration>
@@ -276,19 +258,9 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
              <version>1.4.18</version>
              	<configuration>
                      <container>
-<!--                          <containerId>tomcat8x</containerId>
-						      <zipUrlInstaller>
-						        <url>http://apache.ip-connect.vn.ua/tomcat/tomcat-8/v8.0.30/bin/apache-tomcat-8.0.30-windows-x64.zip</url>
-						      </zipUrlInstaller> -->
-<!-- 						    <containerId>jboss75x</containerId>
-						    <zipUrlInstaller>
-						    	ZIP should be in the temp folder with other pre-downloaded archives.
-						    	<url>https://access.cdn.redhat.com/jboss-eap-6.4.0.zip</url>
-						    </zipUrlInstaller> -->
 						    <containerId>wildfly10x</containerId>
 	                     	<zipUrlInstaller>
 								<url>http://download.jboss.org/wildfly/10.0.0.Final/wildfly-10.0.0.Final.zip</url>
-<!-- 								<url>http://download.jboss.org/wildfly/9.0.2.Final/wildfly-9.0.2.Final.zip</url> -->
 							</zipUrlInstaller>
 						    
 						    <dependencies>
@@ -306,7 +278,6 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
                      	<properties>
                              <cargo.servlet.port>8080</cargo.servlet.port>
                              <cargo.protocol>http</cargo.protocol>
-<!--                              <cargo.tomcat.httpSecure>false</cargo.tomcat.httpSecure> -->
                              <cargo.datasource.datasource.ds1>
                              		cargo.datasource.url=jdbc:h2:mem:test;DB_CLOSE_DELAY=-1|
                              		cargo.datasource.driver=org.h2.Driver|
@@ -382,14 +353,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
             <activeByDefault>false</activeByDefault>
         </activation>  		 
 		<properties>
-           		<db.jdbcUrl>jdbc:postgresql://localhost:5432/sf5springprod</db.jdbcUrl>
-           		<db.driver>org.postgresql.Driver</db.driver>
-           		<db.user>sf5jsf</db.user>
-           		<db.password>1</db.password>
-           		<db.dialect>ProgressDialect</db.dialect>
-  				<rp.build.warname>SF5Spring</rp.build.warname>
-  				<property.placeholder>prod</property.placeholder>
-  				<db.hbm2ddl>update</db.hbm2ddl>
+			<property.placeholder>prod</property.placeholder>
 		</properties>
 	</profile>
 	<profile>
@@ -398,14 +362,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
             <activeByDefault>false</activeByDefault>
         </activation>
 		<properties>
-            <db.jdbcUrl>jdbc:postgresql://localhost:5432/sf5springdev</db.jdbcUrl>
-           	<db.driver>org.postgresql.Driver</db.driver>
-           	<db.user>sf5jsf</db.user>
-           	<db.password>1</db.password>
-           	<db.dialect>ProgressDialect</db.dialect>
-  			<rp.build.warname>SF5Spring-test</rp.build.warname>
   			<property.placeholder>dev</property.placeholder>
-  			<db.hbm2ddl>update</db.hbm2ddl>
   		</properties>
 	</profile>
 	<profile>
@@ -414,14 +371,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
             	<activeByDefault>true</activeByDefault>
         	</activation>
         	<properties>
-        		<db.jdbcUrl>jdbc:postgresql://localhost:5432/sf5springdev</db.jdbcUrl>
-           		<db.driver>org.postgresql.Driver</db.driver>
-           		<db.user>sf5jsf</db.user>
-           		<db.password>1</db.password>
-        		<rp.build.warname></rp.build.warname> <!-- For jboss-web.xml -->
-        		<db.dialect>ProgressDialect</db.dialect>
         		<property.placeholder>openshift</property.placeholder>
-        		<db.hbm2ddl>update</db.hbm2ddl>
         	</properties>
          <build>
             <plugins>
