@@ -667,13 +667,6 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 	</dependency>
 	
 	<dependency>
-		<groupId>commons-logging</groupId>
-		<artifactId>commons-logging</artifactId>
-		<version>1.2</version>
-	</dependency>
-	<!-- java.lang.ClassNotFoundException: org.apache.commons.fileupload.FileItemFactory  -->
-	
-	<dependency>
 		<groupId>org.hibernate</groupId>
 		<artifactId>hibernate-validator</artifactId>
 		<version>5.2.3.Final</version>
