@@ -2,9 +2,12 @@ package org.openbox.sf5.json.endpoints;
 
 import java.util.List;
 
+import javax.servlet.annotation.MultipartConfig;
+import javax.validation.Valid;
 import javax.ws.rs.core.MediaType;
 
 import org.openbox.sf5.common.JsonObjectFiller;
+import org.openbox.sf5.json.service.FileBucket;
 import org.openbox.sf5.json.service.TranspondersJsonizer;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
@@ -12,10 +15,11 @@ import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -23,24 +27,55 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RestController
 @EnableWebMvc
 @RequestMapping("${jaxrs.path}/transponders/")
+@MultipartConfig(fileSizeThreshold = 5242880, maxFileSize = 5242880, // 5
+		// MB
+		maxRequestSize = 20971520) // 20 MB
 public class TranspondersService {
 
 	private static final String filterTypePattern = "filter/{type}/{typeValue}";
 
 	private static final String filterSatIdPattern = "satId/{satId}";
 
-	@RequestMapping(value = "upload", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
-	public ResponseEntity<Boolean> uploadTransponders(@RequestParam("file") MultipartFile file) {
+	@RequestMapping(method = RequestMethod.POST, headers = "content-type=multipart/form-data")
+	public ResponseEntity<Boolean> uploadTransponders(
 
-		Boolean result = new Boolean(false);
-		if (!file.isEmpty()) {
+			// @RequestParam("file") MultipartFile file
+			// @ModelAttribute("file") UploadedFile uploadedFile
 
-			result = transpondersJsonizer.uploadTransponders(file);
+			@Valid FileBucket fileBucket, BindingResult result, ModelMap model
+
+	) {
+
+		Boolean returnResult = new Boolean(false);
+
+		if (result.hasErrors()) {
+			System.out.println("validation errors");
+			return new ResponseEntity<>(returnResult, HttpStatus.NOT_IMPLEMENTED);
+
 		} else {
-			return new ResponseEntity<>(result, HttpStatus.NOT_IMPLEMENTED);
+			System.out.println("Fetching file");
+			// MultipartFile multipartFile = fileBucket.getFile();
+
+			// Now do something with file...
+			// FileCopyUtils.copy(fileBucket.getFile().getBytes(), new File(
+			// UPLOAD_LOCATION + fileBucket.getFile().getOriginalFilename()));
+			// String fileName = multipartFile.getOriginalFilename();
+			// model.addAttribute("fileName", fileName);
+			// return "success";
 		}
 
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		// MultipartFile file = uploadedFile.getFile();
+
+		MultipartFile file = fileBucket.getFile();
+
+		if (!file.isEmpty()) {
+
+			returnResult = transpondersJsonizer.uploadTransponders(file);
+		} else {
+			return new ResponseEntity<>(returnResult, HttpStatus.NOT_IMPLEMENTED);
+		}
+
+		return new ResponseEntity<>(returnResult, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = filterTypePattern, method = RequestMethod.GET, produces = "application/json")
