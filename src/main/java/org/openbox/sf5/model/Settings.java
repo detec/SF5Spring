@@ -49,7 +49,7 @@ public class Settings extends AbstractDbEntity implements Serializable {
 
 	@Column(name = "Name", unique = false, nullable = false, length = 50)
 	@NotEmpty
-	@JsonProperty("Name")
+	@JsonProperty("name")
 	@XmlID
 	private String Name;
 
@@ -57,7 +57,6 @@ public class Settings extends AbstractDbEntity implements Serializable {
 		this.Name = Name;
 	}
 
-	@JsonProperty("Name")
 	public String getName() {
 		return Name;
 	}
@@ -79,13 +78,12 @@ public class Settings extends AbstractDbEntity implements Serializable {
 	}
 
 	@Column(name = "TheLastEntry", unique = false, nullable = true)
-	@JsonProperty("TheLastEntry")
+	@JsonProperty("lastEntry")
 	@XmlJavaTypeAdapter(TimestampAdapter.class)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "Europe/Kiev")
 	@NotNull
 	private Timestamp TheLastEntry;
 
-	@JsonProperty("TheLastEntry")
 	public Timestamp getTheLastEntry() {
 		return TheLastEntry;
 	}
@@ -97,11 +95,10 @@ public class Settings extends AbstractDbEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "\"user\"", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_User"))
 	@NotNull
-	@JsonProperty("User")
+	@JsonProperty("user")
 	@Valid
 	private Users User;
 
-	@JsonProperty("User")
 	public Users getUser() {
 		return User;
 	}
@@ -113,11 +110,10 @@ public class Settings extends AbstractDbEntity implements Serializable {
 	@OneToMany(mappedBy = "parent_id", fetch = FetchType.EAGER, orphanRemoval = true)
 	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE })
 	@OrderColumn(name = "LineNumber")
-	@JsonProperty("Conversion")
+	@JsonProperty("conversion")
 	@JsonManagedReference
-	private List<SettingsConversion> Conversion = new ArrayList<SettingsConversion>();
+	private List<SettingsConversion> Conversion = new ArrayList<>();
 
-	@JsonProperty("Conversion")
 	public List<SettingsConversion> getConversion() {
 		return Conversion;
 	}
@@ -129,10 +125,9 @@ public class Settings extends AbstractDbEntity implements Serializable {
 	@OneToMany(mappedBy = "parent_id", fetch = FetchType.EAGER, orphanRemoval = true)
 	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE })
 	@OrderColumn(name = "LineNumber")
-	@JsonProperty("Satellites")
+	@JsonProperty("satellites")
 	private List<SettingsSatellites> Satellites;
 
-	@JsonProperty("Satellites")
 	public List<SettingsSatellites> getSatellites() {
 		return Satellites;
 	}

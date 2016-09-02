@@ -50,7 +50,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	@XmlIDREF
 	private Settings parent_id;
 
-	@JsonProperty("LineNumber")
+	@JsonProperty("lineNumber")
 	private long LineNumber;
 
 	public SettingsConversion(Settings parent_id) {
@@ -61,10 +61,9 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 
 	@ManyToOne
 	@JoinColumn(name = "Transponder", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_Transponder"))
-	@JsonProperty("Transponder")
+	@JsonProperty("transponder")
 	private Transponders Transponder;
 
-	@JsonProperty("Transponder")
 	public Transponders getTransponder() {
 		return Transponder;
 	}
@@ -74,10 +73,9 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	@Column(name = "Satindex", unique = false, nullable = true, precision = 1)
-	@JsonProperty("Satindex")
+	@JsonProperty("satindex")
 	private long Satindex;
 
-	@JsonProperty("Satindex")
 	public long getSatindex() {
 		return Satindex;
 	}
@@ -87,10 +85,9 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	@Column(name = "Tpindex", unique = false, nullable = true, precision = 1)
-	@JsonProperty("Tpindex")
+	@JsonProperty("tpindex")
 	private long Tpindex;
 
-	@JsonProperty("Tpindex")
 	public long getTpindex() {
 		return Tpindex;
 	}
@@ -100,10 +97,9 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	@Column(name = "Note", unique = false, nullable = true, length = 120)
-	@JsonProperty("Note")
+	@JsonProperty("note")
 	private String Note;
 
-	@JsonProperty("Note")
 	public String getNote() {
 		return Note;
 	}
@@ -113,10 +109,9 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	@Column(name = "TheLineOfIntersection", unique = false, nullable = true, precision = 2)
-	@JsonProperty("TheLineOfIntersection")
+	@JsonProperty("lineOfIntersection")
 	private long TheLineOfIntersection;
 
-	@JsonProperty("TheLineOfIntersection")
 	public long getTheLineOfIntersection() {
 		return TheLineOfIntersection;
 	}
@@ -133,7 +128,6 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 		this.parent_id = parent_id;
 	}
 
-	@JsonProperty("LineNumber")
 	public long getLineNumber() {
 		return LineNumber;
 	}
@@ -167,7 +161,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 		}
 
 		// filter only SettingsConversion fields
-		List<String> SCClassList = new ArrayList<String>();
+		List<String> SCClassList = new ArrayList<>();
 
 		Field[] thisClassFieldsArray = SettingsConversion.class.getDeclaredFields();
 

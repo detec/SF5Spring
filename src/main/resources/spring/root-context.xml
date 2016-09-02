@@ -24,12 +24,12 @@
 <context:annotation-config />
 
 <!-- This section enables autowiring -->	
-<context:component-scan base-package="org.openbox.sf5.model" />
-<context:component-scan base-package="org.openbox.sf5.dao" /> <!-- Probably this is for autowiring -->
+<!-- <context:component-scan base-package="org.openbox.sf5.model" />
+<context:component-scan base-package="org.openbox.sf5.dao" /> Probably this is for autowiring
 <context:component-scan base-package="org.openbox.sf5.service" />
 <context:component-scan base-package="org.openbox.sf5.common" />
 <context:component-scan base-package="org.openbox.sf5.json" />
-<context:component-scan base-package="org.openbox.sf5.jaxws" />
+<context:component-scan base-package="org.openbox.sf5.jaxws" /> -->
 
 
 <!-- Configurer that replaces ${...} placeholders with values from a properties file -->

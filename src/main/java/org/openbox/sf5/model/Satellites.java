@@ -24,7 +24,7 @@ public class Satellites extends AbstractDbEntity implements Serializable {
 	private long id;
 
 	@Column(name = "Name", unique = false, nullable = false, length = 50)
-	@JsonProperty("Name")
+	@JsonProperty("name")
 	private String Name;
 
 	@Override

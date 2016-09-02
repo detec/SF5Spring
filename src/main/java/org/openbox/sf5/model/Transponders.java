@@ -42,7 +42,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 
 	@Column(name = "Frequency", unique = false, nullable = false, precision = 5)
 	@Min(value = 2000)
-	@JsonProperty("Frequency")
+	@JsonProperty("frequency")
 	private long Frequency;
 
 	public long getFrequency() {
@@ -61,7 +61,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	@NotNull
-	@JsonProperty("Polarization")
+	@JsonProperty("polarization")
 	private Polarization Polarization;
 
 	public Polarization getPolarization() {
@@ -74,7 +74,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = true)
-	@JsonProperty("FEC")
+	@JsonProperty("fec")
 	private TypesOfFEC FEC;
 
 	public TypesOfFEC getFEC() {
@@ -88,7 +88,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	@NotNull
-	@JsonProperty("Carrier")
+	@JsonProperty("carrier")
 	private CarrierFrequency Carrier;
 
 	public CarrierFrequency getCarrier() {
@@ -99,9 +99,9 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 		this.Carrier = Carrier;
 	}
 
-	@Column(name = "Speed", unique = false, nullable = false, precision = 5)
+	@Column(name = "speed", unique = false, nullable = false, precision = 5)
 	@Min(value = 1000)
-	@JsonProperty("Speed")
+	@JsonProperty("speed")
 	private long Speed;
 
 	public long getSpeed() {
@@ -115,7 +115,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	@NotNull
-	@JsonProperty("VersionOfTheDVB")
+	@JsonProperty("versionOfTheDVB")
 	private DVBStandards VersionOfTheDVB;
 
 	public DVBStandards getVersionOfTheDVB() {
@@ -129,7 +129,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	@NotNull
-	@JsonProperty("RangeOfDVB")
+	@JsonProperty("rangeOfDVB")
 	private RangesOfDVB RangeOfDVB;
 
 	public RangesOfDVB getRangeOfDVB() {
@@ -143,7 +143,7 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "Satellite", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_SatelliteTransponders"))
 	@NotNull
-	@JsonProperty("Satellite")
+	@JsonProperty("satellite")
 	private Satellites Satellite;
 
 	public Satellites getSatellite() {

@@ -70,7 +70,7 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 	@Column(name = "username", unique = false, nullable = false)
 	private String username;
 
-	@JsonProperty("LineNumber")
+	@JsonProperty("lineNumber")
 	private long LineNumber;
 
 	@Column(name = "authority", unique = false, nullable = false, length = 50)
@@ -100,7 +100,6 @@ public class Usersauthorities extends AbstractDbEntity implements Serializable {
 		this.username = username;
 	}
 
-	@JsonProperty("LineNumber")
 	public long getLineNumber() {
 		return LineNumber;
 	}

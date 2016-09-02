@@ -107,10 +107,9 @@ public class Users extends AbstractDbEntity implements Serializable {
 	}
 
 	@Column(name = "Password", unique = false, nullable = false, length = 15)
-	@JsonProperty("Password")
+	@JsonProperty("password")
 	private String Password;
 
-	@JsonProperty("Password")
 	public String getPassword() {
 		return Password;
 	}
