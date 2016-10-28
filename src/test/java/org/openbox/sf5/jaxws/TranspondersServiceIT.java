@@ -20,19 +20,14 @@ import org.junit.runners.MethodSorters;
 import org.openbox.sf5.wsmodel.Transponders;
 import org.openbox.sf5.wsmodel.WSException_Exception;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
 @RunWith(JUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-// @ContextConfiguration(locations = {
-// "file:src/main/resources/spring/autowired-beans.xml" })
-// @WebAppConfiguration
 public class TranspondersServiceIT extends AbstractWSTest {
 
 	private Validator validator;
 
 	@Before
 	public void setUp() throws Exception {
-		// setUpAbstract();
 		setUpAbstractNoAuth();
 
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
