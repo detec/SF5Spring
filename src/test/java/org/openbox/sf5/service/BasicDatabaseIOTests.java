@@ -73,11 +73,11 @@ public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 		objectController.saveOrUpdate(newSat);
 
 		Transponders trans = new Transponders();
-		trans.setCarrier(CarrierFrequency.Top);
+		trans.setCarrier(CarrierFrequency.TOP);
 		trans.setFEC(TypesOfFEC._23);
 		trans.setFrequency(11555);
 		trans.setPolarization(Polarization.V);
-		trans.setRangeOfDVB(RangesOfDVB.Ku);
+		trans.setRangeOfDVB(RangesOfDVB.KU);
 		trans.setSatellite(newSat);
 		trans.setSpeed(10000);
 		trans.setVersionOfTheDVB(DVBStandards.DVBS2);
@@ -106,7 +106,7 @@ public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 		user.setPassword("1");
 		user.setusername("testuser");
 
-		List<Usersauthorities> rolesList = new ArrayList<Usersauthorities>();
+		List<Usersauthorities> rolesList = new ArrayList<>();
 
 		Usersauthorities checkRoleUser = new Usersauthorities(user.getusername(), "ROLE_USER", user, 2);
 
@@ -127,7 +127,7 @@ public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 		setting.setUser(user);
 		setting.setTheLastEntry(new java.sql.Timestamp(System.currentTimeMillis()));
 
-		List<SettingsConversion> scList = new ArrayList<SettingsConversion>();
+		List<SettingsConversion> scList = new ArrayList<>();
 
 		SettingsConversion sc1 = getNewSettingsConversionLine();
 		sc1.setLineNumber(1);

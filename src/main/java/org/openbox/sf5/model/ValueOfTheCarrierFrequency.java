@@ -8,13 +8,56 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Table with carrier frequency values.
+ *
+ * @author Andrii Duplyk
+ *
+ */
 @Entity
 @Table(name = "ValueOfTheCarrierFrequency")
 public class ValueOfTheCarrierFrequency extends AbstractDbEntity implements Serializable {
 
+	private static final long serialVersionUID = -6095308495476745108L;
+
+	@Id
+	private CarrierFrequency typeOfCarrierFrequency;
+
+	@Id
+	private KindsOfPolarization polarization;
+
+	@Column(name = "lowerThreshold", unique = false, nullable = false, precision = 5)
+	private long lowerThreshold;
+
+	@Column(name = "upperThreshold", unique = false, nullable = false, precision = 5)
+	private long upperThreshold;
+
+	/**
+	 *
+	 * @param typeOfCarrierFrequency
+	 * @param polarization
+	 * @param lowerThreshold
+	 * @param upperThreshold
+	 */
+	public ValueOfTheCarrierFrequency(CarrierFrequency typeOfCarrierFrequency, KindsOfPolarization polarization,
+			long lowerThreshold, long upperThreshold) {
+
+		this.typeOfCarrierFrequency = typeOfCarrierFrequency;
+		this.polarization = polarization;
+		this.lowerThreshold = lowerThreshold;
+		this.upperThreshold = upperThreshold;
+
+	}
+
+	/**
+	 *
+	 */
+	public ValueOfTheCarrierFrequency() {
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.Polarization, this.TypeOfCarrierFrequency);
+		return Objects.hash(this.polarization, this.typeOfCarrierFrequency);
 	}
 
 	@Override
@@ -30,59 +73,33 @@ public class ValueOfTheCarrierFrequency extends AbstractDbEntity implements Seri
 		}
 		ValueOfTheCarrierFrequency other = (ValueOfTheCarrierFrequency) obj;
 
-		return Objects.equals(TypeOfCarrierFrequency, other.TypeOfCarrierFrequency)
-				&& Objects.equals(Polarization, other.Polarization);
+		return Objects.equals(typeOfCarrierFrequency, other.typeOfCarrierFrequency)
+				&& Objects.equals(polarization, other.polarization);
 
 	}
-
-	private static final long serialVersionUID = -6095308495476745108L;
-
-	@Id
-	private CarrierFrequency TypeOfCarrierFrequency;
 
 	public CarrierFrequency getTypeOfCarrierFrequency() {
-		return TypeOfCarrierFrequency;
+		return typeOfCarrierFrequency;
 	}
 
-	public void setTypeOfCarrierFrequency(CarrierFrequency TypeOfCarrierFrequency) {
-		this.TypeOfCarrierFrequency = TypeOfCarrierFrequency;
+	public void setTypeOfCarrierFrequency(CarrierFrequency typeOfCarrierFrequency) {
+		this.typeOfCarrierFrequency = typeOfCarrierFrequency;
 	}
-
-	@Id
-	private KindsOfPolarization Polarization;
-
-	@Column(name = "LowerThreshold", unique = false, nullable = false, precision = 5)
-	private long LowerThreshold;
 
 	public long getLowerThreshold() {
-		return LowerThreshold;
+		return lowerThreshold;
 	}
 
-	public void setLowerThreshold(long LowerThreshold) {
-		this.LowerThreshold = LowerThreshold;
+	public void setLowerThreshold(long lowerThreshold) {
+		this.lowerThreshold = lowerThreshold;
 	}
-
-	@Column(name = "UpperThreshold", unique = false, nullable = false, precision = 5)
-	private long UpperThreshold;
 
 	public long getUpperThreshold() {
-		return UpperThreshold;
+		return upperThreshold;
 	}
 
-	public void setUpperThreshold(long UpperThreshold) {
-		this.UpperThreshold = UpperThreshold;
+	public void setUpperThreshold(long upperThreshold) {
+		this.upperThreshold = upperThreshold;
 	}
 
-	public ValueOfTheCarrierFrequency(CarrierFrequency TypeOfCarrierFrequency, KindsOfPolarization Polarization,
-			long LowerThreshold, long UpperThreshold) {
-
-		this.TypeOfCarrierFrequency = TypeOfCarrierFrequency;
-		this.Polarization = Polarization;
-		this.LowerThreshold = LowerThreshold;
-		this.UpperThreshold = UpperThreshold;
-
-	}
-
-	public ValueOfTheCarrierFrequency() {
-	}
 }

@@ -74,7 +74,7 @@ public class SendTransponderFilesJSONIT extends AbstractServiceTest {
 
 			HttpStatus statusCode = stringResponse.getStatusCode();
 
-			assertEquals(statusCode, HttpStatus.OK);
+			assertEquals(HttpStatus.OK, statusCode);
 
 			// Boolean result = responsePost.readEntity(Boolean.class);
 

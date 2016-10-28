@@ -1,14 +1,20 @@
 package org.openbox.sf5.model;
 
+/**
+ * Carrier frequency enum
+ *
+ * @author Andrii Duplyk
+ *
+ */
 public enum CarrierFrequency {
 
-	Lower("9750"), Top("10600"), CRange("5150"), TopPie("10750");
+	LOWER("9750"), TOP("10600"), C_RANGE("5150"), TOP_PIE("10750");
+
+	private final String value;
 
 	private CarrierFrequency(String s) {
 		value = s;
 	}
-
-	private final String value;
 
 	@Override
 	public String toString() {

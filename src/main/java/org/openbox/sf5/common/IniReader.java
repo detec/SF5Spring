@@ -3,11 +3,9 @@ package org.openbox.sf5.common;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -22,6 +20,7 @@ import org.hibernate.type.EnumType;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.Type;
 import org.hibernate.type.TypeResolver;
+import org.openbox.sf5.dao.DAO;
 import org.openbox.sf5.model.CarrierFrequency;
 import org.openbox.sf5.model.DVBStandards;
 import org.openbox.sf5.model.Polarization;
@@ -31,18 +30,44 @@ import org.openbox.sf5.model.TheDVBRangeValues;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.TypesOfFEC;
 import org.openbox.sf5.model.ValueOfTheCarrierFrequency;
-import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * Class to parse transponder files.
+ *
+ * @author duplyk.a
+ *
+ */
 @Service
-public class IniReader implements Serializable {
+public class IniReader {
+
+	private Satellites sat;
+
+	@Autowired
+	private DAO objectController;
+
+	private static final String REGEX = "(\\d{1,3})=(\\d{5}),(H|V|L|R),(\\d{4,5}),(\\d{2}),(DVB-S|S2),(QPSK|8PSK)(\\sACM)?";
+	private static final String FREQUENCY_CONSTANT = "Frequency";
+	private Pattern pattern;
+	private Matcher matcher;
+
+	private boolean result = false;
+
+	private String filePath;
 
 	public IniReader() {
-
+		// default constructor
 	}
 
+	/**
+	 * Accepts {@link MultipartFile} from controller
+	 *
+	 * @param file
+	 *            {@link MultipartFile}
+	 * @throws IOException
+	 */
 	public void readMultiPartFile(MultipartFile file) throws IOException {
 
 		// create a temp file
@@ -55,14 +80,20 @@ public class IniReader implements Serializable {
 		stream.close();
 
 		// calling reader class
-		setFilepath(absolutePath);
+		setFilePath(absolutePath);
 		readData(); // doing import
 	}
 
+	/**
+	 * Method used for unit test.
+	 *
+	 * @throws IOException
+	 */
 	public void readData() throws IOException {
 		// Open the file
-		FileInputStream fstream = new FileInputStream(filepath);
-		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+
+		FileReader fileReader = new FileReader(filePath);
+		BufferedReader br = new BufferedReader(fileReader);
 
 		String strLine;
 
@@ -71,17 +102,17 @@ public class IniReader implements Serializable {
 		// Read File Line By Line
 		while ((strLine = br.readLine()) != null) {
 
-			if (strLine.equals("[SATTYPE]")) {
+			if ("[SATTYPE]".equals(strLine)) {
 				readSatData(br);
 			}
 
-			if (strLine.equals("[DVB]")) {
+			if ("[DVB]".equals(strLine)) {
 				readTransponderData(br);
 			}
 
 		}
 
-		fstream.close();
+		fileReader.close();
 		br.close();
 
 		result = true;
@@ -118,10 +149,8 @@ public class IniReader implements Serializable {
 		session.close();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void readTransponderData(BufferedReader br) throws IOException {
 
-		Transponders selectedTrans = null;
 		// replace with Java core
 
 		String transCountString = br.readLine().substring(2);
@@ -136,164 +165,189 @@ public class IniReader implements Serializable {
 			// Initialize
 
 			matcher = pattern.matcher(transDataString);
-			RangesOfDVB rangeEnum = null;
-			CarrierFrequency carrierEnum = null;
 
-			// 62=11919,V,27500,23,S2,8PSK ACM/VCM
-			// int count = 0;
 			while (matcher.find()) {
-				// count++;
-
-				// name will be transponder number in
-				// String Name = matcher.group(1);
-
-				// let's check, that it isn't Multistream
-				String Multistream = matcher.group(8);
-				if (Multistream != null) {
-					continue;
-				}
-
-				// frequency
-				String FrequencyString = matcher.group(2);
-				// System.out.println(FrequencyString);
-				Long Frequency = Long.parseLong(FrequencyString);
-
-				// polarization
-				Polarization aPolarization = Polarization.valueOf(matcher.group(3));
-
-				// speed
-				Long Speed = Long.parseLong(matcher.group(4));
-
-				// FEC
-				TypesOfFEC FEC = TypesOfFEC.valueOf("_" + matcher.group(5));
-
-				// DVB standard
-				DVBStandards DVBStandard = null;
-				String Standard = matcher.group(6);
-				if (Standard.equals("DVB-S")) {
-					DVBStandard = DVBStandards.DVBS;
-				}
-
-				if (Standard.equals("S2")) {
-					DVBStandard = DVBStandards.DVBS2;
-				}
-
-				// define range
-
-				Properties params = new Properties();
-				params.put("enumClass", RangesOfDVB.class.getName());
-				params.put("type",
-						"12"); /*
-								 * type 12 instructs to use the String
-								 * representation of enum value
-								 */
-				Type myEnumType = new TypeLocatorImpl(new TypeResolver()).custom(EnumType.class, params);
-
-				String sqltext = "SELECT RangeOfDVB FROM TheDVBRangeValues where :Frequency between LowerThreshold and UpperThreshold";
-
-				Session session = objectController.openSession();
-
-				List<TheDVBRangeValues> range = session.createSQLQuery(sqltext).addScalar("RangeOfDVB", myEnumType)
-						.setParameter("Frequency", Frequency)
-						.setResultTransformer(Transformers.aliasToBean(TheDVBRangeValues.class)).list();
-
-				if (!range.isEmpty()) {
-					rangeEnum = range.get(0).getRangeOfDVB();
-				} else {
-					continue;
-				}
-
-				// get carrier frequency
-				params = new Properties();
-				params.put("enumClass", CarrierFrequency.class.getName());
-				params.put("type",
-						"12"); /*
-								 * type 12 instructs to use the String
-								 * representation of enum value
-								 */
-				myEnumType = new TypeLocatorImpl(new TypeResolver()).custom(EnumType.class, params);
-
-				sqltext = "SELECT TypeOfCarrierFrequency FROM ValueOfTheCarrierFrequency "
-						+ "where (:Frequency between LowerThreshold and UpperThreshold) "
-						+ "and (Polarization = :KindOfPolarization)";
-
-				List<ValueOfTheCarrierFrequency> carrierList = session.createSQLQuery(sqltext)
-						.addScalar("TypeOfCarrierFrequency", myEnumType).setParameter("Frequency", Frequency)
-						.setParameter("KindOfPolarization", Polarization.getPolarizationKind(aPolarization).ordinal())
-
-						.setResultTransformer(Transformers.aliasToBean(ValueOfTheCarrierFrequency.class)).list();
-
-				if (!carrierList.isEmpty()) {
-					carrierEnum = carrierList.get(0).getTypeOfCarrierFrequency();
-				} else {
-					continue;
-				}
-
-				// let's check if such frequency already exists on the given
-				// satellite
-				sqltext = "Select id FROM Transponders where frequency = :Frequency and satellite = :satelliteId";
-
-				List<Object> transIdList = new ArrayList<>();
-				transIdList = session.createSQLQuery(sqltext).addScalar("id", StandardBasicTypes.LONG)
-
-						.setParameter("Frequency", Frequency)
-
-						.setParameter("satelliteId", sat.getId()).list();
-
-				Transponders newTrans = new Transponders(Frequency, aPolarization, FEC, carrierEnum, Speed, DVBStandard,
-						rangeEnum, sat);
-
-				if (transIdList.isEmpty()) {
-					objectController.saveOrUpdate(newTrans);
-				}
-
-				else {
-
-					long transId = (long) transIdList.get(0);
-					selectedTrans = objectController.select(Transponders.class, transId);
-
-					// check if this trans changed to newly read trans
-					if (!selectedTrans.equals(newTrans)) {
-						// we should update all properties of the selected
-						// trans.
-						selectedTrans.setCarrier(carrierEnum);
-						selectedTrans.setFEC(FEC);
-						selectedTrans.setFrequency(Frequency);
-						selectedTrans.setPolarization(aPolarization);
-						selectedTrans.setRangeOfDVB(rangeEnum);
-						selectedTrans.setSatellite(sat);
-						selectedTrans.setSpeed(Speed);
-						selectedTrans.setVersionOfTheDVB(DVBStandard);
-						objectController.update(selectedTrans);
-					}
-
-				}
-
-				session.close();
+				processTransponedrMatch();
 			}
 		}
 	}
 
-	public ObjectsController getObjectController() {
+	private void processTransponedrMatch() {
+
+		Transponders selectedTrans;
+
+		// name will be transponder number in
+
+		// let's check, that it isn't Multistream
+		String multistream = matcher.group(8);
+		if (multistream != null) {
+			return;
+		}
+
+		// frequency
+		String frequencyString = matcher.group(2);
+
+		Long frequency = Long.parseLong(frequencyString);
+
+		// polarization
+		Polarization aPolarization = Polarization.valueOf(matcher.group(3));
+
+		// speed
+		Long speed = Long.parseLong(matcher.group(4));
+
+		// FEC
+		TypesOfFEC fec = TypesOfFEC.valueOf("_" + matcher.group(5));
+
+		// DVB standard
+		DVBStandards dvbStandard = resolveDVBStandard();
+
+		Session session = objectController.openSession();
+
+		// define range
+		RangesOfDVB rangeEnum = resolveTheDVBRangeValue(session, frequency);
+
+		CarrierFrequency carrierEnum = resolveCarrierFrequency(session, frequency, aPolarization);
+
+		Transponders newTrans = new Transponders(frequency, aPolarization, fec, carrierEnum, speed, dvbStandard,
+				rangeEnum, sat);
+
+		// let's check if such frequency already exists on the given
+		// satellite
+		List<Object> transIdList = getListOfTranspondersWithSameFrequency(session, frequency);
+
+		if (transIdList.isEmpty()) {
+			objectController.saveOrUpdate(newTrans);
+		}
+
+		else {
+
+			long transId = (long) transIdList.get(0);
+			selectedTrans = objectController.select(Transponders.class, transId);
+
+			// check if this trans changed to newly read trans
+			if (!selectedTrans.equals(newTrans)) {
+				// we should update all properties of the selected
+				// trans.
+				updateTransponderData(selectedTrans, carrierEnum, fec, frequency, aPolarization, rangeEnum, speed,
+						dvbStandard);
+			}
+
+		}
+
+	}
+
+	private List<Object> getListOfTranspondersWithSameFrequency(Session session, Long frequency) {
+
+		String sqltext = "Select id FROM Transponders where frequency = :Frequency and satellite = :satelliteId";
+
+		List<Object> transIdList;
+		transIdList = session.createSQLQuery(sqltext).addScalar("id", StandardBasicTypes.LONG)
+
+				.setParameter(FREQUENCY_CONSTANT, frequency)
+
+				.setParameter("satelliteId", sat.getId()).list();
+
+		session.close();
+
+		return transIdList;
+	}
+
+	private RangesOfDVB resolveTheDVBRangeValue(Session session, Long frequency) {
+		RangesOfDVB rangeEnum = null;
+
+		Properties params = new Properties();
+		params.put("enumClass", RangesOfDVB.class.getName());
+		params.put("type", "12"); /*
+									 * type 12 instructs to use the String
+									 * representation of enum value
+									 */
+		Type myEnumType = new TypeLocatorImpl(new TypeResolver()).custom(EnumType.class, params);
+
+		String sqltext = "SELECT rangeOfDVB FROM TheDVBRangeValues where :Frequency between lowerThreshold and upperThreshold";
+
+		List<TheDVBRangeValues> range = session.createSQLQuery(sqltext).addScalar("rangeOfDVB", myEnumType)
+				.setParameter(FREQUENCY_CONSTANT, frequency)
+				.setResultTransformer(Transformers.aliasToBean(TheDVBRangeValues.class)).list();
+
+		if (!range.isEmpty()) {
+			rangeEnum = range.get(0).getRangeOfDVB();
+		}
+		return rangeEnum;
+
+	}
+
+	private DVBStandards resolveDVBStandard() {
+		DVBStandards dvbStandard = null;
+		String standard = matcher.group(6);
+		if ("DVB-S".equals(standard)) {
+			dvbStandard = DVBStandards.DVBS;
+		}
+
+		if ("S2".equals(standard)) {
+			dvbStandard = DVBStandards.DVBS2;
+		}
+
+		return dvbStandard;
+	}
+
+	private CarrierFrequency resolveCarrierFrequency(Session session, Long frequency, Polarization aPolarization) {
+		CarrierFrequency carrierEnum = null;
+
+		// get carrier frequency
+		Properties params = new Properties();
+		params.put("enumClass", CarrierFrequency.class.getName());
+		params.put("type", "12"); /*
+									 * type 12 instructs to use the String
+									 * representation of enum value
+									 */
+		Type myEnumType = new TypeLocatorImpl(new TypeResolver()).custom(EnumType.class, params);
+
+		String sqltext = "SELECT typeOfCarrierFrequency FROM ValueOfTheCarrierFrequency "
+				+ "where (:Frequency between lowerThreshold and upperThreshold) "
+				+ "and (polarization = :KindOfPolarization)";
+
+		@SuppressWarnings("unchecked")
+		List<ValueOfTheCarrierFrequency> carrierList = session.createSQLQuery(sqltext)
+
+				.addScalar("typeOfCarrierFrequency", myEnumType)
+
+				.setParameter(FREQUENCY_CONSTANT, frequency)
+
+				.setParameter("KindOfPolarization", Polarization.getPolarizationKind(aPolarization).ordinal())
+
+				.setResultTransformer(Transformers.aliasToBean(ValueOfTheCarrierFrequency.class)).list();
+
+		if (!carrierList.isEmpty()) {
+			carrierEnum = carrierList.get(0).getTypeOfCarrierFrequency();
+		} else {
+			return carrierEnum;
+		}
+		return carrierEnum;
+
+	}
+
+	private void updateTransponderData(Transponders selectedTrans, CarrierFrequency carrierEnum, TypesOfFEC fec,
+			Long frequency, Polarization aPolarization, RangesOfDVB rangeEnum, Long speed, DVBStandards dvbStandard) {
+
+		selectedTrans.setCarrier(carrierEnum);
+		selectedTrans.setFEC(fec);
+		selectedTrans.setFrequency(frequency);
+		selectedTrans.setPolarization(aPolarization);
+		selectedTrans.setRangeOfDVB(rangeEnum);
+		selectedTrans.setSatellite(sat);
+		selectedTrans.setSpeed(speed);
+		selectedTrans.setVersionOfTheDVB(dvbStandard);
+		objectController.update(selectedTrans);
+
+	}
+
+	public DAO getObjectController() {
 		return objectController;
 	}
 
-	public void setObjectController(ObjectsController objectController) {
+	public void setObjectController(DAO objectController) {
 		this.objectController = objectController;
 	}
-
-	private static final long serialVersionUID = -1699774508872380035L;
-
-	private Satellites sat;
-
-	@Autowired
-	private ObjectsController objectController;
-
-	final String REGEX = "(\\d{1,3})=(\\d{5}),(H|V|L|R),(\\d{4,5}),(\\d{2}),(DVB-S|S2),(QPSK|8PSK)(\\sACM)?";
-	private static Pattern pattern;
-	private static Matcher matcher;
-
-	private boolean result = false;
 
 	public boolean isResult() {
 		return result;
@@ -303,14 +357,12 @@ public class IniReader implements Serializable {
 		this.result = result;
 	}
 
-	private String filepath;
-
-	public String getFilepath() {
-		return filepath;
+	public String getFilePath() {
+		return filePath;
 	}
 
-	public void setFilepath(String filepath) {
-		this.filepath = filepath;
+	public void setFilePath(String filepath) {
+		this.filePath = filepath;
 	}
 
 }

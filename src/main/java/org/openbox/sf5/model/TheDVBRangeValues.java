@@ -7,6 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * DVB ranges
+ *
+ * @author Andrii Duplyk
+ *
+ */
 @Entity
 @Table(name = "TheDVBRangeValues")
 public class TheDVBRangeValues extends AbstractDbEntity implements Serializable {
@@ -14,46 +20,56 @@ public class TheDVBRangeValues extends AbstractDbEntity implements Serializable 
 	private static final long serialVersionUID = 1635144675404567877L;
 
 	@Id
-	private RangesOfDVB RangeOfDVB;
+	private RangesOfDVB rangeOfDVB;
 
-	public RangesOfDVB getRangeOfDVB() {
-		return this.RangeOfDVB;
-	}
+	@Column(name = "lowerThreshold", unique = false, nullable = true, precision = 5)
+	private long lowerThreshold;
 
-	public void setRangeOfDVB(RangesOfDVB RangeOfDVB) {
-		this.RangeOfDVB = RangeOfDVB;
-	}
+	@Column(name = "upperThreshold", unique = false, nullable = true, precision = 5)
+	private long upperThreshold;
 
-	@Column(name = "LowerThreshold", unique = false, nullable = true, precision = 5)
-	private long LowerThreshold;
+	/**
+	 *
+	 * @param RangeOfDVB
+	 * @param LowerThreshold
+	 * @param UpperThreshold
+	 */
+	public TheDVBRangeValues(RangesOfDVB rangeOfDVB, long lowerThreshold, long upperThreshold) {
 
-	public long getLowerThreshold() {
-		return this.LowerThreshold;
-	}
-
-	public void setLowerThreshold(long LowerThreshold) {
-		this.LowerThreshold = LowerThreshold;
-	}
-
-	@Column(name = "UpperThreshold", unique = false, nullable = true, precision = 5)
-	private long UpperThreshold;
-
-	public long getUpperThreshold() {
-		return this.UpperThreshold;
-	}
-
-	public void setUpperThreshold(long UpperThreshold) {
-		this.UpperThreshold = UpperThreshold;
-	}
-
-	public TheDVBRangeValues(RangesOfDVB RangeOfDVB, long LowerThreshold, long UpperThreshold) {
-
-		this.RangeOfDVB = RangeOfDVB;
-		this.LowerThreshold = LowerThreshold;
-		this.UpperThreshold = UpperThreshold;
+		this.rangeOfDVB = rangeOfDVB;
+		this.lowerThreshold = lowerThreshold;
+		this.upperThreshold = upperThreshold;
 
 	}
 
+	/**
+	 *
+	 */
 	public TheDVBRangeValues() {
 	}
+
+	public RangesOfDVB getRangeOfDVB() {
+		return this.rangeOfDVB;
+	}
+
+	public void setRangeOfDVB(RangesOfDVB rangeOfDVB) {
+		this.rangeOfDVB = rangeOfDVB;
+	}
+
+	public long getLowerThreshold() {
+		return this.lowerThreshold;
+	}
+
+	public void setLowerThreshold(long lowerThreshold) {
+		this.lowerThreshold = lowerThreshold;
+	}
+
+	public long getUpperThreshold() {
+		return this.upperThreshold;
+	}
+
+	public void setUpperThreshold(long upperThreshold) {
+		this.upperThreshold = upperThreshold;
+	}
+
 }
