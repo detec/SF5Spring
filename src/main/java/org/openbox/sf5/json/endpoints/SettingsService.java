@@ -205,7 +205,7 @@ public class SettingsService {
 		StringWriter sw = new StringWriter();
 
 		List<SettingsConversion> conversionLines = setting.getConversion();
-		Sat sat = XMLExporter.exportSettingsConversionPresentationToSF5Format(conversionLines);
+		Sat sat = XMLExporter.exportSettingsConversionToSF5Format(conversionLines);
 
 		// There is no easy way of using different marshallers
 		// marshalling sat

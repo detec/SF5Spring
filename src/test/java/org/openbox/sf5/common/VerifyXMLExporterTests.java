@@ -58,7 +58,7 @@ public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 		List<SettingsConversion> conversionLines = setting.getConversion();
 		assertThat(conversionLines.size()).isGreaterThan(0);
 
-		Sat sat = XMLExporter.exportSettingsConversionPresentationToSF5Format(conversionLines);
+		Sat sat = XMLExporter.exportSettingsConversionToSF5Format(conversionLines);
 
 		// http://www.concretepage.com/spring/spring-jaxb-integration-annotation-pretty-print-example-with-jaxb2marshaller
 		// try (FileOutputStream fos = new

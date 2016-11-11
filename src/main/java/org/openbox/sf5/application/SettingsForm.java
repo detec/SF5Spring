@@ -650,7 +650,7 @@ public class SettingsForm implements Serializable {
 			scList.add(sc);
 		});
 
-		Sat sat = XMLExporter.exportSettingsConversionPresentationToSF5Format(scList);
+		Sat sat = XMLExporter.exportSettingsConversionToSF5Format(scList);
 
 		// haven't found easy way to use custom marshaller for specific class.
 		// return new ResponseEntity<Sat>(result, HttpStatus.OK);
@@ -676,7 +676,8 @@ public class SettingsForm implements Serializable {
 
 		renumerateLines();
 
-		XMLExporter.generateSatTpPresentation(dataSettingsConversion);
+		// XMLExporter.generateSatTpPresentation(dataSettingsConversion);
+		XMLExporter.exportSettingsConversionPresentationToSF5Format(dataSettingsConversion);
 
 		model.addAttribute("bean", this);
 		model.addAttribute("sessiondate", new Date(session.getLastAccessedTime()));
@@ -824,47 +825,5 @@ public class SettingsForm implements Serializable {
 
 	@Autowired
 	public Jaxb2Marshaller springMarshaller;
-
-	// @PreAuthorize("hasRole('ROLE_USER')")
-	// @ResponseBody
-	// public HttpEntity<String> universalexportToXML(SettingsForm pSetting) {
-	// dataSettingsConversion = pSetting.dataSettingsConversion;
-	//
-	// HttpHeaders header = new HttpHeaders();
-	// header.setContentType(MediaType.TEXT_HTML);
-	//
-	// byte[] bytesBuffer = new byte[32768];
-	//
-	// if (!check32Rows()) {
-	// ResponseEntity<String> resp = new ResponseEntity<String>(
-	// new String("Table Transponders must contain exactly 32 rows!"), header,
-	// HttpStatus.OK);
-	// return resp;
-	// }
-	//
-	// String filePath = XMLExporter.exportSettingToXML(dataSettingsConversion);
-	//
-	// if (filePath == "") {
-	// return new ResponseEntity<String>("Error reading export XML file on
-	// server!", header, HttpStatus.OK);
-	// }
-	//
-	// header.setContentType(new MediaType("application", "xml"));
-	//
-	// try {
-	//
-	// bytesBuffer = Files.readAllBytes(Paths.get(filePath));
-	//
-	// // clean temporary file
-	// Files.deleteIfExists(Paths.get(filePath));
-	//
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	//
-	// return new ResponseEntity<String>(new String(bytesBuffer,
-	// Charset.forName("UTF8")), header, HttpStatus.OK);
-	//
-	// }
 
 }
