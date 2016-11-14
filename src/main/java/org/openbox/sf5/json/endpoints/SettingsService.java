@@ -36,6 +36,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping(value = "${jaxrs.path}/usersettings/")
 public class SettingsService {
 
+	private static final String CONSTANT_COULDNT_GET_USER = "Couldn't get currently authenticated user!";
+
 	@Value("${jaxrs.path}")
 	private String jaxRSPath;
 
@@ -53,11 +55,7 @@ public class SettingsService {
 	public ResponseEntity<Long> createSetting(@RequestBody Settings setting, UriComponentsBuilder ucBuilder)
 			throws NotAuthenticatedException, UsersDoNotCoincideException {
 
-		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
-
-		if (currentUser == null) {
-			throw new NotAuthenticatedException("Couldn't get currently authenticated user!");
-		}
+		Users currentUser = getVerifyAuthenticatedUser();
 
 		if (!currentUser.equals(setting.getUser())) {
 			// authenticated user and setting user do not coincide.
@@ -87,11 +85,7 @@ public class SettingsService {
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Settings>> getSettingsByUserLogin() throws NotAuthenticatedException {
 
-		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
-		if (currentUser == null) {
-
-			throw new NotAuthenticatedException("Couldn't get currently authenticated user!");
-		}
+		Users currentUser = getVerifyAuthenticatedUser();
 
 		List<Settings> settList = settingsJsonizer.getSettingsByUser(currentUser);
 		if (settList.isEmpty()) {
@@ -106,10 +100,7 @@ public class SettingsService {
 	public ResponseEntity<GenericXMLListWrapper<Settings>> getSettingsByUserLoginXML()
 			throws NotAuthenticatedException {
 
-		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
-		if (currentUser == null) {
-			throw new NotAuthenticatedException("Couldn't get currently authenticated user!");
-		}
+		Users currentUser = getVerifyAuthenticatedUser();
 
 		List<Settings> settList = settingsJsonizer.getSettingsByUser(currentUser);
 		if (settList.isEmpty()) {
@@ -127,10 +118,8 @@ public class SettingsService {
 			@PathVariable("typeValue") String typeValue) throws NotAuthenticatedException {
 
 		List<Settings> settList = new ArrayList<>();
-		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
-		if (currentUser == null) {
-			throw new NotAuthenticatedException("Couldn't get currently authenticated user!");
-		}
+
+		Users currentUser = getVerifyAuthenticatedUser();
 
 		settList = settingsJsonizer.getSettingsByArbitraryFilter(fieldName, typeValue, currentUser);
 		if (settList.isEmpty()) {
@@ -147,10 +136,8 @@ public class SettingsService {
 			throws NotAuthenticatedException {
 
 		List<Settings> settList = new ArrayList<>();
-		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
-		if (currentUser == null) {
-			throw new NotAuthenticatedException("Couldn't get currently authenticated user!");
-		}
+
+		Users currentUser = getVerifyAuthenticatedUser();
 
 		settList = settingsJsonizer.getSettingsByArbitraryFilter(fieldName, typeValue, currentUser);
 		if (settList.isEmpty()) {
@@ -165,10 +152,7 @@ public class SettingsService {
 	public ResponseEntity<Settings> getSettingById(@PathVariable("settingId") long settingId)
 			throws NotAuthenticatedException {
 
-		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
-		if (currentUser == null) {
-			throw new NotAuthenticatedException("Couldn't get currently authenticated user!");
-		}
+		Users currentUser = getVerifyAuthenticatedUser();
 
 		Settings setting = settingsJsonizer.getSettingById(settingId, currentUser);
 		if (setting == null) {
@@ -189,10 +173,7 @@ public class SettingsService {
 	public ResponseEntity<String> getSettingByIdSF5(@PathVariable("settingId") long settingId)
 			throws NotAuthenticatedException {
 
-		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
-		if (currentUser == null) {
-			throw new NotAuthenticatedException("Couldn't get currently authenticated user!");
-		}
+		Users currentUser = getVerifyAuthenticatedUser();
 
 		Settings setting = settingsJsonizer.getSettingById(settingId, currentUser);
 		if (setting == null) {
@@ -219,6 +200,17 @@ public class SettingsService {
 
 		// http://stackoverflow.com/questions/26982466/spring-mvc-response-body-xml-has-extra-string-tags-why
 		// useful link
+	}
+
+	private Users getVerifyAuthenticatedUser() throws NotAuthenticatedException {
+		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
+		if (currentUser == null) {
+
+			throw new NotAuthenticatedException(CONSTANT_COULDNT_GET_USER);
+		}
+
+		return currentUser;
+
 	}
 
 	public SettingsJsonizer getSettingsJsonizer() {
