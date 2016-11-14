@@ -23,23 +23,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice(basePackages = { "org.openbox.sf5.json.endpoints", "org.openbox.sf5.json" })
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-	// private Logger LOG;
-	//
-	// public RestResponseEntityExceptionHandler() {
-	// LOG = Logger.getLogger(getClass().getSimpleName());
-	// }
-
-	// In Spring 4.2.6 only with Exception argument method is found and called.
-	// Partially taken from
-	// http://www.baeldung.com/global-error-handler-in-a-spring-rest-api
-
 	// if item exists when creating
 	@ExceptionHandler(value = { IllegalArgumentException.class })
 	public ResponseEntity<ApiError> handleIdException(IllegalArgumentException ex, WebRequest request) {
-		// String bodyOfResponse = ex.getMessage();
-		// // 202
-		// return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(),
-		// HttpStatus.ACCEPTED, request);
 		return constructSerializedException(ex, HttpStatus.BAD_REQUEST);
 
 	}
@@ -67,31 +53,18 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	@ExceptionHandler(NotAuthenticatedException.class)
 	public ResponseEntity<ApiError> handleNotAuthenticatedException(NotAuthenticatedException ex, WebRequest request) {
 
-		// List<String> errors = new ArrayList<>();
-		//
-		// ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED,
-		// ex.getMessage(), errors);
-		// return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
 		return constructSerializedException(ex, HttpStatus.UNAUTHORIZED);
 
 	}
 
 	@ExceptionHandler(value = { UsersDoNotCoincideException.class })
 	public ResponseEntity<ApiError> handleDifferentUser(UsersDoNotCoincideException ex, WebRequest request) {
-		// String bodyOfResponse = ex.getMessage();
-		// // 406
-		// return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(),
-		// HttpStatus.NOT_ACCEPTABLE, request);
 		return constructSerializedException(ex, HttpStatus.NOT_ACCEPTABLE);
 
 	}
 
 	@ExceptionHandler(value = { ItemNotFoundException.class })
 	public ResponseEntity<ApiError> handleUserNotFound(Exception ex, WebRequest request) {
-		// String bodyOfResponse = ex.getMessage();
-		//
-		// return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(),
-		// HttpStatus.NO_CONTENT, request);
 
 		return constructSerializedException(ex, HttpStatus.NOT_FOUND);
 	}
@@ -101,15 +74,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String error = "No handler found for " + ex.getMethod() + " " + request.getContextPath();
 
-		// ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,
-		// ex.getLocalizedMessage(), error);
-		// return new ResponseEntity<Object>(apiError, new HttpHeaders(),
-		// apiError.getStatus());
-
 		return constructSerializedException(ex, HttpStatus.NOT_FOUND, error);
 	}
 
-	// Default error handler for other unforeseen exceptions.
+	/**
+	 * Default error handler for other unforeseen exceptions.
+	 *
+	 * @param ex
+	 * @param request
+	 * @return
+	 */
 	@ExceptionHandler({ Exception.class })
 	public ResponseEntity<ApiError> handleAll(Exception ex, WebRequest request) {
 
@@ -117,23 +91,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
 		return constructSerializedException(ex, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
-	// @Override
-	// protected ResponseEntity<Object>
-	// handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex,
-	// HttpHeaders headers, HttpStatus status, WebRequest request) {
-	//
-	// String error = "Mediatype not supported: ";
-	// return constructSerializedException(ex, HttpStatus.BAD_REQUEST, error);
-	//
-	// }
-
-	// http://stackoverflow.com/questions/17326976/spring-rest-using-jackson-400-bad-request-logging
-	// @ExceptionHandler
-	// @ResponseStatus(HttpStatus.BAD_REQUEST)
-	// public void handle(HttpMessageNotReadableException e) {
-	// logger.warn("Returning HTTP 400 Bad Request", e);
-	// }
 
 	@Override
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
