@@ -21,10 +21,6 @@ import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-// @RunWith(SpringJUnit4ClassRunner.class)
-// @ContextConfiguration(locations = {
-// "file:src/main/resources/spring/autowired-beans.xml" })
-// @WebAppConfiguration
 @RunWith(JUnit4.class)
 public class BUserServiceIT extends AbstractServiceTest {
 
