@@ -164,7 +164,7 @@ Ant-style path patterns matching in spring-framework
 	
 
 	<security:intercept-url pattern="/register" access="isAnonymous()"/>
- 	<security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+ 	<security:intercept-url pattern="/**" access="hasAuthority('ROLE_USER')" />
 
 	<security:logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID" invalidate-session="true"/>
 		 
