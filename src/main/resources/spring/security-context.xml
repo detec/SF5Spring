@@ -15,12 +15,7 @@
 		http://www.springframework.org/schema/context 
 		http://www.springframework.org/schema/context/spring-context.xsd">
  
- <!-- ========================= RESOURCE DEFINITIONS ========================= -->
 
-<!-- application.properties are for Eclipse - file contains dev properties 
-It is in root context
--->
-<context:property-placeholder location="classpath:application.properties" system-properties-mode="OVERRIDE"/>
 
 <!-- digestFilter and digestEntryPoint have been verified with the official docs -->
 <bean id="digestFilter" class=
@@ -121,7 +116,7 @@ So when specifying patterns in action-based frameworks we should use only **
         
         <security:intercept-url pattern="${jaxrs.path}/satellites/*" access="isAnonymous()"/>
         <security:intercept-url pattern="${jaxrs.path}/transponders/*" access="isAnonymous()"/>
-        <security:intercept-url pattern="${jaxrs.path}/users/*" access="isAnonymous()"/>
+<!--         <security:intercept-url pattern="${jaxrs.path}/users/*" access="isAnonymous()"/> -->
         <security:intercept-url pattern="${jaxrs.path}/usersettings/*" access="hasRole('ROLE_USER')"/>
         
  </security:http>
@@ -135,12 +130,7 @@ Ant-style path patterns matching in spring-framework
 
 
  --> 
-<!-- 		entry-point-ref="digestEntryPoint"  
 
-Since JAX-WS RI doesn't support digest authentication, we will use basic.
---> 
-<!-- Exception for JAX-WS --> 
-<!-- <security:http pattern="/${jaxws.path}/**" name="JAXWSBasicAuthentication" create-session="stateless"   --> 
 <security:http pattern="/OpenboxSF5Service*" name="JAXWSBasicAuthentication" create-session="stateless"
 		entry-point-ref="basicAuthenticationEntryPoint"
 		use-expressions="true"
@@ -150,11 +140,6 @@ Since JAX-WS RI doesn't support digest authentication, we will use basic.
 		
     	<!-- We do not need sessions in stateless REST API -->
     	<security:csrf disabled="true"/>
-<!--     	<security:custom-filter ref="digestFilter" before="FORM_LOGIN_FILTER" /> -->
-    	
-    	<!-- In order to activate digest authenticator at client -->
-<!--     	<security:intercept-url pattern="*OpenboxSF5Service?wsdl" access="hasRole('ROLE_USER')"/> -->
-<!--     	<security:anonymous enabled="true"/> -->
     	 
  </security:http>
  
@@ -167,16 +152,10 @@ Since JAX-WS RI doesn't support digest authentication, we will use basic.
 
 	<security:intercept-url pattern="/login" access="isAnonymous()"/>
 	
-	<!-- JAX-WS -->
-<!-- 	<security:intercept-url pattern="OpenboxSF5Service*" access="isAnonymous()"/> -->
-	
+
 	<security:intercept-url pattern="/register" access="isAnonymous()"/>
  	<security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
-	<!--	Anonymous access to json endpoints. --> 
-<!-- 	<security:intercept-url pattern="/json/*" access="isAnonymous()"/> -->
 
-	<!--  For all other requests -->
-<!-- 	<security:intercept-url pattern="/*" access="isAnonymous()"/> -->
 	<security:logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID" invalidate-session="true"/>
 		 
 	<security:form-login 
