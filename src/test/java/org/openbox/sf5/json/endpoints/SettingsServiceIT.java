@@ -188,12 +188,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		fillTranspondersToSetting(newTransList, setting);
 
-		invocationBuilder = serviceTarget
-
-				// .path("create")
-				.path("/")
-
-				.request(MediaType.APPLICATION_XML);
+		invocationBuilder = serviceTarget.path("/").request(MediaType.APPLICATION_XML);
 		Response responsePost = invocationBuilder.post(Entity.entity(setting, MediaType.APPLICATION_XML));
 		assertEquals(Status.CREATED.getStatusCode(), responsePost.getStatus());
 
@@ -225,8 +220,6 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		// getting device specific output
 		invocationBuilder = serviceTarget
-
-				// .path("filter").path("id")
 
 				.path(Long.toString(setting.getId())).path("sf5")
 
