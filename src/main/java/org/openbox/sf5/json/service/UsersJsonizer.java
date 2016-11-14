@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsersJsonizer {
 
+	// @PreAuthorize("hasRole('ROLE_ADMIN')")
 	public HttpStatus saveNewUser(Users user) {
 		long id = user.getId();
 		// if we receive non-empty id

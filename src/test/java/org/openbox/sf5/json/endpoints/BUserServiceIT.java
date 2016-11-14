@@ -82,10 +82,7 @@ public class BUserServiceIT extends AbstractServiceTest {
 		// testUser.authorities = rolesList;
 		testUser.setauthorities(rolesList);
 
-		invocationBuilder = serviceTarget
-
-				// .path("create")
-				.path("/")
+		invocationBuilder = serviceTarget.path("/")
 
 				.request(MediaType.APPLICATION_JSON);
 		Response responsePost = invocationBuilder.post(Entity.entity(testUser, MediaType.APPLICATION_JSON));
@@ -117,8 +114,6 @@ public class BUserServiceIT extends AbstractServiceTest {
 		testUser.setauthorities(rolesList);
 
 		invocationBuilder = serviceTarget
-
-				// .path("create")
 
 				.path("/")
 
