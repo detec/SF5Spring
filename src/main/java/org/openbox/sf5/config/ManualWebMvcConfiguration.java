@@ -65,11 +65,6 @@ public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
 		return new StandardServletMultipartResolver();
 	}
 
-	// @Override
-	// public void addInterceptors(InterceptorRegistry registry) {
-	// registry.addInterceptor(new RequestProcessingTimeInterceptor());
-	// }
-
 	// http://stackoverflow.com/questions/22267191/is-it-possible-to-extend-webmvcconfigurationsupport-and-use-webmvcautoconfigurat
 	@Override
 	public RequestMappingHandlerMapping requestMappingHandlerMapping() {
@@ -92,47 +87,6 @@ public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
 		registry.addViewController("/login").setViewName("login");
 		registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
 	}
-
-	/*
-	 * Configure ResourceHandlers to serve static resources like CSS/ Javascript
-	 * etc...
-	 */
-	// @Override
-	// public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	// registry.addResourceHandler("/css/**").addResourceLocations("/css/");
-	// registry.addResourceHandler("/js/**").addResourceLocations("/js/");
-	// // For static html pages.
-	// registry.addResourceHandler("/registration/**").addResourceLocations("/html/");
-	//
-	// // let's add here index.html.
-	// registry.addResourceHandler("/index.html").addResourceLocations("index.html");
-	//
-	// }
-
-	// @Override
-	// public void configureContentNegotiation(ContentNegotiationConfigurer
-	// configurer) {
-	// configurer
-	//
-	// .favorPathExtension(false)
-	//
-	// .favorParameter(true)
-	//
-	// .parameterName("mediaType")
-	//
-	// .ignoreAcceptHeader(false)
-	//
-	// .useJaf(false)
-	//
-	// .defaultContentType(MediaType.APPLICATION_JSON)
-	//
-	// .mediaType("xml", MediaType.APPLICATION_XML)
-	//
-	// .mediaType("json", MediaType.APPLICATION_JSON)
-	//
-	// .mediaType("html", MediaType.TEXT_HTML);
-	//
-	// }
 
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -171,26 +125,6 @@ public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
 		converters.add(jaxbc); // this doesn't work.
 		converters.add(stringConverter);
 
-		// super.configureMessageConverters(getMessageConverters());
-
-		// Jackson2ObjectMapperBuilder builder = new
-		// Jackson2ObjectMapperBuilder().indentOutput(true)
-		// .dateFormat(JsonObjectFiller.getJsonDateFormatter());
-		// converters.add(new
-		// MappingJackson2HttpMessageConverter(builder.build()));
-		// converters.add(new
-		// MappingJackson2XmlHttpMessageConverter(Jackson2ObjectMapperBuilder.xml().build()));
-
 	}
 
-	// @Override
-	// public void
-	// configureHandlerExceptionResolvers(List<HandlerExceptionResolver>
-	// exceptionResolvers) {
-	//
-	// final ExceptionHandlerExceptionResolver resolver = new
-	// ExceptionHandlerExceptionResolver();
-	// resolver.setWarnLogCategory(resolver.getClass().getName());
-	// exceptionResolvers.add(resolver);
-	// }
 }
