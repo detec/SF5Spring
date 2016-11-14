@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
     Transponders.class,
     SettingsConversion.class
 })
-public abstract class AbstractDbEntity {
+public class AbstractDbEntity {
 
 
 }

@@ -333,11 +333,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WSException }
+     * Create an instance of {@link CheckVerifyFault }
      * 
      */
-    public WSException createWSException() {
-        return new WSException();
+    public CheckVerifyFault createCheckVerifyFault() {
+        return new CheckVerifyFault();
     }
 
     /**
@@ -354,6 +354,14 @@ public class ObjectFactory {
      */
     public SettingsConversion createSettingsConversion() {
         return new SettingsConversion();
+    }
+
+    /**
+     * Create an instance of {@link AbstractDbEntity }
+     * 
+     */
+    public AbstractDbEntity createAbstractDbEntity() {
+        return new AbstractDbEntity();
     }
 
     /**
@@ -555,12 +563,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link WSException }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link CheckVerifyFault }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://wsmodel.sf5.openbox.org/", name = "CheckVerifyFault")
-    public JAXBElement<WSException> createCheckVerifyFault(WSException value) {
-        return new JAXBElement<WSException>(_CheckVerifyFault_QNAME, WSException.class, null, value);
+    public JAXBElement<CheckVerifyFault> createCheckVerifyFault(CheckVerifyFault value) {
+        return new JAXBElement<CheckVerifyFault>(_CheckVerifyFault_QNAME, CheckVerifyFault.class, null, value);
     }
 
     /**

@@ -14,14 +14,10 @@ import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
 import org.openbox.sf5.wsmodel.Users;
 import org.openbox.sf5.wsmodel.Usersauthorities;
-import org.openbox.sf5.wsmodel.WSException_Exception;
+import org.openbox.sf5.wsmodel.WSException;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
 @RunWith(JUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-// @ContextConfiguration(locations = {
-// "file:src/main/resources/spring/autowired-beans.xml" })
-// @WebAppConfiguration
 public class BUsersServiceIT extends AbstractWSTest {
 
 	@Test
@@ -30,9 +26,10 @@ public class BUsersServiceIT extends AbstractWSTest {
 		boolean userExists = false;
 		try {
 			userExists = SF5Port.ifSuchLoginExists(testUsername);
-		} catch (WSException_Exception e) {
-			// e.printStackTrace();
+		} catch (WSException e) {
+
 			System.out.println("Error checking whether login exists! " + e);
+
 		}
 		if (userExists) {
 			return;
@@ -46,14 +43,6 @@ public class BUsersServiceIT extends AbstractWSTest {
 
 		// here we create user
 		List<Usersauthorities> rolesList = new ArrayList<>();
-		// Users testUser = new Users(this.testUsername, this.testUserPassword,
-		// true, rolesList);
-
-		// ROLE_USER
-		// Usersauthorities checkRoleUser = new
-		// Usersauthorities(this.testUsername, "ROLE_USER", testUser, 1);
-		// rolesList.add(checkRoleUser);
-		// testUser.authorities = rolesList;
 
 		Usersauthorities checkRoleUser = new Usersauthorities();
 		checkRoleUser.setAuthority("ROLE_USER");
@@ -67,7 +56,9 @@ public class BUsersServiceIT extends AbstractWSTest {
 		long userId = 0;
 		try {
 			userId = SF5Port.createUser(testUser);
-		} catch (WSException_Exception e) {
+
+		} catch (WSException e) {
+
 			e.printStackTrace();
 		}
 		assertThat(userId).isNotZero();
@@ -78,8 +69,8 @@ public class BUsersServiceIT extends AbstractWSTest {
 		boolean userId = false;
 		try {
 			userId = SF5Port.ifSuchLoginExists("loginxxf");
-		} catch (WSException_Exception e) {
-			assertTrue(e instanceof WSException_Exception);
+		} catch (WSException e) {
+			assertTrue(e instanceof WSException);
 		}
 
 	}
@@ -91,9 +82,7 @@ public class BUsersServiceIT extends AbstractWSTest {
 		Users testUser = null;
 		try {
 			testUser = SF5Port.getUserByLogin(testUsername);
-		} catch (WSException_Exception e) {
-
-			// e.printStackTrace();
+		} catch (WSException e) {
 			System.out.println("Error posting user to database! " + e);
 		}
 		assertThat(testUser).isNotNull();

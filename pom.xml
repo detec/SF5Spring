@@ -179,7 +179,7 @@ declared explicitly so Spring config files can be placed next to their correspon
                 </goals>
                 <configuration>
         	    	<wsdlUrls>
-            	   		<wsdlUrl>http://localhost:8080/${rp.build.warname}/jaxws/OpenboxSF5Service?wsdl</wsdlUrl>
+            	   		<wsdlUrl>http://localhost:8080/OpenboxSF5Service?wsdl</wsdlUrl>
                     </wsdlUrls>
 			        <verbose>true</verbose>
                     <sourceDestDir>${basedir}/src/test/java</sourceDestDir>
@@ -192,8 +192,8 @@ declared explicitly so Spring config files can be placed next to their correspon
           </plugin> -->
      
     </plugins> 
-<!--     </pluginManagement> -->
-  <!--     	<pluginManagement>
+
+<!--       	<pluginManagement>
     		<plugins>
       			<plugin>
     				<groupId>org.eclipse.m2e</groupId>
@@ -245,7 +245,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
   		<db.password></db.password>
         <db.dialect>H2Dialect</db.dialect>
         <db.hbm2ddl>update</db.hbm2ddl> 
-  		<rp.build.warname>SF5Spring-test</rp.build.warname>
+  		<rp.build.warname>/</rp.build.warname>
   		<property.placeholder>test</property.placeholder>
   	</properties>
   	

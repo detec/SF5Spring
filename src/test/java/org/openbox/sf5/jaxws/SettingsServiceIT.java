@@ -15,14 +15,11 @@ import org.openbox.sf5.json.common.BuildTestSetting;
 import org.openbox.sf5.wsmodel.Settings;
 import org.openbox.sf5.wsmodel.Transponders;
 import org.openbox.sf5.wsmodel.Users;
+import org.openbox.sf5.wsmodel.WSException;
 import org.openbox.sf5.wsmodel.WSException_Exception;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
 @RunWith(JUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-// @ContextConfiguration(locations = {
-// "file:src/main/resources/spring/autowired-beans.xml" })
-// @WebAppConfiguration
 public class SettingsServiceIT extends AbstractWSTest {
 
 	@Test
@@ -32,11 +29,14 @@ public class SettingsServiceIT extends AbstractWSTest {
 		assertThat(adminUser).isNotNull();
 
 		List<Transponders> newTransList = null;
+
 		try {
 			newTransList = SF5Port.getTranspondersByArbitraryFilter("Speed", "27500");
-		} catch (WSException_Exception e) {
-			e.printStackTrace();
+		} catch (WSException e1) {
+
+			e1.printStackTrace();
 		}
+
 		assertThat(newTransList.size()).isGreaterThan(0);
 
 		Settings setting = BuildTestSetting.buildSetting(adminUser, newTransList, "Simple");
@@ -45,7 +45,7 @@ public class SettingsServiceIT extends AbstractWSTest {
 		try {
 			newSettID = SF5Port.createSetting(setting);
 
-		} catch (WSException_Exception e) {
+		} catch (WSException e) {
 			e.printStackTrace();
 		}
 
@@ -55,7 +55,7 @@ public class SettingsServiceIT extends AbstractWSTest {
 		Settings settingRead = null;
 		try {
 			settingRead = SF5Port.getSettingById(newSettID);
-		} catch (WSException_Exception e) {
+		} catch (WSException e) {
 			System.out.println("Error getting setting by ID " + newSettID + e);
 		}
 		assertThat(settingRead).isNotNull();
@@ -68,7 +68,7 @@ public class SettingsServiceIT extends AbstractWSTest {
 		Users testUser = null;
 		try {
 			testUser = SF5Port.getUserByLogin(testUsername);
-		} catch (WSException_Exception e) {
+		} catch (WSException e) {
 
 			e.printStackTrace();
 		}

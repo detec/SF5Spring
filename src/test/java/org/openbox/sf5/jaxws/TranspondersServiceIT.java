@@ -18,7 +18,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
 import org.openbox.sf5.wsmodel.Transponders;
-import org.openbox.sf5.wsmodel.WSException_Exception;
+import org.openbox.sf5.wsmodel.WSException;
 
 @RunWith(JUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -40,7 +40,7 @@ public class TranspondersServiceIT extends AbstractWSTest {
 		List<Transponders> transList = null;
 		try {
 			transList = SF5Port.getTranspondersByArbitraryFilter("Speed", "27500");
-		} catch (WSException_Exception e) {
+		} catch (WSException e) {
 			e.printStackTrace();
 		}
 
@@ -52,7 +52,7 @@ public class TranspondersServiceIT extends AbstractWSTest {
 		Transponders trans = null;
 		try {
 			trans = SF5Port.getTransponderById(readTrans.getId());
-		} catch (WSException_Exception e) {
+		} catch (WSException e) {
 			e.printStackTrace();
 		}
 		assertThat(trans).isNotNull();
@@ -69,7 +69,7 @@ public class TranspondersServiceIT extends AbstractWSTest {
 
 		try {
 			transList = SF5Port.getTranspondersBySatelliteId(satTest.getSatelliteId());
-		} catch (WSException_Exception e) {
+		} catch (WSException e) {
 			e.printStackTrace();
 		}
 		assertThat(transList).isNotNull();
@@ -83,7 +83,7 @@ public class TranspondersServiceIT extends AbstractWSTest {
 		List<Transponders> transList = null;
 		try {
 			transList = SF5Port.getTransponders();
-		} catch (WSException_Exception e) {
+		} catch (WSException e) {
 
 			e.printStackTrace();
 		}
