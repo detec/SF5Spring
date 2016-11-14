@@ -12,6 +12,7 @@ import javax.ws.rs.client.WebTarget;
 
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.openbox.sf5.json.service.CustomObjectMapper;
 
@@ -66,7 +67,7 @@ public abstract class AbstractServiceTest {
 
 				.register(JacksonFeature.class).register(MultiPartFeature.class).register(authenticationFeature)
 
-				// .register(new LoggingFilter())
+				// .register(new LoggingFeature())
 
 				.build();
 	}
@@ -87,13 +88,13 @@ public abstract class AbstractServiceTest {
 
 				.register(JacksonFeature.class)
 
-				. register(JacksonJaxbXMLProvider.class)
+				.register(JacksonJaxbXMLProvider.class)
 
 				// .register(jacksonProvider)
 
 				.register(MultiPartFeature.class).register(authenticationFeature)
 
-				// .register(new LoggingFilter())
+				.register(new LoggingFeature())
 
 				.build();
 	}
