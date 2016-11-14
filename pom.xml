@@ -389,6 +389,8 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 </profiles>
   
 <dependencies>
+
+	<!-- Spring -->
 	<dependency>
   		<groupId>org.springframework</groupId>
   		<artifactId>spring-context</artifactId>
@@ -414,30 +416,10 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
     	<artifactId>spring-beans</artifactId>
     	<version>${spring.version}</version>
 	</dependency>
-    <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-web</artifactId>
-        <version>${spring.security.version}</version>
-	</dependency>
- 	<dependency>
-		<groupId>org.springframework.security</groupId>
-		<artifactId>spring-security-config</artifactId>
-		<version>${spring.security.version}</version>
-	</dependency>
- 	<dependency>
-		<groupId>org.springframework.security</groupId>
-		<artifactId>spring-security-core</artifactId>
-		<version>${spring.security.version}</version>
-	</dependency>
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-jdbc</artifactId>
 		<version>${spring.version}</version>
-	</dependency>
-	<dependency>
-    	<groupId>org.springframework.security</groupId>
-    	<artifactId>spring-security-taglibs</artifactId>
-    	<version>${spring.security.version}</version>
 	</dependency>
 	<dependency>
 		<groupId>org.springframework</groupId>
@@ -460,6 +442,36 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<version>${spring.version}</version>
 	</dependency>
 	
+	
+	<!-- Spring security -->
+    <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-web</artifactId>
+        <version>${spring.security.version}</version>
+	</dependency>
+ 	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-config</artifactId>
+		<version>${spring.security.version}</version>
+	</dependency>
+ 	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-core</artifactId>
+		<version>${spring.security.version}</version>
+	</dependency>
+	<dependency>
+    	<groupId>org.springframework.security</groupId>
+    	<artifactId>spring-security-aspects</artifactId>
+    	<version>${spring.security.version}</version>
+	</dependency>
+	<dependency>
+    	<groupId>org.springframework.security</groupId>
+    	<artifactId>spring-security-taglibs</artifactId>
+    	<version>${spring.security.version}</version>
+	</dependency>
+
+
+
 		
 	<dependency>
 		<groupId>javax.servlet</groupId>
@@ -638,13 +650,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<version>3.2.0</version>
 	</dependency>
 	 
-	 <!-- Test ready application with Selenium -->
-<!-- 	<dependency>
-        <groupId>org.seleniumhq.selenium</groupId>
-        <artifactId>selenium-firefox-driver</artifactId>
-        <version>2.48.2</version>
-    </dependency> -->
-     
+  
 	<dependency>
    		<groupId>javax.el</groupId>
    		<artifactId>javax.el-api</artifactId>
@@ -663,6 +669,19 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<version>3.2</version>
 		<scope>provided</scope>
 	</dependency>
+	
+	<!-- Aspects -->
+	<dependency>
+	    <groupId>org.aspectj</groupId>
+	    <artifactId>aspectjrt</artifactId>
+	    <version>1.8.9</version>
+	</dependency>
+	<dependency>
+    	<groupId>org.aspectj</groupId>
+    	<artifactId>aspectjweaver</artifactId>
+    	<version>1.8.9</version>
+	</dependency>
+	
 
         <!-- Logging  -->
 

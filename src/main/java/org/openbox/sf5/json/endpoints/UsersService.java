@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-// @EnableWebMvc
 @RequestMapping(value = "${jaxrs.path}/users/")
 public class UsersService {
 
