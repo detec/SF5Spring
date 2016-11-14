@@ -45,6 +45,16 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 	private static final String servicePath = "usersettings";
 
+	@Autowired
+	Jaxb2Marshaller springMarshaller;
+
+	@Before
+	public void setUp() {
+		setUpAbstractTestUser();
+
+		serviceTarget = commonTarget.path(servicePath);
+	}
+
 	private Users getTestUser() {
 		Invocation.Builder invocationBuilder = commonTarget.path("users").path("filter").path("username")
 				.path(testUsername).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
@@ -68,13 +78,6 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		Users testUser = response.readEntity(Users.class);
 
 		return testUser;
-	}
-
-	@Before
-	public void setUp() {
-		setUpAbstractTestUser();
-
-		serviceTarget = commonTarget.path(servicePath);
 	}
 
 	@Test
@@ -108,13 +111,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		// //
 		// http://howtodoinjava.com/2015/08/07/jersey-restful-client-examples/#post
-		invocationBuilder = serviceTarget
-
-				// .path("create")
-
-				.path("/")
-
-				.request(MediaType.APPLICATION_JSON);
+		invocationBuilder = serviceTarget.path("/").request(MediaType.APPLICATION_JSON);
 		Response responsePost = invocationBuilder.post(Entity.entity(setting, MediaType.APPLICATION_JSON));
 		assertEquals(Status.CREATED.getStatusCode(), responsePost.getStatus());
 
@@ -131,8 +128,6 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		// Here we test getting setting by id.
 		invocationBuilder = serviceTarget
-
-				// .path("filter").path("id")
 
 				.path(Long.toString(setting.getId()))
 
@@ -215,8 +210,6 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		// Here we test getting setting by id.
 		invocationBuilder = serviceTarget
-
-				// .path("filter").path("id")
 
 				.path(Long.toString(setting.getId()))
 
@@ -374,8 +367,5 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		assertTrue(settingRead instanceof Settings);
 
 	}
-
-	@Autowired
-	public Jaxb2Marshaller springMarshaller;
 
 }

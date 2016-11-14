@@ -30,22 +30,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@EnableWebMvc
 @RestController
-// @PreAuthorize("hasRole('ROLE_USER')")
-// Be careful not to use annotations produces, consumes - it kicks away
-// requests.
 @RequestMapping(value = "${jaxrs.path}/usersettings/")
 public class SettingsService {
 
-	// http://websystique.com/springmvc/spring-mvc-4-restful-web-services-crud-example-resttemplate/
+	@Value("${jaxrs.path}")
+	private String jaxRSPath;
 
-	// !!!!!! Be careful with annotations in RequestMapping Consumes, Produces
-	// !!! For ResponseEntity<List<T>>
-	// it should be empty or produces = "application/json".
+	@Autowired
+	private Jaxb2Marshaller springMarshaller;
+
+	@Autowired
+	private SF5SecurityContext securityContext;
+
+	@Autowired
+	private SettingsJsonizer settingsJsonizer;
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(method = RequestMethod.POST)
@@ -128,8 +129,6 @@ public class SettingsService {
 		List<Settings> settList = new ArrayList<>();
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 		if (currentUser == null) {
-
-			// return new ResponseEntity<Settings>(HttpStatus.UNAUTHORIZED);
 			throw new NotAuthenticatedException("Couldn't get currently authenticated user!");
 		}
 
@@ -150,8 +149,6 @@ public class SettingsService {
 		List<Settings> settList = new ArrayList<>();
 		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
 		if (currentUser == null) {
-
-			// return new ResponseEntity<Settings>(HttpStatus.UNAUTHORIZED);
 			throw new NotAuthenticatedException("Couldn't get currently authenticated user!");
 		}
 
@@ -183,10 +180,10 @@ public class SettingsService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "{settingId}/sf5", method = RequestMethod.GET
-
-	// , produces = MediaType.APPLICATION_XML
-			, produces = MediaType.TEXT_PLAIN // This removes <String> tags
+	@RequestMapping(value = "{settingId}/sf5", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN // This
+																											// removes
+																											// <String>
+																											// tags
 
 	)
 	public ResponseEntity<String> getSettingByIdSF5(@PathVariable("settingId") long settingId)
@@ -224,12 +221,6 @@ public class SettingsService {
 		// useful link
 	}
 
-	@Autowired
-	private SF5SecurityContext securityContext;
-
-	@Autowired
-	private SettingsJsonizer settingsJsonizer;
-
 	public SettingsJsonizer getSettingsJsonizer() {
 		return settingsJsonizer;
 	}
@@ -237,11 +228,5 @@ public class SettingsService {
 	public void setSettingsJsonizer(SettingsJsonizer settingsJsonizer) {
 		this.settingsJsonizer = settingsJsonizer;
 	}
-
-	@Autowired
-	public Jaxb2Marshaller springMarshaller;
-
-	@Value("${jaxrs.path}")
-	private String jaxRSPath;
 
 }
