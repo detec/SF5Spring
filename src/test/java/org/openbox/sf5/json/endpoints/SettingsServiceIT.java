@@ -267,10 +267,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		GenericType<List<Settings>> genList = new GenericType<List<Settings>>() {
 		};
 
-		WebTarget target = serviceTarget
-
-				// .path("all")
-				.path("/");
+		WebTarget target = serviceTarget.path("/");
 
 		settList = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get(genList);
 
@@ -281,22 +278,9 @@ public class SettingsServiceIT extends AbstractServiceTest {
 	}
 
 	private List<Settings> getUserSettingsXML() {
-
-		// WebTarget target = serviceTarget.path("all");
-		//
-		// Builder response =
-		// target.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML).b;
-		//
-		// GenericXMLListWrapper<Transponders> settingWrapper =
-		// response.readEntity(GenericXMLListWrapper.class);
-
 		Response response = null;
 
-		Invocation.Builder invocationBuilder = serviceTarget
-
-				// .path("all")
-
-				.path("/")
+		Invocation.Builder invocationBuilder = serviceTarget.path("/")
 
 				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
 		response = invocationBuilder.get();
