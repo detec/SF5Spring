@@ -245,7 +245,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
   		<db.password></db.password>
         <db.dialect>H2Dialect</db.dialect>
         <db.hbm2ddl>update</db.hbm2ddl> 
-  		<rp.build.warname>/</rp.build.warname>
+  		<rp.build.warname>SF5Spring-test</rp.build.warname>
   		<property.placeholder>test</property.placeholder>
   	</properties>
   	
