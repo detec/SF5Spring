@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -130,6 +131,19 @@ public abstract class AbstractWSTest {
 				new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5Service"));
 
 		SF5Port = SF5Service.getOpenboxSF5Port();
+	}
+
+	public void tearAuthentication() {
+		BindingProvider bp = (BindingProvider) SF5Port;
+		Map<String, Object> contextMap = bp.getRequestContext();
+
+		if (contextMap.containsKey(BindingProvider.USERNAME_PROPERTY)) {
+			contextMap.remove(BindingProvider.USERNAME_PROPERTY);
+		}
+
+		if (contextMap.containsKey(BindingProvider.PASSWORD_PROPERTY)) {
+			contextMap.remove(BindingProvider.PASSWORD_PROPERTY);
+		}
 	}
 
 }

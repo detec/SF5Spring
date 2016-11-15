@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -79,6 +80,15 @@ public class SettingsServiceIT extends AbstractWSTest {
 	@Before
 	public void setUp() throws Exception {
 		setUpAbstract();
+	}
+
+	/**
+	 * Trying to clear basic credentials.
+	 */
+	@Override
+	@After
+	public void tearAuthentication() {
+		super.tearAuthentication();
 	}
 
 }

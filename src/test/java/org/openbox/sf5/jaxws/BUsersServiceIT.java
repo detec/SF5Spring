@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -91,6 +92,15 @@ public class BUsersServiceIT extends AbstractWSTest {
 	@Before
 	public void setUp() throws Exception {
 		this.setUpAbstractAdmin();
+	}
+
+	/**
+	 * Trying to clear basic credentials.
+	 */
+	@Override
+	@After
+	public void tearAuthentication() {
+		super.tearAuthentication();
 	}
 
 }
