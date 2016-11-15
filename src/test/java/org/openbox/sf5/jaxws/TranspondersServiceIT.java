@@ -105,4 +105,9 @@ public class TranspondersServiceIT extends AbstractWSTest {
 		assertEquals(0, resultArray[0]);
 	}
 
+	// @BeforeClass
+	// public static void beforeClass() {
+	// beforeClass();
+	// }
+
 }

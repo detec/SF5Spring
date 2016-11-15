@@ -73,4 +73,9 @@ public class SatellitesServiceIT extends AbstractWSTest {
 
 	}
 
+	// @BeforeClass
+	// public static void beforeClass() {
+	// beforeClass();
+	// }
+
 }

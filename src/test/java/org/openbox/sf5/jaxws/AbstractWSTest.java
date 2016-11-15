@@ -13,56 +13,64 @@ import java.util.logging.Logger;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.openbox.sf5.wsmodel.OpenboxSF5;
 import org.openbox.sf5.wsmodel.OpenboxSF5ImplService;
 
 public abstract class AbstractWSTest {
 
-	public OpenboxSF5ImplService SF5Service;
-
-	public URL url;
-
-	public OpenboxSF5 SF5Port;
+	public static final Logger LOGGER = Logger.getLogger(AbstractWSTest.class.getName());
 
 	public static final String appLocation = "http://localhost:8080/";
+
+	public static OpenboxSF5ImplService SF5Service;
+
+	public static URL url;
+
+	public static OpenboxSF5 SF5Port;
 
 	public final String testUsername = "ITUserWS";
 
 	public final String testUserPassword = "Test123";
 
-	public Logger LOGGER = Logger.getLogger(getClass().getName());
+	public static Properties property = new Properties();
 
-	public Properties property = new Properties();
+	@BeforeClass
+	public static void beforeClass() {
 
-	public void loadProperties() {
+		loadProperties();
 
-		// using try with resources
-		try (InputStream in = getClass().getResourceAsStream("/application.properties")) {
-			property.load(in);
-		} catch (IOException e) {
-			e.printStackTrace();
+		String contextPath = property.getProperty("context.path");
+		try {
+			url = new URL(appLocation + contextPath + "/");
+			SF5Service = new OpenboxSF5ImplService(new URL(url, "OpenboxSF5Service?wsdl"),
+					new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5Service"));
 
+			SF5Port = SF5Service.getOpenboxSF5Port();
+		} catch (MalformedURLException e) {
 			// put exception into log.
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		}
 
+	}
+
+	public static void loadProperties() {
+
+		// using try with resources
+		try (InputStream in = AbstractWSTest.class.getResourceAsStream("/application.properties")) {
+			property.load(in);
+		} catch (IOException e) {
+			// put exception into log.
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 	}
 
 	public void setUpAbstract() throws Exception {
-		loadProperties();
 
-		String contextPath = property.getProperty("context.path");
-		url = new URL(appLocation + contextPath + "/"
 		// we moved to WildFly 9+ and it mounts service to the root.
 		// + property.getProperty("jaxws.path") + "/"
-
-		);
-
-		SF5Service = new OpenboxSF5ImplService(new URL(url, "OpenboxSF5Service?wsdl"),
-				new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5Service"));
-
-		SF5Port = SF5Service.getOpenboxSF5Port();
 
 		BasicAuthenticator auth = new BasicAuthenticator(testUsername, testUserPassword);
 		Authenticator.setDefault(auth);
@@ -71,29 +79,20 @@ public abstract class AbstractWSTest {
 		bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, "username");
 		bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, "password");
 
-		// bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY,
-		// testUsername);
-		// bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY,
-		// testUserPassword);
-
 	}
 
 	public void setUpAbstractAdmin() throws Exception {
-		loadProperties();
+		// loadProperties();
 
-		String contextPath = property.getProperty("context.path");
-		url = new URL(appLocation + contextPath + "/"
-		// we moved to WildFly 9+ and it mounts service to the root.
-		// + property.getProperty("jaxws.path") + "/"
+		// String contextPath = property.getProperty("context.path");
+		// url = new URL(appLocation + contextPath + "/");
+		//
+		// URL wsdlURL = new URL(url, "OpenboxSF5Service?wsdl");
 
-		);
-
-		URL wsdlURL = new URL(url, "OpenboxSF5Service?wsdl");
-
-		SF5Service = new OpenboxSF5ImplService(wsdlURL,
-				new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5Service"));
-
-		SF5Port = SF5Service.getOpenboxSF5Port();
+		// SF5Service = new OpenboxSF5ImplService(wsdlURL,
+		// new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5Service"));
+		//
+		// SF5Port = SF5Service.getOpenboxSF5Port();
 
 		BasicAuthenticator auth = new BasicAuthenticator("admin", "1");
 		Authenticator.setDefault(auth);
@@ -116,23 +115,20 @@ public abstract class AbstractWSTest {
 	}
 
 	public void setUpAbstractNoAuth() throws MalformedURLException {
-		loadProperties();
+		// loadProperties();
 
-		String contextPath = property.getProperty("context.path");
-		url = new URL(appLocation + contextPath + "/"
-
-		// + property.getProperty("jaxws.path") + "/"
-
-		);
-
-		URL wsdlURL = new URL(url, "OpenboxSF5Service?wsdl");
-
-		SF5Service = new OpenboxSF5ImplService(wsdlURL,
-				new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5Service"));
-
-		SF5Port = SF5Service.getOpenboxSF5Port();
+		// String contextPath = property.getProperty("context.path");
+		// url = new URL(appLocation + contextPath + "/");
+		//
+		// URL wsdlURL = new URL(url, "OpenboxSF5Service?wsdl");
+		//
+		// SF5Service = new OpenboxSF5ImplService(wsdlURL,
+		// new QName("http://wsmodel.sf5.openbox.org/", "OpenboxSF5Service"));
+		//
+		// SF5Port = SF5Service.getOpenboxSF5Port();
 	}
 
+	@AfterClass
 	public void tearAuthentication() {
 		BindingProvider bp = (BindingProvider) SF5Port;
 		Map<String, Object> contextMap = bp.getRequestContext();
