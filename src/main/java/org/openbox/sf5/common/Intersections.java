@@ -85,7 +85,7 @@ public class Intersections {
 
 						long IntersectionValue = resultSet.getLong("TheLineOfIntersection");
 
-						sc.setTheLineOfIntersection(IntersectionValue + 1);
+						sc.setLineOfIntersection(IntersectionValue + 1);
 					}
 
 					return resultSet;

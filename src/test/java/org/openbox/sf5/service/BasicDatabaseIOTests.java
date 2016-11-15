@@ -125,7 +125,7 @@ public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 		Settings setting = new Settings();
 		setting.setName("Test");
 		setting.setUser(user);
-		setting.setTheLastEntry(new java.sql.Timestamp(System.currentTimeMillis()));
+		setting.setLastEntry(new java.sql.Timestamp(System.currentTimeMillis()));
 
 		List<SettingsConversion> scList = new ArrayList<>();
 

@@ -25,7 +25,7 @@ public class BuildTestSetting {
 		Settings setting = new Settings();
 		setting.setName(settingName);
 		setting.setUser(adminUser);
-		setting.setTheLastEntry(new java.sql.Timestamp(System.currentTimeMillis()));
+		setting.setLastEntry(new java.sql.Timestamp(System.currentTimeMillis()));
 
 		List<SettingsConversion> scList = new ArrayList<>();
 

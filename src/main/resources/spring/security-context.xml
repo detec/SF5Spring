@@ -16,6 +16,16 @@
 		http://www.springframework.org/schema/context/spring-context.xsd">
  
 
+<!-- Do not remove! This configures /${jaxrs.path}/ --> 
+<context:property-placeholder location="classpath:application.properties"/>
+
+<bean id="digestEntryPoint" class=
+	"org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
+	<property name="realmName" value="Custom Realm Name"/>
+	<property name="key" value="acegi"/>
+	<property name="nonceValiditySeconds" value="60"/>
+</bean>
+
 
 <!-- digestFilter and digestEntryPoint have been verified with the official docs -->
 <bean id="digestFilter" class=
@@ -25,12 +35,7 @@
 
 </bean>
 
-<bean id="digestEntryPoint" class=
-	"org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
-	<property name="realmName" value="Custom Realm Name"/>
-	<property name="key" value="acegi"/>
-	<property name="nonceValiditySeconds" value="60"/>
-</bean>
+
 
 <bean id="expressionHandler" 
 	class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"/>
@@ -70,7 +75,7 @@ It used in sf5-servlet.xml
 <security:global-method-security 
     mode="aspectj"
     secured-annotations="enabled"
-    jsr250-annotations="disabled"
+    jsr250-annotations="enabled"
     pre-post-annotations="enabled" >
     
      <security:expression-handler ref="expressionHandler"/>
@@ -120,14 +125,15 @@ So when specifying patterns in action-based frameworks we should use only **
 
 <!-- REST security -->
 <!-- Be careful to use ** in pattern!!! -->
-<security:http pattern="/${jaxrs.path}/**" name="DigetsAuthentication" create-session="stateless" entry-point-ref="digestEntryPoint" >
+<security:http pattern="/${jaxrs.path}/**" name="DigetsAuthentication" create-session="stateless" entry-point-ref="digestEntryPoint" use-expressions="true">
+	
     	<!-- We do not need sessions in stateless REST API -->
     	<security:csrf disabled="true"/>
         <security:custom-filter ref="digestFilter" before="FORM_LOGIN_FILTER" />
         
         <security:intercept-url pattern="${jaxrs.path}/satellites/*" access="isAnonymous()"/>
         <security:intercept-url pattern="${jaxrs.path}/transponders/*" access="isAnonymous()"/>
-        <security:intercept-url pattern="${jaxrs.path}/usersettings/*" access="hasRole('ROLE_USER')"/>
+        <security:intercept-url pattern="/${jaxrs.path}/usersettings/**" access="hasRole('ROLE_USER')"/>
         
  </security:http>
  

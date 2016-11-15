@@ -105,7 +105,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		Settings setting = new Settings();
 		setting.setName("Simple");
 		setting.setUser(adminUser);
-		setting.setTheLastEntry(new java.sql.Timestamp(System.currentTimeMillis()));
+		setting.setLastEntry(new java.sql.Timestamp(System.currentTimeMillis()));
 
 		fillTranspondersToSetting(newTransList, setting);
 
@@ -184,7 +184,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		Settings setting = new Settings();
 		setting.setName("Second");
 		setting.setUser(adminUser);
-		setting.setTheLastEntry(new java.sql.Timestamp(System.currentTimeMillis()));
+		setting.setLastEntry(new java.sql.Timestamp(System.currentTimeMillis()));
 
 		fillTranspondersToSetting(newTransList, setting);
 

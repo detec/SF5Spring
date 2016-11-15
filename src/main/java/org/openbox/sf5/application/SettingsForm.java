@@ -82,7 +82,7 @@ public class SettingsForm implements Serializable {
 		id = SettingsObject.getId();
 		Name = SettingsObject.getName();
 		User = SettingsObject.getUser();
-		TheLastEntry = SettingsObject.getTheLastEntry();
+		TheLastEntry = SettingsObject.getLastEntry();
 
 		List<SettingsConversion> listRead = SettingsObject.getConversion();
 
@@ -106,7 +106,7 @@ public class SettingsForm implements Serializable {
 
 		SettingsObject.setName(pSetting.Name);
 
-		SettingsObject.setTheLastEntry(new java.sql.Timestamp(System.currentTimeMillis()));
+		SettingsObject.setLastEntry(new java.sql.Timestamp(System.currentTimeMillis()));
 
 		// let's refresh the user because it returns empty.
 		readCurrentUser();
@@ -556,7 +556,7 @@ public class SettingsForm implements Serializable {
 		readToThisBean(pSetting);
 
 		// let's clear all old intersections and save setting.
-		dataSettingsConversion.stream().forEach(t -> t.setTheLineOfIntersection(0));
+		dataSettingsConversion.stream().forEach(t -> t.setLineOfIntersection(0));
 
 		saveSettingWithoutContext(pSetting);
 

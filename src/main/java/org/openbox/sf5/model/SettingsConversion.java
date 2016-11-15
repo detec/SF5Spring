@@ -112,11 +112,11 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	@JsonProperty("lineOfIntersection")
 	private long TheLineOfIntersection;
 
-	public long getTheLineOfIntersection() {
+	public long getLineOfIntersection() {
 		return TheLineOfIntersection;
 	}
 
-	public void setTheLineOfIntersection(long TheLineOfIntersection) {
+	public void setLineOfIntersection(long TheLineOfIntersection) {
 		this.TheLineOfIntersection = TheLineOfIntersection;
 	}
 

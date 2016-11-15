@@ -84,11 +84,11 @@ public class Settings extends AbstractDbEntity implements Serializable {
 	@NotNull
 	private Timestamp TheLastEntry;
 
-	public Timestamp getTheLastEntry() {
+	public Timestamp getLastEntry() {
 		return TheLastEntry;
 	}
 
-	public void setTheLastEntry(Timestamp TheLastEntry) {
+	public void setLastEntry(Timestamp TheLastEntry) {
 		this.TheLastEntry = TheLastEntry;
 	}
 
