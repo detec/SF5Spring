@@ -24,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +34,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping(value = "${jaxrs.path}/usersettings/")
-// @PreAuthorize("hasRole('USER')")
 public class SettingsService {
 
 	private static final String CONSTANT_COULDNT_GET_USER = "Couldn't get currently authenticated user!";
@@ -83,9 +81,7 @@ public class SettingsService {
 		return new ResponseEntity<>(new Long(setting.getId()), headers, HttpStatus.CREATED);
 	}
 
-	// @PreAuthorize("hasAuthority('ROLE_USER')")
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@Secured("ROLE_USER")
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Settings>> getSettingsByUserLogin() throws NotAuthenticatedException {
 
@@ -115,9 +111,6 @@ public class SettingsService {
 		return JsonObjectFiller.returnGenericWrapperResponseBySatList(settList, Settings.class);
 	}
 
-	// http://community.hpe.com/t5/Software-Developers/A-Comprehensive-Example-of-a-Spring-MVC-Application-Part-3/ba-p/6135449
-
-	// @PreAuthorize("hasAuthority('ROLE_USER')")
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<Settings>> getSettingsByArbitraryFilter(@PathVariable("type") String fieldName,
@@ -135,7 +128,6 @@ public class SettingsService {
 
 	}
 
-	// @PreAuthorize("hasAuthority('ROLE_USER')")
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Settings>> getSettingsByArbitraryFilterXML(
@@ -154,7 +146,6 @@ public class SettingsService {
 		return JsonObjectFiller.returnGenericWrapperResponseBySatList(settList, Settings.class);
 	}
 
-	// @PreAuthorize("hasAuthority('ROLE_USER')")
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "{settingId}", method = RequestMethod.GET)
 	public ResponseEntity<Settings> getSettingById(@PathVariable("settingId") long settingId)
@@ -171,7 +162,6 @@ public class SettingsService {
 
 	}
 
-	// @PreAuthorize("hasAuthority('ROLE_USER')")
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "{settingId}/sf5", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN // This
 																											// removes
