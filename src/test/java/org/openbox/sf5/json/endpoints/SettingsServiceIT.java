@@ -12,7 +12,9 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -29,6 +31,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
+import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.SettingsConversion;
 import org.openbox.sf5.model.Transponders;
@@ -143,20 +146,33 @@ public class SettingsServiceIT extends AbstractServiceTest {
 	private void fillTranspondersToSetting(List<Transponders> newTransList, Settings setting) {
 
 		// filter up to 32 transponders
-		newTransList.stream().filter(t -> newTransList.indexOf(t) <= 31).forEach(t -> {
-			int currentIndex = newTransList.indexOf(t);
-			int currentNumber = currentIndex + 1;
-			int satIndex = (int) Math.ceil((double) currentNumber / 4);
-			// int tpIndex = currentNumber - (satIndex * 4);
-			int tpIndex = (currentNumber % 4 == 0) ? 4 : currentNumber % 4; // %
-																			// is
-																			// remainder
+		// newTransList.stream().filter(t -> newTransList.indexOf(t) <= 31)
+		// .forEach(t -> fillTpLine(newTransList, setting, t));
 
-			SettingsConversion sc = new SettingsConversion(setting, t, satIndex, tpIndex,
-					Long.toString(t.getFrequency()), 0);
-			sc.setLineNumber(currentNumber);
-			setting.getConversion().add(sc);
-		});
+		// sorting transponders by satellite and speed.
+		newTransList.sort(Comparator.comparing(chain(Transponders::getSatellite, Satellites::getId))
+				.thenComparing(Transponders::getSpeed));
+
+		newTransList.stream().limit(32).forEachOrdered(t -> fillTpLine(newTransList, setting, t));
+
+	}
+
+	static <T, U, R> Function<T, R> chain(Function<? super T, ? extends U> f1, Function<? super U, ? extends R> f2) {
+		return t -> f2.apply(f1.apply(t));
+	}
+
+	private void fillTpLine(List<Transponders> newTransList, Settings setting, Transponders t) {
+		int currentIndex = newTransList.indexOf(t);
+		int currentNumber = currentIndex + 1;
+		int satIndex = (int) Math.ceil((double) currentNumber / 4);
+		int tpIndex = (currentNumber % 4 == 0) ? 4 : currentNumber % 4; // %
+																		// is
+																		// remainder
+
+		SettingsConversion sc = new SettingsConversion(setting, t, satIndex, tpIndex, Long.toString(t.getFrequency()),
+				0);
+		sc.setLineNumber(currentNumber);
+		setting.getConversion().add(sc);
 	}
 
 	@Test
@@ -232,7 +248,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		assertThat(deviceSettings).isNotNull();
 
 		// write test files
-		// ArrayList<String> lines = new ArrayList<String>();
+		// ArrayList<String> lines = new ArrayList<>();
 		// lines.add(deviceSettings);
 		// Files.write(Paths.get("f:\\temp\\sf5IToutput.xml"), lines);
 
