@@ -35,14 +35,7 @@
  <c:if test="${not empty viewErrMsg}" >
  <div style="color:Red;"> ${viewErrMsg}</div>
  </c:if>
- <!-- 
- <c:if test="${bean.id == 0}">
- <c:url var="saveUrl" value="/settings/add" />
- </c:if>
- <c:if test="${bean.id != 0}">
- <c:url var="saveUrl" value="/editsetting"/>
- </c:if>
- -->
+
   <c:url var="saveUrl" value="/editsetting"/>
 <form:form modelAttribute="bean" method="POST" action="${saveUrl}">
  <table>
@@ -110,7 +103,7 @@
  <td><c:out value="${DataSC.transponder.FEC}" /></td>
  <td><c:out value="${DataSC.satindex}" /><form:hidden path="dataSettingsConversion[${x.index}].satindex" /></td>
  <td><c:out value="${DataSC.tpindex}" /><form:hidden path="dataSettingsConversion[${x.index}].tpindex" /></td>
- <td><c:out value="${DataSC.theLineOfIntersection}" /><form:hidden path="dataSettingsConversion[${x.index}].theLineOfIntersection" /></td>
+ <td><c:out value="${DataSC.lineOfIntersection}" /><form:hidden path="dataSettingsConversion[${x.index}].lineOfIntersection" /></td>
  <td><form:input path="dataSettingsConversion[${x.index}].note"/></td>
  <td></td>
  <td><form:checkbox path="dataSettingsConversion[${x.index}].checked" /></td>
@@ -131,17 +124,7 @@
  </c:forEach> 
   </table>
  <c:if test="${!bean.selectionMode}">
- <!-- 
- <c:if test="${bean.id == 0}">
- 
- <input type="submit" value="OK" name="add" />
- </c:if>
- <c:if test="${bean.id != 0}">
- <input type="submit" value="OK" name="save"/>
- </c:if>
- 
- Let's try to save no matter it is new or existing
-   -->
+
 <input type="submit" value="OK" name="save"/>
    
  <input type="submit" value="Cancel" name="cancel"/>
