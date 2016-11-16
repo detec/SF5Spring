@@ -143,6 +143,10 @@ public abstract class AbstractWSTest {
 		if (contextMap.containsKey(BindingProvider.PASSWORD_PROPERTY)) {
 			contextMap.remove(BindingProvider.PASSWORD_PROPERTY);
 		}
+
+		// trying to clear authenticator.
+		Authenticator.setDefault(null);
+
 	}
 
 }

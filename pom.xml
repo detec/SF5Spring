@@ -330,7 +330,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
             			<configuration>
                				<excludes>
                   				<exclude>**/*Tests.java</exclude>
-                   				<exclude>**/jaxws/SettingsServiceIT.java</exclude>
+<!--                    				<exclude>**/jaxws/SettingsServiceIT.java</exclude> -->
                    				<exclude>**/json/endpoints/SettingsServiceIT.java</exclude>          			
                				</excludes>
             				<includes>
