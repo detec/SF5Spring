@@ -95,7 +95,8 @@ public class BUsersServiceIT extends AbstractWSTest {
 	}
 
 	/**
-	 * Trying to clear basic credentials.
+	 * Trying to clear basic credentials. In order it to work we do not make it
+	 * static.
 	 */
 	@Override
 	@After

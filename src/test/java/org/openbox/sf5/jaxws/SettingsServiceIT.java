@@ -85,6 +85,7 @@ public class SettingsServiceIT extends AbstractWSTest {
 	/**
 	 * Trying to clear basic credentials.
 	 */
+
 	@Override
 	@After
 	public void tearAuthentication() {

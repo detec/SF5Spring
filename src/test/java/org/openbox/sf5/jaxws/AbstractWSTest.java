@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openbox.sf5.wsmodel.OpenboxSF5;
 import org.openbox.sf5.wsmodel.OpenboxSF5ImplService;
@@ -128,7 +127,6 @@ public abstract class AbstractWSTest {
 		// SF5Port = SF5Service.getOpenboxSF5Port();
 	}
 
-	@AfterClass
 	public void tearAuthentication() {
 		BindingProvider bp = (BindingProvider) SF5Port;
 		Map<String, Object> contextMap = bp.getRequestContext();
