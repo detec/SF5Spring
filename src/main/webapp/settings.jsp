@@ -69,7 +69,7 @@ This causes problem
   <tr>
    <td><c:out value="${setting.id}" /></td>
    <td><c:out value="${setting.name}" /></td>
-   <td><c:out value="${setting.theLastEntry}" /></td>
+   <td><c:out value="${setting.lastEntry}" /></td>
     <td>
     <c:if test="${!SelectionMode}">
     <a href="${editUrl}">Edit</a><a href="${deleteUrl}">Delete</a><a href="${printUrl}">Print</a>

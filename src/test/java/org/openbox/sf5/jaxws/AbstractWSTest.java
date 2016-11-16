@@ -106,9 +106,6 @@ public abstract class AbstractWSTest {
 		bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, "username");
 		bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, "password");
 
-		// URLConnection ins = wsdlURL.openConnection();
-		// ins.getInputStream().close();
-
 		// Another article
 		// http://www.mkyong.com/webservices/jax-ws/application-authentication-with-jax-ws/
 

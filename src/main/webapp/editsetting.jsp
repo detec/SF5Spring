@@ -51,8 +51,8 @@
    <td><form:input path="name"/></td>
    <td><form:label path="id">ID</form:label><b><c:out value="${bean.id}" /></b><form:hidden path="id"/></td>
    
-   <td><form:label path="TheLastEntry">Last update date</form:label><form:hidden path="TheLastEntry"/></td>
-   <td><b><fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${bean.theLastEntry}" /></b></td>
+   <td><form:label path="lastEntry">Last update date</form:label><form:hidden path="lastEntry"/></td>
+   <td><b><fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${bean.lastEntry}" /></b></td>
   </tr>
    <tr>
    <form:hidden path="user"/>

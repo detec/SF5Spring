@@ -12,22 +12,6 @@ public class SettingsConversionPresentation extends SettingsConversion {
 
 	private transient boolean checked;
 
-	public boolean isChecked() {
-		return checked;
-	}
-
-	public void setChecked(boolean checked) {
-		this.checked = checked;
-	}
-
-	public boolean isEditable() {
-		return editable;
-	}
-
-	public void setEditable(boolean editable) {
-		this.editable = editable;
-	}
-
 	public SettingsConversionPresentation(Settings object) {
 		super.setparent_id(object);
 
@@ -52,6 +36,22 @@ public class SettingsConversionPresentation extends SettingsConversion {
 	// Spring needs default constructor
 	public SettingsConversionPresentation() {
 
+	}
+
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+
+	public boolean isEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 
 }

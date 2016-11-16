@@ -62,6 +62,43 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Scope("request")
 public class SettingsForm implements Serializable {
 
+	private static final long serialVersionUID = 3787216569270743476L;
+
+	@Autowired
+	private SF5ApplicationContext AppContext;
+
+	private long id;
+
+	private boolean SelectionMode;
+
+	private Timestamp lastEntry;
+
+	private Settings SettingsObject;
+
+	private Users User;
+
+	private String Name;
+
+	private List<SettingsConversionPresentation> dataSettingsConversion = new ArrayList<>();
+
+	@Autowired
+	private ObjectsController objectsController;
+
+	@Autowired
+	private UserEditor UserEditor;
+
+	@Autowired
+	private SettingsEditor SettingsEditor;
+
+	@Autowired
+	private TransponderChoiceEditor TransponderChoiceEditor;
+
+	@Autowired
+	private Intersections intersections;
+
+	@Autowired
+	public Jaxb2Marshaller springMarshaller;
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		// exactly this order should be maintained!
@@ -82,7 +119,7 @@ public class SettingsForm implements Serializable {
 		id = SettingsObject.getId();
 		Name = SettingsObject.getName();
 		User = SettingsObject.getUser();
-		TheLastEntry = SettingsObject.getLastEntry();
+		lastEntry = SettingsObject.getLastEntry();
 
 		List<SettingsConversion> listRead = SettingsObject.getConversion();
 
@@ -301,7 +338,7 @@ public class SettingsForm implements Serializable {
 		readCurrentUser();
 
 		Name = "New setting";
-		TheLastEntry = new java.sql.Timestamp(System.currentTimeMillis());
+		lastEntry = new java.sql.Timestamp(System.currentTimeMillis());
 
 	}
 
@@ -312,7 +349,7 @@ public class SettingsForm implements Serializable {
 		SettingsObject = setting.SettingsObject;
 
 		User = setting.User;
-		TheLastEntry = setting.TheLastEntry;
+		lastEntry = setting.lastEntry;
 		dataSettingsConversion = setting.dataSettingsConversion;
 
 		putNewSettingsIntoSettingsObject();
@@ -481,7 +518,7 @@ public class SettingsForm implements Serializable {
 
 		putNewSettingsIntoSettingsObject();
 
-		TheLastEntry = pSetting.TheLastEntry;
+		lastEntry = pSetting.lastEntry;
 		User = pSetting.User;
 		SelectionMode = pSetting.SelectionMode;
 	}
@@ -699,13 +736,6 @@ public class SettingsForm implements Serializable {
 		writeFromSettingsObjectToSettingsForm();
 	}
 
-	// This method seems not to work.
-	// @PreAuthorize("hasRole('ROLE_USER')")
-	// @RequestMapping(value = "/selectsetting", method = RequestMethod.GET)
-	// public String redirectToSettings() {
-	// return "redirect:/settings";
-	// }
-
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
@@ -749,12 +779,12 @@ public class SettingsForm implements Serializable {
 		SelectionMode = selectionMode;
 	}
 
-	public Timestamp getTheLastEntry() {
-		return TheLastEntry;
+	public Timestamp getlastEntry() {
+		return lastEntry;
 	}
 
-	public void setTheLastEntry(Timestamp TheLastEntry) {
-		this.TheLastEntry = TheLastEntry;
+	public void setlastEntry(Timestamp lastEntry) {
+		this.lastEntry = lastEntry;
 	}
 
 	public Settings getSettingsObject() {
@@ -788,42 +818,5 @@ public class SettingsForm implements Serializable {
 	public String getName() {
 		return Name;
 	}
-
-	@Autowired
-	private SF5ApplicationContext AppContext;
-
-	private long id;
-
-	private boolean SelectionMode;
-
-	private Timestamp TheLastEntry;
-
-	private Settings SettingsObject;
-
-	private Users User;
-
-	private String Name;
-
-	private List<SettingsConversionPresentation> dataSettingsConversion = new ArrayList<>();
-
-	@Autowired
-	private ObjectsController objectsController;
-
-	private static final long serialVersionUID = 3787216569270743476L;
-
-	@Autowired
-	private UserEditor UserEditor;
-
-	@Autowired
-	private SettingsEditor SettingsEditor;
-
-	@Autowired
-	private TransponderChoiceEditor TransponderChoiceEditor;
-
-	@Autowired
-	private Intersections intersections;
-
-	@Autowired
-	public Jaxb2Marshaller springMarshaller;
 
 }
