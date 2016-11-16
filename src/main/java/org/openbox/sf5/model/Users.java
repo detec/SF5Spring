@@ -110,7 +110,7 @@ public class Users extends AbstractDbEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return username;
+		return "Username=" + username + ", id=" + id;
 	}
 
 	public String getPassword() {

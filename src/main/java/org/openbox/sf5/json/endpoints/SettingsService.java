@@ -59,8 +59,8 @@ public class SettingsService {
 
 		if (!currentUser.equals(setting.getUser())) {
 			// authenticated user and setting user do not coincide.
-			throw new UsersDoNotCoincideException("Authenticated user " + currentUser.getId()
-					+ " and the one in setting - " + setting.getUser().getId() + " do not coincide!");
+			throw new UsersDoNotCoincideException("Authenticated user " + currentUser + " and the one in setting - "
+					+ setting.getUser() + " do not coincide!");
 		}
 
 		try {
