@@ -29,8 +29,8 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
+import org.openbox.sf5.model.Sat;
 import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.SettingsConversion;
@@ -39,11 +39,17 @@ import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.xml.transform.StringSource;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@RunWith(JUnit4.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "file:src/test/resources/context/test-autowired-beans.xml" })
+@WebAppConfiguration
 public class SettingsServiceIT extends AbstractServiceTest {
 
 	private static final String servicePath = "usersettings";
@@ -252,6 +258,8 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		// lines.add(deviceSettings);
 		// Files.write(Paths.get("f:\\temp\\sf5IToutput.xml"), lines);
 
+		Sat retrievedSat = (Sat) springMarshaller.unmarshal(new StringSource(deviceSettings));
+
 		URL responseFile = ClassLoader.getSystemResource("xml/sf5IToutput.xml");
 		assertThat(responseFile).isNotNull();
 
@@ -259,13 +267,19 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		assertThat(uri).isNotNull();
 
 		String content = new String(Files.readAllBytes(Paths.get(uri)), Charset.forName("UTF-8"));
-		content = content.replace("\r\n\r\n", "\r\n"); // it adds
+
+		Sat resolvedSat = (Sat) springMarshaller.unmarshal(new StringSource(content));
+
+		// trying to compare resolved Sats.
+		assertEquals(retrievedSat, resolvedSat);
+
+		// content = content.replace("\r\n\r\n", "\r\n"); // it adds
 		// superfluous
 		// \r\n
 
-		content = content.replace("\r\n", ""); // it seems to be without crlf
+		// content = content.replace("\r\n", ""); // it seems to be without crlf
 
-		assertEquals(content, deviceSettings);
+		// assertEquals(content, deviceSettings);
 	}
 
 	// getting all user settings with authentication
