@@ -102,9 +102,11 @@ public abstract class AbstractWSTest {
 		// following code just after the authenticator creation then digest
 		// authentication works and my authenticator is used!
 
-		BindingProvider bp = (BindingProvider) SF5Port;
-		bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, "username");
-		bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, "password");
+		// BindingProvider bp = (BindingProvider) SF5Port;
+		// bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY,
+		// "username");
+		// bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY,
+		// "password");
 
 		// Another article
 		// http://www.mkyong.com/webservices/jax-ws/application-authentication-with-jax-ws/
