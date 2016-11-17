@@ -14,7 +14,6 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.transform.stream.StreamResult;
 
 import org.hibernate.criterion.Criterion;
 import org.junit.Before;
@@ -29,6 +28,7 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.xml.transform.StringSource;
 
 @ContextConfiguration(locations = { "file:src/test/resources/context/test-autowired-beans.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -60,7 +60,6 @@ public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 
 		Sat sat = XMLExporter.exportSettingsConversionToSF5Format(conversionLines);
 
-		// http://www.concretepage.com/spring/spring-jaxb-integration-annotation-pretty-print-example-with-jaxb2marshaller
 		// try (FileOutputStream fos = new
 		// FileOutputStream("sf5JunitOutput.xml");) {
 		// springMarshaller.marshal(sat, new StreamResult(fos));
@@ -79,12 +78,18 @@ public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 		assertThat(uri).isNotNull();
 
 		String content = new String(Files.readAllBytes(Paths.get(uri)), Charset.forName("UTF-8"));
-		content = content.replace("\r\n\r\n", "\r\n"); // it adds
 
-		// marshalling sat
-		springMarshaller.marshal(sat, new StreamResult(sw));
+		//
+		// content = content.replace("\r\n\r\n", "\r\n"); // it adds
+		//
+		// // marshalling sat
+		// springMarshaller.marshal(sat, new StreamResult(sw));
+		//
+		// assertEquals(content, sw.toString());
 
-		assertEquals(content, sw.toString());
+		Sat retrievedSat = (Sat) springMarshaller.unmarshal(new StringSource(content));
+		// trying to compare resolved Sats.
+		assertEquals(retrievedSat, sat);
 
 	}
 

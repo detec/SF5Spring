@@ -87,16 +87,6 @@ public class IntersectionsTests extends AbstractJsonizerTest {
 
 		List<Boolean> resultList = new ArrayList<>();
 
-		// URL transpondersFolderUrl =
-		// Thread.currentThread().getContextClassLoader().getResource("transponders/");
-		//
-		// assertThat(transpondersFolderUrl).isNotNull();
-		//
-		// Path path = Paths.get(transpondersFolderUrl.toURI());
-		//
-		// Stream<Path> streamPath = Files.find(path, 2, (newpath, attr) ->
-		// String.valueOf(newpath).endsWith(".ini"));
-
 		Stream<Path> streamPath = getTransponderFilesStreamPath();
 
 		streamPath.forEach(t -> {
@@ -142,14 +132,17 @@ public class IntersectionsTests extends AbstractJsonizerTest {
 
 		List<Transponders> transList = objectController.list(Transponders.class);
 
-		List<SettingsConversion> scList = new ArrayList<>();
-		for (int i = 7; i < 39; i++) {
-			// adding lines to setting
-			SettingsConversion newLine = new SettingsConversion(setting);
-			newLine.setLineNumber(i - 6);
-			newLine.setTransponder(transList.get(i));
-			scList.add(newLine);
-		}
+		// List<SettingsConversion> scList = new ArrayList<>();
+		// for (int i = 7; i < 39; i++) {
+		// // adding lines to setting
+		// SettingsConversion newLine = new SettingsConversion(setting);
+		// newLine.setLineNumber(i - 6);
+		// newLine.setTransponder(transList.get(i));
+		// scList.add(newLine);
+		// }
+
+		ConversionLinesHelper.fillTranspondersToSetting(transList, setting);
+		List<SettingsConversion> scList = setting.getConversion();
 
 		// if something is wrong - test will fail.
 		int rows = intersections.checkIntersection(scList, setting);
