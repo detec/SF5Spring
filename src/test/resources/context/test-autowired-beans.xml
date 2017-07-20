@@ -29,6 +29,17 @@
 
 <context:property-placeholder location="classpath:application.properties" system-properties-mode="OVERRIDE"/>
 
+<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+    <property name="ignoreUnresolvablePlaceholders" value="false" />
+    <property name="localOverride" value="false" />
+    <property name="ignoreResourceNotFound" value="true" />
+    <property name="locations">
+        <list>
+            <value>classpath:application.properties</value>
+        </list>
+    </property>
+</bean>
+
 
 <!-- In tests we need only few beans -->
 <!-- http://docs.spring.io/autorepo/docs/spring/4.2.x/spring-framework-reference/html/transaction.html
