@@ -39,6 +39,6 @@ public class TranspondersTests {
     public void getMockTransponders() throws Exception {
         this.mockMvc.perform(
                 get(String.join("", "/", jsonPath, "/transponders/")).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(204));
+                .andExpect(status().is(200));
     }
 }

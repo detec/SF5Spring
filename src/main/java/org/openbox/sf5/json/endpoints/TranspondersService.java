@@ -1,6 +1,7 @@
 package org.openbox.sf5.json.endpoints;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.annotation.MultipartConfig;
 import javax.validation.Valid;
@@ -35,6 +36,12 @@ public class TranspondersService {
 	private static final String filterTypePattern = "filter/{type}/{typeValue}";
 
 	private static final String filterSatIdPattern = "satId/{satId}";
+
+    @Autowired
+    private TranspondersJsonizer transpondersJsonizer;
+
+    @Autowired
+    private ObjectsController objectController;
 
 	@RequestMapping(method = RequestMethod.POST, headers = "content-type=multipart/form-data")
 	public ResponseEntity<Boolean> uploadTransponders(
@@ -82,10 +89,9 @@ public class TranspondersService {
 	public ResponseEntity<List<Transponders>> getTranspondersByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue) {
 		List<Transponders> transList = transpondersJsonizer.getTranspondersByArbitraryFilter(fieldName, typeValue);
-		if (transList.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<>(transList, HttpStatus.OK);
+
+        return transList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(transList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = filterTypePattern, method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
@@ -100,13 +106,9 @@ public class TranspondersService {
 
 	@RequestMapping(value = "{transponderId}", method = RequestMethod.GET)
 	public ResponseEntity<Transponders> getTransponderById(@PathVariable("transponderId") long tpId) {
-		Transponders trans = objectController.select(Transponders.class, tpId);
-		if (trans == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-
-		return new ResponseEntity<>(trans, HttpStatus.OK);
-
+        return Optional.ofNullable(objectController.select(Transponders.class, tpId))
+                .map(trans -> new ResponseEntity<>(trans, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
 	}
 
 	@RequestMapping(value = filterSatIdPattern, method = RequestMethod.GET, produces = "application/json")
@@ -167,10 +169,5 @@ public class TranspondersService {
 		this.transpondersJsonizer = transpondersJsonizer;
 	}
 
-	@Autowired
-	private TranspondersJsonizer transpondersJsonizer;
-
-	@Autowired
-	private ObjectsController objectController;
 
 }
