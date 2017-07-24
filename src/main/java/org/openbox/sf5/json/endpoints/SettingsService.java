@@ -3,6 +3,7 @@ package org.openbox.sf5.json.endpoints;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.ws.rs.core.MediaType;
 import javax.xml.transform.stream.StreamResult;
@@ -86,29 +87,20 @@ public class SettingsService {
 	public ResponseEntity<List<Settings>> getSettingsByUserLogin() throws NotAuthenticatedException {
 
 		Users currentUser = getVerifyAuthenticatedUser();
-
 		List<Settings> settList = settingsJsonizer.getSettingsByUser(currentUser);
-		if (settList.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<>(settList, HttpStatus.OK);
-
+        return settList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(settList, HttpStatus.OK);
 	}
 
-	// @PreAuthorize("hasAuthority('ROLE_USER')")
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Settings>> getSettingsByUserLoginXML()
 			throws NotAuthenticatedException {
 
 		Users currentUser = getVerifyAuthenticatedUser();
-
 		List<Settings> settList = settingsJsonizer.getSettingsByUser(currentUser);
-		if (settList.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-
-		return JsonObjectFiller.returnGenericWrapperResponseBySatList(settList, Settings.class);
+        return settList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : JsonObjectFiller.returnGenericWrapperResponseBySatList(settList, Settings.class);
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -117,15 +109,11 @@ public class SettingsService {
 			@PathVariable("typeValue") String typeValue) throws NotAuthenticatedException {
 
 		List<Settings> settList = new ArrayList<>();
-
 		Users currentUser = getVerifyAuthenticatedUser();
-
 		settList = settingsJsonizer.getSettingsByArbitraryFilter(fieldName, typeValue, currentUser);
-		if (settList.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<>(settList, HttpStatus.OK);
 
+        return settList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(settList, HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -134,16 +122,11 @@ public class SettingsService {
 			@PathVariable("type") String fieldName, @PathVariable("typeValue") String typeValue)
 			throws NotAuthenticatedException {
 
-		List<Settings> settList = new ArrayList<>();
-
 		Users currentUser = getVerifyAuthenticatedUser();
+        List<Settings> settList = settingsJsonizer.getSettingsByArbitraryFilter(fieldName, typeValue, currentUser);
 
-		settList = settingsJsonizer.getSettingsByArbitraryFilter(fieldName, typeValue, currentUser);
-		if (settList.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-
-		return JsonObjectFiller.returnGenericWrapperResponseBySatList(settList, Settings.class);
+        return settList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : JsonObjectFiller.returnGenericWrapperResponseBySatList(settList, Settings.class);
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -202,14 +185,8 @@ public class SettingsService {
 	}
 
 	private Users getVerifyAuthenticatedUser() throws NotAuthenticatedException {
-		Users currentUser = securityContext.getCurrentlyAuthenticatedUser();
-		if (currentUser == null) {
-
-			throw new NotAuthenticatedException(CONSTANT_COULDNT_GET_USER);
-		}
-
-		return currentUser;
-
+        return Optional.ofNullable(securityContext.getCurrentlyAuthenticatedUser())
+                .orElseThrow(() -> new NotAuthenticatedException(CONSTANT_COULDNT_GET_USER));
 	}
 
 	public SettingsJsonizer getSettingsJsonizer() {
