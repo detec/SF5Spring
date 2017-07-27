@@ -257,10 +257,10 @@ public class IniReader {
 
 		Properties params = new Properties();
 		params.put("enumClass", RangesOfDVB.class.getName());
-		params.put("type", "12"); /*
-									 * type 12 instructs to use the String
-									 * representation of enum value
-									 */
+        // params.put("type", "12");
+        /*
+         * type 12 instructs to use the String representation of enum value
+         */
 		Type myEnumType = new TypeLocatorImpl(new TypeResolver()).custom(EnumType.class, params);
 
 		String sqltext = "SELECT rangeOfDVB FROM TheDVBRangeValues where :Frequency between lowerThreshold and upperThreshold";
@@ -296,10 +296,10 @@ public class IniReader {
 		// get carrier frequency
 		Properties params = new Properties();
 		params.put("enumClass", CarrierFrequency.class.getName());
-		params.put("type", "12"); /*
-									 * type 12 instructs to use the String
-									 * representation of enum value
-									 */
+        // params.put("type", "12");
+        /*
+         * type 12 instructs to use the String representation of enum value
+         */
 		Type myEnumType = new TypeLocatorImpl(new TypeResolver()).custom(EnumType.class, params);
 
 		String sqltext = "SELECT typeOfCarrierFrequency FROM ValueOfTheCarrierFrequency "
@@ -319,9 +319,7 @@ public class IniReader {
 
 		if (!carrierList.isEmpty()) {
 			carrierEnum = carrierList.get(0).getTypeOfCarrierFrequency();
-		} else {
-			return carrierEnum;
-		}
+        }
 		return carrierEnum;
 
 	}
