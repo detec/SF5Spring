@@ -137,12 +137,8 @@ public class SettingsService {
 		Users currentUser = getVerifyAuthenticatedUser();
 
 		Settings setting = settingsJsonizer.getSettingById(settingId, currentUser);
-		if (setting == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-
-		return new ResponseEntity<>(setting, HttpStatus.OK);
-
+        return setting == null ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(setting, HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
