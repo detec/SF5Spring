@@ -147,7 +147,8 @@ public class SettingsForm implements Serializable {
 
 		// let's refresh the user because it returns empty.
 		readCurrentUser();
-		SettingsObject.setUser(pSetting.User);
+        SettingsObject.setUser(this.User);
+
 	}
 
 	public void writeFromSettingsFormToSettingsObject(SettingsForm pSetting) {
@@ -189,8 +190,6 @@ public class SettingsForm implements Serializable {
 
 	// here we save setting
 	@PreAuthorize("hasRole('ROLE_USER')")
-	// @RequestMapping(params = "add", value = "/settings/add", method =
-	// RequestMethod.POST)
 	@RequestMapping(params = "add", value = "/editsetting", method = RequestMethod.POST)
 	public String add(@ModelAttribute("bean") SettingsForm pSetting, Model model) {
 
@@ -289,7 +288,6 @@ public class SettingsForm implements Serializable {
 
 	// here we start to create setting
 	@PreAuthorize("hasRole('ROLE_USER')")
-	// @RequestMapping(value = "/settings/add", method = RequestMethod.GET)
 	@RequestMapping(value = "/addsetting", method = RequestMethod.GET)
 	public String getAdd(Model model) {
 
@@ -459,7 +457,6 @@ public class SettingsForm implements Serializable {
 
 		objectsController.saveOrUpdate(SettingsObject);
 
-		// 11.02.2016, header is somehow empty
 		writeFromSettingsObjectToSettingsForm();
 
 		model.addAttribute("bean", this);
@@ -604,9 +601,6 @@ public class SettingsForm implements Serializable {
 		});
 
 		int rows = intersections.checkIntersection(scList, SettingsObject);
-
-		// reloadDataSettingsConversion();
-
 		model.addAttribute("bean", this);
 		String mesString = "Intersection check result. Unique problem lines: " + String.valueOf(rows);
 
@@ -622,14 +616,7 @@ public class SettingsForm implements Serializable {
 	}
 
 	public boolean check32Rows() {
-
-		if (dataSettingsConversion.size() != 32) {
-			// "Table Transponders must contain exactly 32 records!");
-			return false;
-		} else {
-
-			return true;
-		}
+        return dataSettingsConversion.size() != 32 ? false : true;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
