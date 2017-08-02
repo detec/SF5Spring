@@ -12,7 +12,7 @@
   		<hibernate.version>5.0.8.Final</hibernate.version> <!-- Comply with JavaEE 6 -->
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   		<jackson.version>2.6.4</jackson.version>
-  		<jersey.version>2.23.1</jersey.version>
+  		<jersey.version>2.25.1</jersey.version>
   		<resteasy.version>3.0.16.Final</resteasy.version>
   		<moxy.version>2.6.2</moxy.version>
   		<slf4j.version>1.7.21</slf4j.version>
@@ -625,7 +625,7 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 	<dependency>
 		<groupId>org.glassfish.hk2</groupId>
 		<artifactId>hk2-api</artifactId>
-		<version>2.4.0-b33</version>
+		<version>2.5.0-b43</version>
 		<scope>test</scope>
 	</dependency>
 	
