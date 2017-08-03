@@ -39,7 +39,7 @@ public class TimestampAdapter extends XmlAdapter<String, Timestamp> {
 	}
 
 	private static SimpleDateFormat getJsonDateFormatter() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 		// Will try to use Javascript format with milliseconds.
 		formatter.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
 		return formatter;

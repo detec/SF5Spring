@@ -3,6 +3,7 @@ package org.openbox.sf5.json.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
 public class CustomXMLMapper extends XmlMapper {
 
@@ -28,6 +29,11 @@ public class CustomXMLMapper extends XmlMapper {
 		// at [Source: N/A; line: -1, column: -1] (through reference chain:
 		// java.util.ArrayList[0]->org.openbox.sf5.model.Settings["user"]->org.openbox.sf5.model.Users["authorities"])
 		configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+
+        JaxbAnnotationModule module = new JaxbAnnotationModule();
+        // configure as necessary
+        registerModule(module);
+
 	}
 
 	private static final long serialVersionUID = 7048533734012373317L;
