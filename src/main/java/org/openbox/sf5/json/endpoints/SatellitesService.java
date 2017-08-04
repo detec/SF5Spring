@@ -13,9 +13,9 @@ import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -30,14 +30,14 @@ public class SatellitesService {
     @Autowired
     private SatellitesJsonizer jsonizer;
 
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
+    @GetMapping(produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<Satellites>> getAllSatellites() {
 		List<Satellites> satList = objectController.list(Satellites.class);
         return satList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
                 : new ResponseEntity<>(satList, HttpStatus.OK);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+    @GetMapping(produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Satellites>> getAllSatellitesXML()
 			throws NoSuchFieldException, SecurityException, NoSuchMethodException {
 
@@ -46,7 +46,7 @@ public class SatellitesService {
                 : JsonObjectFiller.returnGenericWrapperResponseBySatList(satList, Satellites.class);
 	}
 
-	@RequestMapping(value = "{satelliteId}", method = RequestMethod.GET)
+    @GetMapping(value = "{satelliteId}")
 	public ResponseEntity<Satellites> getSatelliteById(@PathVariable("satelliteId") long satId) {
 
         return Optional.ofNullable(objectController.select(Satellites.class, satId))
@@ -54,7 +54,7 @@ public class SatellitesService {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
 	}
 
-	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
+    @GetMapping(value = "filter/{type}/{typeValue}", produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<Satellites>> getSatellitesByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue) {
 
@@ -63,7 +63,7 @@ public class SatellitesService {
                 : new ResponseEntity<>(satList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+    @GetMapping(value = "filter/{type}/{typeValue}", produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Satellites>> getSatellitesByArbitraryFilterXML(
 			@PathVariable("type") String fieldName, @PathVariable("typeValue") String typeValue) {
 
