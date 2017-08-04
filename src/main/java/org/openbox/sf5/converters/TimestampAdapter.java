@@ -7,8 +7,6 @@ import java.util.TimeZone;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-// http://stackoverflow.com/questions/2519432/jaxb-unmarshal-timestamp
-
 /**
  * TimestampAdapter
  *
@@ -16,6 +14,8 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  *
  */
 public class TimestampAdapter extends XmlAdapter<String, Timestamp> {
+
+    public static final String ISO_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
 
 	private SimpleDateFormat dateFormat = getJsonDateFormatter();
 
@@ -39,8 +39,7 @@ public class TimestampAdapter extends XmlAdapter<String, Timestamp> {
 	}
 
 	private static SimpleDateFormat getJsonDateFormatter() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-		// Will try to use Javascript format with milliseconds.
+        SimpleDateFormat formatter = new SimpleDateFormat(ISO_DATE_PATTERN);
 		formatter.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
 		return formatter;
 	}
