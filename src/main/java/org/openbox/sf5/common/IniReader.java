@@ -1,10 +1,9 @@
 package org.openbox.sf5.common;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -73,15 +72,11 @@ public class IniReader {
 
 		// create a temp file
 		File temp = File.createTempFile("transponders", ".xml");
-		String absolutePath = temp.getAbsolutePath();
-
-		byte[] bytes = file.getBytes();
-		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(absolutePath)));
-		stream.write(bytes);
-		stream.close();
+        Path path = Paths.get(temp.getAbsolutePath());
+        Files.write(path, file.getBytes());
 
 		// calling reader class
-		setFilePath(absolutePath);
+        setFilePath(path.toString());
 		readData(); // doing import
 	}
 
