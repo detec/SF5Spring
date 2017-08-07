@@ -1,12 +1,13 @@
 package org.openbox.sf5.common;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -92,37 +93,31 @@ public class IniReader {
 	public void readData() throws IOException {
 		// Open the file
 
-		FileReader fileReader = new FileReader(filePath);
-		BufferedReader br = new BufferedReader(fileReader);
-
+        Iterator<String> linesIterator = Files.readAllLines(Paths.get(filePath)).iterator();
 		String strLine;
 
 		// (\d{1,3})=(\d{5}),(H|V|L|R),(\d{4,5}),(\d{2,3}),(DVB-S|S2),(QPSK|8PSK)(\sACM)?
 
 		// Read File Line By Line
-		while ((strLine = br.readLine()) != null) {
-
+        while (linesIterator.hasNext()) {
+            strLine = linesIterator.next();
 			if ("[SATTYPE]".equals(strLine)) {
-				readSatData(br);
+                readSatData(linesIterator);
 			}
 
 			if ("[DVB]".equals(strLine)) {
-				readTransponderData(br);
+                readTransponderData(linesIterator);
 			}
 
 		}
-
-		fileReader.close();
-		br.close();
-
 		result = true;
 
 	}
 
-	private void readSatData(BufferedReader br) throws IOException {
+    private void readSatData(Iterator<String> linesIterator) throws IOException {
 
-		br.readLine(); // 1=0130
-		String satline = br.readLine();
+        linesIterator.next(); // 1=0130
+        String satline = linesIterator.next();
 
 		String satName = satline.substring(2); // 2 characters
 
@@ -149,18 +144,18 @@ public class IniReader {
 		session.close();
 	}
 
-	private void readTransponderData(BufferedReader br) throws IOException {
+    private void readTransponderData(Iterator<String> linesIterator) throws IOException {
 
 		// replace with Java core
 
-		String transCountString = br.readLine().substring(2);
+        String transCountString = linesIterator.next().substring(2);
 
 		int transCount = Integer.parseInt(transCountString);
 
 		pattern = Pattern.compile(REGEX);
 
 		for (int i = 1; i <= transCount; i++) {
-			String transDataString = br.readLine();
+            String transDataString = linesIterator.next();
 
 			// Initialize
 
