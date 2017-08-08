@@ -18,9 +18,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -33,9 +34,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 		maxRequestSize = 20971520) // 20 MB
 public class TranspondersService {
 
-	private static final String filterTypePattern = "filter/{type}/{typeValue}";
+    private static final String FILTER_TYPE_PATTERN = "filter/{type}/{typeValue}";
 
-	private static final String filterSatIdPattern = "satId/{satId}";
+    private static final String FILTER_SAT_ID_PATTERN = "satId/{satId}";
 
     @Autowired
     private TranspondersJsonizer transpondersJsonizer;
@@ -43,15 +44,8 @@ public class TranspondersService {
     @Autowired
     private ObjectsController objectController;
 
-	@RequestMapping(method = RequestMethod.POST, headers = "content-type=multipart/form-data")
-	public ResponseEntity<Boolean> uploadTransponders(
-
-			// @RequestParam("file") MultipartFile file
-			// @ModelAttribute("file") UploadedFile uploadedFile
-
-			@Valid FileBucket fileBucket, BindingResult result, ModelMap model
-
-	) {
+    @PostMapping(headers = "content-type=multipart/form-data")
+    public ResponseEntity<Boolean> uploadTransponders(@Valid FileBucket fileBucket, BindingResult result, ModelMap model) {
 
 		Boolean returnResult = new Boolean(false);
 
@@ -61,17 +55,7 @@ public class TranspondersService {
 
 		} else {
 			System.out.println("Fetching file");
-			// MultipartFile multipartFile = fileBucket.getFile();
-
-			// Now do something with file...
-			// FileCopyUtils.copy(fileBucket.getFile().getBytes(), new File(
-			// UPLOAD_LOCATION + fileBucket.getFile().getOriginalFilename()));
-			// String fileName = multipartFile.getOriginalFilename();
-			// model.addAttribute("fileName", fileName);
-			// return "success";
 		}
-
-		// MultipartFile file = uploadedFile.getFile();
 
 		MultipartFile file = fileBucket.getFile();
 
@@ -85,72 +69,62 @@ public class TranspondersService {
 		return new ResponseEntity<>(returnResult, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = filterTypePattern, method = RequestMethod.GET, produces = "application/json")
+    @GetMapping(value = FILTER_TYPE_PATTERN, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<Transponders>> getTranspondersByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue) {
-		List<Transponders> transList = transpondersJsonizer.getTranspondersByArbitraryFilter(fieldName, typeValue);
 
+		List<Transponders> transList = transpondersJsonizer.getTranspondersByArbitraryFilter(fieldName, typeValue);
         return transList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
                 : new ResponseEntity<>(transList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = filterTypePattern, method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+    @GetMapping(value = FILTER_TYPE_PATTERN, produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Transponders>> getTranspondersByArbitraryFilterXML(
 			@PathVariable("type") String fieldName, @PathVariable("typeValue") String typeValue) {
+
 		List<Transponders> transList = transpondersJsonizer.getTranspondersByArbitraryFilter(fieldName, typeValue);
-		if (transList.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-		return JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);
+        return transList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);
 	}
 
-	@RequestMapping(value = "{transponderId}", method = RequestMethod.GET)
+    @GetMapping("{transponderId}")
 	public ResponseEntity<Transponders> getTransponderById(@PathVariable("transponderId") long tpId) {
         return Optional.ofNullable(objectController.select(Transponders.class, tpId))
                 .map(trans -> new ResponseEntity<>(trans, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
 	}
 
-	@RequestMapping(value = filterSatIdPattern, method = RequestMethod.GET, produces = "application/json")
+    @GetMapping(value = FILTER_SAT_ID_PATTERN, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<Transponders>> getTranspondersBySatelliteId(@PathVariable("satId") long satId) {
 
 		List<Transponders> transList = transpondersJsonizer.getTranspondersBySatelliteId(satId);
-		if (transList.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<>(transList, HttpStatus.OK);
+        return transList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(transList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = filterSatIdPattern, method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+    @GetMapping(value = FILTER_SAT_ID_PATTERN, produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Transponders>> getTranspondersBySatelliteIdXML(
 			@PathVariable(value = "satId") long satId) {
 
-		List<Transponders> transList = transpondersJsonizer.getTranspondersBySatelliteId(satId);
-		if (transList.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-
-		return JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);
+        List<Transponders> transList = transpondersJsonizer.getTranspondersBySatelliteId(satId);
+        return transList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    @GetMapping(produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<Transponders>> getTransponders() {
+
 		List<Transponders> transList = objectController.list(Transponders.class);
-		if (transList.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<>(transList, HttpStatus.OK);
+        return transList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(transList, HttpStatus.OK);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+    @GetMapping(produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Transponders>> getTranspondersXML() {
+
 		List<Transponders> transList = objectController.list(Transponders.class);
-		if (transList.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-
-		return JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);
-
+        return transList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);
 	}
 
 	public ObjectsController getObjectController() {
@@ -168,6 +142,4 @@ public class TranspondersService {
 	public void setTranspondersJsonizer(TranspondersJsonizer transpondersJsonizer) {
 		this.transpondersJsonizer = transpondersJsonizer;
 	}
-
-
 }

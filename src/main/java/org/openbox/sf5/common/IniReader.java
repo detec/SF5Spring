@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -203,7 +204,7 @@ public class IniReader {
 
 		// let's check if such frequency already exists on the given
 		// satellite
-		List<Object> transIdList = getListOfTranspondersWithSameFrequency(session, frequency);
+        List<Long> transIdList = getListOfTranspondersWithSameFrequency(session, frequency);
 
 		if (transIdList.isEmpty()) {
 			objectController.saveOrUpdate(newTrans);
@@ -226,11 +227,11 @@ public class IniReader {
 
 	}
 
-	private List<Object> getListOfTranspondersWithSameFrequency(Session session, Long frequency) {
+    private List<Long> getListOfTranspondersWithSameFrequency(Session session, Long frequency) {
 
 		String sqltext = "Select id FROM Transponders where frequency = :Frequency and satellite = :satelliteId";
 
-		List<Object> transIdList;
+        List<Long> transIdList;
 		transIdList = session.createSQLQuery(sqltext).addScalar("id", StandardBasicTypes.LONG)
 
 				.setParameter(FREQUENCY_CONSTANT, frequency)
@@ -267,17 +268,9 @@ public class IniReader {
 	}
 
 	private DVBStandards resolveDVBStandard() {
-		DVBStandards dvbStandard = null;
+        Map<String, DVBStandards> dvbMap = DVBStandards.getConversionMap();
 		String standard = matcher.group(6);
-		if ("DVB-S".equals(standard)) {
-			dvbStandard = DVBStandards.DVBS;
-		}
-
-		if ("S2".equals(standard)) {
-			dvbStandard = DVBStandards.DVBS2;
-		}
-
-		return dvbStandard;
+        return dvbMap.get(standard);
 	}
 
 	private CarrierFrequency resolveCarrierFrequency(Session session, Long frequency, Polarization aPolarization) {
