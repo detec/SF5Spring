@@ -44,8 +44,6 @@ public class Intersections {
 				// http://stackoverflow.com/questions/1571928/retrieve-auto-detected-hibernate-dialect
 				Dialect dialect = ((SessionFactoryImplementor) objectController.getSessionFactory()).getDialect();
 
-				// String tempTableDrop = dialect.getDropTemporaryTableString();
-
 				// drop tables
 				try {
 					preparedStatement = connection.prepareStatement(getDropTempTables(dialect));
@@ -61,23 +59,15 @@ public class Intersections {
 					preparedStatement.execute();
 
 					preparedStatement = connection.prepareStatement(getIntersectionQuery());
-					// preparedStatement.setLong(1, Object.getId());
 					resultSet = preparedStatement.executeQuery();
 
-					// 11.08.2015, trying to remove locks
-					// this removes lock from sys and temp tables.
-					// 01.02.2016, commented as it gives error with EJB
-					// IJ031020: You cannot commit with autocommit set
 					if (!connection.getAutoCommit()) {
 						connection.commit();
 					}
 					// 11.08.2015
 
 					while (resultSet.next()) {
-						int rowIndex = new BigDecimal(
-								// 11.08.2015, there seems to be a bug in
-								// defining rows.
-								resultSet.getLong("LineNumber")).intValueExact();
+                        int rowIndex = new BigDecimal(resultSet.getLong("LineNumber")).intValueExact();
 
 						arrayLines.add(new Integer(rowIndex));
 
@@ -98,30 +88,7 @@ public class Intersections {
 
 		Session session = objectController.openSession();
 
-		ResultSet rs = null;
-		rs = session.doReturningWork(rowsReturningWork);
-
-		// List<Integer> arrayLines = new ArrayList<Integer>();
-		// while (rs.next()) {
-		//
-		// int rowIndex = new BigDecimal(
-		// // 11.08.2015, there seems to be a bug in defining rows.
-		// rs.getLong("LineNumber")).intValueExact();
-		//
-		// arrayLines.add(new Integer(rowIndex));
-		//
-		// SettingsConversion sc = dataSettingsConversion.get(rowIndex);
-		//
-		// long IntersectionValue = rs.getLong("TheLineOfIntersection");
-		//
-		// System.out.println("table index " + rowIndex + " query row " +
-		// rs.getRow());
-		//
-		// sc.setTheLineOfIntersection(IntersectionValue + 1);
-		//
-		// }
-		//
-		// rs.close();
+        ResultSet rs = session.doReturningWork(rowsReturningWork);
 		session.close();
 
 		// remove duplicates
@@ -207,104 +174,19 @@ public class Intersections {
 				+ " ); \n";
 
 		return String.format(fromatString, tempTableCreate);
-
 	}
 
 	public static String getIntersectionQuery() {
 
 		return "\n"
-				// + "DROP TABLE CONVERSIONTABLE IF EXISTS; \n"
-				// + "DROP TABLE ManyFrequencies IF EXISTS; \n"
-				// + "DROP TABLE IntersectionTable IF EXISTS; \n"
-
-				// + "SET NOCOUNT ON \n"
-				// +
-				// "IF OBJECT_ID('tempdb..#ConversionTable') IS NOT NULL DROP
-				// Table #ConversionTable \n"
-				// +
-				// "IF OBJECT_ID('tempdb..#ManyFrequencies') IS NOT NULL DROP
-				// Table #ManyFrequencies \n"
-				// +
-				// "IF OBJECT_ID('tempdb..#IntersectionTable') IS NOT NULL DROP
-				// Table #IntersectionTable \n"
-
-				// + "CREATE MEMORY TEMPORARY TABLE CONVERSIONTABLE AS ( \n"
-				// + "SELECT \n"
-				// + "LineNumber \n"
-				//
-				// + ", tp.frequency \n"
-				//
-				// + ", 0 as TheLineOfIntersection \n"
-				//
-				// //+ " into #ConversionTable \n"
-				//
-				// + " FROM SettingsConversion conv \n"
-				//
-				// + "inner join Transponders tp \n"
-				//
-				// + "on conv.Transponder = tp.id \n"
-				//
-				// + " where parent_id = ? \n"
-				//
-				// + " ); \n"
-				//
-				// + "CREATE MEMORY TEMPORARY TABLE ManyFrequencies AS ( \n"
-				//
-				// + "select \n"
-				// + "p1.LineNumber \n"
-				// + ", p1.frequency \n"
-				// + ", p1.TheLineOfIntersection \n"
-				// //+ "into #ManyFrequencies \n"
-				//
-				// + "from #ConversionTable p1 \n"
-				//
-				// + "union \n"
-				//
-				// + "select \n"
-				// + "p2.LineNumber \n"
-				// + ", p2.frequency + 1 \n"
-				// + ", p2.TheLineOfIntersection AS TheLineOfIntersection \n"
-				// + "from #ConversionTable p2 \n"
-				//
-				// + "union \n"
-				//
-				// + "select \n"
-				// + "p3.LineNumber \n"
-				// + ", p3.frequency - 1 \n"
-				// + ", p3.TheLineOfIntersection \n"
-				// + "from #ConversionTable p3 \n"
-				//
-				// + " ); \n"
-				//
-				// + "CREATE MEMORY TEMPORARY TABLE IntersectionTable AS ( \n"
-				//
-				// + "select \n"
-				// + "t1.LineNumber \n"
-				// + ", t1.frequency \n"
-				// + ", t2.LineNumber as TheLineOfIntersection \n"
-				// //+ "into #IntersectionTable \n"
-				// + "from #ManyFrequencies t1 \n"
-				// + "inner join #ManyFrequencies t2 \n"
-				// + "on t1.frequency = t2.frequency \n"
-				// + "and t1.LineNumber <> t2.LineNumber \n"
-				//
-				// + " ); \n"
-
 				+ "select distinct \n" + "conv.LineNumber \n"
-				// + ", ISNULL(inter.TheLineOfIntersection, 0) AS
-				// TheLineOfIntersection \n"
+
 				+ ", COALESCE(inter.TheLineOfIntersection, 0) AS TheLineOfIntersection \n"
 
 				+ "from ConversionTable conv \n" + "inner join IntersectionTable inter \n"
 				+ "on inter.LineNumber = conv.LineNumber \n"
 
 				+ "order by \n" + "conv.LineNumber \n"
-
-				// + "DROP TABLE #ConversionTable \n"
-				// + "DROP TABLE #ManyFrequencies \n"
-				// + "DROP TABLE #IntersectionTable \n"
 				+ "";
-
 	}
-
 }

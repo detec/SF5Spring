@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
 import org.hibernate.collection.internal.PersistentList;
+import org.openbox.sf5.converters.TimestampAdapter;
 import org.openbox.sf5.model.AbstractDbEntity;
 import org.openbox.sf5.model.listwrappers.ChangeAnnotation;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
@@ -193,12 +194,8 @@ public class JsonObjectFiller {
 	}
 
 	public static SimpleDateFormat getJsonDateFormatter() {
-		// SimpleDateFormat formatter = new
-		// SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-		// formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        SimpleDateFormat formatter = new SimpleDateFormat(TimestampAdapter.ISO_DATE_PATTERN);
 		formatter.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
-
 		return formatter;
 	}
 
