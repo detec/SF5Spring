@@ -7,22 +7,22 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "${jaxrs.path}/users/")
 public class UsersService {
 
-	// https://docs.spring.io/spring-security/site/docs/3.0.x/reference/el-access.html
-	// We allow only for admin and enabled user.
-	// @PreAuthorize("hasRole('ROLE_ADMIN') or (#login == principal and
-	// principal.enabled)")
+    @Autowired
+    private UsersJsonizer usersJsonizer;
+
 	@PreAuthorize("hasRole('ROLE_ADMIN') or (#login  == authentication.name)")
-	@RequestMapping(value = "filter/username/{login}", method = RequestMethod.GET)
+    @GetMapping("filter/username/{login}")
 	public ResponseEntity<Users> getUserByLogin(@PathVariable("login") String login) {
 		Users retUser = null;
 		try {
@@ -41,22 +41,17 @@ public class UsersService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Long> createUser(@RequestBody Users user)
-			throws IllegalArgumentException, IllegalStateException {
+    @PostMapping
+    public ResponseEntity<Long> createUser(@RequestBody Users user) {
 		// check if such user exists.
 		Boolean result = usersJsonizer.checkIfUsernameExists(user.getusername());
 		if (result) {
-			// return new ResponseEntity<Long>(HttpStatus.ACCEPTED);
 			throw new IllegalArgumentException("Not created! Username already exists.");
 		}
-		HttpStatus statusResult = null;
 
 		try {
-			statusResult = usersJsonizer.saveNewUser(user);
-		}
-
-		catch (Exception e) {
+            usersJsonizer.saveNewUser(user);
+        } catch (Exception e) {
 			throw new IllegalStateException("Error when saving user to database", e);
 		}
 
@@ -65,7 +60,7 @@ public class UsersService {
 		return new ResponseEntity<>(new Long(user.getId()), headers, HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "exists/username/{login}", method = RequestMethod.GET)
+    @GetMapping("exists/username/{login}")
 	public ResponseEntity<Boolean> ifSuchLoginExists(@PathVariable("login") String login) {
 		Boolean result = usersJsonizer.checkIfUsernameExists(login);
 		if (!result) {
@@ -82,8 +77,4 @@ public class UsersService {
 	public void setUsersJsonizer(UsersJsonizer usersJsonizer) {
 		this.usersJsonizer = usersJsonizer;
 	}
-
-	@Autowired
-	private UsersJsonizer usersJsonizer;
-
 }
