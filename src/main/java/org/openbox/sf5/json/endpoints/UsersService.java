@@ -1,5 +1,7 @@
 package org.openbox.sf5.json.endpoints;
 
+import java.util.Optional;
+
 import org.openbox.sf5.json.service.UsersJsonizer;
 import org.openbox.sf5.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +33,8 @@ public class UsersService {
 			throw new IllegalStateException("Error getting user from database!", e);
 		}
 
-		if (retUser == null) {
-			// return new ResponseEntity<Users>(HttpStatus.NO_CONTENT);
-			throw new IllegalArgumentException("No user found in database for login: " + login);
-		}
-
-		return new ResponseEntity<>(retUser, HttpStatus.OK);
-
+        return Optional.ofNullable(retUser).map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseThrow(
+                () -> new IllegalArgumentException(String.join("", "No user found in database for login: ", login)));
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -62,12 +59,8 @@ public class UsersService {
 
     @GetMapping("exists/username/{login}")
 	public ResponseEntity<Boolean> ifSuchLoginExists(@PathVariable("login") String login) {
-		Boolean result = usersJsonizer.checkIfUsernameExists(login);
-		if (!result) {
-			return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
-		}
-
-		return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+        return usersJsonizer.checkIfUsernameExists(login) ? new ResponseEntity<>(true, HttpStatus.ACCEPTED)
+                : new ResponseEntity<>(false, HttpStatus.NO_CONTENT);
 	}
 
 	public UsersJsonizer getUsersJsonizer() {
