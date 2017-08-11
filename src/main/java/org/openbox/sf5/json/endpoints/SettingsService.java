@@ -26,10 +26,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -52,7 +53,7 @@ public class SettingsService {
 	private SettingsJsonizer settingsJsonizer;
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(method = RequestMethod.POST)
+    @PostMapping
 	public ResponseEntity<Long> createSetting(@RequestBody Settings setting, UriComponentsBuilder ucBuilder)
 			throws NotAuthenticatedException, UsersDoNotCoincideException {
 
@@ -83,7 +84,7 @@ public class SettingsService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    @GetMapping(produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<Settings>> getSettingsByUserLogin() throws NotAuthenticatedException {
 
 		Users currentUser = getVerifyAuthenticatedUser();
@@ -93,7 +94,7 @@ public class SettingsService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+    @GetMapping(produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Settings>> getSettingsByUserLoginXML()
 			throws NotAuthenticatedException {
 
@@ -104,7 +105,7 @@ public class SettingsService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = "application/json")
+    @GetMapping(value = TranspondersService.FILTER_TYPE_PATTERN, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<Settings>> getSettingsByArbitraryFilter(@PathVariable("type") String fieldName,
 			@PathVariable("typeValue") String typeValue) throws NotAuthenticatedException {
 
@@ -117,7 +118,7 @@ public class SettingsService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "filter/{type}/{typeValue}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML)
+    @GetMapping(value = TranspondersService.FILTER_TYPE_PATTERN, produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Settings>> getSettingsByArbitraryFilterXML(
 			@PathVariable("type") String fieldName, @PathVariable("typeValue") String typeValue)
 			throws NotAuthenticatedException {
@@ -130,7 +131,7 @@ public class SettingsService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "{settingId}", method = RequestMethod.GET)
+    @GetMapping("{settingId}")
 	public ResponseEntity<Settings> getSettingById(@PathVariable("settingId") long settingId)
 			throws NotAuthenticatedException {
 
@@ -142,12 +143,7 @@ public class SettingsService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(value = "{settingId}/sf5", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN // This
-																											// removes
-																											// <String>
-																											// tags
-
-	)
+    @GetMapping(value = "{settingId}/sf5", produces = MediaType.TEXT_PLAIN)
 	public ResponseEntity<String> getSettingByIdSF5(@PathVariable("settingId") long settingId)
 			throws NotAuthenticatedException {
 

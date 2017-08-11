@@ -34,7 +34,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 		maxRequestSize = 20971520) // 20 MB
 public class TranspondersService {
 
-    private static final String FILTER_TYPE_PATTERN = "filter/{type}/{typeValue}";
+    public static final String FILTER_TYPE_PATTERN = "filter/{type}/{typeValue}";
 
     private static final String FILTER_SAT_ID_PATTERN = "satId/{satId}";
 
