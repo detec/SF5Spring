@@ -1,9 +1,9 @@
 package org.openbox.sf5.json.service;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.common.IniReader;
 import org.openbox.sf5.model.Satellites;
@@ -17,57 +17,37 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class TranspondersJsonizer {
 
+    @Autowired
+    private IniReader iniReader;
+
+    @Autowired
+    private ObjectsController objectsController;
+
+    @Autowired
+    private CriterionService criterionService;
+
 	public Boolean uploadTransponders(MultipartFile file) {
 		try {
 			iniReader.readMultiPartFile(file);
-
 		} catch (Exception e) {
 			return new Boolean(false);
 		}
-
 		return new Boolean(iniReader.isResult());
-
 	}
 
 	public List<Transponders> getTranspondersByArbitraryFilter(String fieldName, String typeValue) {
-		List<Transponders> transList = new ArrayList<>();
-
-		Criterion criterion = criterionService.getCriterionByClassFieldAndStringValue(Transponders.class, fieldName,
-				typeValue);
-
-		if (criterion == null) {
-			return transList;
-		}
-
-		transList = objectsController.restrictionList(Transponders.class, criterion);
-
-		return transList;
-
+        return Optional
+                .ofNullable(criterionService.getCriterionByClassFieldAndStringValue(Transponders.class, fieldName,
+                typeValue)).map(cr -> objectsController.restrictionList(Transponders.class, cr))
+                .orElse(Collections.emptyList());
 	}
 
 	public List<Transponders> getTranspondersBySatelliteId(long satId) {
-		List<Transponders> transList = new ArrayList<>();
-
-		Satellites filterSatellite = objectsController.select(Satellites.class, satId);
-		if (filterSatellite == null) {
-			return transList;
-		}
-		Criterion criterion = Restrictions.eq("Satellite", filterSatellite);
-
-		transList = objectsController.restrictionList(Transponders.class, criterion);
-
-		return transList;
-
+        return Optional.ofNullable(objectsController.select(Satellites.class, satId))
+                .map(sat -> Restrictions.eq("Satellite", sat))
+                .map(cr -> objectsController.restrictionList(Transponders.class, cr)).orElse(Collections.emptyList());
 	}
 
-	@Autowired
-	private IniReader iniReader;
-
-	@Autowired
-	private ObjectsController objectsController;
-
-	@Autowired
-	private CriterionService criterionService;
 
 	public CriterionService getCriterionService() {
 		return criterionService;
