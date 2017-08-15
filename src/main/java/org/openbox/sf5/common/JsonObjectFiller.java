@@ -4,13 +4,11 @@ import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
-
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
@@ -105,28 +103,17 @@ public class JsonObjectFiller {
 		return JOB;
 	}
 
-	// This method returns class from the field name
-	@SuppressWarnings("unchecked")
+    public static <T extends AbstractDbEntity> Field getEntityField(Class<T> type, String fieldName) {
+        return Arrays.asList(type.getDeclaredFields()).stream().filter(t -> t.getName().equalsIgnoreCase(fieldName))
+                .findAny().orElse(null);
+    }
+
 	public static <T extends AbstractDbEntity> Class<?> getFieldClass(Class<T> type, String fieldName) {
-		Field fields[];
-		fields = type.getDeclaredFields();
-
-		List<Field> fieldList = Arrays.asList(fields);
-		Class<T> clazz = null;
-		List<Class<T>> classList = new ArrayList<Class<T>>();
-
 		// find field with the given name and return its class
-		fieldList.stream().filter(t -> t.getName().equals(fieldName)).forEach(t -> {
-			classList.add((Class<T>) t.getType());
-		});
+        return Arrays.asList(type.getDeclaredFields()).stream().filter(t -> t.getName().equalsIgnoreCase(fieldName))
+                .map(Field::getType).findAny()
+                .orElse(null);
 
-		if (classList.size() == 1) {
-			clazz = classList.get(0);
-		}
-
-		// o.getClass().getField("fieldName").getType().isPrimitive(); for
-		// primitives
-		return clazz;
 	}
 
 	public static <T> JsonArray getJsonArray(List<T> objList) {

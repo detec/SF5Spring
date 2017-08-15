@@ -41,4 +41,11 @@ public class TranspondersTests {
                 get(String.join("", "/", jsonPath, "/transponders/")).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200));
     }
+
+    @Test
+    public void getMockFilterTypeTransponders() throws Exception {
+        this.mockMvc.perform(get(String.join("", "/", jsonPath, "/transponders/", "filter/", "Speed/", "27500"))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(200));
+    }
 }

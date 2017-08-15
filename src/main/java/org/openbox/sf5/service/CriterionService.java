@@ -1,9 +1,11 @@
 package org.openbox.sf5.service;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -28,7 +30,10 @@ public class CriterionService implements Serializable {
 		// 4. Filed is entity class, retrieved from database. Then we select
 		// object by id, that came as typeValue.
 
-		Class<?> fieldClazz = JsonObjectFiller.getFieldClass(type, fieldName);
+        Field field = JsonObjectFiller.getEntityField(type, fieldName);
+        fieldName = Optional.ofNullable(field).map(Field::getName).orElse(fieldName);
+        Class<?> fieldClazz = Optional.ofNullable(field).map(Field::getType).orElse(null);
+
 		// check if this field has some class, not null
 		if (fieldClazz == null) {
 			// Return empty criterion
@@ -62,7 +67,6 @@ public class CriterionService implements Serializable {
 			// it is a usual class
 			T filterObject = objectController.select((Class<T>) fieldClazz, Long.parseLong(typeValue));
 			criterion = Restrictions.eq(fieldName, filterObject);
-
 		}
 
 		return criterion;
