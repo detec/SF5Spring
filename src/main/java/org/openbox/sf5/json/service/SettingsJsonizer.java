@@ -1,7 +1,8 @@
 package org.openbox.sf5.json.service;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -19,6 +20,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class SettingsJsonizer {
 
+    @Autowired
+    private CriterionService criterionService;
+
+    @Autowired
+    private ObjectsController objectsController;
+
 	public HttpStatus saveNewSetting(Settings setting) {
 		long id = setting.getId();
 		// if we receive non-empty id
@@ -30,96 +37,47 @@ public class SettingsJsonizer {
 	}
 
 	@SuppressWarnings("unchecked")
-	// public List<Settings> getSettingsByArbitraryFilter(String fieldName,
-	// String typeValue, String login) {
 	public List<Settings> getSettingsByArbitraryFilter(String fieldName, String typeValue, Users user) {
-		List<Settings> settList = new ArrayList<>();
-
-		// Criterion userCriterion = criterionService.getUserCriterion(login,
-		// Settings.class);
-		// if (userCriterion == null) {
-		// return settList;
-		// }
-
 		Criterion userCriterion = Restrictions.eq("User", user);
 
 		// building arbitrary criterion
 		Criterion arbitraryCriterion = criterionService.getCriterionByClassFieldAndStringValue(Settings.class,
 				fieldName, typeValue);
-
 		if (arbitraryCriterion == null) {
-			return settList;
+            return Collections.emptyList();
 		}
 
 		Session session = objectsController.openSession();
 		Criteria criteria = session.createCriteria(Settings.class).add(userCriterion).add(arbitraryCriterion);
 		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
-		settList = criteria.list();
-
+        List<Settings> settList = criteria.list();
 		session.close();
-
 		return settList;
-
 	}
 
 	public List<Settings> getSettingsByUser(Users user) {
-		List<Settings> settList = new ArrayList<>();
-
-		Criterion userCriterion = Restrictions.eq("User", user);
-		settList = objectsController.restrictionList(Settings.class, userCriterion);
-
-		return settList;
-
+        return Optional.ofNullable(Restrictions.eq("User", user))
+                .map(cr -> objectsController.restrictionList(Settings.class, cr)).orElse(Collections.emptyList());
 	}
 
 	public List<Settings> getSettingsByUserLogin(String login) {
-		List<Settings> settList = new ArrayList<>();
-
-		Criterion userCriterion = criterionService.getUserCriterion(login, Settings.class);
-		if (userCriterion == null) {
-			return settList;
-		}
-
-		settList = objectsController.restrictionList(Settings.class, userCriterion);
-
-		return settList;
+        return Optional.ofNullable(criterionService.getUserCriterion(login, Settings.class))
+                .map(cr -> objectsController.restrictionList(Settings.class, cr)).orElse(Collections.emptyList());
 	}
 
 	public Settings getSettingById(long settingId, Users user) {
-		Settings setting = null;
-
-		// Criterion userCriterion = criterionService.getUserCriterion(login,
-		// Settings.class);
-		// if (userCriterion == null) {
-		// return setting;
-		// }
-
 		Criterion userCriterion = Restrictions.eq("User", user);
-
 		Criterion settingIdCriterion = Restrictions.eq("id", settingId);
 
 		Session session = objectsController.openSession();
 		@SuppressWarnings("unchecked")
-		List<Settings> records = session.createCriteria(Settings.class).add(userCriterion).add(settingIdCriterion)
-				.list();
+        Settings setting = (Settings) session.createCriteria(Settings.class).add(userCriterion).add(settingIdCriterion)
+                .list().stream().map(Settings.class::cast).findFirst().orElse(null);
 
-		if (records.size() == 0) {
-			// There is no such setting with username
-			return setting;
-		} else {
-			setting = records.get(0);
-		}
 		session.close();
-
 		return setting;
 	}
-
-	@Autowired
-	private CriterionService criterionService;
-
-	@Autowired
-	private ObjectsController objectsController;
 
 	public ObjectsController getObjectsController() {
 		return objectsController;
@@ -136,5 +94,4 @@ public class SettingsJsonizer {
 	public void setCriterionService(CriterionService criterionService) {
 		this.criterionService = criterionService;
 	}
-
 }

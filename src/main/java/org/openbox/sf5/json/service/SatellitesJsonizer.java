@@ -1,10 +1,10 @@
 package org.openbox.sf5.json.service;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-import org.hibernate.criterion.Criterion;
-import org.openbox.sf5.common.JsonObjectFiller;
 import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.service.CriterionService;
 import org.openbox.sf5.service.ObjectsController;
@@ -13,21 +13,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SatellitesJsonizer implements Serializable {
+    private static final long serialVersionUID = 3401682206534536724L;
 
-	public String getSatellitesList() {
-		List<Satellites> satList = objectsController.list(Satellites.class);
-		String result = JsonObjectFiller.getJsonFromObjectsList(satList);
+    @Autowired
+    private ObjectsController objectsController;
 
-		return result;
-	}
+    @Autowired
+    private CriterionService criterionService;
 
 	public List<Satellites> getSatellitesByArbitraryFilter(String fieldName, String typeValue) {
-
-		Criterion criterion = criterionService.getCriterionByClassFieldAndStringValue(Satellites.class, fieldName,
-				typeValue);
-		List<Satellites> satList = objectsController.restrictionList(Satellites.class, criterion);
-
-		return satList;
+        return Optional.ofNullable(
+                criterionService.getCriterionByClassFieldAndStringValue(Satellites.class, fieldName, typeValue))
+                .map(cr -> objectsController.restrictionList(Satellites.class, cr)).orElse(Collections.emptyList());
 	}
 
 	public CriterionService getCriterionService() {
@@ -38,12 +35,5 @@ public class SatellitesJsonizer implements Serializable {
 		this.criterionService = criterionService;
 	}
 
-	@Autowired
-	private ObjectsController objectsController;
-
-	private static final long serialVersionUID = 3401682206534536724L;
-
-	@Autowired
-	private CriterionService criterionService;
 
 }

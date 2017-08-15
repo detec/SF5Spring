@@ -19,6 +19,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class CriterionService implements Serializable {
 
+    private static final long serialVersionUID = -2669096886833468746L;
+
+    @Autowired
+    private ObjectsController objectController;
+
 	public <T extends AbstractDbEntity> Criterion getCriterionByClassFieldAndStringValue(Class<T> type,
 			String fieldName, String typeValue) {
 		Criterion criterion = null;
@@ -105,10 +110,4 @@ public class CriterionService implements Serializable {
 	public void setObjectController(ObjectsController objectController) {
 		this.objectController = objectController;
 	}
-
-	private static final long serialVersionUID = -2669096886833468746L;
-
-	@Autowired
-	private ObjectsController objectController;
-
 }
