@@ -1,8 +1,8 @@
 package org.openbox.sf5.json.service;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.Optional;
 
-import org.hibernate.criterion.Criterion;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.service.CriterionService;
 import org.openbox.sf5.service.ObjectsController;
@@ -13,7 +13,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsersJsonizer {
 
-	// @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Autowired
+    private CriterionService criterionService;
+
+    @Autowired
+    private ObjectsController objectsController;
+
 	public HttpStatus saveNewUser(Users user) {
 		long id = user.getId();
 		// if we receive non-empty id
@@ -26,47 +31,21 @@ public class UsersJsonizer {
 	}
 
 	public Users getUserByLogin(String typeValue) {
-		Users returnUser = null;
-		Criterion criterion = criterionService.getCriterionByClassFieldAndStringValue(Users.class, "username",
-				typeValue);
-
-		if (criterion == null) {
-			return returnUser;
-		}
-
-		List<Users> userList = objectsController.restrictionList(Users.class, criterion);
-		if (userList.size() == 0) {
-			return returnUser;
-		}
-		returnUser = userList.get(0);
-		return returnUser;
+        return Optional
+                .ofNullable(
+                criterionService.getCriterionByClassFieldAndStringValue(Users.class, "username", typeValue))
+                .map(cr -> objectsController.restrictionList(Users.class, cr)).orElse(Collections.emptyList()).stream()
+                .findFirst().orElse(null);
 	}
 
 	// returns false if there is no such user. Otherwise - false.
 	public Boolean checkIfUsernameExists(String typeValue) {
-		Boolean result = false;
-		Criterion criterion = criterionService.getCriterionByClassFieldAndStringValue(Users.class, "username",
-				typeValue);
-
-		if (criterion == null) {
-			return result;
-		}
-		List<Users> userList = objectsController.restrictionList(Users.class, criterion);
-		// if (userList.size() == 0) {
-		// return result;
-		// } else {
-		// result = true;
-		// }
-		result = (userList.size() == 0) ? false : true;
-
-		return result;
+        return Optional
+                .ofNullable(
+                criterionService.getCriterionByClassFieldAndStringValue(Users.class, "username", typeValue))
+                .map(cr -> objectsController.restrictionList(Users.class, cr)).orElse(Collections.emptyList()).stream()
+                .findAny().isPresent();
 	}
-
-	@Autowired
-	private CriterionService criterionService;
-
-	@Autowired
-	private ObjectsController objectsController;
 
 	public ObjectsController getObjectsController() {
 		return objectsController;

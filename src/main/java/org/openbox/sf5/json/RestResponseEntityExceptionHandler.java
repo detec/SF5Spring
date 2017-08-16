@@ -38,7 +38,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
 	protected ResponseEntity<ApiError> constructSerializedException(Exception ex, HttpStatus status) {
 		ApiError apiError = new ApiError(status, ex);
-		logger.info("Exception caught : " + ex.getClass().getSimpleName());
+        logger.info("Exception caught : " + ex.getClass().getSimpleName());
 		return new ResponseEntity<>(apiError, status);
 	}
 
