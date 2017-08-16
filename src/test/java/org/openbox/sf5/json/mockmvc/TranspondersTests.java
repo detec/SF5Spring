@@ -2,6 +2,7 @@ package org.openbox.sf5.json.mockmvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -39,13 +40,14 @@ public class TranspondersTests {
     public void getMockTransponders() throws Exception {
         this.mockMvc.perform(
                 get(String.join("", "/", jsonPath, "/transponders/")).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(200));
+                .andExpect(status().is(200))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
     public void getMockFilterTypeTransponders() throws Exception {
         this.mockMvc.perform(get(String.join("", "/", jsonPath, "/transponders/", "filter/", "Speed/", "27500"))
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(200));
+                .andExpect(status().is(200)).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 }
