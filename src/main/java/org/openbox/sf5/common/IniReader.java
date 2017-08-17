@@ -244,8 +244,6 @@ public class IniReader {
 	}
 
 	private RangesOfDVB resolveTheDVBRangeValue(Session session, Long frequency) {
-		RangesOfDVB rangeEnum = null;
-
 		Properties params = new Properties();
 		params.put("enumClass", RangesOfDVB.class.getName());
         // params.put("type", "12");
@@ -256,15 +254,11 @@ public class IniReader {
 
 		String sqltext = "SELECT rangeOfDVB FROM TheDVBRangeValues where :Frequency between lowerThreshold and upperThreshold";
 
-		List<TheDVBRangeValues> range = session.createSQLQuery(sqltext).addScalar("rangeOfDVB", myEnumType)
+        List<TheDVBRangeValues> rangeList = session.createSQLQuery(sqltext).addScalar("rangeOfDVB", myEnumType)
 				.setParameter(FREQUENCY_CONSTANT, frequency)
 				.setResultTransformer(Transformers.aliasToBean(TheDVBRangeValues.class)).list();
 
-		if (!range.isEmpty()) {
-			rangeEnum = range.get(0).getRangeOfDVB();
-		}
-		return rangeEnum;
-
+        return rangeList.stream().findAny().map(TheDVBRangeValues::getRangeOfDVB).orElse(null);
 	}
 
 	private DVBStandards resolveDVBStandard() {
@@ -274,8 +268,6 @@ public class IniReader {
 	}
 
 	private CarrierFrequency resolveCarrierFrequency(Session session, Long frequency, Polarization aPolarization) {
-		CarrierFrequency carrierEnum = null;
-
 		// get carrier frequency
 		Properties params = new Properties();
 		params.put("enumClass", CarrierFrequency.class.getName());
@@ -300,11 +292,7 @@ public class IniReader {
 
 				.setResultTransformer(Transformers.aliasToBean(ValueOfTheCarrierFrequency.class)).list();
 
-		if (!carrierList.isEmpty()) {
-			carrierEnum = carrierList.get(0).getTypeOfCarrierFrequency();
-        }
-		return carrierEnum;
-
+        return carrierList.stream().findAny().map(ValueOfTheCarrierFrequency::getTypeOfCarrierFrequency).orElse(null);
 	}
 
 	private void updateTransponderData(Transponders selectedTrans, CarrierFrequency carrierEnum, TypesOfFEC fec,
