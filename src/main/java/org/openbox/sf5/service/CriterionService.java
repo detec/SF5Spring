@@ -3,9 +3,11 @@ package org.openbox.sf5.service;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -24,6 +26,17 @@ public class CriterionService implements Serializable {
     @Autowired
     private ObjectsController objectController;
 
+    /**
+     * Returns ready to use criterion
+     *
+     * @param type
+     *            - class
+     * @param fieldName
+     *            fieldname
+     * @param typeValue
+     *            - value of field
+     * @return
+     */
 	public <T extends AbstractDbEntity> Criterion getCriterionByClassFieldAndStringValue(Class<T> type,
 			String fieldName, String typeValue) {
 		Criterion criterion = null;
@@ -43,37 +56,27 @@ public class CriterionService implements Serializable {
 		if (fieldClazz == null) {
 			// Return empty criterion
 			return criterion;
-		}
-
-		else if (fieldClazz.isPrimitive()) {
+        } else if (fieldClazz.isPrimitive()) {
 			criterion = Restrictions.eq(fieldName, Long.parseLong(typeValue));
-		}
-
-		// check that it is an enum
-		else if (Enum.class.isAssignableFrom(fieldClazz)) {
+        } else if (Enum.class.isAssignableFrom(fieldClazz)) {
+            // check that it is an enum
 			// must select from HashMap where key is String representation of
 			// enum
 
 			// http://stackoverflow.com/questions/1626901/java-enums-list-enumerated-values-from-a-class-extends-enum
-			List<?> enumList = enum2list((Class<? extends Enum>) fieldClazz);
-			HashMap<String, Object> hm = new HashMap<>();
-			enumList.stream().forEach(t -> hm.put(t.toString(), t));
+            Map<String, Object> hm = enum2list((Class<? extends Enum>) fieldClazz).stream()
+                    .collect(Collectors.toMap(Enum::toString, Function.identity()));
 
 			// now get enum value by string representation
 			criterion = Restrictions.eq(fieldName, hm.get(typeValue));
-		}
-
-		else if (fieldClazz == String.class) {
+        } else if (fieldClazz == String.class) {
 			// we build rather primitive criterion
 			criterion = Restrictions.eq(fieldName, typeValue);
-		}
-
-		else {
+        } else {
 			// it is a usual class
 			T filterObject = objectController.select((Class<T>) fieldClazz, Long.parseLong(typeValue));
 			criterion = Restrictions.eq(fieldName, filterObject);
 		}
-
 		return criterion;
 	}
 

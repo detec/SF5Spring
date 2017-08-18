@@ -103,17 +103,32 @@ public class JsonObjectFiller {
 		return JOB;
 	}
 
+    /**
+     * Returns verified field for its name in given class
+     *
+     * @param type
+     *            - class with field
+     * @param fieldName
+     *            - field name case-ignored
+     * @return
+     */
     public static <T extends AbstractDbEntity> Field getEntityField(Class<T> type, String fieldName) {
         return Arrays.asList(type.getDeclaredFields()).stream().filter(t -> t.getName().equalsIgnoreCase(fieldName))
                 .findAny().orElse(null);
     }
 
+    /**
+     * This method returns class from the field name
+     *
+     * @param type
+     * @param fieldName
+     * @return
+     */
 	public static <T extends AbstractDbEntity> Class<?> getFieldClass(Class<T> type, String fieldName) {
 		// find field with the given name and return its class
         return Arrays.asList(type.getDeclaredFields()).stream().filter(t -> t.getName().equalsIgnoreCase(fieldName))
                 .map(Field::getType).findAny()
                 .orElse(null);
-
 	}
 
 	public static <T> JsonArray getJsonArray(List<T> objList) {
