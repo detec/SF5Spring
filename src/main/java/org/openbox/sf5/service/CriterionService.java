@@ -82,23 +82,11 @@ public class CriterionService implements Serializable {
 
 	public <T extends AbstractDbEntity> Criterion getUserCriterion(String login, Class<T> type) {
 		// Find out user id.
-		SimpleExpression criterion = null;
-		Criterion userCriterion = null;
-
-		criterion = Restrictions.eq("username", login);
-		List<Users> usersList = objectController.restrictionList(Users.class, criterion);
-
-		if (usersList.size() == 0) {
-			return criterion;
-		}
-
-		String userIdToString = Long.toString(usersList.get(0).getId());
-
-		// Let's filter by userId and settings id
-		userCriterion = getCriterionByClassFieldAndStringValue(type, "User", userIdToString);
-
-		return userCriterion;
-
+        SimpleExpression criterion = Restrictions.eq("username", login);
+        return objectController.restrictionList(Users.class, criterion).stream().findAny()
+                .map(Users::getId)
+                .map(Long::new).map(Object::toString)
+                .map(idStr -> getCriterionByClassFieldAndStringValue(type, "User", idStr)).orElse(criterion);
 	}
 
 	@SuppressWarnings("rawtypes")
