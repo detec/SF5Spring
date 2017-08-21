@@ -19,6 +19,7 @@ import org.hibernate.criterion.Criterion;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openbox.sf5.config.AppTestConfiguration;
 import org.openbox.sf5.json.service.AbstractJsonizerTest;
 import org.openbox.sf5.model.Sat;
 import org.openbox.sf5.model.Settings;
@@ -26,12 +27,12 @@ import org.openbox.sf5.model.SettingsConversion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.xml.transform.StringSource;
 
-@ContextConfiguration(locations = { "file:src/test/resources/context/test-autowired-beans.xml" })
-@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { AppTestConfiguration.class })
+@RunWith(SpringRunner.class)
 @WebAppConfiguration
 public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 

@@ -12,12 +12,12 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openbox.sf5.config.AppTestConfiguration;
 import org.openbox.sf5.json.service.AbstractJsonizerTest;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.SettingsConversion;
@@ -29,8 +29,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-// Taken from http://stackoverflow.com/questions/10385452/location-of-spring-context-xml
-@ContextConfiguration(locations = { "file:src/test/resources/context/test-autowired-beans.xml" })
+@ContextConfiguration(classes = { AppTestConfiguration.class })
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 public class IntersectionsTests extends AbstractJsonizerTest {
@@ -100,10 +99,7 @@ public class IntersectionsTests extends AbstractJsonizerTest {
 		});
 
 		streamPath.close();
-
-		int positiveResult = resultList.stream().filter(t -> t.booleanValue()).collect(Collectors.toList()).size();
-
-		return positiveResult;
+        return (int) resultList.stream().filter(Boolean::booleanValue).count();
 	}
 
 	@Test

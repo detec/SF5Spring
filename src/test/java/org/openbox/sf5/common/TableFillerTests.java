@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openbox.sf5.config.AppTestConfiguration;
 import org.openbox.sf5.json.service.AbstractJsonizerTest;
 import org.openbox.sf5.model.TheDVBRangeValues;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-@ContextConfiguration(locations = { "file:src/test/resources/context/test-autowired-beans.xml" })
+@ContextConfiguration(classes = { AppTestConfiguration.class })
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @Component
