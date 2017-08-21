@@ -55,7 +55,6 @@ public class ValidatorTests {
 
 		Iterator<ConstraintViolation<Transponders>> iterator = trsnapondersConstraintViolations.iterator();
 
-		// HashMap<String, String> valuesmap = new HashMap<String, String>();
 		valuesmap.put("RangeOfDVB", "may not be null");
 		valuesmap.put("Carrier", "may not be null");
 		valuesmap.put("Satellite", "may not be null");
@@ -65,12 +64,9 @@ public class ValidatorTests {
 		valuesmap.put("Frequency", "must be greater than or equal to 2000");
 
 		while (iterator.hasNext()) {
-
 			ConstraintViolation<Transponders> transViolation = iterator.next();
 			String propertyPath = transViolation.getPropertyPath().toString();
 			assertThat(valuesmap.get(propertyPath).equals(transViolation.getMessage()));
-
 		}
-
 	}
 }

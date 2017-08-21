@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openbox.sf5.config.AppTestConfiguration;
 import org.openbox.sf5.json.service.AbstractJsonizerTest;
 import org.openbox.sf5.model.CarrierFrequency;
 import org.openbox.sf5.model.DVBStandards;
@@ -21,12 +22,12 @@ import org.openbox.sf5.model.TypesOfFEC;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@ContextConfiguration(locations = { "file:src/test/resources/context/test-autowired-beans.xml" })
-@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { AppTestConfiguration.class })
+@RunWith(SpringRunner.class)
 @WebAppConfiguration
 public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 
@@ -38,7 +39,6 @@ public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 	@Test
 	@Transactional
 	public void shouldInsertSatellite() {
-
 		Satellites newSat = getNewSatellite();
 		objectController.saveOrUpdate(newSat);
 		assertThat(newSat.getId()).isNotEqualTo(0);
@@ -50,7 +50,6 @@ public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 		Transponders trans = getNewTransponder();
 		objectController.saveOrUpdate(trans);
 		assertThat(trans.getId()).isNotEqualTo(0);
-
 	}
 
 	@Test
@@ -64,7 +63,6 @@ public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 	private Satellites getNewSatellite() {
 		Satellites newSat = new Satellites();
 		newSat.setName("Test sat");
-
 		return newSat;
 	}
 
