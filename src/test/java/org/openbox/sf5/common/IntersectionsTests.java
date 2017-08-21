@@ -26,12 +26,12 @@ import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 // Taken from http://stackoverflow.com/questions/10385452/location-of-spring-context-xml
 @ContextConfiguration(locations = { "file:src/test/resources/context/test-autowired-beans.xml" })
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @WebAppConfiguration
 public class IntersectionsTests extends AbstractJsonizerTest {
 

@@ -39,21 +39,6 @@ public class SendTransponderFilesJSONIT extends AbstractServiceTest {
 
 		transponderFilesPathes.forEach(t -> {
 
-			// FileDataBodyPart filePart = new FileDataBodyPart("file",
-			// t.toFile());
-			//
-			// @SuppressWarnings("resource")
-			// final FormDataMultiPart multipart = (FormDataMultiPart) new
-			// FormDataMultiPart().field("foo", "bar")
-			// .bodyPart(filePart);
-			//
-			// Invocation.Builder invocationBuilder =
-			// serviceTarget.request(MediaType.APPLICATION_JSON);
-			//
-			// Response responsePost = invocationBuilder.post(Entity.entity(
-			//
-			// multipart, multipart.getMediaType()));
-
 			RestTemplate restTemplate = new RestTemplate();
 
 			LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
@@ -75,8 +60,6 @@ public class SendTransponderFilesJSONIT extends AbstractServiceTest {
 			HttpStatus statusCode = stringResponse.getStatusCode();
 
 			assertEquals(HttpStatus.OK, statusCode);
-
-			// Boolean result = responsePost.readEntity(Boolean.class);
 
 			String body = stringResponse.getBody();
 
