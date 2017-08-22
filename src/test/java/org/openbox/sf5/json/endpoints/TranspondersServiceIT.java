@@ -55,8 +55,8 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-		GenericType<List<Transponders>> genList = new GenericType<List<Transponders>>() {
-		};
+        GenericType<List<Transponders>> genList = new GenericType<List<Transponders>>() {
+        };
 
 		List<Transponders> newTransList = response.readEntity(genList);
 
@@ -68,11 +68,7 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		Transponders readTrans = newTransList.get(0);
 		transponderId = readTrans.getId();
 
-		invocationBuilder = serviceTarget
-
-				// .path("filter").path("id")
-
-				.path(String.valueOf(transponderId)).request(MediaType.APPLICATION_JSON)
+        invocationBuilder = serviceTarget.path(String.valueOf(transponderId)).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON);
 
 		response = invocationBuilder.get();
@@ -84,7 +80,6 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		assertThat(trans).isNotNull();
 		Set<ConstraintViolation<Transponders>> constraintViolations = validator.validate(trans);
 		assertEquals(0, constraintViolations.size());
-
 	}
 
 	@Test
@@ -98,17 +93,11 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-		// GenericType<List<Transponders>> genList = new
-		// GenericType<List<Transponders>>() {
-		// };
-		//
-		// List<Transponders> newTransList = response.readEntity(genList);
-
 		GenericXMLListWrapper<Transponders> transWrapper = response.readEntity(GenericXMLListWrapper.class);
 
 		List<Transponders> newTransList = xmlMapper.convertValue(transWrapper.getWrappedList(),
-				new TypeReference<List<Transponders>>() {
-				});
+                new TypeReference<List<Transponders>>() {
+                });
 
 		assertThat(newTransList).isNotNull();
 		assertThat(newTransList.size()).isGreaterThan(0);
@@ -116,11 +105,7 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		Transponders readTrans = newTransList.get(0);
 		transponderId = readTrans.getId();
 
-		invocationBuilder = serviceTarget
-
-				// .path("filter").path("id")
-
-				.path(String.valueOf(transponderId)).request(MediaType.APPLICATION_XML)
+        invocationBuilder = serviceTarget.path(String.valueOf(transponderId)).request(MediaType.APPLICATION_XML)
 				.accept(MediaType.APPLICATION_XML);
 		response = invocationBuilder.get();
 
@@ -131,7 +116,6 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		assertThat(trans).isNotNull();
 		Set<ConstraintViolation<Transponders>> constraintViolations = validator.validate(trans);
 		assertEquals(0, constraintViolations.size());
-
 	}
 
 	@Test
@@ -142,15 +126,9 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		SatellitesServiceIT satTest = new SatellitesServiceIT();
 		satTest.setUp();
 
-		Invocation.Builder invocationBuilder = serviceTarget
-
-				// .path("filter")
-
-				.path("satId")
-
-				.path(String.valueOf(satTest.getSatelliteId()))
-
-				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+        Invocation.Builder invocationBuilder = serviceTarget.path("satId")
+                .path(String.valueOf(satTest.getSatelliteId())).request(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
@@ -170,23 +148,17 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 		SatellitesServiceIT satTest = new SatellitesServiceIT();
 		satTest.setUp();
 
-		Invocation.Builder invocationBuilder = serviceTarget
-
-				// .path("filter")
-
-				.path("satId")
-
-				.path(String.valueOf(satTest.getSatelliteId()))
-
-				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+        Invocation.Builder invocationBuilder = serviceTarget.path("satId")
+                .path(String.valueOf(satTest.getSatelliteId())).request(MediaType.APPLICATION_XML)
+                .accept(MediaType.APPLICATION_XML);
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 		GenericXMLListWrapper<Transponders> transWrapper = response.readEntity(GenericXMLListWrapper.class);
 
 		List<Transponders> newTransList = xmlMapper.convertValue(transWrapper.getWrappedList(),
-				new TypeReference<List<Transponders>>() {
-				});
+                new TypeReference<List<Transponders>>() {
+                });
 
 		assertThat(newTransList).isNotNull();
 		assertThat(newTransList.size()).isGreaterThan(0);
@@ -194,19 +166,14 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		Transponders transponder = newTransList.get(0);
 		assertTrue(transponder instanceof Transponders);
-
 	}
 
 	@Test
 	public void shouldGetAllTransponders() {
 
 		Response response = null;
-
-		Invocation.Builder invocationBuilder = serviceTarget
-
-				.path("/")
-
-				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+        Invocation.Builder invocationBuilder = serviceTarget.path("/").request(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
@@ -224,11 +191,8 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 		Response response = null;
 
-		Invocation.Builder invocationBuilder = serviceTarget
-
-				.path("/")
-
-				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+        Invocation.Builder invocationBuilder = serviceTarget.path("/").request(MediaType.APPLICATION_XML)
+                .accept(MediaType.APPLICATION_XML);
 		response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
@@ -246,15 +210,10 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 	}
 
 	public void validateTranspondersList(List<Transponders> transList) {
-		int[] resultArray = new int[1];
-
-		transList.forEach(t -> {
-			Set<ConstraintViolation<Transponders>> constraintViolations = validator.validate(t);
-			resultArray[0] = resultArray[0] + constraintViolations.size();
-
-		});
-
-		assertEquals(0, resultArray[0]);
+        Integer violationsCount = transList.stream().map(validator::validate)
+                .map(Set<ConstraintViolation<Transponders>>::size)
+                .reduce(Integer::sum).orElse(0);
+        assertEquals(0, violationsCount.intValue());
 	}
 
 }

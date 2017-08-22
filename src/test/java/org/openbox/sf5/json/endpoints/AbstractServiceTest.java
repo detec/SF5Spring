@@ -23,21 +23,13 @@ import com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider;
 public abstract class AbstractServiceTest {
 	public static final String appLocation = "http://localhost:8080";
 
-	// public static final String jsonPath = "json";
-
-	// it doesn't work in abstract class
-	// @Value("${jaxrs.path}")
 	public static String jsonPath;
 
-	// @Autowired
 	public CustomObjectMapper mapper;
 
-	// @Autowired
 	public XmlMapper xmlMapper;
 
 	public Client client;
-
-	// public ObjectMapper mapper = new ObjectMapper();
 
 	public WebTarget commonTarget;
 
