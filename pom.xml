@@ -253,12 +253,12 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
              <plugin>
              <groupId>org.codehaus.cargo</groupId>
              <artifactId>cargo-maven2-plugin</artifactId>
-             <version>1.6.4</version>
+             <version>1.6.5</version>
              	<configuration>
                      <container>
-						    <containerId>wildfly10x</containerId>
+						    <containerId>wildfly11x</containerId>
 	                     	<zipUrlInstaller>
-								<url>http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.zip</url>
+								<url>http://download.jboss.org/wildfly/11.0.0.Final/wildfly-11.0.0.Final.zip</url>
 							</zipUrlInstaller>
 						    
 						    <dependencies>
