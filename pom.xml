@@ -7,7 +7,7 @@
   <name>Openbox SF5 settings editor - Spring </name>
   
 	<properties>
-  		<spring.version>4.3.10.RELEASE</spring.version>
+  		<spring.version>4.3.12.RELEASE</spring.version>
   		<spring.security.version>4.2.0.RELEASE</spring.security.version>
   		<hibernate.version>5.1.10.Final</hibernate.version> <!-- Comply with JavaEE 6 -->
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
