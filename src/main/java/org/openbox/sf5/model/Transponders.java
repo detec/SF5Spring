@@ -20,6 +20,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Transponders entity.
+ *
+ * @author Andrii Duplyk
+ *
+ */
 @Entity
 @Table(name = "Transponders")
 @XmlRootElement
@@ -31,68 +37,79 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@Column(name = "Frequency", unique = false, nullable = false, precision = 5)
+	@Column(name = "frequency", unique = false, nullable = false, precision = 5)
 	@Min(value = 2000)
-	@JsonProperty("frequency")
-	private long Frequency;
+	private long frequency;
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	@NotNull
-	@JsonProperty("polarization")
-	private Polarization Polarization;
+	private Polarization polarization;
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = true)
-	@JsonProperty("fec")
+	@JsonProperty("FEC")
 	private TypesOfFEC FEC;
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	@NotNull
-	@JsonProperty("carrier")
-	private CarrierFrequency Carrier;
+	private CarrierFrequency carrier;
 
 	@Column(name = "speed", unique = false, nullable = false, precision = 5)
 	@Min(value = 1000)
-	@JsonProperty("speed")
-	private long Speed;
+	private long speed;
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	@NotNull
-	@JsonProperty("versionOfTheDVB")
-	private DVBStandards VersionOfTheDVB;
+	private DVBStandards versionOfTheDVB;
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	@NotNull
-	@JsonProperty("rangeOfDVB")
-	private RangesOfDVB RangeOfDVB;
+	private RangesOfDVB rangeOfDVB;
 
 	@ManyToOne
-	@JoinColumn(name = "Satellite", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_SatelliteTransponders"))
+	@JoinColumn(name = "satellite", unique = false, nullable = false, foreignKey = @ForeignKey(name = "FK_SatelliteTransponders"))
 	@NotNull
-	@JsonProperty("satellite")
-	private Satellites Satellite;
+	private Satellites satellite;
 
-	public Transponders(long Frequency, Polarization Polarization, TypesOfFEC FEC, CarrierFrequency Carrier, long Speed,
-			DVBStandards VersionOfTheDVB, RangesOfDVB RangeOfDVB, Satellites Satellite) {
+	/**
+	 *
+	 * @param frequency
+	 * @param polarization
+	 * @param FEC
+	 * @param carrier
+	 * @param speed
+	 * @param versionOfTheDVB
+	 * @param rangeOfDVB
+	 * @param satellite
+	 */
+	public Transponders(long frequency, Polarization polarization, TypesOfFEC FEC, CarrierFrequency carrier, long speed,
+			DVBStandards versionOfTheDVB, RangesOfDVB rangeOfDVB, Satellites satellite) {
 
-		this.Frequency = Frequency;
-		this.Polarization = Polarization;
+		this.frequency = frequency;
+		this.polarization = polarization;
 		this.FEC = FEC;
-		this.Carrier = Carrier;
-		this.Speed = Speed;
-		this.VersionOfTheDVB = VersionOfTheDVB;
-		this.RangeOfDVB = RangeOfDVB;
-		this.Satellite = Satellite;
+		this.carrier = carrier;
+		this.speed = speed;
+		this.versionOfTheDVB = versionOfTheDVB;
+		this.rangeOfDVB = rangeOfDVB;
+		this.satellite = satellite;
 
 	}
 
+	/**
+	 *
+	 */
 	public Transponders() {
 	}
 
+	/**
+	 *
+	 * @param origObj
+	 */
 	public Transponders(Transponders origObj) {
 		try {
 			setObjectFieldsFrom(origObj);
@@ -111,24 +128,24 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	}
 
 	public long getFrequency() {
-		return Frequency;
+		return frequency;
 	}
 
-	public void setFrequency(long Frequency) {
-		this.Frequency = Frequency;
+	public void setFrequency(long frequency) {
+		this.frequency = frequency;
 	}
 
 	@Override
 	public String toString() {
-		return String.valueOf(Frequency);
+		return String.valueOf(frequency);
 	}
 
 	public Polarization getPolarization() {
-		return Polarization;
+		return polarization;
 	}
 
-	public void setPolarization(Polarization Polarization) {
-		this.Polarization = Polarization;
+	public void setPolarization(Polarization polarization) {
+		this.polarization = polarization;
 	}
 
 	public TypesOfFEC getFEC() {
@@ -140,43 +157,43 @@ public class Transponders extends AbstractDbEntity implements Serializable {
 	}
 
 	public CarrierFrequency getCarrier() {
-		return Carrier;
+		return carrier;
 	}
 
-	public void setCarrier(CarrierFrequency Carrier) {
-		this.Carrier = Carrier;
+	public void setCarrier(CarrierFrequency carrier) {
+		this.carrier = carrier;
 	}
 
 	public long getSpeed() {
-		return Speed;
+		return speed;
 	}
 
-	public void setSpeed(long Speed) {
-		this.Speed = Speed;
+	public void setSpeed(long speed) {
+		this.speed = speed;
 	}
 
 	public DVBStandards getVersionOfTheDVB() {
-		return VersionOfTheDVB;
+		return versionOfTheDVB;
 	}
 
-	public void setVersionOfTheDVB(DVBStandards VersionOfTheDVB) {
-		this.VersionOfTheDVB = VersionOfTheDVB;
+	public void setVersionOfTheDVB(DVBStandards versionOfTheDVB) {
+		this.versionOfTheDVB = versionOfTheDVB;
 	}
 
 	public RangesOfDVB getRangeOfDVB() {
-		return RangeOfDVB;
+		return rangeOfDVB;
 	}
 
-	public void setRangeOfDVB(RangesOfDVB RangeOfDVB) {
-		this.RangeOfDVB = RangeOfDVB;
+	public void setRangeOfDVB(RangesOfDVB rangeOfDVB) {
+		this.rangeOfDVB = rangeOfDVB;
 	}
 
 	public Satellites getSatellite() {
-		return Satellite;
+		return satellite;
 	}
 
-	public void setSatellite(Satellites Satellite) {
-		this.Satellite = Satellite;
+	public void setSatellite(Satellites satellite) {
+		this.satellite = satellite;
 	}
 
 	private void setObjectFieldsFrom(Transponders origObj) throws IllegalAccessException {

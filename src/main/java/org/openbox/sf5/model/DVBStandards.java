@@ -3,15 +3,21 @@ package org.openbox.sf5.model;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Used DVB standards.
+ *
+ * @author Andrii Duplyk
+ *
+ */
 public enum DVBStandards {
 
 	DVBS("DVB-S"), DVBS2("DVB-S2");
 
+	private final String value;
+
 	private DVBStandards(String s) {
 		value = s;
 	}
-
-	private final String value;
 
 	@Override
 	public String toString() {
@@ -29,5 +35,4 @@ public enum DVBStandards {
         dvbMap.put("S2", DVBStandards.DVBS2);
         return dvbMap;
     }
-
 }

@@ -43,7 +43,7 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		GenericType<List<Satellites>> genList = new GenericType<List<Satellites>>() {
 		};
 
-		Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("Name").path("13E")
+        Invocation.Builder invocationBuilder = serviceTarget.path("filter").path("name").path("13E")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 
 		response = invocationBuilder.get();
@@ -69,11 +69,8 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		Response response = null;
 		GenericType<List<Satellites>> genList = new GenericType<List<Satellites>>() {
 		};
-		Invocation.Builder invocationBuilder = serviceTarget
-
-				// .path("")
-
-				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+        Invocation.Builder invocationBuilder = serviceTarget.request(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
 		response = invocationBuilder.get();
 
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -91,7 +88,6 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 
 		Invocation.Builder invocationBuilder = serviceTarget
 
-				// .path("all")
 
 				.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
 		response = invocationBuilder.get();

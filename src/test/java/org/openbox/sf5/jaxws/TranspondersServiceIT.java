@@ -39,7 +39,7 @@ public class TranspondersServiceIT extends AbstractWSTest {
 
 		List<Transponders> transList = null;
 		try {
-			transList = SF5Port.getTranspondersByArbitraryFilter("Speed", "27500");
+            transList = SF5Port.getTranspondersByArbitraryFilter("speed", "27500");
 		} catch (WSException e) {
 			e.printStackTrace();
 		}

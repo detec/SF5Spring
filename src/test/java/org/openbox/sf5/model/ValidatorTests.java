@@ -55,13 +55,13 @@ public class ValidatorTests {
 
 		Iterator<ConstraintViolation<Transponders>> iterator = trsnapondersConstraintViolations.iterator();
 
-		valuesmap.put("RangeOfDVB", "may not be null");
-		valuesmap.put("Carrier", "may not be null");
-		valuesmap.put("Satellite", "may not be null");
-		valuesmap.put("Polarization", "may not be null");
-		valuesmap.put("VersionOfTheDVB", "may not be null");
-		valuesmap.put("Speed", "must be greater than or equal to 1000");
-		valuesmap.put("Frequency", "must be greater than or equal to 2000");
+        valuesmap.put("rangeOfDVB", "may not be null");
+        valuesmap.put("carrier", "may not be null");
+        valuesmap.put("satellite", "may not be null");
+        valuesmap.put("polarization", "may not be null");
+        valuesmap.put("versionOfTheDVB", "may not be null");
+        valuesmap.put("speed", "must be greater than or equal to 1000");
+        valuesmap.put("frequency", "must be greater than or equal to 2000");
 
 		while (iterator.hasNext()) {
 			ConstraintViolation<Transponders> transViolation = iterator.next();

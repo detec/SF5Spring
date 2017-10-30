@@ -44,7 +44,7 @@ public class TranspondersJsonizer {
 
 	public List<Transponders> getTranspondersBySatelliteId(long satId) {
         return Optional.ofNullable(objectsController.select(Satellites.class, satId))
-                .map(sat -> Restrictions.eq("Satellite", sat))
+                .map(sat -> Restrictions.eq("satellite", sat))
                 .map(cr -> objectsController.restrictionList(Transponders.class, cr)).orElse(Collections.emptyList());
 	}
 
