@@ -88,22 +88,22 @@ There is an option to utilize tomcat7-maven-plugin in pom.xml. Default administr
 ## System requirements ##
 
 - configured non-XA datasource with JNDI name "java:jboss/datasources/PostgreSQLDS"; Postgre and H2 supported;
-- WildFly 10 application server;
+- WildFly 11 application server;
 - Postgre 9.2+ database server (for profiles dev, prod and openshift);
 - Java 8.
 
 ## Technologies ##
 
 - Spring 4 (Spring Core, Security, MVC, XML-based and Java configuration combined);
-- Hibernate ORM 5.0.7;
+- Hibernate ORM 5.1;
 - Hibernate POJO classes and mappings were generated from my 1C:Enterprise database using my 1C:Enterprise project <https://github.com/detec/POJOClassesGenerationForHibernate>;
 - Hibernate Validator 5.2;
-- Jackson 2.5;
+- Jackson 2.8;
 - JUnit 4.12;
 - JDBC (for Spring Security only);
 - Jersey 2 client;
-- Maven 3.3 with plugins compiler, surefire, resources, war, tomcat7, cargo, jaxws;
-- WildFly 10;
+- Maven 3.5 with plugins compiler, surefire, resources, war, tomcat7, cargo, jaxws;
+- WildFly 11;
 - Java 8.
 
-The project can be built either with Maven (3.3 or higher) or Eclipse (4.5 or higher).
+The project can be built either with Maven (3.5 or higher) or Eclipse (4.5 or higher).
