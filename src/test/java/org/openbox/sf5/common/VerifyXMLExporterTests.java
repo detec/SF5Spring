@@ -18,6 +18,8 @@ import javax.xml.bind.JAXBException;
 import org.hibernate.criterion.Criterion;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 import org.openbox.sf5.config.AppTestConfiguration;
 import org.openbox.sf5.json.service.AbstractJsonizerTest;
@@ -27,12 +29,13 @@ import org.openbox.sf5.model.SettingsConversion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.xml.transform.StringSource;
 
 @ContextConfiguration(classes = { AppTestConfiguration.class })
-@RunWith(SpringRunner.class)
+@RunWith(JUnitPlatform.class)
+@ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 
@@ -71,13 +74,10 @@ public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 		// }
 
 		StringWriter sw = new StringWriter();
-
 		URL responseFile = ClassLoader.getSystemResource("xml/sf5JunitOutput.xml");
 		assertThat(responseFile).isNotNull();
-
 		URI uri = responseFile.toURI();
 		assertThat(uri).isNotNull();
-
 		String content = new String(Files.readAllBytes(Paths.get(uri)), Charset.forName("UTF-8"));
 
 		//
@@ -91,7 +91,5 @@ public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 		Sat retrievedSat = (Sat) springMarshaller.unmarshal(new StringSource(content));
 		// trying to compare resolved Sats.
 		assertEquals(retrievedSat, sat);
-
 	}
-
 }

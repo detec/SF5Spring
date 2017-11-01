@@ -16,7 +16,9 @@ import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.junit.platform.runner.JUnitPlatform;
 import org.openbox.sf5.config.AppTestConfiguration;
 import org.openbox.sf5.json.service.AbstractJsonizerTest;
 import org.openbox.sf5.model.Settings;
@@ -26,11 +28,12 @@ import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 @ContextConfiguration(classes = { AppTestConfiguration.class })
-@RunWith(SpringRunner.class)
+@RunWith(JUnitPlatform.class)
+@ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 public class IntersectionsTests extends AbstractJsonizerTest {
 
@@ -57,29 +60,20 @@ public class IntersectionsTests extends AbstractJsonizerTest {
 
 	@Test
 	public void shouldImportTestInis() throws URISyntaxException {
-
 		int positiveResult = 0;
 		try {
 			positiveResult = getIniImportResult();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		assertEquals(3, positiveResult);
-
 	}
 
 	public static Stream<Path> getTransponderFilesStreamPath() throws URISyntaxException, IOException {
-
 		URL transpondersFolderUrl = Thread.currentThread().getContextClassLoader().getResource("transponders/");
-
 		assertThat(transpondersFolderUrl).isNotNull();
-
 		Path path = Paths.get(transpondersFolderUrl.toURI());
-
-		Stream<Path> streamPath = Files.find(path, 2, (newpath, attr) -> String.valueOf(newpath).endsWith(".ini"));
-
-		return streamPath;
+        return Files.find(path, 2, (newpath, attr) -> String.valueOf(newpath).endsWith(".ini"));
 	}
 
 	public int getIniImportResult() throws IOException, URISyntaxException {
@@ -127,16 +121,6 @@ public class IntersectionsTests extends AbstractJsonizerTest {
 		objectController.saveOrUpdate(setting);
 
 		List<Transponders> transList = objectController.list(Transponders.class);
-
-		// List<SettingsConversion> scList = new ArrayList<>();
-		// for (int i = 7; i < 39; i++) {
-		// // adding lines to setting
-		// SettingsConversion newLine = new SettingsConversion(setting);
-		// newLine.setLineNumber(i - 6);
-		// newLine.setTransponder(transList.get(i));
-		// scList.add(newLine);
-		// }
-
 		ConversionLinesHelper.fillTranspondersToSetting(transList, setting);
 		List<SettingsConversion> scList = setting.getConversion();
 
@@ -146,5 +130,4 @@ public class IntersectionsTests extends AbstractJsonizerTest {
 		setting.setConversion(scList);
 		objectController.saveOrUpdate(setting);
 	}
-
 }

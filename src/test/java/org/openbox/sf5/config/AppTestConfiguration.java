@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.openbox.sf5.config;
 
 import org.springframework.context.annotation.Configuration;
