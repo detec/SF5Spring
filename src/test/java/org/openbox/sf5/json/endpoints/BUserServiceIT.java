@@ -14,23 +14,25 @@ import javax.ws.rs.core.Response.Status;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@RunWith(JUnit4.class)
+@RunWith(JUnitPlatform.class)
+@ExtendWith(SpringExtension.class)
 public class BUserServiceIT extends AbstractServiceTest {
 
-	private static final String servicePath = "users";
+    private static final String SERVICE_PATH = "users";
 
 	@Before
 	public void setUp() {
 		setUpAbstractAdmin();
-
-		serviceTarget = commonTarget.path(servicePath);
+        serviceTarget = commonTarget.path(SERVICE_PATH);
 	}
 
 	@Test
@@ -44,7 +46,6 @@ public class BUserServiceIT extends AbstractServiceTest {
 
 		// there is no such login.
 		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
-
 	}
 
 	@Test
@@ -82,14 +83,9 @@ public class BUserServiceIT extends AbstractServiceTest {
 		// testUser.authorities = rolesList;
 		testUser.setauthorities(rolesList);
 
-		invocationBuilder = serviceTarget.path("/")
-
-				.request(MediaType.APPLICATION_JSON);
+        invocationBuilder = serviceTarget.path("/").request(MediaType.APPLICATION_JSON);
 		Response responsePost = invocationBuilder.post(Entity.entity(testUser, MediaType.APPLICATION_JSON));
 		assertEquals(Status.CREATED.getStatusCode(), responsePost.getStatus());
-
-		// let's read id.
-
 	}
 
 	@Test
@@ -113,14 +109,8 @@ public class BUserServiceIT extends AbstractServiceTest {
 		rolesList.add(checkRoleUser);
 		testUser.setauthorities(rolesList);
 
-		invocationBuilder = serviceTarget
-
-				.path("/")
-
-				.request(MediaType.APPLICATION_XML);
+        invocationBuilder = serviceTarget.path("/").request(MediaType.APPLICATION_XML);
 		Response responsePost = invocationBuilder.post(Entity.entity(testUser, MediaType.APPLICATION_XML));
 		assertEquals(Status.CREATED.getStatusCode(), responsePost.getStatus());
-
 	}
-
 }

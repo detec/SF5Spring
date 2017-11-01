@@ -19,14 +19,17 @@ import javax.ws.rs.core.Response.Status;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-@RunWith(JUnit4.class)
+@RunWith(JUnitPlatform.class)
+@ExtendWith(SpringExtension.class)
 public class TranspondersServiceIT extends AbstractServiceTest {
 
 	private static final String servicePath = "transponders";

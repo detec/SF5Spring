@@ -14,17 +14,17 @@ import javax.ws.rs.core.Response.Status;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(locations = { "file:src/main/resources/spring/autowired-beans.xml" })
-//@WebAppConfiguration
-@RunWith(JUnit4.class)
+@RunWith(JUnitPlatform.class)
+@ExtendWith(SpringExtension.class)
 public class SatellitesServiceIT extends AbstractServiceTest {
 
 	private String servicePath = "satellites/";
@@ -58,9 +58,7 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		Satellites satellite = satList.get(0);
 		assertTrue(satellite instanceof Satellites);
 		satelliteId = satellite.getId();
-
 		return satelliteId;
-
 	}
 
 	@Test

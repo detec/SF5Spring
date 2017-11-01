@@ -26,9 +26,12 @@ import javax.ws.rs.core.Response.Status;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.openbox.sf5.common.ConversionLinesHelper;
+import org.openbox.sf5.config.AppTestConfiguration;
 import org.openbox.sf5.model.Sat;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.Transponders;
@@ -37,15 +40,16 @@ import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.xml.transform.StringSource;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "file:src/test/resources/context/test-autowired-beans.xml" })
+@RunWith(JUnitPlatform.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { AppTestConfiguration.class })
 @WebAppConfiguration
 public class SettingsServiceIT extends AbstractServiceTest {
 
@@ -80,10 +84,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		Response response = invocationBuilder.get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-		Users testUser = response.readEntity(Users.class);
-
-		return testUser;
+        return response.readEntity(Users.class);
 	}
 
 	@Test
@@ -265,7 +266,6 @@ public class SettingsServiceIT extends AbstractServiceTest {
 		assertThat(settList).isNotNull();
 		assertThat(settList.size()).isGreaterThan(0);
 		return settList;
-
 	}
 
 	private List<Settings> getUserSettingsXML() {
@@ -288,9 +288,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		Settings settingRead = settingList.get(0);
 		assertTrue(settingRead instanceof Settings);
-
 		return settingList;
-
 	}
 
 	@Test
@@ -318,7 +316,6 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		assertThat(newSettingsList).isNotNull();
 		assertThat(newSettingsList.size()).isGreaterThan(0);
-
 	}
 
 	@Test
@@ -340,7 +337,5 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		Settings settingRead = settingList.get(0);
 		assertTrue(settingRead instanceof Settings);
-
 	}
-
 }
