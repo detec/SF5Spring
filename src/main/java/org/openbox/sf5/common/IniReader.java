@@ -9,28 +9,22 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.internal.TypeLocatorImpl;
-import org.hibernate.transform.Transformers;
-import org.hibernate.type.EnumType;
 import org.hibernate.type.StandardBasicTypes;
-import org.hibernate.type.Type;
-import org.hibernate.type.TypeResolver;
 import org.openbox.sf5.dao.DAO;
+import org.openbox.sf5.dao.DVBRangeValuesRepository;
+import org.openbox.sf5.dao.ValueOfTheCarrierFrequencyRepository;
 import org.openbox.sf5.model.CarrierFrequency;
 import org.openbox.sf5.model.DVBStandards;
 import org.openbox.sf5.model.Polarization;
 import org.openbox.sf5.model.RangesOfDVB;
 import org.openbox.sf5.model.Satellites;
-import org.openbox.sf5.model.TheDVBRangeValues;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.TypesOfFEC;
-import org.openbox.sf5.model.ValueOfTheCarrierFrequency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,6 +42,12 @@ public class IniReader {
 
 	@Autowired
 	private DAO objectController;
+
+    @Autowired
+    private DVBRangeValuesRepository dvbRangeValuesRepository;
+
+    @Autowired
+    private ValueOfTheCarrierFrequencyRepository valueOfTheCarrierFrequencyRepository;
 
 	private static final String REGEX = "(\\d{1,3})=(\\d{5}),(H|V|L|R),(\\d{4,5}),(\\d{2}),(DVB-S|S2),(QPSK|8PSK)(\\sACM)?";
 	private static final String FREQUENCY_CONSTANT = "Frequency";
@@ -244,12 +244,12 @@ public class IniReader {
 	}
 
 	private RangesOfDVB resolveTheDVBRangeValue(Session session, Long frequency) {
-		Properties params = new Properties();
+/*		Properties params = new Properties();
 		params.put("enumClass", RangesOfDVB.class.getName());
         // params.put("type", "12");
-        /*
+
          * type 12 instructs to use the String representation of enum value
-         */
+
 		Type myEnumType = new TypeLocatorImpl(new TypeResolver()).custom(EnumType.class, params);
 
 		String sqltext = "SELECT rangeOfDVB FROM TheDVBRangeValues where :Frequency between lowerThreshold and upperThreshold";
@@ -258,7 +258,9 @@ public class IniReader {
 				.setParameter(FREQUENCY_CONSTANT, frequency)
 				.setResultTransformer(Transformers.aliasToBean(TheDVBRangeValues.class)).list();
 
-        return rangeList.stream().findAny().map(TheDVBRangeValues::getRangeOfDVB).orElse(null);
+        return rangeList.stream().findAny().map(TheDVBRangeValues::getRangeOfDVB).orElse(null);*/
+
+        return this.dvbRangeValuesRepository.findFrequencyBetweenThresholds(frequency).orElse(null);
 	}
 
 	private DVBStandards resolveDVBStandard() {
@@ -268,13 +270,13 @@ public class IniReader {
 	}
 
 	private CarrierFrequency resolveCarrierFrequency(Session session, Long frequency, Polarization aPolarization) {
-		// get carrier frequency
+/*		// get carrier frequency
 		Properties params = new Properties();
 		params.put("enumClass", CarrierFrequency.class.getName());
         // params.put("type", "12");
-        /*
+
          * type 12 instructs to use the String representation of enum value
-         */
+
 		Type myEnumType = new TypeLocatorImpl(new TypeResolver()).custom(EnumType.class, params);
 
 		String sqltext = "SELECT typeOfCarrierFrequency FROM ValueOfTheCarrierFrequency "
@@ -292,7 +294,10 @@ public class IniReader {
 
 				.setResultTransformer(Transformers.aliasToBean(ValueOfTheCarrierFrequency.class)).list();
 
-        return carrierList.stream().findAny().map(ValueOfTheCarrierFrequency::getTypeOfCarrierFrequency).orElse(null);
+        return carrierList.stream().findAny().map(ValueOfTheCarrierFrequency::getTypeOfCarrierFrequency).orElse(null);*/
+
+        return this.valueOfTheCarrierFrequencyRepository.resolveByFrequencyAndPolarization(frequency, aPolarization)
+                .orElse(null);
 	}
 
 	private void updateTransponderData(Transponders selectedTrans, CarrierFrequency carrierEnum, TypesOfFEC fec,

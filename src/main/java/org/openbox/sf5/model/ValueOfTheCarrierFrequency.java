@@ -6,6 +6,7 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 /**
@@ -16,14 +17,15 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ValueOfTheCarrierFrequency")
+@IdClass(ValueOfTheCarrierFrequency.ValueOfTheCarrierFrequencyId.class)
 public class ValueOfTheCarrierFrequency extends AbstractDbEntity implements Serializable {
 
 	private static final long serialVersionUID = -6095308495476745108L;
 
-	@Id
+    @Id
 	private CarrierFrequency typeOfCarrierFrequency;
 
-	@Id
+    @Id
 	private KindsOfPolarization polarization;
 
 	@Column(name = "lowerThreshold", unique = false, nullable = false, precision = 5)
@@ -46,7 +48,6 @@ public class ValueOfTheCarrierFrequency extends AbstractDbEntity implements Seri
 		this.polarization = polarization;
 		this.lowerThreshold = lowerThreshold;
 		this.upperThreshold = upperThreshold;
-
 	}
 
 	/**
@@ -102,4 +103,40 @@ public class ValueOfTheCarrierFrequency extends AbstractDbEntity implements Seri
 		this.upperThreshold = upperThreshold;
 	}
 
+    public static class ValueOfTheCarrierFrequencyId implements Serializable {
+
+        private CarrierFrequency typeOfCarrierFrequency;
+
+        private KindsOfPolarization polarization;
+
+        public ValueOfTheCarrierFrequencyId(CarrierFrequency typeOfCarrierFrequency, KindsOfPolarization polarization) {
+            this.typeOfCarrierFrequency = typeOfCarrierFrequency;
+            this.polarization = polarization;
+        }
+
+        public ValueOfTheCarrierFrequencyId() {
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.polarization, this.typeOfCarrierFrequency);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            ValueOfTheCarrierFrequencyId other = (ValueOfTheCarrierFrequencyId) obj;
+
+            return Objects.equals(typeOfCarrierFrequency, other.typeOfCarrierFrequency) &&
+                    Objects.equals(polarization, other.polarization);
+        }
+    }
 }
