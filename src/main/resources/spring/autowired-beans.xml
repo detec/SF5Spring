@@ -6,7 +6,6 @@
 	xmlns:p="http://www.springframework.org/schema/p" 
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx" 
-	xmlns:jee="http://www.springframework.org/schema/jee"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 	xmlns:security="http://www.springframework.org/schema/security"
 	xmlns:util="http://www.springframework.org/schema/util"
@@ -16,8 +15,6 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/security 
  		http://www.springframework.org/schema/security/spring-security-4.0.xsd
- 		http://www.springframework.org/schema/jee 
-		http://www.springframework.org/schema/jee/spring-jee.xsd
 		http://www.springframework.org/schema/util
 		http://www.springframework.org/schema/util/spring-util-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
@@ -35,8 +32,8 @@
 <context:annotation-config />
 
 <!-- This section enables autowiring -->	
-<context:component-scan base-package="org.openbox.sf5.model, org.openbox.sf5.dao
-, org.openbox.sf5.service, org.openbox.sf5.common, org.openbox.sf5.json, org.openbox.sf5.jaxws" />
+<!-- <context:component-scan base-package="org.openbox.sf5.model, org.openbox.sf5.dao -->
+<!-- , org.openbox.sf5.service, org.openbox.sf5.common, org.openbox.sf5.json, org.openbox.sf5.jaxws" /> -->
 
 <context:property-placeholder location="classpath:application.properties" system-properties-mode="OVERRIDE"/>
 
@@ -52,8 +49,6 @@
 </bean>
 	
 	
-<jee:jndi-lookup jndi-name="java:jboss/datasources/PostgreSQLDS" id="dataSource" />
-
 
 <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">  
 	<property name="entityManagerFactory" ref="entityManagerFactory" /> 
@@ -63,73 +58,6 @@
 <tx:annotation-driven transaction-manager="transactionManager" />
 
 
-<!-- For converting to SF5 XML format -->
-<bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller"> 
-	<property name="classesToBeBound">
-		<list>
-        <value>org.openbox.sf5.model.Sat</value>
- 
-        </list>
-    </property>
-    <property name="marshallerProperties">
-        <map>
-            <entry>
-            	<key>
-                    <util:constant static-field="javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT" />
-               	</key>
-               <value type="java.lang.Boolean">true</value>
-            </entry>
-            <entry>
-            	<key>
-            		<util:constant static-field="javax.xml.bind.Marshaller.JAXB_ENCODING"/>
-            	</key>
-            	<value type="java.lang.String">UTF-8</value>
-            </entry>
-            <entry>
-            	<key>
-            		<util:constant static-field="javax.xml.bind.Marshaller.JAXB_FRAGMENT"/>
-            	</key>
-            	<value type="java.lang.Boolean">true</value>
-            </entry>
-        </map>
-    </property>
-    	
-</bean>
-
-<!-- From http://stackoverflow.com/questions/4882988/how-to-get-formatted-xml-output-from-jaxb-in-spring -->   
-
-<bean class="org.springframework.web.util.UriComponentsBuilder"> </bean>
-
-<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-	<property name="jpaVendorAdapter">
-		<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-			<property name="showSql" value="true" />
-			<property name="generateDdl" value="true" />
-		</bean>
-	</property>
-	<property name="jpaProperties">
-		<props>
-			<prop key="hibernate.hbm2ddl.auto">update</prop>
-			<prop key="hibernate.dialect">org.hibernate.dialect.ProgressDialect</prop>
-			<prop key="hibernate.current_session_context_class">jta</prop>
-			<prop key="hibernate.transaction.coordinator_class">jta</prop>
-			<prop key="hibernate.transaction.jta.platform">JBossAS</prop>
-		</props>
-	</property>
-	<property name="packagesToScan">
-	 	<array>
-			<value>org.openbox.sf5.model</value> 
-		</array>
-	</property>
-	<property name="persistenceUnitName" value="emf"/>
-	<property name="dataSource" ref="dataSource" />
-	
-	<property name="jpaDialect">
-		<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect">
-			<property name="prepareConnection" value="false" />
-		</bean>
-	</property>
-</bean>
 
 		
 </beans>  		

@@ -24,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
-import org.springframework.web.util.UriComponentsBuilder;
 
 // http://java.globinch.com/category/enterprise-java/web-services/jax-ws/
 
@@ -213,7 +212,7 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 			throws WSException {
 		ResponseEntity<Long> RSResponse = null;
 		try {
-			RSResponse = settingsService.createSetting(setting, ucBuilder);
+            RSResponse = settingsService.createSetting(setting);
 		} catch (NotAuthenticatedException e) {
 			throw new WSException("Failed to authenticate!", e);
 		} catch (UsersDoNotCoincideException e) {
@@ -439,8 +438,5 @@ public class OpenboxSF5Impl extends SpringBeanAutowiringSupport
 	public OpenboxSF5Impl() {
 
 	}
-
-	@Autowired
-	UriComponentsBuilder ucBuilder;
 
 }

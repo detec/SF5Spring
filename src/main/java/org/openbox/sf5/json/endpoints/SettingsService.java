@@ -54,7 +54,7 @@ public class SettingsService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
-	public ResponseEntity<Long> createSetting(@RequestBody Settings setting, UriComponentsBuilder ucBuilder)
+    public ResponseEntity<Long> createSetting(@RequestBody Settings setting)
 			throws NotAuthenticatedException, UsersDoNotCoincideException {
 
 		Users currentUser = getVerifyAuthenticatedUser();
@@ -75,7 +75,8 @@ public class SettingsService {
 		headers.add("SettingId", Long.toString(setting.getId()));
 		// it can be called out of JAX-WS
 		try {
-			headers.setLocation(ucBuilder.path("/" + jaxRSPath + "/").path("usersettings/filter/id/{id}")
+		    UriComponentsBuilder ucBuilder = UriComponentsBuilder.fromPath("/" + jaxRSPath + "/");
+            headers.setLocation(ucBuilder.path("usersettings/filter/id/{id}")
 					.buildAndExpand(setting.getId()).toUri());
 		} catch (Exception e) {
 
