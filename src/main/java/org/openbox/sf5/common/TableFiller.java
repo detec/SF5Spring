@@ -2,10 +2,10 @@ package org.openbox.sf5.common;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
-import org.openbox.sf5.dao.DAO;
+import org.openbox.sf5.dao.DVBRangeValuesRepository;
+import org.openbox.sf5.dao.ValueOfTheCarrierFrequencyRepository;
 import org.openbox.sf5.model.CarrierFrequency;
 import org.openbox.sf5.model.KindsOfPolarization;
 import org.openbox.sf5.model.RangesOfDVB;
@@ -23,25 +23,19 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public final class TableFiller {
+public class TableFiller {
 
-	private static final String CONSTANAT_POLARIZATION = "polarization";
+    @Autowired
+    private DVBRangeValuesRepository dvbRangeValuesRepository;
 
-	private static final String CONSTANT_TYPE_OF_CARRIER_FREQUENCY = "typeOfCarrierFrequency";
-
-	@Autowired
-	private DAO objectController;
-
-	public TableFiller() {
-
-	}
+    @Autowired
+    private ValueOfTheCarrierFrequencyRepository valueOfTheCarrierFrequencyRepository;
 
 	/**
 	 * This method executes when context loads.
 	 *
 	 * @param event
 	 */
-	@SuppressWarnings("unchecked")
 	@EventListener
 	public void handleContextRefresh(ContextRefreshedEvent event) {
 
@@ -50,90 +44,68 @@ public final class TableFiller {
 		list.add(RangesOfDVB.KU);
 
 		TheDVBRangeValues newRecord = null;
+        List<TheDVBRangeValues> existingValues = this.dvbRangeValuesRepository.findAll();
 
-		Session session = objectController.openSession();
+        if (existingValues.isEmpty()) {
+            for (RangesOfDVB e : list) {
+                if (e.equals(RangesOfDVB.C)) {
+                    newRecord = new TheDVBRangeValues(e, 3400, 4200);
+                }
 
-		for (RangesOfDVB e : list) {
-
-			List<TheDVBRangeValues> rec = session.createCriteria(TheDVBRangeValues.class)
-					.add(Restrictions.eq("rangeOfDVB", e)).list();
-
-			if (rec.isEmpty()) {
-
-				if (e.equals(RangesOfDVB.C)) {
-					newRecord = new TheDVBRangeValues(e, 3400, 4200);
-
-				}
-
-				if (e.equals(RangesOfDVB.KU)) {
-					newRecord = new TheDVBRangeValues(e, 10700, 12750);
-
-				}
-
-				objectController.add(newRecord);
-			}
-
-		}
+                if (e.equals(RangesOfDVB.KU)) {
+                    newRecord = new TheDVBRangeValues(e, 10700, 12750);
+                }
+                this.dvbRangeValuesRepository.save(newRecord);
+            }
+        }
 
 		ValueOfTheCarrierFrequency value;
 		List<ValueOfTheCarrierFrequency> rec;
 
-		rec = session.createCriteria(ValueOfTheCarrierFrequency.class)
-				.add(Restrictions.eq(CONSTANT_TYPE_OF_CARRIER_FREQUENCY, CarrierFrequency.LOWER))
-				.add(Restrictions.eq(CONSTANAT_POLARIZATION, KindsOfPolarization.PIE)).list();
-		if (rec.isEmpty()) {
+        Optional<ValueOfTheCarrierFrequency> valueOptional = this.valueOfTheCarrierFrequencyRepository
+                .findByTypeOfCarrierFrequencyAndPolarization(
+                CarrierFrequency.LOWER,
+                KindsOfPolarization.PIE);
+
+        if (!valueOptional.isPresent()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.LOWER, KindsOfPolarization.PIE, 10700, 11699);
-			objectController.add(value);
+            this.valueOfTheCarrierFrequencyRepository.save(value);
 		}
 
-		rec = session.createCriteria(ValueOfTheCarrierFrequency.class)
-				.add(Restrictions.eq(CONSTANT_TYPE_OF_CARRIER_FREQUENCY, CarrierFrequency.LOWER))
-				.add(Restrictions.eq(CONSTANAT_POLARIZATION, KindsOfPolarization.LINEAR)).list();
+        valueOptional = this.valueOfTheCarrierFrequencyRepository
+                .findByTypeOfCarrierFrequencyAndPolarization(CarrierFrequency.LOWER,
+                KindsOfPolarization.LINEAR);
 
-		if (rec.isEmpty()) {
+        if (!valueOptional.isPresent()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.LOWER, KindsOfPolarization.LINEAR, 10700, 11699);
-			objectController.add(value);
+            this.valueOfTheCarrierFrequencyRepository.save(value);
 		}
 
-		rec = session.createCriteria(ValueOfTheCarrierFrequency.class)
-				.add(Restrictions.eq(CONSTANT_TYPE_OF_CARRIER_FREQUENCY, CarrierFrequency.TOP))
-				.add(Restrictions.eq(CONSTANAT_POLARIZATION, KindsOfPolarization.LINEAR)).list();
+        valueOptional = this.valueOfTheCarrierFrequencyRepository
+                .findByTypeOfCarrierFrequencyAndPolarization(CarrierFrequency.TOP,
+                KindsOfPolarization.LINEAR);
 
-		if (rec.isEmpty()) {
+        if (!valueOptional.isPresent()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.TOP, KindsOfPolarization.LINEAR, 11700, 12750);
-			objectController.add(value);
+            this.valueOfTheCarrierFrequencyRepository.save(value);
 		}
 
-		rec = session.createCriteria(ValueOfTheCarrierFrequency.class)
-				.add(Restrictions.eq(CONSTANT_TYPE_OF_CARRIER_FREQUENCY, CarrierFrequency.C_RANGE))
-				.add(Restrictions.eq(CONSTANAT_POLARIZATION, KindsOfPolarization.LINEAR)).list();
+        valueOptional = this.valueOfTheCarrierFrequencyRepository
+                .findByTypeOfCarrierFrequencyAndPolarization(CarrierFrequency.C_RANGE,
+                KindsOfPolarization.LINEAR);
 
-		if (rec.isEmpty()) {
+        if (!valueOptional.isPresent()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.C_RANGE, KindsOfPolarization.LINEAR, 3400, 4200);
-			objectController.add(value);
-
+            this.valueOfTheCarrierFrequencyRepository.save(value);
 		}
 
-		rec = session.createCriteria(ValueOfTheCarrierFrequency.class)
-				.add(Restrictions.eq(CONSTANT_TYPE_OF_CARRIER_FREQUENCY, CarrierFrequency.TOP_PIE))
-				.add(Restrictions.eq(CONSTANAT_POLARIZATION, KindsOfPolarization.PIE)).list();
+        valueOptional = this.valueOfTheCarrierFrequencyRepository
+                .findByTypeOfCarrierFrequencyAndPolarization(CarrierFrequency.TOP_PIE, KindsOfPolarization.PIE);
 
-		if (rec.isEmpty()) {
+        if (!valueOptional.isPresent()) {
 			value = new ValueOfTheCarrierFrequency(CarrierFrequency.TOP_PIE, KindsOfPolarization.PIE, 11700, 12750);
-			objectController.add(value);
-
+            this.valueOfTheCarrierFrequencyRepository.save(value);
 		}
-
-		session.close();
-
-	}
-
-	public DAO getObjectController() {
-		return objectController;
-	}
-
-	public void setObjectController(DAO objectController) {
-		this.objectController = objectController;
 	}
 
 }
