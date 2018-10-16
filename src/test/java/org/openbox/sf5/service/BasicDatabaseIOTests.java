@@ -5,9 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openbox.sf5.config.AppTestConfiguration;
 import org.openbox.sf5.json.service.AbstractJsonizerTest;
 import org.openbox.sf5.model.CarrierFrequency;
@@ -21,17 +20,13 @@ import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.TypesOfFEC;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.annotation.Transactional;
 
-@ContextConfiguration(classes = { AppTestConfiguration.class })
-@RunWith(SpringRunner.class)
-@WebAppConfiguration
+@SpringJUnitConfig(AppTestConfiguration.class)
 public class BasicDatabaseIOTests extends AbstractJsonizerTest {
 
-	@Before
+    @BeforeEach
 	public void setUp() {
 		super.setUpAbstract();
 	}

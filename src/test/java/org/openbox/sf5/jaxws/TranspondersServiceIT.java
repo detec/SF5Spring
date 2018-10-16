@@ -1,7 +1,7 @@
 package org.openbox.sf5.jaxws;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import java.util.Set;
@@ -11,22 +11,17 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openbox.sf5.wsmodel.Transponders;
 import org.openbox.sf5.wsmodel.WSException;
 
-@RunWith(JUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+// @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TranspondersServiceIT extends AbstractWSTest {
 
 	private Validator validator;
 
-	@Before
+    @BeforeEach
 	public void setUp() throws Exception {
 		setUpAbstractNoAuth();
 

@@ -1,9 +1,8 @@
 package org.openbox.sf5.json.endpoints;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import javax.ws.rs.client.Invocation;
@@ -12,18 +11,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.runner.JUnitPlatform;
-import org.junit.runner.RunWith;
 import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-@RunWith(JUnitPlatform.class)
 @ExtendWith(SpringExtension.class)
 public class SatellitesServiceIT extends AbstractServiceTest {
 
@@ -31,7 +27,7 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 
 	private long satelliteId;
 
-	@Before
+    @BeforeEach
 	public void setUp() {
 		setUpAbstractTestUser();
 		serviceTarget = commonTarget.path(servicePath);
@@ -119,9 +115,6 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		getSatelliteId();
 
 		Invocation.Builder invocationBuilder = serviceTarget
-
-				// .path("filter").path("id")
-
 				.path(String.valueOf(satelliteId)).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON);
 
@@ -163,9 +156,6 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		getSatelliteIdXML();
 
 		Invocation.Builder invocationBuilder = serviceTarget
-
-				// .path("filter").path("id")
-
 				.path(String.valueOf(satelliteId)).request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
 
 		response = invocationBuilder.get();
@@ -175,7 +165,6 @@ public class SatellitesServiceIT extends AbstractServiceTest {
 		assertThat(satellite).isNotNull();
 
 		assertTrue(satellite instanceof Satellites);
-
 	}
 
 }

@@ -1,17 +1,11 @@
 package org.openbox.sf5.jaxws;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openbox.sf5.json.common.BuildTestSetting;
 import org.openbox.sf5.wsmodel.Settings;
 import org.openbox.sf5.wsmodel.Transponders;
@@ -19,8 +13,7 @@ import org.openbox.sf5.wsmodel.Users;
 import org.openbox.sf5.wsmodel.WSException;
 import org.openbox.sf5.wsmodel.WSException_Exception;
 
-@RunWith(JUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+// @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SettingsServiceIT extends AbstractWSTest {
 
 	@Test
@@ -65,31 +58,17 @@ public class SettingsServiceIT extends AbstractWSTest {
 	}
 
 	private Users getTestUser() {
-
-		Users testUser = null;
 		try {
-			testUser = SF5Port.getUserByLogin(testUsername);
+            return SF5Port.getUserByLogin(testUsername);
 		} catch (WSException e) {
-
 			e.printStackTrace();
+            return null;
 		}
-
-		return testUser;
 	}
 
-	@Before
+    @BeforeEach
 	public void setUp() throws Exception {
 		setUpAbstract();
-	}
-
-	/**
-	 * Trying to clear basic credentials.
-	 */
-
-	@Override
-	@After
-	public void tearAuthentication() {
-		super.tearAuthentication();
 	}
 
 }

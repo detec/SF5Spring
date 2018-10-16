@@ -1,24 +1,16 @@
 package org.openbox.sf5.jaxws;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Test;
 import org.openbox.sf5.wsmodel.Users;
 import org.openbox.sf5.wsmodel.Usersauthorities;
 import org.openbox.sf5.wsmodel.WSException;
 
-@RunWith(JUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+// @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BUsersServiceIT extends AbstractWSTest {
 
 	@Test
@@ -87,21 +79,6 @@ public class BUsersServiceIT extends AbstractWSTest {
 			System.out.println("Error posting user to database! " + e);
 		}
 		assertThat(testUser).isNotNull();
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		this.setUpAbstractAdmin();
-	}
-
-	/**
-	 * Trying to clear basic credentials. In order it to work we do not make it
-	 * static.
-	 */
-	@Override
-	@After
-	public void tearAuthentication() {
-		super.tearAuthentication();
 	}
 
 }

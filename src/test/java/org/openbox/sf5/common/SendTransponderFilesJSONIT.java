@@ -1,7 +1,7 @@
 package org.openbox.sf5.common;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openbox.sf5.json.endpoints.AbstractServiceTest;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
@@ -27,7 +27,7 @@ public class SendTransponderFilesJSONIT extends AbstractServiceTest {
 
 	private static final String servicePath = "transponders/";
 
-	@Before
+    @BeforeEach
 	public void setUp() {
 		setUpAbstractTestUser();
 		serviceTarget = commonTarget.path(servicePath);

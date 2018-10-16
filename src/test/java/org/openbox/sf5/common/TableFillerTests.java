@@ -6,11 +6,9 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.runner.JUnitPlatform;
-import org.junit.runner.RunWith;
 import org.openbox.sf5.config.AppTestConfiguration;
 import org.openbox.sf5.json.service.AbstractJsonizerTest;
 import org.openbox.sf5.model.TheDVBRangeValues;
@@ -20,13 +18,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 @ContextConfiguration(classes = { AppTestConfiguration.class })
-@RunWith(JUnitPlatform.class)
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @Component
 public class TableFillerTests extends AbstractJsonizerTest {
 
-	@Before
+    @BeforeEach
 	public void setUp() {
 		super.setUpAbstract();
 	}

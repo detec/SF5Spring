@@ -1,23 +1,17 @@
 package org.openbox.sf5.jaxws;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openbox.sf5.wsmodel.Satellites;
 import org.openbox.sf5.wsmodel.WSException;
 
 // https://github.com/javaee-samples/javaee7-samples/blob/master/jaxws/jaxws-client/src/test/java/org/javaee7/jaxws/client/EBookStoreClientSampleTest.java
 
-@RunWith(JUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+// @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SatellitesServiceIT extends AbstractWSTest {
 
 	public long satelliteId;
@@ -39,7 +33,7 @@ public class SatellitesServiceIT extends AbstractWSTest {
 		return satelliteId;
 	}
 
-	@Before
+    @BeforeEach
 	public void setUp() throws Exception {
 		setUpAbstractNoAuth();
 	}

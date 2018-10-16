@@ -1,6 +1,6 @@
 package org.openbox.sf5.json.endpoints;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,25 +11,20 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.runner.JUnitPlatform;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@RunWith(JUnitPlatform.class)
+// @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @ExtendWith(SpringExtension.class)
 public class BUserServiceIT extends AbstractServiceTest {
 
     private static final String SERVICE_PATH = "users";
 
-	@Before
+    @BeforeEach
 	public void setUp() {
 		setUpAbstractAdmin();
         serviceTarget = commonTarget.path(SERVICE_PATH);

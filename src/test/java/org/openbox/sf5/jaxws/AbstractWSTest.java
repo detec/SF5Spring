@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.openbox.sf5.wsmodel.OpenboxSF5;
 import org.openbox.sf5.wsmodel.OpenboxSF5ImplService;
 
@@ -36,7 +36,7 @@ public abstract class AbstractWSTest {
 
 	public static Properties property = new Properties();
 
-	@BeforeClass
+    @BeforeAll
 	public static void beforeClass() {
 
 		loadProperties();
@@ -131,7 +131,7 @@ public abstract class AbstractWSTest {
 		staticTearAuthentication();
 	}
 
-	@AfterClass
+    @AfterAll
 	public static void staticTearAuthentication() {
 		BindingProvider bp = (BindingProvider) SF5Port;
 		Map<String, Object> contextMap = bp.getRequestContext();

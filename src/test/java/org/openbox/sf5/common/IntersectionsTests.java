@@ -1,7 +1,7 @@
 package org.openbox.sf5.common;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -14,11 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.junit.platform.runner.JUnitPlatform;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openbox.sf5.config.AppTestConfiguration;
 import org.openbox.sf5.json.service.AbstractJsonizerTest;
 import org.openbox.sf5.model.Settings;
@@ -27,14 +25,9 @@ import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 
-@ContextConfiguration(classes = { AppTestConfiguration.class })
-@RunWith(JUnitPlatform.class)
-@ExtendWith(SpringExtension.class)
-@WebAppConfiguration
+@SpringJUnitWebConfig(AppTestConfiguration.class)
 public class IntersectionsTests extends AbstractJsonizerTest {
 
 	@Autowired
@@ -46,7 +39,7 @@ public class IntersectionsTests extends AbstractJsonizerTest {
 	@Autowired
 	private Intersections intersections;
 
-	@Before
+    @BeforeEach
 	public void setUp() {
 		super.setUpAbstract();
 

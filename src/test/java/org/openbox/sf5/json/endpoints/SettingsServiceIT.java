@@ -1,8 +1,8 @@
 package org.openbox.sf5.json.endpoints;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.URI;
@@ -23,13 +23,8 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.runner.JUnitPlatform;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openbox.sf5.common.ConversionLinesHelper;
 import org.openbox.sf5.config.AppTestConfiguration;
 import org.openbox.sf5.model.Sat;
@@ -39,18 +34,13 @@ import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.xml.transform.StringSource;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@RunWith(JUnitPlatform.class)
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { AppTestConfiguration.class })
-@WebAppConfiguration
+// @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@SpringJUnitWebConfig(AppTestConfiguration.class)
 public class SettingsServiceIT extends AbstractServiceTest {
 
 	private static final String servicePath = "usersettings";
@@ -58,7 +48,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 	@Autowired
 	Jaxb2Marshaller springMarshaller;
 
-	@Before
+    @BeforeEach
 	public void setUp() {
 		setUpAbstractTestUser();
 
@@ -136,9 +126,7 @@ public class SettingsServiceIT extends AbstractServiceTest {
 
 		// Here we test getting setting by id.
 		invocationBuilder = serviceTarget
-
 				.path(Long.toString(setting.getId()))
-
 				.request(MediaType.APPLICATION_JSON);
 
 		response = invocationBuilder.get();

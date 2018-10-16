@@ -1,8 +1,8 @@
 package org.openbox.sf5.json.endpoints;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Set;
@@ -17,18 +17,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.runner.JUnitPlatform;
-import org.junit.runner.RunWith;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-@RunWith(JUnitPlatform.class)
 @ExtendWith(SpringExtension.class)
 public class TranspondersServiceIT extends AbstractServiceTest {
 
@@ -38,7 +35,7 @@ public class TranspondersServiceIT extends AbstractServiceTest {
 
 	private long transponderId;
 
-	@Before
+    @BeforeEach
 	public void setUp() {
 		setUpAbstractTestUser();
 		serviceTarget = commonTarget.path(servicePath);

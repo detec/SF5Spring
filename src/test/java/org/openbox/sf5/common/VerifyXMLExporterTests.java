@@ -1,7 +1,7 @@
 package org.openbox.sf5.common;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -16,11 +16,9 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.hibernate.criterion.Criterion;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.runner.JUnitPlatform;
-import org.junit.runner.RunWith;
 import org.openbox.sf5.config.AppTestConfiguration;
 import org.openbox.sf5.json.service.AbstractJsonizerTest;
 import org.openbox.sf5.model.Sat;
@@ -34,7 +32,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.xml.transform.StringSource;
 
 @ContextConfiguration(classes = { AppTestConfiguration.class })
-@RunWith(JUnitPlatform.class)
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 public class VerifyXMLExporterTests extends AbstractJsonizerTest {
@@ -42,7 +39,7 @@ public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 	@Autowired
 	public Jaxb2Marshaller springMarshaller;
 
-	@Before
+    @BeforeEach
 	public void setUp() {
 		super.setUpAbstract();
 	}
