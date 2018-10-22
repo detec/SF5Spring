@@ -16,9 +16,9 @@ import org.hibernate.dialect.H2Dialect;
 import org.hibernate.dialect.ProgressDialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.jdbc.ReturningWork;
+import org.openbox.sf5.dao.ObjectsController;
 import org.openbox.sf5.model.Settings;
 import org.openbox.sf5.model.SettingsConversion;
-import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

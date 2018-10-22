@@ -1,10 +1,9 @@
-package org.openbox.sf5.service;
+package org.openbox.sf5.dao;
 
 import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.criterion.Criterion;
-import org.openbox.sf5.dao.DAOList;
 import org.openbox.sf5.model.AbstractDbEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

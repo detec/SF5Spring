@@ -5,16 +5,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openbox.sf5.config.AppTestConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -40,12 +35,12 @@ public class UserTests {
         this.mockMvc.perform(
                 get(String.join("", "/", jsonPath, "/users/", "exists/", "username/", "admin"))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(202));
+                .andExpect(status().isOk());
     }
 
     @Test
     public void checkotherLoginDoesNotExist() throws Exception {
         this.mockMvc.perform(get(String.join("", "/", jsonPath, "/users/", "exists/", "username/", "ITUser"))
-                .accept(MediaType.APPLICATION_JSON)).andExpect(status().is(204));
+                .accept(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
     }
 }

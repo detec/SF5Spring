@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.openbox.sf5.dao.ObjectsController;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
 import org.springframework.beans.factory.annotation.Autowired;

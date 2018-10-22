@@ -1,16 +1,31 @@
 package org.openbox.sf5.config;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
 
 /**
- * Inports test beans
+ * Imports test beans
  *
  * @author Andrii Duplyk
  *
  */
 @Configuration
-@ImportResource({ "file:src/test/resources/context/test-autowired-beans.xml" })
+@Import({ DatasourceConfiguration.class, ManualWebMvcConfiguration.class })
+@ComponentScan({ "org.openbox.sf5.dao" })
 public class AppTestConfiguration {
+
+
+    @Bean
+    public PropertySourcesPlaceholderConfigurer propertyConfigurer() {
+        PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
+        configurer.setIgnoreResourceNotFound(false);
+        ClassPathResource resource = new ClassPathResource("application-test.properties");
+        configurer.setLocation(resource);
+        return configurer;
+    }
 
 }

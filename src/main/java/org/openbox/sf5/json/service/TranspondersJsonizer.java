@@ -6,10 +6,10 @@ import java.util.Optional;
 
 import org.hibernate.criterion.Restrictions;
 import org.openbox.sf5.common.IniReader;
+import org.openbox.sf5.dao.CriterionService;
+import org.openbox.sf5.dao.ObjectsController;
 import org.openbox.sf5.model.Satellites;
 import org.openbox.sf5.model.Transponders;
-import org.openbox.sf5.service.CriterionService;
-import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

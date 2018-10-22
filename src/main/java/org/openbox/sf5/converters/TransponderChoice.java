@@ -1,7 +1,7 @@
 package org.openbox.sf5.converters;
 
+import org.openbox.sf5.dao.ObjectsController;
 import org.openbox.sf5.model.Transponders;
-import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

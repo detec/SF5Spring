@@ -8,11 +8,11 @@ import javax.validation.Valid;
 import javax.ws.rs.core.MediaType;
 
 import org.openbox.sf5.common.JsonObjectFiller;
+import org.openbox.sf5.dao.ObjectsController;
 import org.openbox.sf5.json.service.FileBucket;
 import org.openbox.sf5.json.service.TranspondersJsonizer;
 import org.openbox.sf5.model.Transponders;
 import org.openbox.sf5.model.listwrappers.GenericXMLListWrapper;
-import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

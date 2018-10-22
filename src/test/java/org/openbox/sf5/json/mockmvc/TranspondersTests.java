@@ -1,13 +1,12 @@
 package org.openbox.sf5.json.mockmvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.runner.JUnitPlatform;
 import org.openbox.sf5.config.AppTestConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +39,7 @@ public class TranspondersTests {
     @Test
     public void getMockTransponders() throws Exception {
         this.mockMvc.perform(get(String.join("", "/", jsonPath, "/transponders/")).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(200))
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
@@ -48,7 +47,8 @@ public class TranspondersTests {
     public void getMockFilterTypeTranspondersJson() throws Exception {
         this.mockMvc.perform(get(String.join("", "/", jsonPath, "/transponders/", "filter/", "Speed/", "27500"))
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(200)).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
@@ -56,6 +56,6 @@ public class TranspondersTests {
         this.mockMvc
                 .perform(get(String.join("", "/", jsonPath, "/transponders/", "filter/", "Speed/", "27500"))
                         .accept(MediaType.APPLICATION_XML))
-                .andExpect(status().is(200));
+                .andExpect(status().isOk());
     }
 }

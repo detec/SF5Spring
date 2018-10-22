@@ -2,7 +2,9 @@ package org.openbox.sf5.config;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openbox.sf5.common.JsonObjectFiller;
 import org.openbox.sf5.json.service.CustomObjectMapper;
@@ -80,6 +82,19 @@ public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
 		resolver.setSuffix(".jsp");
 		return resolver;
 	}
+
+    @Bean
+    public Jaxb2Marshaller jaxb2Marshaller() {
+        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+        marshaller.setClassesToBeBound(org.openbox.sf5.model.Sat.class);
+
+        Map<String, Object> properties = new HashMap<>();
+        properties.put(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        properties.put(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8");
+        properties.put(javax.xml.bind.Marshaller.JAXB_FRAGMENT, true);
+        marshaller.setMarshallerProperties(properties);
+        return marshaller;
+    }
 
 	// http://docs.spring.io/spring-security/site/docs/4.0.3.RELEASE/guides/html5/form.html
 	@Override

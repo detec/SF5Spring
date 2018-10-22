@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.openbox.sf5.dao.ObjectsController;
 import org.openbox.sf5.json.exceptions.UserNotFoundException;
 import org.openbox.sf5.model.UserDto;
 import org.openbox.sf5.model.Users;

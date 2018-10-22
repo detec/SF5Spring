@@ -2,8 +2,8 @@ package org.openbox.sf5.converters;
 
 import java.beans.PropertyEditorSupport;
 
+import org.openbox.sf5.dao.ObjectsController;
 import org.openbox.sf5.model.Transponders;
-import org.openbox.sf5.service.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

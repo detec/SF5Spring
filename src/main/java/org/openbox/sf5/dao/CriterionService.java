@@ -1,4 +1,4 @@
-package org.openbox.sf5.service;
+package org.openbox.sf5.dao;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;

@@ -1,7 +1,7 @@
 package org.openbox.sf5.json.service;
 
-import org.openbox.sf5.service.CriterionService;
-import org.openbox.sf5.service.ObjectsController;
+import org.openbox.sf5.dao.CriterionService;
+import org.openbox.sf5.dao.ObjectsController;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractJsonizerTest {
