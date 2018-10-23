@@ -31,9 +31,6 @@ import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 public class IntersectionsTests extends AbstractJsonizerTest {
 
 	@Autowired
-	private TableFillerTests tft;
-
-	@Autowired
 	private IniReader iniReader;
 
 	@Autowired
@@ -46,7 +43,7 @@ public class IntersectionsTests extends AbstractJsonizerTest {
 		// we need 2 to setup catalogues before transponders import
 		// we cannot create new object, should use autowiring.
 		// TableFillerTests tft = new TableFillerTests();
-		tft.setUpAbstract(); // disable logging, formerly used to set up
+        // tft.setUpAbstract(); // disable logging, formerly used to set up
 								// dependencies.
 
 	}
@@ -86,7 +83,7 @@ public class IntersectionsTests extends AbstractJsonizerTest {
 		});
 
 		streamPath.close();
-        return (int) resultList.stream().filter(Boolean::booleanValue).count();
+        return (int) resultList.size();
 	}
 
 	@Test

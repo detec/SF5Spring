@@ -14,10 +14,9 @@ import org.springframework.core.io.ClassPathResource;
  *
  */
 @Configuration
-@Import({ DatasourceConfiguration.class, ManualWebMvcConfiguration.class })
-@ComponentScan({ "org.openbox.sf5.dao" })
+@Import({ DatasourceConfiguration.class })
+@ComponentScan({ "org.openbox.sf5.dao", "org.openbox.sf5.common" })
 public class AppTestConfiguration {
-
 
     @Bean
     public PropertySourcesPlaceholderConfigurer propertyConfigurer() {

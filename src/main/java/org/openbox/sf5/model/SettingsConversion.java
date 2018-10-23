@@ -152,7 +152,8 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void setObjectFieldsFrom(SettingsConversion origObj) throws IllegalAccessException {
+    protected void setObjectFieldsFrom(SettingsConversion origObj)
+            throws IllegalArgumentException, IllegalAccessException {
 		Field fields[];
 		Class curClass = origObj.getClass();
 
@@ -168,7 +169,7 @@ public class SettingsConversion extends AbstractDbEntity implements Serializable
 		List<Field> thisClassFiledList = Arrays.asList(thisClassFieldsArray);
 		thisClassFiledList.stream().forEach(t -> {
 			String fieldname = t.getName();
-			if (!fieldname.equals("serialVersionUID")) {
+            if (!"serialVersionUID".equals(fieldname)) {
 				SCClassList.add(fieldname);
 			}
 		});

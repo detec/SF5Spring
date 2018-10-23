@@ -9,7 +9,6 @@ import java.util.Map;
 import org.openbox.sf5.common.JsonObjectFiller;
 import org.openbox.sf5.json.service.CustomObjectMapper;
 import org.openbox.sf5.json.service.CustomXMLMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -36,9 +35,6 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 @Configuration
 @ComponentScan(basePackages = { "org.openbox.sf5.common", "org.openbox.sf5.json, org.openbox.sf5.application" })
 public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
-
-	@Autowired
-	private Jaxb2Marshaller springMarshaller;
 
 	// we use this method to enable forwarding to the “default” Servlet. The
 	// “default” Serlvet is used to handle static content such as CSS, HTML and
@@ -122,7 +118,7 @@ public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
 		mcxml.setObjectMapper(customXMLMapper());
 
 		MarshallingHttpMessageConverter jaxbc = new MarshallingHttpMessageConverter();
-		jaxbc.setMarshaller(springMarshaller);
+        jaxbc.setMarshaller(jaxb2Marshaller());
 
 		// boolean doesSupport = jaxbc.canWrite(Sat.class,
 		// MediaType.APPLICATION_XML);
