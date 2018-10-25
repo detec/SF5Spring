@@ -8,23 +8,30 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openbox.sf5.config.AppTestConfiguration;
+import org.openbox.sf5.config.ManualWebMvcConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@ContextConfiguration(classes = { AppTestConfiguration.class })
-@ExtendWith(SpringExtension.class)
-@WebAppConfiguration
+@ExtendWith(MockitoExtension.class)
+@SpringJUnitWebConfig({ ManualWebMvcConfiguration.class, AppTestConfiguration.class })
 public class TranspondersTests {
 
     @Autowired
     private WebApplicationContext context;
+
+    // @Mock
+    // private TranspondersJsonizer transpondersJsonizer;
+    //
+    // @Mock
+    // private ObjectsController objectController;
+    //
+    // @InjectMocks
+    // private TranspondersService transpondersService;
 
     @Value("${jaxrs.path}")
     private String jsonPath;
@@ -33,7 +40,9 @@ public class TranspondersTests {
 
     @BeforeEach
     public void setUp() {
+        // MockitoAnnotations.initMocks(this);
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+
     }
 
     @Test

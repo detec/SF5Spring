@@ -1,14 +1,12 @@
 package org.openbox.sf5.json.endpoints;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.servlet.annotation.MultipartConfig;
 import javax.validation.Valid;
 import javax.ws.rs.core.MediaType;
 
 import org.openbox.sf5.common.JsonObjectFiller;
-import org.openbox.sf5.dao.ObjectsController;
+import org.openbox.sf5.dao.TranspondersRepository;
 import org.openbox.sf5.json.service.FileBucket;
 import org.openbox.sf5.json.service.TranspondersJsonizer;
 import org.openbox.sf5.model.Transponders;
@@ -42,12 +40,12 @@ public class TranspondersService {
     private TranspondersJsonizer transpondersJsonizer;
 
     @Autowired
-    private ObjectsController objectController;
+    private TranspondersRepository transpondersRepository;
 
     @PostMapping(headers = "content-type=multipart/form-data")
     public ResponseEntity<Boolean> uploadTransponders(@Valid FileBucket fileBucket, BindingResult result, ModelMap model) {
 
-		Boolean returnResult = new Boolean(false);
+        Boolean returnResult = false;
 
 		if (result.hasErrors()) {
 			System.out.println("validation errors");
@@ -89,8 +87,7 @@ public class TranspondersService {
 
     @GetMapping("{transponderId}")
 	public ResponseEntity<Transponders> getTransponderById(@PathVariable("transponderId") long tpId) {
-        return Optional.ofNullable(objectController.select(Transponders.class, tpId))
-                .map(trans -> new ResponseEntity<>(trans, HttpStatus.OK))
+        return transpondersRepository.findById(tpId).map(trans -> new ResponseEntity<>(trans, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
 	}
 
@@ -113,26 +110,16 @@ public class TranspondersService {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<Transponders>> getTransponders() {
-
-		List<Transponders> transList = objectController.list(Transponders.class);
+        List<Transponders> transList = this.transpondersRepository.findAll();
         return transList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
                 : new ResponseEntity<>(transList, HttpStatus.OK);
 	}
 
     @GetMapping(produces = MediaType.APPLICATION_XML)
 	public ResponseEntity<GenericXMLListWrapper<Transponders>> getTranspondersXML() {
-
-		List<Transponders> transList = objectController.list(Transponders.class);
+        List<Transponders> transList = this.transpondersRepository.findAll();
         return transList.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
                 : JsonObjectFiller.returnGenericWrapperResponseBySatList(transList, Transponders.class);
-	}
-
-	public ObjectsController getObjectController() {
-		return objectController;
-	}
-
-	public void setObjectController(ObjectsController objectController) {
-		this.objectController = objectController;
 	}
 
 	public TranspondersJsonizer getTranspondersJsonizer() {

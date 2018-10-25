@@ -689,7 +689,12 @@ http://stackoverflow.com/questions/29704901/configure-spring-4-propertysourcespl
 		<artifactId>assertj-core</artifactId>
 		<version>3.11.1</version>
 	</dependency>
-	 
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>2.23.0</version>
+        <scope>test</scope>
+    </dependency>
   
 	<dependency>
    		<groupId>javax.el</groupId>

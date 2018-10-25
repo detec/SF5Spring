@@ -33,7 +33,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 @Configuration
-@ComponentScan(basePackages = { "org.openbox.sf5.common", "org.openbox.sf5.json, org.openbox.sf5.application" })
+@ComponentScan(basePackages = {
+        // "org.openbox.sf5.common",
+
+        "org.openbox.sf5.json, org.openbox.sf5.application" })
 public class ManualWebMvcConfiguration extends WebMvcConfigurationSupport {
 
 	// we use this method to enable forwarding to the “default” Servlet. The
