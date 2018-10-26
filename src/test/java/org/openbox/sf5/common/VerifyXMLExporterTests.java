@@ -10,8 +10,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBException;
 
@@ -34,10 +37,38 @@ public class VerifyXMLExporterTests extends AbstractJsonizerTest {
 	@Autowired
 	public Jaxb2Marshaller springMarshaller;
 
+    @Autowired
+    private IniReader iniReader;
+
     @BeforeEach
-	public void setUp() {
+    public void setUp() throws URISyntaxException {
 		super.setUpAbstract();
+
+        int positiveResult = 0;
+        try {
+            positiveResult = getIniImportResult();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertEquals(3, positiveResult);
 	}
+
+    public int getIniImportResult() throws IOException, URISyntaxException {
+        List<Boolean> resultList = new ArrayList<>();
+        Stream<Path> streamPath = IntersectionsTests.getTransponderFilesStreamPath();
+
+        streamPath.forEach(t -> {
+            iniReader.setFilePath(t.toString());
+            try {
+                iniReader.readData();
+                resultList.add(iniReader.isResult());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        return (int) resultList.size();
+    }
 
 	@Test
 	public void shouldVerifyXMLExport() throws IOException, JAXBException, URISyntaxException {

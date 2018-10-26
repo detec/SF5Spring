@@ -1,12 +1,21 @@
 package org.openbox.sf5.json.mockmvc;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.openbox.sf5.common.IniReader;
+import org.openbox.sf5.common.IntersectionsTests;
 import org.openbox.sf5.config.AppTestConfiguration;
 import org.openbox.sf5.config.ManualWebMvcConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +26,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@ExtendWith(MockitoExtension.class)
 @SpringJUnitWebConfig({ ManualWebMvcConfiguration.class, AppTestConfiguration.class })
 public class TranspondersTests {
 
     @Autowired
     private WebApplicationContext context;
 
-    // @Mock
-    // private TranspondersJsonizer transpondersJsonizer;
-    //
-    // @Mock
-    // private ObjectsController objectController;
-    //
-    // @InjectMocks
-    // private TranspondersService transpondersService;
+    @Autowired
+    private IniReader iniReader;
 
     @Value("${jaxrs.path}")
     private String jsonPath;
@@ -39,10 +41,34 @@ public class TranspondersTests {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws URISyntaxException, IOException {
         // MockitoAnnotations.initMocks(this);
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
 
+        int positiveResult = 0;
+        try {
+            positiveResult = getIniImportResult();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertEquals(3, positiveResult);
+    }
+
+    public int getIniImportResult() throws IOException, URISyntaxException {
+        List<Boolean> resultList = new ArrayList<>();
+        Stream<Path> streamPath = IntersectionsTests.getTransponderFilesStreamPath();
+
+        streamPath.forEach(t -> {
+            iniReader.setFilePath(t.toString());
+            try {
+                iniReader.readData();
+                resultList.add(iniReader.isResult());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        return (int) resultList.size();
     }
 
     @Test

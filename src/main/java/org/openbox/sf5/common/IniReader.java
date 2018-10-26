@@ -18,6 +18,7 @@ import org.openbox.sf5.dao.TranspondersRepository;
 import org.openbox.sf5.dao.ValueOfTheCarrierFrequencyRepository;
 import org.openbox.sf5.model.CarrierFrequency;
 import org.openbox.sf5.model.DVBStandards;
+import org.openbox.sf5.model.KindsOfPolarization;
 import org.openbox.sf5.model.Polarization;
 import org.openbox.sf5.model.RangesOfDVB;
 import org.openbox.sf5.model.Satellites;
@@ -175,7 +176,8 @@ public class IniReader {
 		// define range
         RangesOfDVB rangeEnum = resolveTheDVBRangeValue(frequency);
 
-        CarrierFrequency carrierEnum = resolveCarrierFrequency(frequency, aPolarization);
+        CarrierFrequency carrierEnum = resolveCarrierFrequency(frequency,
+                Polarization.getPolarizationKind(aPolarization));
 
 		Transponders newTrans = new Transponders(frequency, aPolarization, fec, carrierEnum, speed, dvbStandard,
                 rangeEnum, currentSatellite);
@@ -213,8 +215,9 @@ public class IniReader {
         return dvbMap.get(standard);
 	}
 
-    private CarrierFrequency resolveCarrierFrequency(Long frequency, Polarization aPolarization) {
-        return this.valueOfTheCarrierFrequencyRepository.resolveByFrequencyAndPolarization(frequency, aPolarization)
+    private CarrierFrequency resolveCarrierFrequency(Long frequency, KindsOfPolarization kindOfPolarization) {
+        return this.valueOfTheCarrierFrequencyRepository
+                .resolveByFrequencyAndPolarization(frequency, kindOfPolarization)
                 .orElse(null);
 	}
 

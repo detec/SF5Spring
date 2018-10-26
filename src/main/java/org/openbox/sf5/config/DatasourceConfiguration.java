@@ -23,6 +23,9 @@ public class DatasourceConfiguration {
     @Value("${jndi.datasource.name:}")
     String jndiName;
 
+    @Value("${hibernate.show_sql:false}")
+    private String showSql;
+
     @Bean
     public DataSource dataSource() {
         JndiDataSourceLookup lookup = new JndiDataSourceLookup();
@@ -48,7 +51,7 @@ public class DatasourceConfiguration {
 
         Properties jpaProperties = new Properties();
         jpaProperties.put("hibernate.format_sql", "true");
-        jpaProperties.put("hibernate.show_sql", "true");
+        jpaProperties.put("hibernate.show_sql", this.showSql);
         jpaProperties.put("hibernate.hbm2ddl.auto", "update");
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 

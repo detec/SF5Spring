@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.openbox.sf5.model.CarrierFrequency;
 import org.openbox.sf5.model.KindsOfPolarization;
-import org.openbox.sf5.model.Polarization;
 import org.openbox.sf5.model.ValueOfTheCarrierFrequency;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,7 +18,7 @@ public interface ValueOfTheCarrierFrequencyRepository
         "where (:Frequency between lowerThreshold and upperThreshold) " +
         "and (polarization = :KindOfPolarization)")
     Optional<CarrierFrequency> resolveByFrequencyAndPolarization(@Param("Frequency") Long frequency,
-            @Param("KindOfPolarization") Polarization aPolarization);
+            @Param("KindOfPolarization") KindsOfPolarization kindOfPolarization);
 
     Optional<ValueOfTheCarrierFrequency> findByTypeOfCarrierFrequencyAndPolarization(
             CarrierFrequency typeOfCarrierFrequency, KindsOfPolarization polarization);
