@@ -19,7 +19,7 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
  */
 @Configuration
 @Import({ DatasourceConfiguration.class })
-@ComponentScan({ "org.openbox.sf5.dao", "org.openbox.sf5.common" })
+@ComponentScan({ "org.openbox.sf5.dao", "org.openbox.sf5.common", "org.openbox.sf5.service" })
 public class AppTestConfiguration {
 
     @Bean

@@ -2,49 +2,40 @@ package org.openbox.sf5.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
-import org.openbox.sf5.dao.ObjectsController;
+import org.openbox.sf5.dao.UserRepository;
 import org.openbox.sf5.model.Users;
 import org.openbox.sf5.model.Usersauthorities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component // NFO: Overriding bean definition for bean
+@Component
 public class AdminCheck {
 
-	@Autowired
-	private ObjectsController objectsController;
+    private static final String ADMIN_USERNAME = "admin";
+
+    @Autowired
+    private UserRepository userRepository;
 
 	@PostConstruct
 	public void initialize() {
+        Users admin;
+        List<Usersauthorities> rolesList;
 
-		Criterion criterea = Restrictions.eq("username", "admin");
-		List<Users> adminsList = objectsController.restrictionList(Users.class, criterea);
-
-		if (adminsList.isEmpty()) {
-			List<Usersauthorities> rolesList = new ArrayList<>();
-
-			Users admin = new Users("admin", "1", true, rolesList);
-			// objectsController.saveOrUpdate(admin);
-
-			fillTables(admin, rolesList);
-			objectsController.saveOrUpdate(admin);
+		Optional<Users> adminOptional = this.userRepository.findByUsername(ADMIN_USERNAME);
+        if (!adminOptional.isPresent()) {
+            rolesList = new ArrayList<>();
+            admin = new Users("admin", "1", true, rolesList);
+        } else {
+            admin = adminOptional.get();
+            rolesList = admin.getauthorities();
 		}
 
-		else {
-
-			Users adminUser = adminsList.get(0);
-			List<Usersauthorities> rolesList = adminUser.getauthorities();
-
-			fillTables(adminUser, rolesList);
-			objectsController.saveOrUpdate(adminUser);
-
-		}
-
+        fillTables(admin, rolesList);
+        this.userRepository.save(admin);
 	}
 
 	public void fillTables(Users adminUser, List<Usersauthorities> rolesList) {
@@ -65,7 +56,5 @@ public class AdminCheck {
 		if (!rolesList.contains(checkRoleUser)) {
 			rolesList.add(checkRoleUser);
 		}
-
 	}
-
 }
