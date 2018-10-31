@@ -103,6 +103,15 @@ public class Sat {
 	}
 
 	@Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Sat [satid=");
+        builder.append(satid);
+        builder.append("]");
+        return builder.toString();
+    }
+
+    @Override
 	public int hashCode() {
 		return Objects.hash(satid);
 	}
@@ -219,6 +228,17 @@ public class Sat {
 		}
 
 		@Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            builder.append("Satid [tp=");
+            builder.append(tp);
+            builder.append(", index=");
+            builder.append(index);
+            builder.append("]");
+            return builder.toString();
+        }
+
+        @Override
 		public int hashCode() {
 			return Objects.hash(index, tp);
 		}
@@ -370,6 +390,21 @@ public class Sat {
 			}
 
 			@Override
+            public String toString() {
+                StringBuilder builder = new StringBuilder();
+                builder.append("Tp [index=");
+                builder.append(index);
+                builder.append(", polar=");
+                builder.append(polar);
+                builder.append(", freq=");
+                builder.append(freq);
+                builder.append(", symbol=");
+                builder.append(symbol);
+                builder.append("]");
+                return builder.toString();
+            }
+
+            @Override
 			public int hashCode() {
 				return Objects.hash(freq, index, lnbFreq, polar, symbol);
 			}

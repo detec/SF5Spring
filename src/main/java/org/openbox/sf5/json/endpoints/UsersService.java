@@ -3,7 +3,6 @@ package org.openbox.sf5.json.endpoints;
 import java.util.Optional;
 
 import org.openbox.sf5.dao.UserRepository;
-import org.openbox.sf5.json.service.UsersJsonizer;
 import org.openbox.sf5.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,9 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "${jaxrs.path}/users/")
 public class UsersService {
-
-    @Autowired
-    private UsersJsonizer usersJsonizer;
 
     @Autowired
     private UserRepository userRepository;
@@ -58,11 +54,4 @@ public class UsersService {
                 : new ResponseEntity<>(false, HttpStatus.NO_CONTENT);
 	}
 
-	public UsersJsonizer getUsersJsonizer() {
-		return usersJsonizer;
-	}
-
-	public void setUsersJsonizer(UsersJsonizer usersJsonizer) {
-		this.usersJsonizer = usersJsonizer;
-	}
 }
