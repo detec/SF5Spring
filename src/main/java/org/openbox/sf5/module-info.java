@@ -13,4 +13,12 @@ module org.openbox.sf5.SF5Spring {
     requires spring.webmvc;
     requires spring.data.commons;
     requires spring.data.jpa;
+    requires org.hibernate.orm.core;
+    requires java.json;
+    requires java.xml.ws;
+    requires javax.jws;
+    // requires javax.servlet;
+    // requires com.fasterxml.jackson;
+    requires java.desktop;
+    // requires springframework;
 }
