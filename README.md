@@ -4,9 +4,7 @@ This pet project derives from my old 1C:Enterprise 8.2 (<http://1c-dn.com/>) too
 - <http://openbox.ua/instruments/sf5/>   - official page of the gadget;
 - <http://infostart.ru/public/76804/>	 - page of the initial 1C:Enterprise 8.2 project.
 
-## Openshift ##
-
-This application is hosted in Openshift cloud. Its address is <http://sf5spring-detec.rhcloud.com/login>. Its database already has user logins 'admin' (password '1') and 'user' (password 'user') with one sample gadget setting saved in every profile. Anyone can register its own user and start creating Openbox SF-5 gadget settings.
+This application is designed for hosting in Openshift cloud. 
 
 ## Features ##
 
@@ -88,22 +86,22 @@ There is an option to utilize tomcat7-maven-plugin in pom.xml. Default administr
 ## System requirements ##
 
 - configured non-XA datasource with JNDI name "java:jboss/datasources/PostgreSQLDS"; Postgre and H2 supported;
-- WildFly 11 application server;
+- WildFly 14 application server;
 - Postgre 9.2+ database server (for profiles dev, prod and openshift);
 - Java 8.
 
 ## Technologies ##
 
-- Spring 4 (Spring Core, Security, MVC, XML-based and Java configuration combined);
-- Hibernate ORM 5.1;
+- Spring 5 (Spring Core, Security, MVC, XML-based and Java configuration combined);
+- Hibernate ORM 5.3;
 - Hibernate POJO classes and mappings were generated from my 1C:Enterprise database using my 1C:Enterprise project <https://github.com/detec/POJOClassesGenerationForHibernate>;
 - Hibernate Validator 5.2;
-- Jackson 2.8;
-- JUnit 4.12;
+- Jackson 2.9;
+- JUnit 5;
 - JDBC (for Spring Security only);
 - Jersey 2 client;
 - Maven 3.5 with plugins compiler, surefire, resources, war, tomcat7, cargo, jaxws;
-- WildFly 11;
-- Java 8.
+- WildFly 14;
+- Java 11.
 
-The project can be built either with Maven (3.5 or higher) or Eclipse (4.5 or higher).
+The project can be built either with Maven (3.5 or higher) or Eclipse (4.9 or higher).
