@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="SF5Spring-test">
+    <wb-module deploy-name="${rp.build.warname}">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
@@ -8,6 +8,6 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <property name="java-output-path" value="/SF5Spring/target/classes"/>
         <property name="component.exclusion.patterns" value="web.xml"/>
-        <property name="context-root" value="SF5Spring-test"/>
+        <property name="context-root" value="${rp.build.warname}"/>
     </wb-module>
 </project-modules>
